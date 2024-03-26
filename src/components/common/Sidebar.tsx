@@ -1,6 +1,15 @@
+import { useRef, useState } from "react";
+
 import yayawalletLogo from "../../assets/yayawallet-brand.svg";
 
 const Sidebar = () => {
+  const menuBtn = useRef<HTMLButtonElement>(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const openSidebarMenu = () => {
+    setSidebarOpen(true);
+  };
+
   return (
     <>
       <button
@@ -9,6 +18,8 @@ const Sidebar = () => {
         aria-controls="logo-sidebar"
         type="button"
         className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        ref={menuBtn}
+        onClick={openSidebarMenu}
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -24,8 +35,9 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  sm:translate-x-0 ${isSidebarOpen ? "" : "-translate-x-full"}`}
         aria-label="Sidebar"
+        onClick={() => setSidebarOpen(false)}
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
           <a href="/" className="flex items-center ps-2.5 mb-5 shadow-sm">
