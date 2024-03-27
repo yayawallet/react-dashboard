@@ -6,13 +6,11 @@ import yayawalletLogo from "../assets/yayawallet-brand.svg";
 const Sidebar = () => {
   const menuBtn = useRef<HTMLButtonElement>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [profileName, setProfileName] = useState("");
-  const [profileType, setProfileType] = useState("");
+  const [profile, setProfile] = useState(undefined);
 
   useEffect(() => {
     axios.get("http://localhost:4000/profile").then((res) => {
-      setProfileName(res.data.name);
-      setProfileType(res.data.type);
+      setProfile(res.data);
     });
   }, []);
 
@@ -20,7 +18,7 @@ const Sidebar = () => {
     setSidebarOpen(true);
   };
 
-  console.log(profileName, profileType);
+  // console.log(profile);
 
   return (
     <>
@@ -58,15 +56,23 @@ const Sidebar = () => {
           <div className="px-3">
             <ul className="space-y-2 font-medium">
               <li>
+                <div className="flex justify-center p-2">
+                  <img
+                    src={profile?.photo_url}
+                    alt=""
+                    className="w-24 h-24 border-2 rounded-full "
+                  />
+                </div>
+
                 <a
                   href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    {profileName.split(" ").slice(0, 2).join(" ")}
+                  <span className="flex-1 ms-3">
+                    {profile?.name.split(" ").slice(0, 2).join(" ")}
                   </span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
-                    {profileType.replace(/([a-zA-Z])(\d)/g, "$1 $2")}
+                    {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2")}
                   </span>
                 </a>
               </li>
