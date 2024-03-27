@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@yayawallet/node-sdk": "^0.0.5",
+    "@yayawallet/node-sdk": "^0.0.6",
     "express": "^4.19.1"
   }
 }
