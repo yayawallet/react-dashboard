@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-import yayawalletLogo from "../../assets/yayawallet-brand.svg";
+import yayawalletLogo from "../assets/yayawallet-brand.svg";
 
 const Sidebar = () => {
   const menuBtn = useRef<HTMLButtonElement>(null);
@@ -53,64 +53,6 @@ const Sidebar = () => {
                   <span className="flex-1 ms-3 whitespace-nowrap">Profile</span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
                     Level 1
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transactions
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transfer
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Saving</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Institution
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Invitation
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Sign out
                   </span>
                 </a>
               </li>

@@ -1,5 +1,5 @@
-import Header from "./common/Header";
-import Sidebar from "./common/Sidebar";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
 import Main from "./Main";
 
 const Dashboard = () => {
