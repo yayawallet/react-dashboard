@@ -1,10 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const { getProfile } = require("@yayawallet/node-sdk");
 
 const app = express();
 const port = 4000;
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.json({ product: "Yayawallet Dashboard" });
