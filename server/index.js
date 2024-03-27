@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { getProfile } = require("@yayawallet/node-sdk");
+const { getProfile, getTransferList } = require("@yayawallet/node-sdk");
 
 const app = express();
 const port = 4000;
@@ -22,6 +22,12 @@ app.get("/profile", async (req, res) => {
   } catch (error) {
     res.status(403).send(error.message);
   }
+});
+
+app.get("/getTransferList", async (req, res) => {
+  const list = await getTransferList();
+
+  res.send(list);
 });
 
 app.listen(port, () => {
