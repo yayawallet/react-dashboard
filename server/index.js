@@ -10,12 +10,11 @@ app.get("/", (req, res) => {
   res.json({ product: "Yayawallet Dashboard" });
 });
 
-app.post("/profile", async (req, res) => {
-  const username = req.body.username;
+app.get("/profile", async (req, res) => {
+  // user your own yayawallet username
+  const username = "surafelaraya";
 
   try {
-    if (!username) throw new Error("username is required!");
-
     const profile = await getProfile(username);
     res.send(profile);
   } catch (error) {
