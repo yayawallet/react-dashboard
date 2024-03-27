@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const {
   getProfile,
+  generateQrUrl,
   createTransaction,
   getTransferList,
   getTransactionListByUser,
@@ -29,12 +30,17 @@ app.get("/profile", async (req, res) => {
   }
 });
 
+app.post("/generateQrUrl", async (req, res) => {
+  const { amount, cause } = req.body;
+  const QRCode = await generateQrUrl(amount, cause);
+
+  res.send(QRCode);
+});
+
 app.post("/createTransaction", async (req, res) => {
   const { receiver, amount, cause } = req.body;
-
   const transactionId = await createTransaction(receiver, amount, cause, []);
 
-  console.log("transactionId: ", transactionId);
   res.send(transactionId);
 });
 
