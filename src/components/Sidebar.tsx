@@ -1,14 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 import yayawalletLogo from "../assets/yayawallet-brand.svg";
 
 const Sidebar = () => {
   const menuBtn = useRef<HTMLButtonElement>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [profileName, setProfileName] = useState("");
+  const [profileType, setProfileType] = useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:4000/profile").then((res) => {
+      setProfileName(res.data.name);
+      setProfileType(res.data.type);
+    });
+  }, []);
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);
   };
+
+  console.log(profileName, profileType);
 
   return (
     <>
@@ -50,9 +62,11 @@ const Sidebar = () => {
                   href="#"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Profile</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    {profileName.split(" ").slice(0, 2).join(" ")}
+                  </span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
-                    Level 1
+                    {profileType.replace(/([a-zA-Z])(\d)/g, "$1 $2")}
                   </span>
                 </a>
               </li>
