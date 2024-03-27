@@ -13,8 +13,14 @@ app.get("/", (req, res) => {
 app.post("/profile", async (req, res) => {
   const username = req.body.username;
 
-  const profile = await getProfile(username);
-  res.send(profile);
+  try {
+    if (!username) throw new Error("username is required!");
+
+    const profile = await getProfile(username);
+    res.send(profile);
+  } catch (error) {
+    res.status(403).send(error.message);
+  }
 });
 
 app.listen(port, () => {
