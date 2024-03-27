@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const {
   getProfile,
+  createTransaction,
   getTransferList,
   getTransactionListByUser,
 } = require("@yayawallet/node-sdk");
@@ -26,6 +27,15 @@ app.get("/profile", async (req, res) => {
   } catch (error) {
     res.status(403).send(error.message);
   }
+});
+
+app.post("/createTransaction", async (req, res) => {
+  const { receiver, amount, cause } = req.body;
+
+  const transactionId = await createTransaction(receiver, amount, cause, []);
+
+  console.log("transactionId: ", transactionId);
+  res.send(transactionId);
 });
 
 app.get("/getTransferList", async (req, res) => {
