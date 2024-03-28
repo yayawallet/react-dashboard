@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 import yayawalletLogo from "../assets/yayawallet-brand.svg";
+import avater from "../assets/avater.svg";
 
 const Sidebar = () => {
   const menuBtn = useRef<HTMLButtonElement>(null);
@@ -17,8 +18,6 @@ const Sidebar = () => {
   const openSidebarMenu = () => {
     setSidebarOpen(true);
   };
-
-  // console.log(profile);
 
   return (
     <>
@@ -47,18 +46,35 @@ const Sidebar = () => {
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  sm:translate-x-0 ${isSidebarOpen ? "" : "-translate-x-full"}`}
         aria-label="Sidebar"
-        onClick={() => setSidebarOpen(false)}
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
           <a href="/" className="flex items-center ps-2.5 mb-5 shadow-sm">
             <img src={yayawalletLogo} className="h-12" alt="YaYaWallet Logo" />
           </a>
+
+          <button
+            type="button"
+            className="sm:hidden flex text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-4 end-2 items-center justify-center"
+            onClick={() => setSidebarOpen(false)}
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+            <span className="sr-only">Close menu</span>
+          </button>
+
           <div className="px-3">
             <ul className="space-y-2 font-medium">
               <li>
                 <div className="flex justify-center p-2">
                   <img
-                    src={profile?.photo_url}
+                    src={profile?.photo_url || avater}
                     alt=""
                     className="w-24 h-24 border-2 rounded-full "
                   />
@@ -74,6 +90,14 @@ const Sidebar = () => {
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
                     {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2")}
                   </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Make Transaction</span>
                 </a>
               </li>
             </ul>
