@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState([]);
-
-  console.log(transactionList);
+  const [ownAccount, setOwnAccount] = useState("");
 
   useEffect(() => {
+    axios
+      .get("http://localhost:4000/profile")
+      .then((res) => setOwnAccount(res.data.account));
+
     axios
       .get("http://localhost:4000/getTransactionListByUser")
       .then((res) => setTransactionList(res.data.data))
@@ -14,7 +17,7 @@ const TransactionList = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ overflowX: "auto" }}>
       <table style={{ minWidth: "960px" }}>
         <thead>
           <tr className="bg-violet-500 text-gray-50">
@@ -41,8 +44,8 @@ const TransactionList = () => {
 
         <tbody>
           {transactionList.map((t) => (
-            <tr key={t.id} className="hover:bg-gray-100">
-              <td className="border-t border-b border-slate-200 p-3">{`${t.id.slice(0, 4)}...${t.id.slice(-2)}`}</td>
+            <tr key={t?.id} className="hover:bg-gray-100">
+              <td className="border-t border-b border-slate-200 p-3">{`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}</td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.sender.name.split(" ").slice(0, 2).join(" ")}
                 <br />
@@ -55,6 +58,15 @@ const TransactionList = () => {
               </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.amount_with_currency}
+                {ownAccount === t?.receiver.account ? (
+                  <span className="inline-block ml-3  text-green-600 text-xl">
+                    &#8601;
+                  </span>
+                ) : (
+                  <span className="inline-block ml-3 text-red-600 text-xl">
+                    &#8599;
+                  </span>
+                )}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.receiver.name.split(" ").slice(0, 2).join(" ")}
