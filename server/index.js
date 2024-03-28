@@ -31,29 +31,45 @@ app.get("/profile", async (req, res) => {
 });
 
 app.post("/generateQrUrl", async (req, res) => {
-  const { amount, cause } = req.body;
-  const QRCode = await generateQrUrl(amount, cause);
+  try {
+    const { amount, cause } = req.body;
+    const QRCode = await generateQrUrl(amount, cause);
 
-  res.send(QRCode);
+    res.send(QRCode);
+  } catch (error) {
+    res.status(403).send(error.message);
+  }
 });
 
 app.post("/createTransaction", async (req, res) => {
-  const { receiver, amount, cause } = req.body;
-  const transactionId = await createTransaction(receiver, amount, cause, []);
+  try {
+    const { receiver, amount, cause } = req.body;
+    const transactionId = await createTransaction(receiver, amount, cause, []);
 
-  res.send(transactionId);
+    res.send(transactionId);
+  } catch (error) {
+    res.status(403).send(error.message);
+  }
 });
 
 app.get("/getTransferList", async (req, res) => {
-  const list = await getTransferList();
+  try {
+    const list = await getTransferList();
 
-  res.send(list);
+    res.send(list);
+  } catch (error) {
+    res.status(403).send(error.message);
+  }
 });
 
 app.get("/getTransactionListByUser", async (req, res) => {
-  const transactionList = await getTransactionListByUser();
+  try {
+    const transactionList = await getTransactionListByUser();
 
-  res.send(transactionList);
+    res.send(transactionList);
+  } catch (error) {
+    res.status(403).send(error.message);
+  }
 });
 
 app.listen(port, () => {
