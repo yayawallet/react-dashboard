@@ -1,16 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const CreateTransaction = () => {
-  const [transactionID, setTransactionID] = useState(undefined);
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:4000/createTransaction")
-  //     .then((res) => setTransactionI(res.data));
-  // }, []);
+  const [transactionID, setTransactionID] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const formik = useFormik({
     initialValues: {
@@ -23,22 +18,76 @@ const CreateTransaction = () => {
       receiver: Yup.string()
         .max(50, "Must be 50 characters or less")
         .required("Required"),
-      amount: Yup.string()
-        .max(20, "Must be 20,000 or less")
-        .required("Required"),
+      amount: Yup.number().required("Required"),
       cause: Yup.string()
         .max(50, "Must be 50 characters or less")
         .required("Required"),
     }),
 
     onSubmit: (values) => {
-      console.log(values);
+      // Clear existing alerts
+      setErrorMessage("");
+      setTransactionID("");
+
+      axios
+        .post("http://localhost:4000/createTransaction", values)
+        .then((res) => {
+          setTransactionID(res.data.transaction_id);
+          setErrorMessage("");
+
+          // clear input fields
+          formik.resetForm();
+        })
+        .catch((error) => {
+          setTransactionID("");
+          setErrorMessage(error.response?.data.error || error.message);
+        });
     },
   });
 
   return (
     <div>
       <h1 className="text-2xl font-semibold p-2 mb-5">Make Transaction</h1>
+
+      {errorMessage && (
+        <div
+          className="flex items-center p-4 mb-10 text-sm text-red-800 rounded-lg bg-red-50"
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-4 h-4 me-3"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>
+            <span className="font-medium mr-2">Unsuccessful transaction!</span>
+            {errorMessage}
+          </div>
+        </div>
+      )}
+
+      {transactionID && (
+        <div
+          className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
+          role="alert"
+        >
+          <svg
+            className="flex-shrink-0 inline w-4 h-4 me-3"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+          </svg>
+          <span className="sr-only">Info</span>
+          <div>
+            <span className="font-medium mr-2">Successful transaction!</span>
+            Transaction ID: {transactionID}
+          </div>
+        </div>
+      )}
 
       <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
         <div className="relative z-0 w-full mb-10 group">
@@ -80,7 +129,7 @@ const CreateTransaction = () => {
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.receiver && formik.errors.amount}
+              {formik.touched.amount && formik.errors.amount}
             </span>
           </div>
 
@@ -101,16 +150,16 @@ const CreateTransaction = () => {
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.receiver && formik.errors.cause}
+              {formik.touched.cause && formik.errors.cause}
             </span>
           </div>
         </div>
 
         <button
           type="submit"
-          className="text-white bg-purple-900 hover:bg-purple-900 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Submit
+          Send Money
         </button>
       </form>
     </div>
