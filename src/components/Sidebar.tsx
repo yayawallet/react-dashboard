@@ -119,7 +119,18 @@ const Sidebar = () => {
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transaction List
+                    Transfer List
+                  </span>
+                </a>
+              </li>
+
+              <li>
+                <a
+                  href="#"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+                >
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Transaction List By User
                   </span>
                 </a>
               </li>
