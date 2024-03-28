@@ -10,8 +10,6 @@ const Profile = () => {
       .then((res) => setProfile(res.data));
   }, []);
 
-  console.log("profile: ", profile);
-
   return (
     <div>
       <div className="bg-white overflow-hidden shadow rounded-lg border">
@@ -30,10 +28,10 @@ const Profile = () => {
               Status
             </dt>
             <dd
-              className={`mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === "ACTIVE" ? "bg-green-500 text-slate-100" : "bg-gray-100"}`}
+              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === "ACTIVE" ? "bg-green-500 text-slate-100" : "bg-gray-100"}`}
             >
               {profile?.status?.charAt(0) +
-                profile?.status?.slice(1).toLowerCase()}
+                profile?.status?.slice(1).toLowerCase() || "- - -"}
             </dd>
           </div>
         </div>
@@ -58,7 +56,8 @@ const Profile = () => {
                 Phone number
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {`(${profile?.country?.phone_code}) ${profile?.phone}`}
+                {profile &&
+                  `(${profile?.country?.phone_code}) ${profile?.phone}`}
               </dd>
             </div>
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -87,9 +86,10 @@ const Profile = () => {
                 Balance Limit
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile?.currency +
-                  " " +
-                  profile?.balance_limit?.toLocaleString()}
+                {profile &&
+                  profile?.currency +
+                    " " +
+                    profile?.balance_limit?.toLocaleString()}
               </dd>
             </div>
 
@@ -98,9 +98,10 @@ const Profile = () => {
                 Daily transaction limit
               </dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile?.currency +
-                  " " +
-                  profile?.daily_transaction_limit?.toLocaleString()}
+                {profile &&
+                  profile?.currency +
+                    " " +
+                    profile?.daily_transaction_limit?.toLocaleString()}
               </dd>
             </div>
           </dl>
