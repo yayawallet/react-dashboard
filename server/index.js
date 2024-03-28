@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.json({ product: "Yayawallet Dashboard" });
 });
 
-app.get("/profile", async (req, res) => {
+app.get("/getProfile", async (req, res) => {
   // user your own yayawallet username
   const username = "surafelaraya";
 
