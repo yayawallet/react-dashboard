@@ -1,4 +1,4 @@
-import yayawalletLogo from "../../assets/yayawallet-brand.svg";
+import yayawalletLogo from "../assets/yayawallet-brand.svg";
 
 const Header = () => {
   return (
