@@ -10,7 +10,7 @@ const Sidebar = () => {
   const [profile, setProfile] = useState(undefined);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/profile").then((res) => {
+    axios.get("http://localhost:4000/getProfile").then((res) => {
       setProfile(res.data);
     });
   }, []);

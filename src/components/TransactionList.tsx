@@ -7,7 +7,7 @@ const TransactionList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/profile")
+      .get("http://localhost:4000/getProfile")
       .then((res) => setOwnAccount(res.data.account));
 
     axios

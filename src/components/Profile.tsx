@@ -6,7 +6,7 @@ const Profile = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/profile")
+      .get("http://localhost:4000/getProfile")
       .then((res) => setProfile(res.data));
   }, []);
 
