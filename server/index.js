@@ -102,11 +102,11 @@ app.post("/getTransferFee", async (req, res) => {
   }
 });
 
-app.get("/getTransactionById/:id", async (req, res) => {
+app.post("/getTransactionById", async (req, res) => {
   try {
-    const id = req.params.id;
+    const transactionID = req.body.transactionID;
 
-    const transaction = await getTransactionById(id);
+    const transaction = await getTransactionById(transactionID);
 
     res.send(transaction);
   } catch (error) {
