@@ -6,6 +6,7 @@ const {
   createTransaction,
   getTransferList,
   getTransactionListByUser,
+  externalAccountLookup,
 } = require("@yayawallet/node-sdk");
 
 const app = express();
@@ -58,7 +59,7 @@ app.get("/getTransferList", async (req, res) => {
 
     res.send(list);
   } catch (error) {
-    res.status(403).send(error.message);
+    res.status(404).send(error.message);
   }
 });
 
@@ -68,7 +69,22 @@ app.get("/getTransactionListByUser", async (req, res) => {
 
     res.send(transactionList);
   } catch (error) {
-    res.status(403).send(error.message);
+    res.status(404).send(error.message);
+  }
+});
+
+app.post("/externalAccountLookup", async (req, res) => {
+  try {
+    const { institution_code, account_number } = req.body;
+
+    const account = await externalAccountLookup(
+      institution_code,
+      account_number,
+    );
+
+    res.send(account);
+  } catch (error) {
+    res.status(404).send(error.message);
   }
 });
 
