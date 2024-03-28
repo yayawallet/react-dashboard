@@ -30,7 +30,7 @@ const Profile = () => {
               Status
             </dt>
             <dd
-              className={`mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status ? "bg-greed-600" : "bg-gray-100"}`}
+              className={`mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === "ACTIVE" ? "bg-green-500 text-slate-100" : "bg-gray-100"}`}
             >
               {profile?.status?.charAt(0) +
                 profile?.status?.slice(1).toLowerCase()}
