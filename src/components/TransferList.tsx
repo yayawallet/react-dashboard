@@ -58,12 +58,12 @@ const TransferList = () => {
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.amount}&nbsp;{t?.currency}
                 {t?.user.account === t?.payment_method.account_number ? (
-                  <span className="inline-block ml-3  text-green-600 text-xl">
-                    &#8601;
+                  <span className="inline-block ml-3  text-green-600">
+                    &#43;&nbsp;
                   </span>
                 ) : (
-                  <span className="inline-block ml-3 text-red-600 text-xl">
-                    &#8599;
+                  <span className="inline-block ml-3 text-red-600">
+                    &#8722;&nbsp;
                   </span>
                 )}
               </td>

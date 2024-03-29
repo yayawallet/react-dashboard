@@ -113,16 +113,16 @@ const GetTransactionByID = () => {
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Amount</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction?.amount_with_currency}
                   {ownAccount === transaction?.receiver.account ? (
-                    <span className="inline-block ml-3  text-green-600 text-xl">
-                      &#8601;
+                    <span className="inline-block ml-3  text-green-600">
+                      &#43;&nbsp;
                     </span>
                   ) : (
-                    <span className="inline-block ml-3 text-red-600 text-xl">
-                      &#8599;
+                    <span className="inline-block ml-3 text-red-600">
+                      &#8722;&nbsp;
                     </span>
                   )}
+                  {transaction?.amount_with_currency}
                 </dd>
               </div>
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
