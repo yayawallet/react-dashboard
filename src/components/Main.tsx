@@ -3,12 +3,12 @@ import CreateTransaction from "./CreateTransaction";
 import GenerateQRCode from "./GenerateQRCode";
 import TransactionList from "./TransactionList";
 import TransferList from "./TransferList";
-import GetTransactionByID from "./GetTransactionID";
+import VerifyTransactionByID from "./VerifyTransactionID";
 
 const Main = () => {
   return (
     <div className="p-4">
-      <GetTransactionByID />
+      <VerifyTransactionByID />
     </div>
   );
 };
