@@ -8,6 +8,8 @@ import TransferList from "./pages/TransferList";
 import VerifyTransactionByID from "./pages/VerifyTransactionID";
 import TransferFee from "./pages/TransferFee";
 import ExternalAccountLookup from "./pages/ExternalAccountLookup";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 import Layout from "./Layout";
 
 const Dashboard = () => {
@@ -17,7 +19,8 @@ const Dashboard = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
-              <Route index path="profile" element={<Profile />} />
+              <Route index element={<Home />} />
+              <Route path="profile" element={<Profile />} />
               <Route
                 path="create-transaction"
                 element={<CreateTransaction />}
@@ -34,6 +37,7 @@ const Dashboard = () => {
                 path="external-account-lookup"
                 element={<ExternalAccountLookup />}
               />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </BrowserRouter>
