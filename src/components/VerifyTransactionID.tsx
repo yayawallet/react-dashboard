@@ -25,11 +25,11 @@ const GetTransactionByID = () => {
       setTransaction(undefined);
 
       axios
-        .get("http://localhost:4000/getProfile")
+        .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
         .then((res) => setOwnAccount(res.data.account));
 
       axios
-        .post("http://localhost:4000/getTransactionById", values)
+        .post(`${import.meta.env.VITE_BASE_URL}/getTransactionById`, values)
         .then((res) => {
           setTransaction(res.data);
 

@@ -6,7 +6,7 @@ const TransferList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/getTransferList")
+      .get(`${import.meta.env.VITE_BASE_URL}/getTransferList`)
       .then((res) => setTransferList(res.data))
       .catch((error) => console.log(error));
   }, []);

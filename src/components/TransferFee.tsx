@@ -26,7 +26,7 @@ const TransferFee = () => {
       setInstitution("");
 
       axios
-        .post("http://localhost:4000/getTransferFee", values)
+        .post(`${import.meta.env.VITE_BASE_URL}/getTransferFee`, values)
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);

@@ -24,7 +24,7 @@ const ExternalAccountLookup = () => {
       setExternalAccount(undefined);
 
       axios
-        .post("http://localhost:4000/externalAccountLookup", values)
+        .post(`${import.meta.env.VITE_BASE_URL}/externalAccountLookup`, values)
         .then((res) => {
           setExternalAccount(res.data);
 
