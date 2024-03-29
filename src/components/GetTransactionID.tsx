@@ -4,11 +4,9 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const GetTransactionByID = () => {
+  const [ownAccount, setOwnAccount] = useState("");
   const [transaction, setTransaction] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
-
-  console.log({ transaction });
-  console.log({ errorMessage });
 
   const formik = useFormik({
     initialValues: {
@@ -27,6 +25,10 @@ const GetTransactionByID = () => {
       setTransaction(undefined);
 
       axios
+        .get("http://localhost:4000/getProfile")
+        .then((res) => setOwnAccount(res.data.account));
+
+      axios
         .post("http://localhost:4000/getTransactionById", values)
         .then((res) => {
           setTransaction(res.data);
@@ -37,7 +39,9 @@ const GetTransactionByID = () => {
         })
         .catch((error) => {
           setTransaction(undefined);
-          setErrorMessage(error.response?.data.error || error.message);
+          setErrorMessage(
+            error.response?.data.error || "Invalid transaction ID",
+          );
         });
     },
   });
@@ -68,28 +72,68 @@ const GetTransactionByID = () => {
         </div>
       )}
 
-      {/* {transactionID && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Successful transaction!</span>
-            Transaction ID: {transactionID}
+      {transaction && (
+        <div className="bg-white overflow-hidden shadow rounded-lg border mb-5">
+          <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+            <dl className="sm:divide-y sm:divide-gray-200">
+              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Sender</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {transaction?.sender.name}
+                </dd>
+              </div>
+              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Receiver</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {transaction?.receiver.name}
+                </dd>
+              </div>
+              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Amount</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {transaction?.amount_with_currency}
+                  {ownAccount === transaction?.receiver.account ? (
+                    <span className="inline-block ml-3  text-green-600 text-xl">
+                      &#8601;
+                    </span>
+                  ) : (
+                    <span className="inline-block ml-3 text-red-600 text-xl">
+                      &#8599;
+                    </span>
+                  )}
+                </dd>
+              </div>
+              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">Cause</dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {transaction?.cause}
+                </dd>
+              </div>
+
+              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Is outgoing transfer
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {String(transaction?.is_outgoing_transfer)}
+                </dd>
+              </div>
+
+              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                <dt className="text-sm font-medium text-gray-500">
+                  Created At
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                  {new Date(transaction?.created_at_time).toLocaleString()}
+                </dd>
+              </div>
+            </dl>
           </div>
         </div>
-      )} */}
+      )}
 
       <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
-        <div className="relative z-0 w-full mb-10 group">
+        <div className="relative z-0 w-full mb-10 mt-10 group">
           <input
             type="Text"
             id="transactionID"
