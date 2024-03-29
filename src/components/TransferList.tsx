@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 const TransferList = () => {
   const [transferList, setTransferList] = useState([]);
 
-  console.log(transferList);
-
   useEffect(() => {
     axios
       .get("http://localhost:4000/getTransferList")

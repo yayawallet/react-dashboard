@@ -20,24 +20,23 @@ const TransferFee = () => {
     }),
 
     onSubmit: (values) => {
-      // Clear existing alerts
+      // Clear existing values
       setErrorMessage("");
       setTransferFee(undefined);
+      setInstitution("");
 
       axios
         .post("http://localhost:4000/getTransferFee", values)
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);
-          setErrorMessage("");
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) => {
-          setTransferFee(undefined);
-          setErrorMessage(error.response?.data.error || error.message);
-        });
+        .catch((error) =>
+          setErrorMessage(error.response?.data.error || error.message),
+        );
     },
   });
 
