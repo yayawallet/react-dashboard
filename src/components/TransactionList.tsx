@@ -17,7 +17,7 @@ const TransactionList = () => {
   }, []);
 
   return (
-    <div style={{ overflowX: "auto" }}>
+    <div className="container" style={{ overflowX: "auto" }}>
       <table style={{ minWidth: "960px" }}>
         <thead>
           <tr className="bg-violet-500 text-gray-50">

@@ -47,7 +47,7 @@ const GetTransactionByID = () => {
   });
 
   return (
-    <div>
+    <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">
         Verify Transaction IDs
       </h1>
