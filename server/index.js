@@ -22,11 +22,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getProfile", async (req, res) => {
-  // user your own yayawallet username
-  const username = "surafelaraya";
-
   try {
-    const profile = await getProfile(username);
+    const profile = await getProfile();
     res.send(profile);
   } catch (error) {
     res.status(403).send(error.message);
