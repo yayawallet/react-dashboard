@@ -20,7 +20,7 @@ const GetTransactionByID = () => {
     }),
 
     onSubmit: (values) => {
-      // Clear existing alerts
+      // Clear existing values
       setErrorMessage("");
       setTransaction(undefined);
 
@@ -32,17 +32,15 @@ const GetTransactionByID = () => {
         .post("http://localhost:4000/getTransactionById", values)
         .then((res) => {
           setTransaction(res.data);
-          setErrorMessage("");
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) => {
-          setTransaction(undefined);
+        .catch((error) =>
           setErrorMessage(
             error.response?.data.error || "Invalid transaction ID",
-          );
-        });
+          ),
+        );
     },
   });
 
@@ -81,39 +79,39 @@ const GetTransactionByID = () => {
                   Transaction ID
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction?.id}
+                  {transaction.id}
                 </dd>
               </div>
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Sender</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction?.sender.name}
+                  {transaction.sender.name}
                   <br />
                   <span
                     className="text-gray-500 text-sm block"
                     style={{ marginTop: "-3px" }}
                   >
-                    {"@" + transaction?.sender.account}
+                    {"@" + transaction.sender.account}
                   </span>
                 </dd>
               </div>
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Receiver</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction?.receiver.name}
+                  {transaction.receiver.name}
                   <br />
                   <span
                     className="text-gray-500 text-sm block"
                     style={{ marginTop: "-3px" }}
                   >
-                    {"@" + transaction?.sender.account}
+                    {"@" + transaction.sender.account}
                   </span>
                 </dd>
               </div>
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Amount</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {ownAccount === transaction?.receiver.account ? (
+                  {ownAccount === transaction.receiver.account ? (
                     <span className="inline-block ml-3  text-green-600">
                       &#43;&nbsp;
                     </span>
@@ -122,13 +120,13 @@ const GetTransactionByID = () => {
                       &#8722;&nbsp;
                     </span>
                   )}
-                  {transaction?.amount_with_currency}
+                  {transaction.amount_with_currency}
                 </dd>
               </div>
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Cause</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction?.cause}
+                  {transaction.cause}
                 </dd>
               </div>
 
@@ -137,7 +135,7 @@ const GetTransactionByID = () => {
                   Is outgoing transfer
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {String(transaction?.is_outgoing_transfer)}
+                  {String(transaction.is_outgoing_transfer)}
                 </dd>
               </div>
 
@@ -146,7 +144,7 @@ const GetTransactionByID = () => {
                   Created At
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {new Date(transaction?.created_at_time)
+                  {new Date(transaction.created_at_time)
                     .toString()
                     .replace(/\(.*\)/, "")}
                 </dd>
