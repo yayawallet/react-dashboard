@@ -21,7 +21,7 @@ const GenerateQRCode = () => {
     }),
 
     onSubmit: (values) => {
-      // Clear existing alerts
+      // Clear existing values
       setErrorMessage("");
       setQRCodeURL("");
 
@@ -29,17 +29,13 @@ const GenerateQRCode = () => {
         .post("http://localhost:4000/generateQrUrl", values)
         .then((res) => {
           setQRCodeURL(res.data.qr_image_url);
-          setErrorMessage("");
-
-          console.log(res.data.qr_image_url);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) => {
-          setQRCodeURL("");
-          setErrorMessage(error.response?.data.error || error.message);
-        });
+        .catch((error) =>
+          setErrorMessage(error.response?.data.error || error.message),
+        );
     },
   });
 
