@@ -57,7 +57,6 @@ const TransactionList = () => {
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.amount_with_currency}
                 {ownAccount === t?.receiver.account ? (
                   <span className="inline-block ml-3  text-green-600">
                     &#43;&nbsp;
@@ -67,6 +66,7 @@ const TransactionList = () => {
                     &#8722;&nbsp;
                   </span>
                 )}
+                {t?.amount_with_currency}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.receiver.name.split(" ").slice(0, 2).join(" ")}
