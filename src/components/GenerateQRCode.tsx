@@ -26,7 +26,7 @@ const GenerateQRCode = () => {
       setQRCodeURL("");
 
       axios
-        .post("http://localhost:4000/generateQrUrl", values)
+        .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
         .then((res) => {
           setQRCodeURL(res.data.qr_image_url);
 

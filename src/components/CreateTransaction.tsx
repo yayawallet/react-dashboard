@@ -30,7 +30,7 @@ const CreateTransaction = () => {
       setTransactionID("");
 
       axios
-        .post("http://localhost:4000/createTransaction", values)
+        .post(`${import.meta.env.VITE_BASE_URL}/createTransaction`, values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
 

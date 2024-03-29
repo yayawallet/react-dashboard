@@ -1,6 +1,4 @@
-build
-.env
-*.env*
+server/.env
 
 # Logs
 logs

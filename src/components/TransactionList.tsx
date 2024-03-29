@@ -7,11 +7,11 @@ const TransactionList = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/getProfile")
+      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
       .then((res) => setOwnAccount(res.data.account));
 
     axios
-      .get("http://localhost:4000/getTransactionListByUser")
+      .get(`${import.meta.env.VITE_BASE_URL}/getTransactionListByUser`)
       .then((res) => setTransactionList(res.data.data))
       .catch((error) => console.log(error));
   }, []);
