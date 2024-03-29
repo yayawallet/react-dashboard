@@ -25,7 +25,7 @@ const CreateTransaction = () => {
     }),
 
     onSubmit: (values) => {
-      // Clear existing alerts
+      // Clear existing values
       setErrorMessage("");
       setTransactionID("");
 
@@ -33,15 +33,13 @@ const CreateTransaction = () => {
         .post("http://localhost:4000/createTransaction", values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
-          setErrorMessage("");
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) => {
-          setTransactionID("");
-          setErrorMessage(error.response?.data.error || error.message);
-        });
+        .catch((error) =>
+          setErrorMessage(error.response?.data.error || error.message),
+        );
     },
   });
 

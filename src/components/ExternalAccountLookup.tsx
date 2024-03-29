@@ -70,18 +70,18 @@ const ExternalAccountLookup = () => {
           <div className="flex flex-wrap justify-between px-4 py-5 sm:px-6">
             <div className="">
               <h3 className="text-lg leading-6 font-medium text-gray-900">
-                {externalAccount?.institution.name}
+                {externalAccount.institution.name}
               </h3>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                {"code: " + externalAccount?.institution.code}
+                {"code: " + externalAccount.institution.code}
                 <br />
-                {"Id: " + externalAccount?.institution.institution_id}
+                {"Id: " + externalAccount.institution.institution_id}
               </p>
             </div>
 
             <div className="h-24">
               <img
-                src={externalAccount?.institution.logo_url}
+                src={externalAccount.institution.logo_url}
                 alt="Institution Logo"
                 className="h-full"
               />
@@ -92,7 +92,7 @@ const ExternalAccountLookup = () => {
               <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Full Name</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {externalAccount?.full_name}
+                  {externalAccount.full_name}
                 </dd>
               </div>
               <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -100,7 +100,7 @@ const ExternalAccountLookup = () => {
                   Account Number
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {externalAccount?.account_number}
+                  {externalAccount.account_number}
                 </dd>
               </div>
 
@@ -110,7 +110,7 @@ const ExternalAccountLookup = () => {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2 h-24">
                   <img
-                    src={externalAccount?.photo_url}
+                    src={externalAccount.photo_url}
                     alt="user photo"
                     className="h-full"
                   />
