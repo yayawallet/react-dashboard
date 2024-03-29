@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {},
     container: {
-      padding: "15px",
+      padding: "1rem",
       center: true,
     },
   },

@@ -11,7 +11,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <div className="bg-white overflow-hidden shadow rounded-lg border">
         <div className="flex flex-wrap justify-between px-4 py-5 sm:px-6">
           <div className="">

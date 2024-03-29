@@ -46,7 +46,7 @@ const CreateTransaction = () => {
   });
 
   return (
-    <div>
+    <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Make Transaction</h1>
 
       {errorMessage && (
