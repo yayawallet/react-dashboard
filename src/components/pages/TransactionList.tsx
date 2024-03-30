@@ -45,7 +45,10 @@ const TransactionList = () => {
         <tbody>
           {transactionList.map((t) => (
             <tr key={t?.id} className="hover:bg-gray-100">
-              <td className="border-t border-b border-slate-200 p-3">{`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}</td>
+              <td
+                className="border-t border-b border-slate-200 p-3"
+                onClick={() => navigator.clipboard.writeText(t?.id)}
+              >{`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}</td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.sender.name.split(" ").slice(0, 2).join(" ")}
                 <br />

@@ -39,7 +39,11 @@ const TransferList = () => {
 
         <tbody>
           {transferList.map((t) => (
-            <tr key={t?.id} className="hover:bg-gray-100">
+            <tr
+              key={t?.id}
+              className="hover:bg-gray-100"
+              onClick={() => navigator.clipboard.writeText(t?.id)}
+            >
               <td className="border-t border-b border-slate-200 p-3">
                 {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
               </td>
