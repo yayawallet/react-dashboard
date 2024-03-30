@@ -4,8 +4,19 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const GenerateQRCode = () => {
-  const [QRCodeURL, setQRCodeURL] = useState("");
+  const [QRCode, setQRCode] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
+  const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
+
+  const copyPaymentLink = (e) => {
+    navigator.clipboard.writeText(QRCode.payment_link);
+    setPaymentLinkCopied(true);
+
+    setTimeout(() => {
+      setPaymentLinkCopied(false);
+      e.target.blur();
+    }, 2000);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -23,12 +34,12 @@ const GenerateQRCode = () => {
     onSubmit: (values) => {
       // Clear existing values
       setErrorMessage("");
-      setQRCodeURL("");
+      setQRCode(undefined);
 
       axios
         .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
         .then((res) => {
-          setQRCodeURL(res.data.qr_image_url);
+          setQRCode(res.data);
 
           // clear input fields
           formik.resetForm();
@@ -42,7 +53,9 @@ const GenerateQRCode = () => {
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 ">Generate QR Code</h1>
-      <p className="pl-2 mb-10">Generate QR Code to receive payments.</p>
+      <p className="pl-2 mb-10 text-gray-600">
+        Receive payments by sharing your generated QR Code.
+      </p>
 
       {errorMessage && (
         <div
@@ -64,9 +77,25 @@ const GenerateQRCode = () => {
         </div>
       )}
 
-      {QRCodeURL && (
-        <div className="flex justify-center rounded-lg">
-          <img src={QRCodeURL} alt="QR Code URL" />
+      {QRCode && (
+        <div className="flex flex-col items-center justify-center rounded-lg -mt-10 mb-8">
+          <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60" />
+          <p className="text-sm">
+            Payment Link:{" "}
+            <span className="inline-flex px-1 text-white bg-violet-600 rounded">
+              {QRCode.payment_link}
+            </span>
+            <button
+              onClick={(e) => copyPaymentLink(e)}
+              className="w-10 ml-2 px-1 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
+            >
+              {paymentLinkCopied ? (
+                <span className="font-bold">&#10003;</span>
+              ) : (
+                "copy"
+              )}
+            </button>
+          </p>
         </div>
       )}
 
