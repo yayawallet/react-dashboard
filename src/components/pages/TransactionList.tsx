@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState([]);
   const [ownAccount, setOwnAccount] = useState("");
+  const [copiedID, setCopiedID] = useState("");
+
+  const copyTransactionID = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedID(id);
+
+    setTimeout(() => setCopiedID(""), 1000);
+  };
 
   useEffect(() => {
     axios
@@ -46,9 +54,17 @@ const TransactionList = () => {
           {transactionList.map((t) => (
             <tr key={t?.id} className="hover:bg-gray-100">
               <td
-                className="border-t border-b border-slate-200 p-3"
-                onClick={() => navigator.clipboard.writeText(t?.id)}
-              >{`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}</td>
+                title={t?.id}
+                className="relative border-t border-b border-slate-200 p-3"
+                onClick={() => copyTransactionID(t?.id)}
+              >
+                {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
+                <span
+                  className={`${copiedID === t?.id ? "" : "hidden"} absolute -top-2 left-4 w-24 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                >
+                  Id copied
+                </span>
+              </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.sender.name.split(" ").slice(0, 2).join(" ")}
                 <br />

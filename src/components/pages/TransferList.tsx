@@ -3,6 +3,14 @@ import { useEffect, useState } from "react";
 
 const TransferList = () => {
   const [transferList, setTransferList] = useState([]);
+  const [copiedID, setCopiedID] = useState("");
+
+  const copyTransferID = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedID(id);
+
+    setTimeout(() => setCopiedID(""), 1000);
+  };
 
   useEffect(() => {
     axios
@@ -44,8 +52,17 @@ const TransferList = () => {
               className="hover:bg-gray-100"
               onClick={() => navigator.clipboard.writeText(t?.id)}
             >
-              <td className="border-t border-b border-slate-200 p-3">
+              <td
+                title={t?.id}
+                className="relative border-t border-b border-slate-200 p-3"
+                onClick={() => copyTransferID(t?.id)}
+              >
                 {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
+                <span
+                  className={`${copiedID === t?.id ? "" : "hidden"} absolute -top-2 left-4 w-24 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                >
+                  Id copied
+                </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.user.name.split(" ").slice(0, 2).join(" ")}
