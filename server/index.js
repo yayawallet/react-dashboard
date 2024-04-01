@@ -7,6 +7,7 @@ const {
   getTransferList,
   getTransactionListByUser,
   externalAccountLookup,
+  listInstitution,
   getTransferFee,
   getTransactionById,
 } = require("@yayawallet/node-sdk");
@@ -82,6 +83,19 @@ app.post("/externalAccountLookup", async (req, res) => {
     );
 
     res.send(account);
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
+});
+
+app.get("/financialInstitutionList", async (req, res) => {
+  try {
+    const { country } = req.body;
+
+    const institutionList = await listInstitution("Ethiopia");
+
+    res.send(institutionList);
+    console.log(institutionList);
   } catch (error) {
     res.status(404).send(error.message);
   }
