@@ -88,14 +88,13 @@ app.post("/externalAccountLookup", async (req, res) => {
   }
 });
 
-app.get("/financialInstitutionList", async (req, res) => {
+app.post("/financialInstitutionList", async (req, res) => {
   try {
     const { country } = req.body;
 
-    const institutionList = await listInstitution("Ethiopia");
+    const institutionList = await listInstitution(country);
 
     res.send(institutionList);
-    console.log(institutionList);
   } catch (error) {
     res.status(404).send(error.message);
   }
