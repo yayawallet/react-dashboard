@@ -6,6 +6,7 @@ import * as Yup from "yup";
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -25,6 +26,8 @@ const CreateTransaction = () => {
     }),
 
     onSubmit: (values) => {
+      setLoading(true);
+
       // Clear existing values
       setErrorMessage("");
       setTransactionID("");
@@ -33,13 +36,15 @@ const CreateTransaction = () => {
         .post(`${import.meta.env.VITE_BASE_URL}/createTransaction`, values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
+          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) =>
+        .catch((error) => {
           setErrorMessage(error.response?.data.error || error.message),
-        );
+            setLoading(false);
+        });
     },
   });
 
@@ -157,7 +162,7 @@ const CreateTransaction = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Send Money
+          {isLoading ? "Sending . . ." : "Send Money"}
         </button>
       </form>
     </div>
