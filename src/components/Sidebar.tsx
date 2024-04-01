@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 import yayawalletLogo from "../assets/yayawallet-brand.svg";
@@ -48,9 +49,9 @@ const Sidebar = () => {
         aria-label="Sidebar"
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
-          <a href="/" className="flex items-center ps-2.5 mb-5 shadow-sm">
+          <Link to="/" className="flex items-center ps-2.5 mb-5 shadow-sm">
             <img src={yayawalletLogo} className="h-12" alt="YaYaWallet Logo" />
-          </a>
+          </Link>
 
           <button
             type="button"
@@ -73,99 +74,104 @@ const Sidebar = () => {
             <ul className="space-y-2 font-medium">
               <li>
                 <div className="flex justify-center p-2">
-                  <img
-                    src={profile?.photo_url || avater}
-                    alt=""
-                    className="w-24 h-24 border-2 rounded-full "
-                  />
+                  <Link to="/profile">
+                    <img
+                      src={profile?.photo_url || avater}
+                      alt=""
+                      className="w-24 h-24 rounded-full "
+                    />
+                  </Link>
                 </div>
 
-                <a
-                  href="#"
+                <Link
+                  to="/profile"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">
-                    {profile?.name.split(" ").slice(0, 2).join(" ")}
+                    {profile?.name.split(" ").slice(0, 2).join(" ") || (
+                      <span>&nbsp;</span>
+                    )}
                   </span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
-                    {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2")}
+                    {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2") ||
+                      "LEVEL -"}
                   </span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/create-transaction"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">Make Transaction</span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/generate-qr-code"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Generate QR Code
                   </span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/transfer-list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Transfer List
                   </span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/transaction-list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Transaction List By User
                   </span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/verify-transaction-id"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Verify Transaction ID
                   </span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/check-transfer-fee"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Check Transfer Fee
                   </span>
-                </a>
+                </Link>
               </li>
 
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/external-account-lookup"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     External Account Lookup
                   </span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

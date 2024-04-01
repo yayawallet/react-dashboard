@@ -1,18 +1,21 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const TransactionList = () => {
-  const [transactionList, setTransactionList] = useState([]);
-  const [ownAccount, setOwnAccount] = useState("");
+const TransferList = () => {
+  const [transferList, setTransferList] = useState([]);
+  const [copiedID, setCopiedID] = useState("");
+
+  const copyTransferID = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedID(id);
+
+    setTimeout(() => setCopiedID(""), 1000);
+  };
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
-      .then((res) => setOwnAccount(res.data.account));
-
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getTransactionListByUser`)
-      .then((res) => setTransactionList(res.data.data))
+      .get(`${import.meta.env.VITE_BASE_URL}/getTransferList`)
+      .then((res) => setTransferList(res.data))
       .catch((error) => console.log(error));
   }, []);
 
@@ -34,31 +37,45 @@ const TransactionList = () => {
               Receiver
             </th>
             <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-              Cause
+              Institution
             </th>
             <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-              Date
+              Ref code
             </th>
           </tr>
         </thead>
 
         <tbody>
-          {transactionList.map((t) => (
-            <tr key={t?.id} className="hover:bg-gray-100">
-              <td className="border-t border-b border-slate-200 p-3">{`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}</td>
+          {transferList.map((t) => (
+            <tr
+              key={t?.id}
+              className="hover:bg-gray-100"
+              onClick={() => navigator.clipboard.writeText(t?.id)}
+            >
+              <td
+                title={t?.id}
+                className="relative border-t border-b border-slate-200 p-3"
+                onClick={() => copyTransferID(t?.id)}
+              >
+                {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
+                <span
+                  className={`${copiedID === t?.id ? "" : "hidden"} absolute -top-2 left-4 w-24 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                >
+                  Id copied
+                </span>
+              </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.sender.name.split(" ").slice(0, 2).join(" ")}
+                {t?.user.name.split(" ").slice(0, 2).join(" ")}
                 <br />
                 <span
                   className="text-gray-500 text-sm block"
                   style={{ marginTop: "-3px" }}
                 >
-                  {"@" + t?.sender.account}
+                  {"@" + t?.user.account}
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.amount_with_currency}
-                {ownAccount === t?.receiver.account ? (
+                {t?.user.account === t?.payment_method.account_number ? (
                   <span className="inline-block ml-3  text-green-600">
                     &#43;&nbsp;
                   </span>
@@ -67,26 +84,23 @@ const TransactionList = () => {
                     &#8722;&nbsp;
                   </span>
                 )}
+                {t?.amount}&nbsp;{t?.currency}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.receiver.name.split(" ").slice(0, 2).join(" ")}
+                {t?.payment_method.full_name.split(" ").slice(0, 2).join(" ")}
                 <br />
                 <span
                   className="text-gray-500 text-sm block"
                   style={{ marginTop: "-3px" }}
                 >
-                  {"@" + t?.receiver.account}
+                  {"@" + t?.payment_method.account_number}
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? "..." : ""}`}
+                {t?.payment_method.institution.name}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {`${new Date(t?.created_at_time)
-                  .toISOString()
-                  .replace("T", " ")
-                  .replace("Z", "")
-                  .replace(/\.\d+$/, "")}`}
+                {t?.ref_code}
               </td>
             </tr>
           ))}
@@ -96,4 +110,4 @@ const TransactionList = () => {
   );
 };
 
-export default TransactionList;
+export default TransferList;

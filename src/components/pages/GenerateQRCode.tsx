@@ -4,8 +4,20 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const GenerateQRCode = () => {
-  const [QRCodeURL, setQRCodeURL] = useState("");
+  const [QRCode, setQRCode] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
+  const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  const copyPaymentLink = (e) => {
+    navigator.clipboard.writeText(QRCode.payment_link);
+    setPaymentLinkCopied(true);
+
+    setTimeout(() => {
+      setPaymentLinkCopied(false);
+      e.target.blur();
+    }, 2000);
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -21,28 +33,34 @@ const GenerateQRCode = () => {
     }),
 
     onSubmit: (values) => {
+      setLoading(true);
+
       // Clear existing values
       setErrorMessage("");
-      setQRCodeURL("");
+      setQRCode(undefined);
 
       axios
         .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
         .then((res) => {
-          setQRCodeURL(res.data.qr_image_url);
+          setQRCode(res.data);
+          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) =>
+        .catch((error) => {
           setErrorMessage(error.response?.data.error || error.message),
-        );
+            setLoading(false);
+        });
     },
   });
 
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 ">Generate QR Code</h1>
-      <p className="pl-2 mb-10">Generate QR Code to receive payments.</p>
+      <p className="pl-2 mb-10 text-gray-600">
+        Receive payments by sharing your generated QR Code.
+      </p>
 
       {errorMessage && (
         <div
@@ -64,9 +82,25 @@ const GenerateQRCode = () => {
         </div>
       )}
 
-      {QRCodeURL && (
-        <div className="flex justify-center rounded-lg">
-          <img src={QRCodeURL} alt="QR Code URL" />
+      {QRCode && (
+        <div className="flex flex-col items-center justify-center rounded-lg -mt-10 mb-8">
+          <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60" />
+          <p className="text-sm">
+            Payment Link:{" "}
+            <span className="px-1 pb-0.5 text-white bg-violet-600 rounded">
+              {QRCode.payment_link}
+            </span>
+            <button
+              onClick={(e) => copyPaymentLink(e)}
+              className="w-12 ml-2 px-1 pb-0.5 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
+            >
+              {paymentLinkCopied ? (
+                <span className="font-bold">&#10003;</span>
+              ) : (
+                "copy"
+              )}
+            </button>
+          </p>
         </div>
       )}
 
@@ -78,12 +112,13 @@ const GenerateQRCode = () => {
               id="amount"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
+              autoComplete="off"
               onChange={formik.handleChange}
               value={formik.values.amount}
             />
             <label
               htmlFor="amount"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Amount
             </label>
@@ -99,12 +134,13 @@ const GenerateQRCode = () => {
               id="cause"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
+              autoComplete="off"
               onChange={formik.handleChange}
               value={formik.values.cause}
             />
             <label
               htmlFor="cause"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Cause
             </label>
@@ -119,7 +155,7 @@ const GenerateQRCode = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Generate QR
+          {isLoading ? "Generating . . ." : "Generate QR"}
         </button>
       </form>
     </div>
