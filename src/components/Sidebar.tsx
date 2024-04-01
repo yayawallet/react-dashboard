@@ -88,10 +88,13 @@ const Sidebar = () => {
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">
-                    {profile?.name.split(" ").slice(0, 2).join(" ")}
+                    {profile?.name.split(" ").slice(0, 2).join(" ") || (
+                      <span>&nbsp;</span>
+                    )}
                   </span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
-                    {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2")}
+                    {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2") ||
+                      "LEVEL -"}
                   </span>
                 </Link>
               </li>
