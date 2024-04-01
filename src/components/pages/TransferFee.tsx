@@ -1,12 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const TransferFee = () => {
+  const [financialInstitutionList, setFinancialInstitutionList] = useState([]);
   const [institution, setInstitution] = useState("");
   const [transferFee, setTransferFee] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/financialInstitutionList`, {
+        country: "Ethiopia",
+      })
+      .then((res) => setFinancialInstitutionList(res.data))
+      .catch((error) =>
+        setErrorMessage(error.response?.data.error || error.message),
+      );
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -20,6 +33,8 @@ const TransferFee = () => {
     }),
 
     onSubmit: (values) => {
+      setLoading(true);
+
       // Clear existing values
       setErrorMessage("");
       setTransferFee(undefined);
@@ -30,13 +45,15 @@ const TransferFee = () => {
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);
+          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) =>
-          setErrorMessage(error.response?.data.error || error.message),
-        );
+        .catch((error) => {
+          setErrorMessage(error.response?.data.error || error.message);
+          setLoading(false);
+        });
     },
   });
 
@@ -65,7 +82,7 @@ const TransferFee = () => {
       )}
 
       {transferFee && (
-        <div className="flex justify-center sm:-ml-10 rounded-lg mb-20">
+        <div className="flex justify-center sm:mr-10 md:mr-20 lg:mr-28 rounded-lg mb-20">
           <p className="text-2xl">
             Transfer Fee to {institution}:
             <span className="text-6xl px-2">{transferFee.fee}</span>
@@ -77,21 +94,19 @@ const TransferFee = () => {
       <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="text"
+            <select
               id="institution_code"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
+              className=" bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
               onChange={formik.handleChange}
               value={formik.values.institution_code}
-            />
-            <label
-              htmlFor="institution_code"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Institution Code
-            </label>
-
+              <option label="Choose Institution code"></option>
+              {financialInstitutionList?.map((list) => (
+                <option key={list.code} value={list.code}>
+                  {`${list.name} - (${list.code})`}
+                </option>
+              ))}
+            </select>
             <span className="text-xs text-red-600">
               {formik.touched.institution_code &&
                 formik.errors.institution_code}
@@ -104,12 +119,13 @@ const TransferFee = () => {
               id="amount"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
+              autoComplete="off"
               onChange={formik.handleChange}
               value={formik.values.amount}
             />
             <label
               htmlFor="amount"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Amount
             </label>
@@ -124,7 +140,7 @@ const TransferFee = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Check Fee
+          {isLoading ? "Checking . . ." : "Check Fee"}
         </button>
       </form>
     </div>

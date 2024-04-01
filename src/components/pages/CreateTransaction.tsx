@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import avater from "./../../assets/avater.svg";
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
+  const [usersList, setUsersList] = useState([]);
 
   const formik = useFormik({
     initialValues: {
@@ -25,6 +28,8 @@ const CreateTransaction = () => {
     }),
 
     onSubmit: (values) => {
+      setLoading(true);
+
       // Clear existing values
       setErrorMessage("");
       setTransactionID("");
@@ -33,15 +38,28 @@ const CreateTransaction = () => {
         .post(`${import.meta.env.VITE_BASE_URL}/createTransaction`, values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
+          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) =>
+        .catch((error) => {
           setErrorMessage(error.response?.data.error || error.message),
-        );
+            setLoading(false);
+        });
     },
   });
+
+  useEffect(() => {
+    if (formik.values.receiver.length < 2) return setUsersList([]);
+
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/searchUser`, {
+        query: formik.values.receiver,
+      })
+      .then((res) => setUsersList(res.data))
+      .catch((error) => console.log(error));
+  }, [formik.values.receiver]);
 
   return (
     <div className="container">
@@ -88,18 +106,19 @@ const CreateTransaction = () => {
       )}
 
       <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
-        <div className="relative z-0 w-full mb-10 group">
+        <div className="relative z-0 w-full mb-1 group">
           <input
             type="Text"
             id="receiver"
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
+            autoComplete="off"
             onChange={formik.handleChange}
             value={formik.values.receiver}
           />
           <label
             htmlFor="receiver"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
             Receiver
           </label>
@@ -107,6 +126,32 @@ const CreateTransaction = () => {
           <span className="text-xs text-red-600">
             {formik.touched.receiver && formik.errors.receiver}
           </span>
+        </div>
+
+        <div className="relative z-0 w-full mb-10 group">
+          <div className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 outline-none">
+            {usersList?.map((user) => (
+              <div
+                key={user.account}
+                className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
+                onClick={() => {
+                  formik.setFieldValue("receiver", user.account);
+                  setUsersList([user]);
+                }}
+              >
+                <img
+                  src={user.photo_url || avater}
+                  alt=""
+                  className="h-8 w-8 rounded-full"
+                />
+                <span>{user.name}</span>
+              </div>
+            ))}
+
+            {usersList.length === 0 && formik.values.receiver.length >= 2 && (
+              <span className="block text-sm pl-4">No users found.</span>
+            )}
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 md:gap-6">
@@ -121,7 +166,7 @@ const CreateTransaction = () => {
             />
             <label
               htmlFor="amount"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Amount
             </label>
@@ -137,12 +182,13 @@ const CreateTransaction = () => {
               id="cause"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
+              autoComplete="off"
               onChange={formik.handleChange}
               value={formik.values.cause}
             />
             <label
               htmlFor="cause"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
               Cause
             </label>
@@ -157,7 +203,7 @@ const CreateTransaction = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Send Money
+          {isLoading ? "Sending . . ." : "Send Money"}
         </button>
       </form>
     </div>
