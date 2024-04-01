@@ -78,7 +78,7 @@ const Sidebar = () => {
                     <img
                       src={profile?.photo_url || avater}
                       alt=""
-                      className="w-24 h-24 border-2 rounded-full "
+                      className="w-24 h-24 rounded-full "
                     />
                   </Link>
                 </div>
