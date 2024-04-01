@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 const ExternalAccountLookup = () => {
+  const [financialInstitutionList, setFinancialInstitutionList] = useState([]);
   const [externalAccount, setExternalAccount] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/financialInstitutionList`, {
+        country: "Ethiopia",
+      })
+      .then((res) => setFinancialInstitutionList(res.data))
+      .catch((error) =>
+        setErrorMessage(error.response?.data.error || error.message),
+      );
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -77,7 +89,7 @@ const ExternalAccountLookup = () => {
               </p>
             </div>
 
-            <div className="h-24">
+            <div className="h-20">
               <img
                 src={externalAccount.institution.logo_url}
                 alt="Institution Logo"
@@ -122,21 +134,19 @@ const ExternalAccountLookup = () => {
       <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
         <div className="grid md:grid-cols-2 md:gap-6 mt-16">
           <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="text"
+            <select
               id="institution_code"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
+              className=" bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
               onChange={formik.handleChange}
               value={formik.values.institution_code}
-            />
-            <label
-              htmlFor="institution_code"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Institution Code
-            </label>
-
+              <option label="Choose Institution code"></option>
+              {financialInstitutionList?.map((list) => (
+                <option key={list.code} value={list.code}>
+                  {`${list.name} - (${list.code})`}
+                </option>
+              ))}
+            </select>
             <span className="text-xs text-red-600">
               {formik.touched.institution_code &&
                 formik.errors.institution_code}
