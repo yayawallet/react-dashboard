@@ -7,6 +7,7 @@ const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState("");
   const [transaction, setTransaction] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -20,6 +21,8 @@ const GetTransactionByID = () => {
     }),
 
     onSubmit: (values) => {
+      setLoading(true);
+
       // Clear existing values
       setErrorMessage("");
       setTransaction(undefined);
@@ -32,15 +35,17 @@ const GetTransactionByID = () => {
         .post(`${import.meta.env.VITE_BASE_URL}/getTransactionById`, values)
         .then((res) => {
           setTransaction(res.data);
+          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) =>
+        .catch((error) => {
           setErrorMessage(
             error.response?.data.error || "Invalid transaction ID",
-          ),
-        );
+          );
+          setLoading(false);
+        });
     },
   });
 
@@ -180,7 +185,7 @@ const GetTransactionByID = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Verify
+          {isLoading ? "Verifying . . ." : "Verify"}
         </button>
       </form>
     </div>

@@ -7,6 +7,7 @@ const GenerateQRCode = () => {
   const [QRCode, setQRCode] = useState(undefined);
   const [errorMessage, setErrorMessage] = useState("");
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const copyPaymentLink = (e) => {
     navigator.clipboard.writeText(QRCode.payment_link);
@@ -32,6 +33,8 @@ const GenerateQRCode = () => {
     }),
 
     onSubmit: (values) => {
+      setLoading(true);
+
       // Clear existing values
       setErrorMessage("");
       setQRCode(undefined);
@@ -40,13 +43,15 @@ const GenerateQRCode = () => {
         .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
         .then((res) => {
           setQRCode(res.data);
+          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) =>
+        .catch((error) => {
           setErrorMessage(error.response?.data.error || error.message),
-        );
+            setLoading(false);
+        });
     },
   });
 
@@ -148,7 +153,7 @@ const GenerateQRCode = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Generate QR
+          {isLoading ? "Generating . . ." : "Generate QR"}
         </button>
       </form>
     </div>
