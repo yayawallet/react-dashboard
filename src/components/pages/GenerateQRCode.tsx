@@ -87,12 +87,12 @@ const GenerateQRCode = () => {
           <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60" />
           <p className="text-sm">
             Payment Link:{" "}
-            <span className="inline-flex px-1 text-white bg-violet-600 rounded">
+            <span className="px-1 pb-0.5 text-white bg-violet-600 rounded">
               {QRCode.payment_link}
             </span>
             <button
               onClick={(e) => copyPaymentLink(e)}
-              className="w-10 ml-2 px-1 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
+              className="w-12 ml-2 px-1 pb-0.5 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
             >
               {paymentLinkCopied ? (
                 <span className="font-bold">&#10003;</span>
