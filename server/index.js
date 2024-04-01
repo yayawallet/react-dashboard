@@ -87,6 +87,18 @@ app.post("/externalAccountLookup", async (req, res) => {
   }
 });
 
+app.post("/financialInstitutionList", async (req, res) => {
+  try {
+    const { country } = req.body;
+
+    const institutionList = await listInstitution(country);
+
+    res.send(institutionList);
+  } catch (error) {
+    res.status(404).send(error.message);
+  }
+});
+
 app.post("/getTransferFee", async (req, res) => {
   try {
     const { institution_code, amount } = req.body;
