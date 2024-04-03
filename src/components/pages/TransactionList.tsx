@@ -1,8 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Transaction } from "../../models";
 
 const TransactionList = () => {
-  const [transactionList, setTransactionList] = useState([]);
+  const [transactionList, setTransactionList] = useState<Transaction[]>([]);
   const [ownAccount, setOwnAccount] = useState("");
   const [copiedID, setCopiedID] = useState("");
 

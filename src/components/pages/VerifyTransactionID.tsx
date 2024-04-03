@@ -1,11 +1,12 @@
 import { useState } from "react";
-import axios from "axios";
 import { useFormik } from "formik";
+import axios from "axios";
 import * as Yup from "yup";
+import { Transaction } from "../../models";
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState("");
-  const [transaction, setTransaction] = useState(undefined);
+  const [transaction, setTransaction] = useState<Transaction>();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
 

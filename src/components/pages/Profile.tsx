@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Profile } from "../../models";
 
 const Profile = () => {
-  const [profile, setProfile] = useState(undefined);
+  const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
     axios

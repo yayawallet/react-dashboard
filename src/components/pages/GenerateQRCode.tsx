@@ -2,9 +2,10 @@ import { useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { QRCode } from "../../models";
 
 const GenerateQRCode = () => {
-  const [QRCode, setQRCode] = useState(undefined);
+  const [QRCode, setQRCode] = useState<QRCode>();
   const [errorMessage, setErrorMessage] = useState("");
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);

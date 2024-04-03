@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { Institution, Fee } from "../../models";
 
 const TransferFee = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState([]);
+  const [financialInstitutionList, setFinancialInstitutionList] = useState<
+    Institution[]
+  >([]);
   const [institution, setInstitution] = useState("");
-  const [transferFee, setTransferFee] = useState(undefined);
+  const [transferFee, setTransferFee] = useState<Fee>();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
 

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { User } from "../../models";
 import avater from "./../../assets/avater.svg";
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
-  const [usersList, setUsersList] = useState([]);
+  const [usersList, setUsersList] = useState<User[]>([]);
 
   const formik = useFormik({
     initialValues: {
