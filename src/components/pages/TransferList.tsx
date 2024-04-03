@@ -14,6 +14,8 @@ const TransferList = () => {
     setTimeout(() => setCopiedID(""), 1000);
   };
 
+  console.log(transferList);
+
   useEffect(() => {
     axios
       .get(`${BASE_URL}/getTransferList`)

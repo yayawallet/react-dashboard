@@ -1,4 +1,4 @@
-export interface Profile {
+export interface UserProfile {
   id: string;
   name: string;
   account: string;
@@ -43,25 +43,26 @@ export interface QRCode {
 
 export interface Transfer {
   id: string;
-  user: {
-    name: string;
-    account: string;
-  };
-  currency: string;
+  name: string;
+  email: string;
   amount: number;
+  amount_in_base_currency: number;
+
+  currency: string;
   payment_method: {
+    account_number: string;
+    full_name: string;
     institution: {
       code: string;
       name: string;
-      logo_url: null | string;
+      logo_url: string;
     };
-    full_name: string;
-    account_number: string;
-    phone: string;
+  };
+  phone: string;
+  ref_code: string;
+  user: {
     name: string;
-    email: null | string;
-    ref_code: string;
-    amount_in_base_currecny: number;
+    account: string;
   };
 }
 
@@ -95,7 +96,7 @@ export interface Institution {
     name: string;
     phone_code: string;
   };
-  logo_url: null | string;
+  logo_url: string;
   full_name: string;
   account_number: string;
   phone: string;
@@ -105,4 +106,12 @@ export interface Institution {
 export interface Fee {
   fee: number;
   currency: string;
+}
+
+export interface EXternalAccount {
+  account_number: string;
+  full_name: string;
+  institution: Institution;
+  phone: string;
+  photo_url: string;
 }

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Profile } from "../../models";
+import { UserProfile } from "../../models";
 import { BASE_URL } from "../../constants";
 
 const Profile = () => {
-  const [profile, setProfile] = useState<Profile>();
+  const [profile, setProfile] = useState<UserProfile>();
 
   useEffect(() => {
     axios.get(`${BASE_URL}/getProfile`).then((res) => setProfile(res.data));
@@ -30,8 +30,9 @@ const Profile = () => {
             <dd
               className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === "ACTIVE" ? "bg-green-500 text-slate-100" : "bg-gray-100"}`}
             >
-              {profile?.status?.charAt(0) +
-                profile?.status?.slice(1).toLowerCase() || "- - -"}
+              {profile
+                ? `${profile?.status?.charAt(0)}${profile?.status?.slice(1).toLowerCase()}`
+                : "- - -"}
             </dd>
           </div>
         </div>

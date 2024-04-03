@@ -11,13 +11,15 @@ const GenerateQRCode = () => {
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const copyPaymentLink = (e) => {
-    navigator.clipboard.writeText(QRCode.payment_link);
+  const copyPaymentLink = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    navigator.clipboard.writeText(QRCode?.payment_link || "");
     setPaymentLinkCopied(true);
 
     setTimeout(() => {
       setPaymentLinkCopied(false);
-      e.target.blur();
+      e.currentTarget.blur();
     }, 2000);
   };
 
