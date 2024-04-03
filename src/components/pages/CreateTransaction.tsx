@@ -56,7 +56,7 @@ const CreateTransaction = () => {
     if (formik.values.receiver.length < 2) return setUsersList([]);
 
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/searchUser`, {
+      .post(`${BASE_URL}/searchUser`, {
         query: formik.values.receiver,
       })
       .then((res) => setUsersList(res.data))

@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Institution } from "../../models";
+import { Institution, EXternalAccount } from "../../models";
 import { BASE_URL } from "../../constants";
 
 const ExternalAccountLookup = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<
     Institution[]
   >([]);
-  const [externalAccount, setExternalAccount] = useState<Institution>();
+  const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
+
+  console.log(externalAccount);
 
   useEffect(() => {
     axios
