@@ -3,6 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { QRCode } from "../../models";
+import { BASE_URL } from "../../constants";
 
 const GenerateQRCode = () => {
   const [QRCode, setQRCode] = useState<QRCode>();
@@ -41,7 +42,7 @@ const GenerateQRCode = () => {
       setQRCode(undefined);
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
+        .post(`${BASE_URL}/generateQrUrl`, values)
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);

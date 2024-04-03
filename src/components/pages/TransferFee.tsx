@@ -3,6 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Institution, Fee } from "../../models";
+import { BASE_URL } from "../../constants";
 
 const TransferFee = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<
@@ -15,7 +16,7 @@ const TransferFee = () => {
 
   useEffect(() => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/financialInstitutionList`, {
+      .post(`${BASE_URL}/financialInstitutionList`, {
         country: "Ethiopia",
       })
       .then((res) => setFinancialInstitutionList(res.data))
@@ -44,7 +45,7 @@ const TransferFee = () => {
       setInstitution("");
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/getTransferFee`, values)
+        .post(`${BASE_URL}/getTransferFee`, values)
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);

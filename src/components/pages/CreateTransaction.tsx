@@ -3,6 +3,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { User } from "../../models";
+import { BASE_URL } from "../../constants";
 import avater from "./../../assets/avater.svg";
 
 const CreateTransaction = () => {
@@ -36,7 +37,7 @@ const CreateTransaction = () => {
       setTransactionID("");
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/createTransaction`, values)
+        .post(`${BASE_URL}/createTransaction`, values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
           setLoading(false);

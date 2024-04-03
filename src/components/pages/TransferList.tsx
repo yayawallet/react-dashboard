@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Transfer } from "../../models";
+import { BASE_URL } from "../../constants";
 
 const TransferList = () => {
   const [transferList, setTransferList] = useState<Transfer[]>([]);
@@ -15,7 +16,7 @@ const TransferList = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getTransferList`)
+      .get(`${BASE_URL}/getTransferList`)
       .then((res) => setTransferList(res.data))
       .catch((error) => console.log(error));
   }, []);
