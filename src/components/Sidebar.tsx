@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Profile } from "../models";
 
 import yayawalletLogo from "../assets/yayawallet-brand.svg";
 import avater from "../assets/avater.svg";
@@ -8,7 +9,7 @@ import avater from "../assets/avater.svg";
 const Sidebar = () => {
   const menuBtn = useRef<HTMLButtonElement>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [profile, setProfile] = useState(undefined);
+  const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/getProfile`).then((res) => {

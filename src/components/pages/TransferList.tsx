@@ -1,8 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Transfer } from "../../models";
 
 const TransferList = () => {
-  const [transferList, setTransferList] = useState([]);
+  const [transferList, setTransferList] = useState<Transfer[]>([]);
   const [copiedID, setCopiedID] = useState("");
 
   const copyTransferID = (id: string) => {
