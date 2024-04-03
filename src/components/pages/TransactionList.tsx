@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Transaction } from "../../models";
-import { BASE_URL } from "../../constants";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Transaction } from '../../models';
+import { BASE_URL } from '../../constants';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
-  const [ownAccount, setOwnAccount] = useState("");
-  const [copiedID, setCopiedID] = useState("");
+  const [ownAccount, setOwnAccount] = useState('');
+  const [copiedID, setCopiedID] = useState('');
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedID(id);
 
-    setTimeout(() => setCopiedID(""), 1000);
+    setTimeout(() => setCopiedID(''), 1000);
   };
 
   useEffect(() => {
@@ -22,13 +22,12 @@ const TransactionList = () => {
 
     axios
       .get(`${BASE_URL}/getTransactionListByUser`)
-      .then((res) => setTransactionList(res.data.data))
-      .catch((error) => console.log(error));
+      .then((res) => setTransactionList(res.data.data));
   }, []);
 
   return (
-    <div className="container" style={{ overflowX: "auto" }}>
-      <table style={{ minWidth: "960px" }}>
+    <div className="container" style={{ overflowX: 'auto' }}>
+      <table style={{ minWidth: '960px' }}>
         <thead>
           <tr className="bg-violet-500 text-gray-50">
             <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
@@ -62,19 +61,19 @@ const TransactionList = () => {
               >
                 {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
                 <span
-                  className={`${copiedID === t?.id ? "" : "hidden"} absolute -top-2 left-4 w-24 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                  className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                 >
                   Transaction ID Copied
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.sender.name.split(" ").slice(0, 2).join(" ")}
+                {t?.sender.name.split(' ').slice(0, 2).join(' ')}
                 <br />
                 <span
                   className="text-gray-500 text-sm block"
-                  style={{ marginTop: "-3px" }}
+                  style={{ marginTop: '-3px' }}
                 >
-                  {"@" + t?.sender.account}
+                  {'@' + t?.sender.account}
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
@@ -90,24 +89,24 @@ const TransactionList = () => {
                 {t?.amount_with_currency}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.receiver.name.split(" ").slice(0, 2).join(" ")}
+                {t?.receiver.name.split(' ').slice(0, 2).join(' ')}
                 <br />
                 <span
                   className="text-gray-500 text-sm block"
-                  style={{ marginTop: "-3px" }}
+                  style={{ marginTop: '-3px' }}
                 >
-                  {"@" + t?.receiver.account}
+                  {'@' + t?.receiver.account}
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? "..." : ""}`}
+                {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {`${new Date(t?.created_at_time)
                   .toISOString()
-                  .replace("T", " ")
-                  .replace("Z", "")
-                  .replace(/\.\d+$/, "")}`}
+                  .replace('T', ' ')
+                  .replace('Z', '')
+                  .replace(/\.\d+$/, '')}`}
               </td>
             </tr>
           ))}

@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { Transfer } from "../../models";
-import { BASE_URL } from "../../constants";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Transfer } from '../../models';
+import { BASE_URL } from '../../constants';
 
 const TransferList = () => {
   const [transferList, setTransferList] = useState<Transfer[]>([]);
-  const [copiedID, setCopiedID] = useState("");
+  const [copiedID, setCopiedID] = useState('');
 
   const copyTransferID = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedID(id);
 
-    setTimeout(() => setCopiedID(""), 1000);
+    setTimeout(() => setCopiedID(''), 1000);
   };
-
-  console.log(transferList);
 
   useEffect(() => {
     axios
       .get(`${BASE_URL}/getTransferList`)
-      .then((res) => setTransferList(res.data))
-      .catch((error) => console.log(error));
+      .then((res) => setTransferList(res.data));
   }, []);
 
   return (
-    <div className="container" style={{ overflowX: "auto" }}>
-      <table style={{ minWidth: "960px" }}>
+    <div className="container" style={{ overflowX: 'auto' }}>
+      <table style={{ minWidth: '960px' }}>
         <thead>
           <tr className="bg-violet-500 text-gray-50">
             <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
@@ -63,19 +60,19 @@ const TransferList = () => {
               >
                 {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
                 <span
-                  className={`${copiedID === t?.id ? "" : "hidden"} absolute -top-2 left-4 w-24 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                  className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 w-36 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                 >
-                  Id copied
+                  Transfer ID Copied
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.user.name.split(" ").slice(0, 2).join(" ")}
+                {t?.user.name.split(' ').slice(0, 2).join(' ')}
                 <br />
                 <span
                   className="text-gray-500 text-sm block"
-                  style={{ marginTop: "-3px" }}
+                  style={{ marginTop: '-3px' }}
                 >
-                  {"@" + t?.user.account}
+                  {'@' + t?.user.account}
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
@@ -91,13 +88,13 @@ const TransferList = () => {
                 {t?.amount}&nbsp;{t?.currency}
               </td>
               <td className="border-t border-b border-slate-200 p-3">
-                {t?.payment_method.full_name.split(" ").slice(0, 2).join(" ")}
+                {t?.payment_method.full_name.split(' ').slice(0, 2).join(' ')}
                 <br />
                 <span
                   className="text-gray-500 text-sm block"
-                  style={{ marginTop: "-3px" }}
+                  style={{ marginTop: '-3px' }}
                 >
-                  {"@" + t?.payment_method.account_number}
+                  {'@' + t?.payment_method.account_number}
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
