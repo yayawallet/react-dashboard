@@ -1,47 +1,45 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { Institution, EXternalAccount } from "../../models";
-import { BASE_URL } from "../../constants";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { Institution, EXternalAccount } from '../../models';
+import { BASE_URL } from '../../constants';
 
 const ExternalAccountLookup = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<
     Institution[]
   >([]);
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  console.log(externalAccount);
 
   useEffect(() => {
     axios
       .post(`${BASE_URL}/financialInstitutionList`, {
-        country: "Ethiopia",
+        country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
       .catch((error) =>
-        setErrorMessage(error.response?.data.error || error.message),
+        setErrorMessage(error.response?.data.error || error.message)
       );
   }, []);
 
   const formik = useFormik({
     initialValues: {
-      institution_code: "",
-      account_number: "",
+      institution_code: '',
+      account_number: '',
     },
 
     validationSchema: Yup.object({
-      institution_code: Yup.string().required("Required"),
-      account_number: Yup.string().required("Required"),
+      institution_code: Yup.string().required('Required'),
+      account_number: Yup.string().required('Required'),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
 
       // Clear existing values
-      setErrorMessage("");
+      setErrorMessage('');
       setExternalAccount(undefined);
 
       axios
@@ -94,9 +92,9 @@ const ExternalAccountLookup = () => {
                 {externalAccount.institution.name}
               </h3>
               <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                {"code: " + externalAccount.institution.code}
+                {'code: ' + externalAccount.institution.code}
                 <br />
-                {"Id: " + externalAccount.institution.institution_id}
+                {'Id: ' + externalAccount.institution.institution_id}
               </p>
             </div>
 
@@ -190,7 +188,7 @@ const ExternalAccountLookup = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? "Please wait..." : "Lookup Account"}
+          {isLoading ? 'Please wait...' : 'Lookup Account'}
         </button>
       </form>
     </div>

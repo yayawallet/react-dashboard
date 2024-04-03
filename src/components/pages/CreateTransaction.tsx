@@ -66,8 +66,7 @@ const CreateTransaction = () => {
       .then((res) => {
         setUsersList(res.data);
         if (res.data.length === 0) setNOUserFound(true);
-      })
-      .catch((error) => console.log(error));
+      });
   }, [formik.values.receiver]);
 
   return (
