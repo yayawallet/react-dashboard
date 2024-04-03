@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Profile } from "../models";
+import { BASE_URL } from "../constants";
 
 import yayawalletLogo from "../assets/yayawallet-brand.svg";
 import avater from "../assets/avater.svg";
@@ -12,7 +13,7 @@ const Sidebar = () => {
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/getProfile`).then((res) => {
+    axios.get(`${BASE_URL}/getProfile`).then((res) => {
       setProfile(res.data);
     });
   }, []);

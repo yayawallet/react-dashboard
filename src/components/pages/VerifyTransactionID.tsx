@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import axios from "axios";
 import * as Yup from "yup";
 import { Transaction } from "../../models";
+import { BASE_URL } from "../../constants";
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState("");
@@ -29,11 +30,11 @@ const GetTransactionByID = () => {
       setTransaction(undefined);
 
       axios
-        .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
+        .get(`${BASE_URL}/getProfile`)
         .then((res) => setOwnAccount(res.data.account));
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/getTransactionById`, values)
+        .post(`${BASE_URL}/getTransactionById`, values)
         .then((res) => {
           setTransaction(res.data);
           setLoading(false);

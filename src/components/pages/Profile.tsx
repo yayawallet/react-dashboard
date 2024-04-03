@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Profile } from "../../models";
+import { BASE_URL } from "../../constants";
 
 const Profile = () => {
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
-      .then((res) => setProfile(res.data));
+    axios.get(`${BASE_URL}/getProfile`).then((res) => setProfile(res.data));
   }, []);
 
   return (
