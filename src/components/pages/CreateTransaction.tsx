@@ -1,41 +1,42 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { User } from "../../models";
-import { BASE_URL } from "../../constants";
-import avater from "./../../assets/avater.svg";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { User } from '../../models';
+import { BASE_URL } from '../../constants';
+import avater from './../../assets/avater.svg';
 
 const CreateTransaction = () => {
-  const [transactionID, setTransactionID] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [transactionID, setTransactionID] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [usersList, setUsersList] = useState<User[]>([]);
   const [noUserFound, setNOUserFound] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      receiver: "",
-      amount: "",
-      cause: "",
+      receiver: '',
+      amount: '',
+      cause: '',
     },
 
     validationSchema: Yup.object({
       receiver: Yup.string()
-        .max(50, "Must be 50 characters or less")
-        .required("Required"),
-      amount: Yup.number().required("Required"),
+        .max(50, 'Must be 50 characters or less')
+        .required('Required'),
+      amount: Yup.number().required('Required'),
       cause: Yup.string()
-        .max(50, "Must be 50 characters or less")
-        .required("Required"),
+        .max(50, 'Must be 50 characters or less')
+        .required('Required'),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
+      setUsersList([]);
 
       // Clear existing values
-      setErrorMessage("");
-      setTransactionID("");
+      setErrorMessage('');
+      setTransactionID('');
 
       axios
         .post(`${BASE_URL}/createTransaction`, values)
@@ -143,7 +144,7 @@ const CreateTransaction = () => {
                 key={user.account}
                 className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
-                  formik.setFieldValue("receiver", user.account);
+                  formik.setFieldValue('receiver', user.account);
                   setUsersList([user]);
                 }}
               >
@@ -210,9 +211,10 @@ const CreateTransaction = () => {
 
         <button
           type="submit"
+          disabled={noUserFound}
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? "Sending..." : "Send Money"}
+          {isLoading ? 'Sending...' : 'Send Money'}
         </button>
       </form>
     </div>
