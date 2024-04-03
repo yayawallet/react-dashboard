@@ -64,7 +64,7 @@ const TransactionList = () => {
                 <span
                   className={`${copiedID === t?.id ? "" : "hidden"} absolute -top-2 left-4 w-24 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                 >
-                  Id copied
+                  Transaction ID Copied
                 </span>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
