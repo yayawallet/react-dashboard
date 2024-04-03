@@ -11,6 +11,7 @@ const CreateTransaction = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
   const [usersList, setUsersList] = useState<User[]>([]);
+  const [noUserFound, setNOUserFound] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -53,13 +54,18 @@ const CreateTransaction = () => {
   });
 
   useEffect(() => {
-    if (formik.values.receiver.length < 2) return setUsersList([]);
+    if (formik.values.receiver.length < 1) return setUsersList([]);
+    // reset NoUserFound
+    setNOUserFound(false);
 
     axios
       .post(`${BASE_URL}/searchUser`, {
         query: formik.values.receiver,
       })
-      .then((res) => setUsersList(res.data))
+      .then((res) => {
+        setUsersList(res.data);
+        if (res.data.length === 0) setNOUserFound(true);
+      })
       .catch((error) => console.log(error));
   }, [formik.values.receiver]);
 
@@ -132,7 +138,7 @@ const CreateTransaction = () => {
 
         <div className="relative z-0 w-full mb-10 group">
           <div className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 outline-none">
-            {usersList?.map((user) => (
+            {usersList?.slice(0, 5).map((user) => (
               <div
                 key={user.account}
                 className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
@@ -150,7 +156,7 @@ const CreateTransaction = () => {
               </div>
             ))}
 
-            {usersList.length === 0 && formik.values.receiver.length >= 2 && (
+            {noUserFound && (
               <span className="block text-sm pl-4">No users found.</span>
             )}
           </div>
@@ -163,6 +169,7 @@ const CreateTransaction = () => {
               id="amount"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
+              autoComplete="off"
               onChange={formik.handleChange}
               value={formik.values.amount}
             />
@@ -205,7 +212,7 @@ const CreateTransaction = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? "Sending . . ." : "Send Money"}
+          {isLoading ? "Sending..." : "Send Money"}
         </button>
       </form>
     </div>
