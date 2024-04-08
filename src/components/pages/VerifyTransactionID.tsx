@@ -1,11 +1,13 @@
 import { useState } from "react";
-import axios from "axios";
 import { useFormik } from "formik";
+import axios from "axios";
 import * as Yup from "yup";
+import { Transaction } from "../../models";
+import { BASE_URL } from "../../constants";
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState("");
-  const [transaction, setTransaction] = useState(undefined);
+  const [transaction, setTransaction] = useState<Transaction>();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setLoading] = useState(false);
 
@@ -28,11 +30,11 @@ const GetTransactionByID = () => {
       setTransaction(undefined);
 
       axios
-        .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
+        .get(`${BASE_URL}/getProfile`)
         .then((res) => setOwnAccount(res.data.account));
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/getTransactionById`, values)
+        .post(`${BASE_URL}/getTransactionById`, values)
         .then((res) => {
           setTransaction(res.data);
           setLoading(false);
@@ -185,7 +187,7 @@ const GetTransactionByID = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? "Verifying . . ." : "Verify"}
+          {isLoading ? "Verifying..." : "Verify"}
         </button>
       </form>
     </div>
