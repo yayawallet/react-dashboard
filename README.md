@@ -7,11 +7,11 @@ An example dashboard using React + TypeScrpipt and Tailwind CSS
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yayawallet/yayawallet-node-sdk.git
+   git clone https://github.com/yayawallet/yayawallet-example-dashboard.git
 
    ```
 
-2. Navigate to the project directory: `cd yayawallet-node-sdk/example-dashboard`
+2. Navigate to the project directory: `cd yayawallet-example-dashboard`
 3. Install dependencies: `npm install`
 
 ## Usage
