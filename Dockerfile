@@ -2,10 +2,12 @@ FROM node:21-alpine
 
 WORKDIR /app
 
-RUN npm install --global http-server
+COPY package*.json .
 
-COPY ./dist .
+RUN npm install
 
-EXPOSE 3030
+COPY . .
 
-CMD ["http-server", ".", "-p 3030"]
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]
