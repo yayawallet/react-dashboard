@@ -15,7 +15,7 @@ const TransferFee = () => {
 
   useEffect(() => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/financialInstitutionList`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/financial-institution/list`, {
         country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
@@ -44,7 +44,7 @@ const TransferFee = () => {
       setInstitution('');
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/getTransferFee`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values)
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);
