@@ -1,4 +1,4 @@
-import yayawallet from "../../assets/yayawallet-brand.svg";
+import yayawallet from '../../assets/yayawallet-brand.svg';
 
 const Home = () => {
   return (

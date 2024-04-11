@@ -1,20 +1,19 @@
-import { useState } from "react";
-import axios from "axios";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { QRCode } from "../../models";
-import { BASE_URL } from "../../constants";
+import { useState } from 'react';
+import axios from 'axios';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { QRCode } from '../../models';
 
 const GenerateQRCode = () => {
   const [QRCode, setQRCode] = useState<QRCode>();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
   const copyPaymentLink = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    navigator.clipboard.writeText(QRCode?.payment_link || "");
+    navigator.clipboard.writeText(QRCode?.payment_link || '');
     setPaymentLinkCopied(true);
 
     setTimeout(() => {
@@ -25,26 +24,26 @@ const GenerateQRCode = () => {
 
   const formik = useFormik({
     initialValues: {
-      amount: "",
-      cause: "",
+      amount: '',
+      cause: '',
     },
 
     validationSchema: Yup.object({
-      amount: Yup.number().required("Required"),
+      amount: Yup.number().required('Required'),
       cause: Yup.string()
-        .max(50, "Must be 50 characters or less")
-        .required("Required"),
+        .max(50, 'Must be 50 characters or less')
+        .required('Required'),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
 
       // Clear existing values
-      setErrorMessage("");
+      setErrorMessage('');
       setQRCode(undefined);
 
       axios
-        .post(`${BASE_URL}/generateQrUrl`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);
@@ -90,7 +89,7 @@ const GenerateQRCode = () => {
         <div className="flex flex-col items-center justify-center rounded-lg -mt-10 mb-8">
           <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60" />
           <p className="text-sm">
-            Payment Link:{" "}
+            Payment Link:{' '}
             <span className="px-1 pb-0.5 text-white bg-violet-600 rounded">
               {QRCode.payment_link}
             </span>
@@ -98,7 +97,7 @@ const GenerateQRCode = () => {
               onClick={(e) => copyPaymentLink(e)}
               className="w-14 ml-2 px-1 pb-0.5 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
             >
-              {paymentLinkCopied ? "copied" : "copy"}
+              {paymentLinkCopied ? 'copied' : 'copy'}
             </button>
           </p>
         </div>
@@ -155,7 +154,7 @@ const GenerateQRCode = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? "Generating..." : "Generate QR"}
+          {isLoading ? 'Generating...' : 'Generate QR'}
         </button>
       </form>
     </div>
