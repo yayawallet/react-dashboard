@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Transaction } from '../../models';
-import { BASE_URL } from '../../constants';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
@@ -17,11 +16,11 @@ const TransactionList = () => {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/getProfile`)
+      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
       .then((res) => setOwnAccount(res.data.account));
 
     axios
-      .get(`${BASE_URL}/getTransactionListByUser`)
+      .get(`${import.meta.env.VITE_BASE_URL}/getTransactionListByUser`)
       .then((res) => setTransactionList(res.data.data));
   }, []);
 
