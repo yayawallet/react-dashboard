@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../../models';
-import { BASE_URL } from '../../constants';
 
 const ExternalAccountLookup = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<
@@ -15,7 +14,7 @@ const ExternalAccountLookup = () => {
 
   useEffect(() => {
     axios
-      .post(`${BASE_URL}/financialInstitutionList`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/financialInstitutionList`, {
         country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
@@ -43,7 +42,7 @@ const ExternalAccountLookup = () => {
       setExternalAccount(undefined);
 
       axios
-        .post(`${BASE_URL}/externalAccountLookup`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/externalAccountLookup`, values)
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);
