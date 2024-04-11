@@ -1,40 +1,39 @@
-import { useState } from "react";
-import { useFormik } from "formik";
-import axios from "axios";
-import * as Yup from "yup";
-import { Transaction } from "../../models";
-import { BASE_URL } from "../../constants";
+import { useState } from 'react';
+import { useFormik } from 'formik';
+import axios from 'axios';
+import * as Yup from 'yup';
+import { Transaction } from '../../models';
 
 const GetTransactionByID = () => {
-  const [ownAccount, setOwnAccount] = useState("");
+  const [ownAccount, setOwnAccount] = useState('');
   const [transaction, setTransaction] = useState<Transaction>();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      transactionID: "",
+      transactionID: '',
     },
 
     validationSchema: Yup.object({
       transactionID: Yup.string()
-        .max(50, "Must be 50 characters or less")
-        .required("Required"),
+        .max(50, 'Must be 50 characters or less')
+        .required('Required'),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
 
       // Clear existing values
-      setErrorMessage("");
+      setErrorMessage('');
       setTransaction(undefined);
 
       axios
-        .get(`${BASE_URL}/getProfile`)
+        .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
         .then((res) => setOwnAccount(res.data.account));
 
       axios
-        .post(`${BASE_URL}/getTransactionById`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/getTransactionById`, values)
         .then((res) => {
           setTransaction(res.data);
           setLoading(false);
@@ -44,7 +43,7 @@ const GetTransactionByID = () => {
         })
         .catch((error) => {
           setErrorMessage(
-            error.response?.data.error || "Invalid transaction ID",
+            error.response?.data.error || 'Invalid transaction ID'
           );
           setLoading(false);
         });
@@ -96,9 +95,9 @@ const GetTransactionByID = () => {
                   <br />
                   <span
                     className="text-gray-500 text-sm block"
-                    style={{ marginTop: "-3px" }}
+                    style={{ marginTop: '-3px' }}
                   >
-                    {"@" + transaction.sender.account}
+                    {'@' + transaction.sender.account}
                   </span>
                 </dd>
               </div>
@@ -109,9 +108,9 @@ const GetTransactionByID = () => {
                   <br />
                   <span
                     className="text-gray-500 text-sm block"
-                    style={{ marginTop: "-3px" }}
+                    style={{ marginTop: '-3px' }}
                   >
-                    {"@" + transaction.sender.account}
+                    {'@' + transaction.sender.account}
                   </span>
                 </dd>
               </div>
@@ -153,7 +152,7 @@ const GetTransactionByID = () => {
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {new Date(transaction.created_at_time)
                     .toString()
-                    .replace(/\(.*\)/, "")}
+                    .replace(/\(.*\)/, '')}
                 </dd>
               </div>
             </dl>
@@ -187,7 +186,7 @@ const GetTransactionByID = () => {
           type="submit"
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? "Verifying..." : "Verify"}
+          {isLoading ? 'Verifying...' : 'Verify'}
         </button>
       </form>
     </div>

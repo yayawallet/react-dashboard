@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { UserProfile } from "../models";
-import { BASE_URL } from "../constants";
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { UserProfile } from '../models';
 
-import yayawalletLogo from "../assets/yayawallet-brand.svg";
-import avater from "../assets/avater.svg";
+import yayawalletLogo from '../assets/yayawallet-brand.svg';
+import avater from '../assets/avater.svg';
 
 const Sidebar = () => {
   const menuBtn = useRef<HTMLButtonElement>(null);
@@ -13,7 +12,7 @@ const Sidebar = () => {
   const [profile, setProfile] = useState<UserProfile>();
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/getProfile`).then((res) => {
+    axios.get(`${import.meta.env.VITE_BASE_URL}/getProfile`).then((res) => {
       setProfile(res.data);
     });
   }, []);
@@ -47,7 +46,7 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  sm:translate-x-0 ${isSidebarOpen ? "" : "-translate-x-full"}`}
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  sm:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
@@ -90,13 +89,13 @@ const Sidebar = () => {
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">
-                    {profile?.name.split(" ").slice(0, 2).join(" ") || (
+                    {profile?.name.split(' ').slice(0, 2).join(' ') || (
                       <span>&nbsp;</span>
                     )}
                   </span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
-                    {profile?.type.replace(/([a-zA-Z])(\d)/g, "$1 $2") ||
-                      "LEVEL -"}
+                    {profile?.type.replace(/([a-zA-Z])(\d)/g, '$1 $2') ||
+                      'LEVEL -'}
                   </span>
                 </Link>
               </li>

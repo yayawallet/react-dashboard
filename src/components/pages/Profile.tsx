@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { UserProfile } from "../../models";
-import { BASE_URL } from "../../constants";
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { UserProfile } from '../../models';
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile>();
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/getProfile`).then((res) => setProfile(res.data));
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
+      .then((res) => setProfile(res.data));
   }, []);
 
   return (
@@ -19,7 +20,7 @@ const Profile = () => {
               {profile?.name}
             </h3>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              {"@" + profile?.account}
+              {'@' + profile?.account}
             </p>
           </div>
 
@@ -28,11 +29,11 @@ const Profile = () => {
               Status
             </dt>
             <dd
-              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === "ACTIVE" ? "bg-green-500 text-slate-100" : "bg-gray-100"}`}
+              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === 'ACTIVE' ? 'bg-green-500 text-slate-100' : 'bg-gray-100'}`}
             >
               {profile
                 ? `${profile?.status?.charAt(0)}${profile?.status?.slice(1).toLowerCase()}`
-                : "- - -"}
+                : '- - -'}
             </dd>
           </div>
         </div>
@@ -71,7 +72,7 @@ const Profile = () => {
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Guardians</dt>
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile?.guardians.join(", ")}
+                {profile?.guardians.join(', ')}
               </dd>
             </div>
 
@@ -89,7 +90,7 @@ const Profile = () => {
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 {profile &&
                   profile?.currency +
-                    " " +
+                    ' ' +
                     profile?.balance_limit?.toLocaleString()}
               </dd>
             </div>
@@ -101,7 +102,7 @@ const Profile = () => {
               <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 {profile &&
                   profile?.currency +
-                    " " +
+                    ' ' +
                     profile?.daily_transaction_limit?.toLocaleString()}
               </dd>
             </div>
