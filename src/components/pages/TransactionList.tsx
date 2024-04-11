@@ -16,11 +16,11 @@ const TransactionList = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
+      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
       .then((res) => setOwnAccount(res.data.account));
 
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getTransactionListByUser`)
+      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user`)
       .then((res) => setTransactionList(res.data.data));
   }, []);
 

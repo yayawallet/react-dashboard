@@ -14,7 +14,7 @@ const ExternalAccountLookup = () => {
 
   useEffect(() => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/financialInstitutionList`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/financial-institution/list`, {
         country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
@@ -42,7 +42,10 @@ const ExternalAccountLookup = () => {
       setExternalAccount(undefined);
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/externalAccountLookup`, values)
+        .post(
+          `${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`,
+          values
+        )
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);

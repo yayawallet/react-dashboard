@@ -12,7 +12,7 @@ const Sidebar = () => {
   const [profile, setProfile] = useState<UserProfile>();
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/getProfile`).then((res) => {
+    axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => {
       setProfile(res.data);
     });
   }, []);
