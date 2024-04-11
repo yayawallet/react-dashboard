@@ -43,7 +43,10 @@ const GenerateQRCode = () => {
       setQRCode(undefined);
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/generateQrUrl`, values)
+        .post(
+          `${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`,
+          values
+        )
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);
