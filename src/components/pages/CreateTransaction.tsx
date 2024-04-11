@@ -38,7 +38,7 @@ const CreateTransaction = () => {
       setTransactionID('');
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/createTransaction`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
           setLoading(false);
@@ -59,7 +59,7 @@ const CreateTransaction = () => {
     setNOUserFound(false);
 
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/searchUser`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
         query: formik.values.receiver,
       })
       .then((res) => {

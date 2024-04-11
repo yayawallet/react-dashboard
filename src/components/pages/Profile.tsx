@@ -7,7 +7,7 @@ const Profile = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/getProfile`)
+      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
       .then((res) => setProfile(res.data));
   }, []);
 
