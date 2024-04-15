@@ -147,14 +147,14 @@ const ExternalAccountLookup = () => {
           <div className="relative z-0 w-full mb-10 group">
             <select
               id="institution_code"
-              className=" bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
+              className="w-full bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
               onChange={formik.handleChange}
               value={formik.values.institution_code}
             >
               <option label="Choose Institution code"></option>
               {financialInstitutionList?.map((list) => (
                 <option key={list.code} value={list.code}>
-                  {`${list.name} - (${list.code})`}
+                  {`${list.code} - ${list.name}`}
                 </option>
               ))}
             </select>
