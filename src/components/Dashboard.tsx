@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Profile from './pages/Profile';
+import AirTime from './AirTime/Index';
 import CreateTransaction from './pages/CreateTransaction';
 import GenerateQRCode from './pages/GenerateQRCode';
 import TransactionList from './pages/TransactionList';
@@ -21,6 +22,7 @@ const Dashboard = () => {
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="airtime" element={<AirTime />} />
               <Route
                 path="create-transaction"
                 element={<CreateTransaction />}
