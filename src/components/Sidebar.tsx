@@ -102,6 +102,15 @@ const Sidebar = () => {
 
               <li>
                 <Link
+                  to="/airtime"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Air Time/Package</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
                   to="/create-transaction"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
