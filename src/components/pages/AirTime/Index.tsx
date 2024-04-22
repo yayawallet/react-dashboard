@@ -1,5 +1,5 @@
-import BuyAirTime from './BuyAirTime';
-// import BuyPackage from './BuyPackage';
+// import BuyAirTime from './BuyAirTime';
+import BuyPackage from './BuyPackage';
 
 const AirTime = () => {
   return (
@@ -55,8 +55,8 @@ const AirTime = () => {
         </div>
       </div>
 
-      <BuyAirTime />
-      {/* <BuyPackage /> */}
+      {/* <BuyAirTime /> */}
+      <BuyPackage />
     </div>
   );
 };
