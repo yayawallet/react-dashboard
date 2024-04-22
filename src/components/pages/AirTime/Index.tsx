@@ -1,20 +1,20 @@
-// import BuyAirTime from './BuyAirTime';
-import BuyPackage from './BuyPackage';
+import BuyAirTime from './BuyAirTime';
+// import BuyPackage from './BuyPackage';
 
 const AirTime = () => {
   return (
-    <div className="container border-2">
+    <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Top-up Air Time</h1>
 
       <div className="">
-        <div className="border-2 rounded-lg p-2 max-w-2xl">
+        <div className="border-2 rounded-lg p-2 px-5">
           <div className="flex gap-x-4 my-2 justify-end">
             <button className="flex flex-wrap items-center text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center">
               <input
                 id="default-checkbox"
                 type="checkbox"
                 value=""
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
               />
               <label htmlFor="">For Self</label>
             </button>
@@ -24,24 +24,27 @@ const AirTime = () => {
                 id="default-checkbox"
                 type="checkbox"
                 value=""
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
               />
               <label htmlFor="">For Other</label>
             </button>
           </div>
 
-          <div className="relative w-full">
+          <div className="relative w-full mb-1">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <span>+251</span>
+            </div>
             <input
               type="text"
               id="phone-number"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-6 p-2.5 outline-none"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-14 p-2.5 outline-none"
               placeholder="Phone number"
               required
             />
           </div>
         </div>
 
-        <div className="flex gap-x-4 my-4 mb-10">
+        <div className="flex gap-x-4 my-4 px-4a mb-10">
           <button className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">
             Buy Air Time
           </button>
@@ -52,8 +55,8 @@ const AirTime = () => {
         </div>
       </div>
 
-      {/* <BuyAirTime /> */}
-      <BuyPackage />
+      <BuyAirTime />
+      {/* <BuyPackage /> */}
     </div>
   );
 };
