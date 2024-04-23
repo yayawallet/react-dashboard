@@ -1,16 +1,28 @@
 import { useState } from 'react';
+import axios from 'axios';
 import Modal from './Modal';
 
-const BuyAirTime = () => {
+interface Props {
+  phoneNumber: string;
+  isInvalidNumber: boolean;
+}
+
+const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [openModal, setOpenModal] = useState(false);
 
   const definedAmounts = [5, 10, 15, 25, 50, 100, 250, 500, 1000];
 
-  const payForAirTime = () => setOpenModal(true);
-
-  const handleConfirm = () => {
+  const handleConfirm = (confirm: boolean) => {
     setOpenModal(false);
+
+    if (!confirm) return;
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/airtime/buy`, {
+        phone: '+251' + phoneNumber,
+        amount: selectedAmount,
+      })
+      .then((res) => console.log(res.data));
   };
 
   return (
@@ -55,8 +67,8 @@ const BuyAirTime = () => {
 
       <button
         className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center"
-        disabled={selectedAmount <= 0}
-        onClick={payForAirTime}
+        disabled={selectedAmount <= 0 || isInvalidNumber}
+        onClick={() => setOpenModal(true)}
       >
         Next
       </button>
