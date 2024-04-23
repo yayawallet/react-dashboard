@@ -14,14 +14,16 @@ const AirTime = () => {
           <div className="flex gap-x-4 my-2 justify-end">
             <button
               className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${forSelf ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+              onClick={() => setForSelf(true)}
             >
               <input
                 id="forSelf"
                 type="radio"
                 name="phone-number"
                 className="w-4 h-4 cursor-pointer"
-                defaultChecked={forSelf}
-                onClick={() => setForSelf(true)}
+                // defaultChecked={forSelf}
+                checked={forSelf}
+                onChange={() => setForSelf(true)}
               />
               <label htmlFor="forSelf" className="cursor-pointer">
                 For Self
@@ -30,13 +32,15 @@ const AirTime = () => {
 
             <button
               className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${!forSelf ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+              onClick={() => setForSelf(false)}
             >
               <input
                 id="forOther"
                 type="radio"
                 name="phone-number"
                 className="w-4 h-4 cursor-pointer"
-                onClick={() => setForSelf(false)}
+                checked={!forSelf}
+                onChange={() => setForSelf(false)}
               />
               <label htmlFor="forOther" className="cursor-pointer">
                 For Other
