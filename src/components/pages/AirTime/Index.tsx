@@ -1,9 +1,17 @@
 // import BuyAirTime from './BuyAirTime';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import BuyPackage from './BuyPackage';
+import axios from 'axios';
 
 const AirTime = () => {
   const [forSelf, setForSelf] = useState(true);
+  const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
+      .then((res) => setOwnPhoneNumber(res.data.phone));
+  }, []);
 
   return (
     <div className="container">
@@ -21,7 +29,6 @@ const AirTime = () => {
                 type="radio"
                 name="phone-number"
                 className="w-4 h-4 cursor-pointer"
-                // defaultChecked={forSelf}
                 checked={forSelf}
                 onChange={() => setForSelf(true)}
               />
@@ -56,6 +63,7 @@ const AirTime = () => {
               type="text"
               id="phone-number"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-14 p-2.5 outline-none"
+              defaultValue={forSelf ? ownPhoneNumber : ''}
               placeholder="Phone number"
               required
             />
