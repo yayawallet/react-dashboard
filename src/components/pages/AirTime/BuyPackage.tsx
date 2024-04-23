@@ -20,6 +20,7 @@ const BuyPackage = () => {
   const [packages, setPackages] = useState([]);
   const [categories, setCategories] = useState(packageCategories);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState('');
 
   useEffect(() => {
     axios
@@ -61,7 +62,8 @@ const BuyPackage = () => {
                 .map((pkg) => (
                   <div
                     key={pkg.code}
-                    className="border border-violet-200 rounded-lg w-[19.5rem] px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
+                    className={`border border-violet-200 rounded-lg w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'bg-violet-100 hover:bg-violet-100 ring-4 ring-violet-300' : 'hover:bg-violet-50'}`}
+                    onClick={() => setSelectedPackage(pkg.code)}
                   >
                     <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
                     <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
@@ -70,7 +72,10 @@ const BuyPackage = () => {
                   </div>
                 ))}
             </div>
-            <button className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center">
+            <button
+              className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center cursor-pointer"
+              disabled={!selectedPackage}
+            >
               Next
             </button>
           </div>
