@@ -1,7 +1,10 @@
 // import BuyAirTime from './BuyAirTime';
+import { useState } from 'react';
 import BuyPackage from './BuyPackage';
 
 const AirTime = () => {
+  const [forSelf, setForSelf] = useState(true);
+
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Top-up Air Time</h1>
@@ -9,24 +12,35 @@ const AirTime = () => {
       <div className="">
         <div className="border-2 rounded-lg p-2 px-5">
           <div className="flex gap-x-4 my-2 justify-end">
-            <button className="flex flex-wrap items-center text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center">
+            <button
+              className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${forSelf ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            >
               <input
-                id="default-checkbox"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                id="forSelf"
+                type="radio"
+                name="phone-number"
+                className="w-4 h-4 cursor-pointer"
+                checked={forSelf}
+                onClick={() => setForSelf(true)}
               />
-              <label htmlFor="">For Self</label>
+              <label htmlFor="forSelf" className="cursor-pointer">
+                For Self
+              </label>
             </button>
 
-            <button className="flex flex-wrap items-center gap-x-2 text-violet-900 border-2 border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center">
+            <button
+              className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${!forSelf ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            >
               <input
-                id="default-checkbox"
-                type="checkbox"
-                value=""
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                id="forOther"
+                type="radio"
+                name="phone-number"
+                className="w-4 h-4 cursor-pointer"
+                onClick={() => setForSelf(false)}
               />
-              <label htmlFor="">For Other</label>
+              <label htmlFor="forOther" className="cursor-pointer">
+                For Other
+              </label>
             </button>
           </div>
 
