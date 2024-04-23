@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import LoadingSpinner from './LoadingSpinner';
 
 const packageCategories = [
   'One-Birr Package',
@@ -50,28 +51,34 @@ const BuyPackage = () => {
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-x-2 gap-y-4 h-full sticky top-3">
-          {packages
-            .filter((pkg) =>
-              !selectedCategory ? pkg : pkg.category == selectedCategory
-            )
-            .map((pkg) => (
-              <div
-                key={pkg.code}
-                className="border-2 rounded-lg w-80 px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
-              >
-                <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
-                <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
-                  {pkg.amount} ETB
-                </span>
-              </div>
-            ))}
-        </div>
-      </div>
+        {packages.length > 0 ? (
+          <div className="flex flex-wrap gap-x-2 gap-y-4 h-full sticky top-3">
+            {packages
+              .filter((pkg) =>
+                !selectedCategory ? pkg : pkg.category == selectedCategory
+              )
+              .map((pkg) => (
+                <div
+                  key={pkg.code}
+                  className="border-2 rounded-lg w-80 px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
+                >
+                  <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
+                  <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
+                    {pkg.amount} ETB
+                  </span>
+                </div>
+              ))}
 
-      <button className="block mx-auto mt-8 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center">
-        Next
-      </button>
+            <button className="block mx-auto mt-8 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center">
+              Next
+            </button>
+          </div>
+        ) : (
+          <div className="h-full w-full flex justify-center">
+            <LoadingSpinner />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
