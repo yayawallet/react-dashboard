@@ -17,7 +17,12 @@ const packageCategories = [
   'Voice Flexi Local All Net Package',
 ];
 
-const BuyPackage = () => {
+interface Props {
+  phoneNumber: string;
+  isInvalidNumber: boolean;
+}
+
+const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [packages, setPackages] = useState([]);
   const [categories, setCategories] = useState(packageCategories);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -40,10 +45,16 @@ const BuyPackage = () => {
     setCategories(Array.from(catgSet));
   }, [packages]);
 
-  const payForPackage = () => setOpenModal(true);
-
-  const handleConfirm = () => {
+  const handleConfirm = (confirm: boolean) => {
     setOpenModal(false);
+    if (!confirm) return;
+
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/package/buy`, {
+        phone: '+251' + phoneNumber,
+        package: selectedPackage,
+      })
+      .then((res) => console.log(res.data));
   };
 
   return (
@@ -91,8 +102,8 @@ const BuyPackage = () => {
             </div>
             <button
               className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center cursor-pointer"
-              disabled={!selectedPackage}
-              onClick={payForPackage}
+              disabled={!selectedPackage || isInvalidNumber}
+              onClick={() => setOpenModal(true)}
             >
               Next
             </button>
