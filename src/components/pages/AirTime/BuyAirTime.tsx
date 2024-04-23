@@ -1,11 +1,25 @@
 import { useState } from 'react';
+import Modal from './Modal';
 
 const BuyAirTime = () => {
   const [selectedAmount, setSelectedAmount] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+
   const definedAmounts = [5, 10, 15, 25, 50, 100, 250, 500, 1000];
+
+  const payForAirTime = () => setOpenModal(true);
+
+  const handleConfirm = () => {
+    setOpenModal(false);
+  };
 
   return (
     <div className="border-2 rounded-lg p-5">
+      <Modal
+        openModal={openModal}
+        onConfirm={handleConfirm}
+        amount={selectedAmount}
+      />
       <h2 className="font-semibold mb-2">Select Denomination</h2>
 
       <div className="flex flex-wrap gap-4 mb-8 text-xl">
@@ -28,7 +42,7 @@ const BuyAirTime = () => {
             <span>ETB</span>
           </div>
           <input
-            type="text"
+            type="number"
             id="phone-number"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-12 p-2.5 outline-none"
             placeholder="Enter Amount"
@@ -41,7 +55,8 @@ const BuyAirTime = () => {
 
       <button
         className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center"
-        disabled={selectedAmount === 0}
+        disabled={selectedAmount <= 0}
+        onClick={payForAirTime}
       >
         Next
       </button>
