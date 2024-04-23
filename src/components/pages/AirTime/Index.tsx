@@ -6,6 +6,7 @@ import axios from 'axios';
 const AirTime = () => {
   const [forSelf, setForSelf] = useState(true);
   const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
+  const [category, setCategory] = useState('airtime');
 
   useEffect(() => {
     axios
@@ -71,11 +72,17 @@ const AirTime = () => {
         </div>
 
         <div className="flex gap-x-4 my-4 px-4a mb-10">
-          <button className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">
+          <button
+            className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${category == 'airtime' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setCategory('airtime')}
+          >
             Buy Air Time
           </button>
 
-          <button className="text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center">
+          <button
+            className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${category == 'package' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setCategory('package')}
+          >
             Buy Package
           </button>
         </div>
