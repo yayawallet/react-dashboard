@@ -44,7 +44,7 @@ const BuyPackage = () => {
                 key={pkg.code}
                 className="border-2 rounded-lg w-80 px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
               >
-                <span>{pkg.name}</span> <br />
+                <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
                 <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
                   {pkg.amount} ETB
                 </span>
