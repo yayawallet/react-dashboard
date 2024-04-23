@@ -6,13 +6,19 @@ import BuyPackage from './BuyPackage';
 const AirTime = () => {
   const [forSelf, setForSelf] = useState(true);
   const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('airtime');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('package');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
       .then((res) => setOwnPhoneNumber(res.data.phone));
   }, []);
+
+  useEffect(() => {
+    if (forSelf) setErrorMessage('');
+  }, [forSelf]);
 
   return (
     <div className="container">
@@ -61,14 +67,23 @@ const AirTime = () => {
               <span>+251</span>
             </div>
             <input
-              type="text"
+              type="number"
               id="phone-number"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-14 p-2.5 outline-none"
-              defaultValue={forSelf ? ownPhoneNumber : ''}
               placeholder="Phone number"
-              required
+              value={forSelf ? ownPhoneNumber : phoneNumber}
+              onChange={(e) => {
+                setPhoneNumber(e.currentTarget.value);
+                setForSelf(false);
+                /(^09\d{8}$|^9\d{8}$)/.test(e.currentTarget.value)
+                  ? setErrorMessage('')
+                  : setErrorMessage('Invalid phone number');
+              }}
             />
           </div>
+          <span className="block text-red-600 text-sm pl-10">
+            {errorMessage}
+          </span>
         </div>
 
         <div className="flex gap-x-4 my-4 px-4a mb-10">
@@ -88,7 +103,17 @@ const AirTime = () => {
         </div>
       </div>
 
-      {selectedCategory == 'airtime' ? <BuyAirTime /> : <BuyPackage />}
+      {selectedCategory == 'airtime' ? (
+        <BuyAirTime
+          phoneNumber={phoneNumber}
+          isInvalidNumber={errorMessage ? true : false}
+        />
+      ) : (
+        <BuyPackage
+          phoneNumber={phoneNumber}
+          isInvalidNumber={errorMessage ? true : false}
+        />
+      )}
     </div>
   );
 };
