@@ -37,12 +37,12 @@ const BuyPackage = () => {
   }, [packages]);
 
   return (
-    <div className="">
-      <div className="flex gap-6">
+    <div>
+      <div className="flex gap-6 border-2 rounded-lg p-5">
         <div className="flex flex-col gap-y-3">
           {categories.map((c) => (
             <div
-              className={`border-2 rounded-lg text-violet-900 font-semibold w-40 p-3 py-5 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
+              className={`border border-violet-200 rounded-lg text-violet-900 font-semibold w-40 p-2 py-4 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
               key={c}
               onClick={() => setSelectedCategory(c)}
             >
@@ -61,7 +61,7 @@ const BuyPackage = () => {
                 .map((pkg) => (
                   <div
                     key={pkg.code}
-                    className="border-2 rounded-lg w-80 px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
+                    className="border border-violet-200 rounded-lg w-[19.5rem] px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
                   >
                     <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
                     <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
