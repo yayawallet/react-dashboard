@@ -20,7 +20,7 @@ const AirTime = () => {
                 type="radio"
                 name="phone-number"
                 className="w-4 h-4 cursor-pointer"
-                checked={forSelf}
+                defaultChecked={forSelf}
                 onClick={() => setForSelf(true)}
               />
               <label htmlFor="forSelf" className="cursor-pointer">
