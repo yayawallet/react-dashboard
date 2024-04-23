@@ -1,9 +1,23 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const packageCategories = [
+  'One-Birr Package',
+  'Good Morning',
+  'Birthday Package',
+  'Hourly & Daily Unlimited Package',
+  'Internet',
+  'Voice',
+  'Voice Plus Internet',
+  'Flexi,International Pack- Destination 1',
+  'International Pack- Destination 2',
+  'SMS Package',
+  'Voice Flexi Local All Net Package',
+];
+
 const BuyPackage = () => {
   const [packages, setPackages] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(packageCategories);
   const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
@@ -15,6 +29,8 @@ const BuyPackage = () => {
   }, []);
 
   useEffect(() => {
+    if (packages.length === 0) return;
+
     const catgSet = new Set(packages.map((p) => p.category));
     setCategories(Array.from(catgSet));
   }, [packages]);
