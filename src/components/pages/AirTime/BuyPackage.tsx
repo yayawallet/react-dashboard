@@ -3,36 +3,53 @@ import axios from 'axios';
 
 const BuyPackage = () => {
   const [packages, setPackages] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
 
   useEffect(() => {
     axios
       .post(`${import.meta.env.VITE_BASE_URL}/airtime/packages`, {
-        phone: '+251967',
+        phone: '+2519', // Ethio telecom packages
       })
       .then((res) => setPackages(res.data));
-  });
+  }, []);
+
+  useEffect(() => {
+    const catgSet = new Set(packages.map((p) => p.category));
+    setCategories(Array.from(catgSet));
+  }, [packages]);
 
   return (
     <div className="">
       <div className="flex gap-6">
         <div className="flex flex-col gap-y-3">
-          <div className="border-2 rounded-lg bg-violet-600 text-white w-40 p-3 py-5 flex justify-center text-center cursor-pointer">
-            <span>One-Birr Package</span>
-          </div>
-          <div className="border-2 rounded-lg w-40 p-3 py-5 flex justify-center text-center cursor-pointer">
-            <span>Good Morning</span>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-x-2 gap-y-4">
-          {packages?.map((pkg) => (
-            <div className="border-2 rounded-lg w-80 px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer">
-              <span>{pkg.name}</span> <br />
-              <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
-                {pkg.amount} ETB
-              </span>
+          {categories.map((c) => (
+            <div
+              className={`border-2 rounded-lg text-violet-900 font-semibold w-40 p-3 py-5 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
+              key={c}
+              onClick={() => setSelectedCategory(c)}
+            >
+              <span>{c}</span>
             </div>
           ))}
+        </div>
+
+        <div className="flex flex-wrap gap-x-2 gap-y-4 h-full sticky top-3">
+          {packages
+            .filter((pkg) =>
+              !selectedCategory ? pkg : pkg.category == selectedCategory
+            )
+            .map((pkg) => (
+              <div
+                key={pkg.code}
+                className="border-2 rounded-lg w-80 px-3 py-2 flex flex-col justify-between hover:bg-violet-50 cursor-pointer"
+              >
+                <span>{pkg.name}</span> <br />
+                <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
+                  {pkg.amount} ETB
+                </span>
+              </div>
+            ))}
         </div>
       </div>
 
