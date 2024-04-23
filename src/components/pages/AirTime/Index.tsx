@@ -1,12 +1,12 @@
-// import BuyAirTime from './BuyAirTime';
 import { useState, useEffect } from 'react';
-import BuyPackage from './BuyPackage';
 import axios from 'axios';
+import BuyAirTime from './BuyAirTime';
+import BuyPackage from './BuyPackage';
 
 const AirTime = () => {
   const [forSelf, setForSelf] = useState(true);
   const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
-  const [category, setCategory] = useState('airtime');
+  const [selectedCategory, setSelectedCategory] = useState('airtime');
 
   useEffect(() => {
     axios
@@ -73,23 +73,22 @@ const AirTime = () => {
 
         <div className="flex gap-x-4 my-4 px-4a mb-10">
           <button
-            className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${category == 'airtime' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
-            onClick={() => setCategory('airtime')}
+            className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${selectedCategory == 'airtime' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setSelectedCategory('airtime')}
           >
             Buy Air Time
           </button>
 
           <button
-            className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${category == 'package' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
-            onClick={() => setCategory('package')}
+            className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${selectedCategory == 'package' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setSelectedCategory('package')}
           >
             Buy Package
           </button>
         </div>
       </div>
 
-      {/* <BuyAirTime /> */}
-      <BuyPackage />
+      {selectedCategory == 'airtime' ? <BuyAirTime /> : <BuyPackage />}
     </div>
   );
 };
