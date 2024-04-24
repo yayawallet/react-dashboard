@@ -22,8 +22,9 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
 
   const handleConfirm = (confirm: boolean) => {
     setOpenConfirmModal(false);
-
     if (!confirm) return;
+
+    setIsProcessing(true);
     axios
       .post(`${import.meta.env.VITE_BASE_URL}/airtime/buy`, {
         phone: '+251' + phoneNumber,
@@ -35,12 +36,14 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         setTopup(res.data);
         setOpenInfoCard(true);
         setIsSucceed(true);
+        console.log(res.data);
       })
-      .catch(() => {
+      .catch((error) => {
         setIsProcessing(false);
         setTopup(undefined);
         setOpenInfoCard(true);
         setIsSucceed(false);
+        console.log(error);
       });
   };
 
