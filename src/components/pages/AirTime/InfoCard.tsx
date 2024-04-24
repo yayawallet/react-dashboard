@@ -1,12 +1,10 @@
+import { TopUp } from '../../../models';
+
 interface Props {
   openModal: boolean;
   onCloseModal: () => void;
   isSucceed: boolean;
-  info: {
-    amount: number;
-    id: string;
-    phone: string;
-  };
+  info: TopUp | undefined;
 }
 
 const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
