@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner';
-import Modal from './Modal';
+import ConfirmModal from './ConfirmModal';
 import LoadingModal from './LoadingModal';
 import InfoCard from './InfoCard';
 import { TopUp, Package } from './../../../models';
@@ -89,7 +89,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         info={topup}
       />
       <LoadingModal loading={isProcessing} />
-      <Modal
+      <ConfirmModal
         openModal={openModal}
         onConfirm={handleConfirm}
         amount={selectedPackageAmount}

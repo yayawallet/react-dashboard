@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import Modal from './Modal';
+import ConfirmModal from './ConfirmModal';
 
 interface Props {
   phoneNumber: string;
@@ -27,7 +27,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
 
   return (
     <div className="border-2 rounded-lg p-5">
-      <Modal
+      <ConfirmModal
         openModal={openModal}
         onConfirm={handleConfirm}
         amount={selectedAmount}
