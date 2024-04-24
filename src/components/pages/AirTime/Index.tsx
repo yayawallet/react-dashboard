@@ -19,6 +19,7 @@ const AirTime = () => {
 
   useEffect(() => {
     if (forSelf) setErrorMessage('');
+    setPhoneNumber('');
   }, [forSelf]);
 
   return (
