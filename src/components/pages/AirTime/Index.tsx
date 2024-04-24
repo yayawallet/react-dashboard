@@ -11,9 +11,10 @@ const AirTime = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
-      .then((res) => setOwnPhoneNumber(res.data.phone));
+    axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => {
+      setOwnPhoneNumber(res.data.phone);
+      setPhoneNumber(res.data.phone);
+    });
   }, []);
 
   useEffect(() => {
@@ -73,7 +74,7 @@ const AirTime = () => {
               placeholder="Phone number"
               value={forSelf ? ownPhoneNumber : phoneNumber}
               onChange={(e) => {
-                setPhoneNumber(e.currentTarget.value);
+                setPhoneNumber(e.currentTarget.value.replace(/^0+/, ''));
                 setForSelf(false);
                 /(^09\d{8}$|^9\d{8}$)/.test(e.currentTarget.value)
                   ? setErrorMessage('')
