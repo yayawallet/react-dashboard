@@ -1,4 +1,10 @@
-const Modal = ({ amount, openModal, onConfirm }) => {
+interface Props {
+  amount: number;
+  openModal: boolean;
+  onConfirm: (a: boolean) => void;
+}
+
+const Modal = ({ amount, openModal, onConfirm }: Props) => {
   return (
     <div
       id="popup-modal"
