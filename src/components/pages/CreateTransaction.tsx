@@ -112,7 +112,7 @@ const CreateTransaction = () => {
         </div>
       )}
 
-      <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
+      <form className="max-w-md ml-10" onSubmit={formik.handleSubmit}>
         <div className="relative z-0 w-full mb-1 group">
           <input
             type="Text"
