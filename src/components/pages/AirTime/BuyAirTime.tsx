@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import ConfirmModal from './ConfirmModal';
+import LoadingModal from './LoadingModal';
+import InfoCard from './InfoCard';
+import { TopUp } from '../../../models';
 
 interface Props {
   phoneNumber: string;
@@ -9,12 +12,16 @@ interface Props {
 
 const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedAmount, setSelectedAmount] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSucceed, setIsSucceed] = useState(false);
+  const [topup, setTopup] = useState<TopUp>();
+  const [openInfoCard, setOpenInfoCard] = useState(false);
 
   const definedAmounts = [5, 10, 15, 25, 50, 100, 250, 500, 1000];
 
   const handleConfirm = (confirm: boolean) => {
-    setOpenModal(false);
+    setOpenConfirmModal(false);
 
     if (!confirm) return;
     axios
@@ -22,13 +29,36 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         phone: '+251' + phoneNumber,
         amount: selectedAmount,
       })
-      .then((res) => console.log(res.data));
+      .then((res) => {
+        console.log(res.data);
+        setIsProcessing(false);
+        setTopup(res.data);
+        setOpenInfoCard(true);
+        setIsSucceed(true);
+      })
+      .catch(() => {
+        setIsProcessing(false);
+        setTopup(undefined);
+        setOpenInfoCard(true);
+        setIsSucceed(false);
+      });
+  };
+
+  const handleCloseInfoCard = () => {
+    setOpenInfoCard(false);
   };
 
   return (
     <div className="border-2 rounded-lg p-5">
+      <InfoCard
+        openModal={openInfoCard}
+        onCloseModal={handleCloseInfoCard}
+        isSucceed={isSucceed}
+        info={topup}
+      />
+      <LoadingModal loading={isProcessing} />
       <ConfirmModal
-        openModal={openModal}
+        openModal={openConfirmModal}
         onConfirm={handleConfirm}
         amount={selectedAmount}
       />
@@ -68,7 +98,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
       <button
         className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center"
         disabled={selectedAmount <= 0 || isInvalidNumber}
-        onClick={() => setOpenModal(true)}
+        onClick={() => setOpenConfirmModal(true)}
       >
         Next
       </button>
