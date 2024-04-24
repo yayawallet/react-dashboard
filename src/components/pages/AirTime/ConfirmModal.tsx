@@ -51,7 +51,7 @@ const Modal = ({ amount, openModal, onConfirm }: Props) => {
               />
             </svg>
             <h3 className="mb-5 text-lg font-normal text-gray-500">
-              Are you sure you want to pay {amount} Birr ?
+              Are you sure you want to pay {amount} Birr?
             </h3>
             <button
               data-modal-hide="popup-modal"

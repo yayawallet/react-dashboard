@@ -94,6 +94,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         onConfirm={handleConfirm}
         amount={selectedPackageAmount}
       />
+
       <div className="flex gap-6 border-2 rounded-lg p-5">
         <div className="flex flex-col gap-y-3">
           {categories.map((c) => (
