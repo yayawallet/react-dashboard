@@ -68,7 +68,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         {definedAmounts.map((amount) => (
           <div
             key={amount}
-            className={`flex justify-center items-center border border-violet-200  rounded w-40 p-2 py-5 cursor-pointer ${selectedAmount === amount ? 'bg-violet-100 hover:bg-violet-100 ring-4 ring-violet-300' : 'hover:bg-violet-50'}`}
+            className={`flex justify-center items-center border border-violet-200 hover:bg-violet-50 rounded w-40 p-2 py-5 cursor-pointer ${selectedAmount === amount ? 'ring-4 ring-violet-300' : ''}`}
             onClick={() => setSelectedAmount(amount)}
           >
             <span className="pr-1">{amount}</span>
