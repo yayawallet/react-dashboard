@@ -99,7 +99,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         <div className="flex flex-col gap-y-3">
           {categories.map((c) => (
             <div
-              className={`border border-violet-200 rounded-lg text-violet-900 font-semibold w-40 p-2 py-4 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
+              className={`border border-violet-200 rounded-lg text-violet-900 font-semibold md:w-40 p-2 py-4 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
               key={c}
               onClick={() => setSelectedCategory(c)}
             >
@@ -118,7 +118,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
                 .map((pkg) => (
                   <div
                     key={pkg.code}
-                    className={`border border-violet-200 hover:bg-violet-50 rounded-lg w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
+                    className={`border border-violet-200 hover:bg-violet-50 rounded-lg w-max-[19rem] lg:w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
                     onClick={() => {
                       setSelectedPackage(pkg.code);
                       setSelectedPackageAmount(pkg.amount);

@@ -16,7 +16,7 @@ import Layout from './Layout';
 const Dashboard = () => {
   return (
     <>
-      <div className="sm:ml-64">
+      <div className="md:ml-64">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
