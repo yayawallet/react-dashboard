@@ -4,6 +4,7 @@ import LoadingSpinner from './LoadingSpinner';
 import Modal from './Modal';
 import LoadingModal from './LoadingModal';
 import InfoCard from './InfoCard';
+import { TopUp, Package } from './../../../models';
 
 const packageCategories = [
   'One-Birr Package',
@@ -25,7 +26,7 @@ interface Props {
 }
 
 const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
-  const [packages, setPackages] = useState([]);
+  const [packages, setPackages] = useState<Package[]>([]);
   const [categories, setCategories] = useState(packageCategories);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
@@ -33,6 +34,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSucceed, setIsSucceed] = useState(false);
+  const [topup, setTopup] = useState<TopUp>();
   const [openInfoCard, setOpenInfoCard] = useState(false);
 
   useEffect(() => {
@@ -61,13 +63,14 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         package: selectedPackage,
       })
       .then((res) => {
-        console.log(res.data);
         setIsProcessing(false);
+        setTopup(res.data);
         setOpenInfoCard(true);
         setIsSucceed(true);
       })
       .catch(() => {
         setIsProcessing(false);
+        setTopup(undefined);
         setOpenInfoCard(true);
         setIsSucceed(false);
       });
@@ -83,7 +86,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         openModal={openInfoCard}
         onCloseModal={handleCloseInfoCard}
         isSucceed={isSucceed}
-        info={selectedPackage}
+        info={topup}
       />
       <LoadingModal loading={isProcessing} />
       <Modal
