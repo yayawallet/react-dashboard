@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner';
 import Modal from './Modal';
+import LoadingModal from './LoadingModal';
+import InfoCard from './InfoCard';
 
 const packageCategories = [
   'One-Birr Package',
@@ -29,6 +31,9 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedPackage, setSelectedPackage] = useState('');
   const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
   const [openModal, setOpenModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isSucceed, setIsSucceed] = useState(false);
+  const [openInfoCard, setOpenInfoCard] = useState(false);
 
   useEffect(() => {
     axios
@@ -49,16 +54,38 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
     setOpenModal(false);
     if (!confirm) return;
 
+    setIsProcessing(true);
     axios
       .post(`${import.meta.env.VITE_BASE_URL}/package/buy`, {
         phone: '+251' + phoneNumber,
         package: selectedPackage,
       })
-      .then((res) => console.log(res.data));
+      .then((res) => {
+        console.log(res.data);
+        setIsProcessing(false);
+        setOpenInfoCard(true);
+        setIsSucceed(true);
+      })
+      .catch(() => {
+        setIsProcessing(false);
+        setOpenInfoCard(true);
+        setIsSucceed(false);
+      });
+  };
+
+  const handleCloseInfoCard = () => {
+    setOpenInfoCard(false);
   };
 
   return (
     <div>
+      <InfoCard
+        openModal={openInfoCard}
+        onCloseModal={handleCloseInfoCard}
+        isSucceed={isSucceed}
+        info={selectedPackage}
+      />
+      <LoadingModal loading={isProcessing} />
       <Modal
         openModal={openModal}
         onConfirm={handleConfirm}
