@@ -7,7 +7,7 @@ const AirTime = () => {
   const [forSelf, setForSelf] = useState(true);
   const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('package');
+  const [selectedCategory, setSelectedCategory] = useState('airtime');
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {

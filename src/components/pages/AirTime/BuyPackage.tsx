@@ -117,7 +117,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
                 .map((pkg) => (
                   <div
                     key={pkg.code}
-                    className={`border border-violet-200 rounded-lg w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'bg-violet-100 hover:bg-violet-100 ring-4 ring-violet-300' : 'hover:bg-violet-50'}`}
+                    className={`border border-violet-200 hover:bg-violet-50 rounded-lg w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
                     onClick={() => {
                       setSelectedPackage(pkg.code);
                       setSelectedPackageAmount(pkg.amount);
