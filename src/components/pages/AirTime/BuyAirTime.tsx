@@ -31,19 +31,16 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         amount: selectedAmount,
       })
       .then((res) => {
-        console.log(res.data);
         setIsProcessing(false);
         setTopup(res.data);
         setOpenInfoCard(true);
         setIsSucceed(true);
-        console.log(res.data);
       })
-      .catch((error) => {
+      .catch(() => {
         setIsProcessing(false);
         setTopup(undefined);
         setOpenInfoCard(true);
         setIsSucceed(false);
-        console.log(error);
       });
   };
 
@@ -93,6 +90,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
             placeholder="Enter Amount"
             required
             autoComplete="off"
+            value={selectedAmount != 0 ? selectedAmount : ''}
             onChange={(e) => setSelectedAmount(Number(e.currentTarget.value))}
           />
         </div>
