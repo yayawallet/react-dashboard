@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserProfile } from '../models';
@@ -7,7 +7,6 @@ import yayawalletLogo from '../assets/yayawallet-brand.svg';
 import avater from '../assets/avater.svg';
 
 const Sidebar = () => {
-  const menuBtn = useRef<HTMLButtonElement>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [profile, setProfile] = useState<UserProfile>();
 
@@ -26,10 +25,8 @@ const Sidebar = () => {
       <button
         type="button"
         className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-        ref={menuBtn}
         onClick={openSidebarMenu}
       >
-        <span className="sr-only">Open sidebar</span>
         <svg
           className="w-6 h-6"
           aria-hidden="true"
@@ -65,11 +62,13 @@ const Sidebar = () => {
                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
               />
             </svg>
-            <span className="sr-only">Close menu</span>
           </button>
 
           <div className="px-3">
-            <ul className="space-y-2 font-medium">
+            <ul
+              className="space-y-2 font-medium"
+              onClick={() => setSidebarOpen(false)}
+            >
               <li>
                 <div className="flex justify-center p-2">
                   <Link to="/profile">
