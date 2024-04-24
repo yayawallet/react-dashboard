@@ -55,18 +55,18 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
               </div>
 
               <h3 className="mb-2 text-lg font-normal text-gray-800">
-                <span className="text-xl">-{info.amount}</span>
+                <span className="text-xl">-{info?.amount}</span>
                 <span className="text-sm"> (ETB)</span>
               </h3>
               <hr className="mb-5" />
               <ul className="text-start px-5">
                 <li>
                   <span className="text-gray-600">Service Number: </span>{' '}
-                  {info.phone}
+                  {info?.phone}
                 </li>
                 <li>
                   <span className="text-gray-600">Transaction Id: </span>
-                  {info.id}
+                  {info?.id}
                 </li>
               </ul>
               <button
