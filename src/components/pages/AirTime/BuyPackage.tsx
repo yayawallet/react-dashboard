@@ -31,7 +31,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
   const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
-  const [openModal, setOpenModal] = useState(false);
+  const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSucceed, setIsSucceed] = useState(false);
   const [topup, setTopup] = useState<TopUp>();
@@ -53,7 +53,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   }, [packages]);
 
   const handleConfirm = (confirm: boolean) => {
-    setOpenModal(false);
+    setOpenConfirmModal(false);
     if (!confirm) return;
 
     setIsProcessing(true);
@@ -90,7 +90,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
       />
       <LoadingModal loading={isProcessing} />
       <ConfirmModal
-        openModal={openModal}
+        openModal={openConfirmModal}
         onConfirm={handleConfirm}
         amount={selectedPackageAmount}
       />
@@ -133,7 +133,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
             <button
               className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center cursor-pointer"
               disabled={!selectedPackage || isInvalidNumber}
-              onClick={() => setOpenModal(true)}
+              onClick={() => setOpenConfirmModal(true)}
             >
               Next
             </button>
