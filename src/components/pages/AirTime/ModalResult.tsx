@@ -1,3 +1,5 @@
+import InfoCard from './InfoCard';
+
 interface Props {
   message: string;
 }
@@ -9,14 +11,7 @@ const ModalResult = ({ message }: Props) => {
       className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full cursor-not-allowed flex`}
     >
       {message ? (
-        <div>
-          <button
-            type="submit"
-            className="block w-full sm:w-56 text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg px-5 py-2.5 text-center"
-          >
-            Close
-          </button>
-        </div>
+        <InfoCard />
       ) : (
         <div
           aria-label="Loading..."
