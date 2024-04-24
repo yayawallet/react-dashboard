@@ -17,6 +17,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [isSucceed, setIsSucceed] = useState(false);
   const [topup, setTopup] = useState<TopUp>();
   const [openInfoCard, setOpenInfoCard] = useState(false);
+  const [errorMessage, setErrorMessge] = useState('');
 
   const definedAmounts = [5, 10, 15, 25, 50, 100, 250, 500, 1000];
 
@@ -91,14 +92,22 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
             required
             autoComplete="off"
             value={selectedAmount != 0 ? selectedAmount : ''}
-            onChange={(e) => setSelectedAmount(Number(e.currentTarget.value))}
+            onChange={(e) => {
+              setSelectedAmount(Number(e.currentTarget.value));
+              Number(e.currentTarget.value) < 5
+                ? setErrorMessge('Amount cannot be less than 5')
+                : setErrorMessge('');
+            }}
           />
         </div>
+        <span className="block text-red-600 text-sm pl-10">{errorMessage}</span>
       </div>
 
       <button
         className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center"
-        disabled={selectedAmount <= 0 || isInvalidNumber}
+        disabled={
+          selectedAmount <= 0 || isInvalidNumber || Boolean(errorMessage)
+        }
         onClick={() => setOpenConfirmModal(true)}
       >
         Next
