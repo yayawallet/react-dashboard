@@ -85,7 +85,7 @@ const TransferFee = () => {
       )}
 
       {transferFee && (
-        <div className="flex justify-center sm:mr-10 md:mr-20 lg:mr-28 rounded-lg mb-20">
+        <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
           <p className="text-2xl">
             Transfer Fee to {institution}:
             <span className="text-6xl px-2">{transferFee.fee}</span>
