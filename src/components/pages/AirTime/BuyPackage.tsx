@@ -109,7 +109,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         </div>
 
         {packages.length > 0 ? (
-          <div className="h-full sticky top-3">
+          <div className="h-full w-full sticky top-3">
             <div className="flex flex-wrap gap-x-2 gap-y-4">
               {packages
                 .filter((pkg) =>
