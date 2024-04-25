@@ -8,7 +8,7 @@ const AirTime = () => {
   const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('airtime');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | boolean>('');
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => {
@@ -19,7 +19,10 @@ const AirTime = () => {
 
   useEffect(() => {
     if (forSelf) setErrorMessage('');
-    setPhoneNumber('');
+    if (!forSelf) {
+      setPhoneNumber('');
+      setErrorMessage(true);
+    }
   }, [forSelf]);
 
   return (
