@@ -66,10 +66,6 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
                   <span className="text-gray-500">Service Number: </span>{' '}
                   {info?.phone}
                 </li>
-                <li className="mb-1">
-                  <span className="text-gray-500">Transaction Id: </span>
-                  {info?.id}
-                </li>
               </ul>
               <button
                 data-modal-hide="popup-modal"
