@@ -1,16 +1,24 @@
 interface Props {
   amount: number;
+  message: string;
+  phoneNumber: string;
   openModal: boolean;
   onConfirm: (a: boolean) => void;
 }
 
-const Modal = ({ amount, openModal, onConfirm }: Props) => {
+const Modal = ({
+  amount,
+  message,
+  phoneNumber,
+  openModal,
+  onConfirm,
+}: Props) => {
   return (
     <div
       id="popup-modal"
       className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${openModal ? 'flex' : 'hidden'}`}
     >
-      <div className="relative p-4 w-full max-w-md max-h-full cursor-auto">
+      <div className="relative p-4 w-full max-w-xl max-h-full cursor-auto">
         <div className="relative bg-white rounded-lg shadow">
           <button
             type="button"
@@ -50,13 +58,24 @@ const Modal = ({ amount, openModal, onConfirm }: Props) => {
                 d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <h3 className="mb-5 text-lg font-normal text-gray-500">
+            <h3 className="mb-2 text-lg font-normal text-gray-500">
               Are you sure you want to pay {amount} Birr?
             </h3>
+            <hr className="mb-5" />
+            <ul className="list-disc text-gray-900 text-start px-5">
+              <li className="mb-1">
+                <span className="text-gray-500">{message}</span>
+              </li>
+              <li className="mb-1">
+                <span className="text-gray-500">
+                  Service Number: {phoneNumber}
+                </span>
+              </li>
+            </ul>
             <button
               data-modal-hide="popup-modal"
               type="button"
-              className="text-white bg-violet-600 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+              className="mt-6 text-white bg-violet-600 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
               onClick={() => onConfirm(true)}
             >
               Yes, I'm sure

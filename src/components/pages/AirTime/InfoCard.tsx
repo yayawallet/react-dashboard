@@ -61,7 +61,7 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
                 <span className="text-gray-400 font-light"> (ETB)</span>
               </h3>
               <hr className="mb-5" />
-              <ul className="text-sm text-gray-900 text-start px-5">
+              <ul className="list-disc text-sm text-gray-900 text-start px-5">
                 <li className="mb-1">
                   <span className="text-gray-500">Service Number: </span>{' '}
                   {info?.phone}
@@ -107,7 +107,7 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
               <hr className="mb-2" />
 
               <h3 className="mb-2 text-lg font-normal text-gray-800">
-                Operation has failed.
+                Couldn't process your request
               </h3>
               <button
                 type="button"
