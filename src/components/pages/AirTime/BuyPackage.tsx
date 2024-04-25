@@ -31,6 +31,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
   const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
+  const [selectedPackageName, setSelectedPackageName] = useState('');
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSucceed, setIsSucceed] = useState(false);
@@ -93,6 +94,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         openModal={openConfirmModal}
         onConfirm={handleConfirm}
         amount={selectedPackageAmount}
+        message={selectedPackageName}
+        phoneNumber={phoneNumber}
       />
 
       <div className="flex gap-6 border-2 rounded-lg p-5">
@@ -118,10 +121,11 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
                 .map((pkg) => (
                   <div
                     key={pkg.code}
-                    className={`border border-violet-200 hover:bg-violet-50 rounded-lg w-max-[19rem] lg:w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
+                    className={`border border-violet-200 text-gray-900 hover:bg-violet-50 rounded-lg w-max-[19rem] lg:w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
                     onClick={() => {
                       setSelectedPackage(pkg.code);
                       setSelectedPackageAmount(pkg.amount);
+                      setSelectedPackageName(pkg.name);
                     }}
                   >
                     <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />

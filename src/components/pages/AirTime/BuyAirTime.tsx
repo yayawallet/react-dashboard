@@ -62,6 +62,8 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         openModal={openConfirmModal}
         onConfirm={handleConfirm}
         amount={selectedAmount}
+        message={`Airtime top-up, ${selectedAmount} birr`}
+        phoneNumber={phoneNumber}
       />
       <h2 className="font-semibold mb-2">Select Denomination</h2>
 
