@@ -157,6 +157,7 @@ const ExternalAccountLookup = () => {
               id="account_number"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
+              disabled={isLoading}
               onChange={formik.handleChange}
               value={formik.values.account_number}
             />
@@ -175,6 +176,7 @@ const ExternalAccountLookup = () => {
 
         <button
           type="submit"
+          disabled={isLoading}
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           {isLoading ? 'Please wait...' : 'Lookup Account'}
