@@ -115,3 +115,30 @@ export interface EXternalAccount {
   phone: string;
   photo_url: string;
 }
+
+export interface TopUp {
+  amount: number;
+  id: string;
+  phone: string;
+  user: {
+    name: string;
+    account: string;
+  };
+}
+
+export interface Package {
+  code: string;
+  category: string;
+  name: string;
+  amount: number;
+}
+
+export interface Recharge {
+  id: string;
+  user: {
+    name: string;
+    account: string;
+  };
+  amount: number;
+  phone: string;
+}

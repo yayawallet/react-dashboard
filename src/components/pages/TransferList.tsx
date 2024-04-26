@@ -15,7 +15,7 @@ const TransferList = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/transfer`)
+      .get(`${import.meta.env.VITE_BASE_URL}/transfer/list`)
       .then((res) => setTransferList(res.data));
   }, []);
 
