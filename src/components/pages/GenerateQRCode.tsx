@@ -89,7 +89,7 @@ const GenerateQRCode = () => {
       )}
 
       {QRCode && (
-        <div className="flex flex-col items-center justify-center rounded-lg -mt-10 mb-8">
+        <div className="inline-flex flex-col rounded-lg ml-10 -mt-10 mb-8">
           <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60" />
           <p className="text-sm">
             Payment Link:{' '}
@@ -106,7 +106,7 @@ const GenerateQRCode = () => {
         </div>
       )}
 
-      <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
+      <form className="max-w-md ml-10" onSubmit={formik.handleSubmit}>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-10 group">
             <input

@@ -8,6 +8,11 @@ input[type='number']::-webkit-outer-spin-button {
   margin: 0;
 }
 
+input[type='radio'] {
+  accent-color: rgb(109 40 217);
+}
+
 button[disabled] {
+  opacity: 0.6;
   cursor: not-allowed;
 }
