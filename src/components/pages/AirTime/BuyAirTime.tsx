@@ -62,7 +62,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         openModal={openConfirmModal}
         onConfirm={handleConfirm}
         amount={selectedAmount}
-        message={`Airtime top-up, ${selectedAmount} birr`}
+        message={`Ethio telecom Airtime Topup, ${selectedAmount} Br.`}
         phoneNumber={phoneNumber}
       />
       <h2 className="font-semibold mb-2">Select Denomination</h2>
@@ -72,7 +72,10 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
           <div
             key={amount}
             className={`flex justify-center items-center border border-violet-200 hover:bg-violet-50 rounded w-40 p-2 py-5 cursor-pointer ${selectedAmount === amount ? 'ring-4 ring-violet-300' : ''}`}
-            onClick={() => setSelectedAmount(amount)}
+            onClick={() => {
+              setSelectedAmount(amount);
+              setErrorMessge('');
+            }}
           >
             <span className="pr-1">{amount}</span>
             <span className="text-sm text-gray-400">(ETB)</span>
@@ -82,7 +85,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
 
       <div className="">
         <h2 className="font-semibold mb-2">Other Amounts</h2>
-        <div className="mb-5 relative max-w-lg">
+        <div className="relative max-w-lg">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <span>ETB</span>
           </div>
