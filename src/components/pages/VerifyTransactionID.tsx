@@ -110,7 +110,7 @@ const GetTransactionByID = () => {
                     className="text-gray-500 text-sm block"
                     style={{ marginTop: '-3px' }}
                   >
-                    {'@' + transaction.sender.account}
+                    {'@' + transaction.receiver.account}
                   </span>
                 </dd>
               </div>
@@ -133,15 +133,6 @@ const GetTransactionByID = () => {
                 <dt className="text-sm font-medium text-gray-500">Cause</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {transaction.cause}
-                </dd>
-              </div>
-
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Is outgoing transfer
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {String(transaction.is_outgoing_transfer)}
                 </dd>
               </div>
 
