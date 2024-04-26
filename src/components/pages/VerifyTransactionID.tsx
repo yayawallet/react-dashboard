@@ -150,9 +150,7 @@ const GetTransactionByID = () => {
                   Created At
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {new Date(transaction.created_at_time)
-                    .toString()
-                    .replace(/\(.*\)/, '')}
+                  {`${new Date(Number(transaction?.created_at_time) * 1000).toLocaleString()}`}
                 </dd>
               </div>
             </dl>
