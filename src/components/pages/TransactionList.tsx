@@ -33,6 +33,9 @@ const TransactionList = () => {
               ID
             </th>
             <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              Invoice
+            </th>
+            <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
               Sender
             </th>
             <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
@@ -64,6 +67,19 @@ const TransactionList = () => {
                 >
                   Transaction ID Copied
                 </span>
+              </td>
+              <td className="relative border-t border-b border-slate-200 p-3">
+                <button
+                  type="button"
+                  className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
+                >
+                  <a
+                    href={`https://yayawallet.com/en/invoice/transaction/${t.id}`}
+                    target="_blank"
+                  >
+                    Print
+                  </a>
+                </button>
               </td>
               <td className="border-t border-b border-slate-200 p-3">
                 {t?.sender.name.split(' ').slice(0, 2).join(' ')}
