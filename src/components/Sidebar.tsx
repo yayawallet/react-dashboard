@@ -101,7 +101,7 @@ const Sidebar = () => {
                   to="/airtime"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3">Air Time/Package</span>
+                  <span className="flex-1 ms-3">Airtime/Package</span>
                 </Link>
               </li>
 
@@ -142,7 +142,7 @@ const Sidebar = () => {
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transaction List By User
+                    Transaction List
                   </span>
                 </Link>
               </li>
