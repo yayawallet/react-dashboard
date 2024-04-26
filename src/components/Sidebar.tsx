@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { UserProfile } from '../models';
@@ -7,7 +7,6 @@ import yayawalletLogo from '../assets/yayawallet-brand.svg';
 import avater from '../assets/avater.svg';
 
 const Sidebar = () => {
-  const menuBtn = useRef<HTMLButtonElement>(null);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [profile, setProfile] = useState<UserProfile>();
 
@@ -24,15 +23,10 @@ const Sidebar = () => {
   return (
     <>
       <button
-        data-drawer-target="logo-sidebar"
-        data-drawer-toggle="logo-sidebar"
-        aria-controls="logo-sidebar"
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
-        ref={menuBtn}
+        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
         onClick={openSidebarMenu}
       >
-        <span className="sr-only">Open sidebar</span>
         <svg
           className="w-6 h-6"
           aria-hidden="true"
@@ -46,7 +40,7 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  sm:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  md:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
@@ -68,11 +62,13 @@ const Sidebar = () => {
                 d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
               />
             </svg>
-            <span className="sr-only">Close menu</span>
           </button>
 
           <div className="px-3">
-            <ul className="space-y-2 font-medium">
+            <ul
+              className="space-y-2 font-medium"
+              onClick={() => setSidebarOpen(false)}
+            >
               <li>
                 <div className="flex justify-center p-2">
                   <Link to="/profile">
@@ -97,6 +93,15 @@ const Sidebar = () => {
                     {profile?.type.replace(/([a-zA-Z])(\d)/g, '$1 $2') ||
                       'LEVEL -'}
                   </span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/airtime"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Airtime/Package</span>
                 </Link>
               </li>
 
@@ -137,7 +142,7 @@ const Sidebar = () => {
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
                   <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transaction List By User
+                    Transaction List
                   </span>
                 </Link>
               </li>
