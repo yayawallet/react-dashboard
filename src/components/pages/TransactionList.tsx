@@ -1,22 +1,17 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Transaction } from '../../models';
 import Pagination from '../common/Pagination';
+import SearchBar from '../common/SearchBar';
+import { Transaction } from '../../models';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [ownAccount, setOwnAccount] = useState('');
   const [copiedID, setCopiedID] = useState('');
-
-  const copyTransactionID = (id: string) => {
-    navigator.clipboard.writeText(id);
-    setCopiedID(id);
-
-    setTimeout(() => setCopiedID(''), 1000);
-  };
 
   useEffect(() => {
     axios
@@ -25,25 +20,41 @@ const TransactionList = () => {
   }, []);
 
   useEffect(() => {
+    const endpoint = searchQuery ? 'search' : 'find-by-user';
+
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user`, {
+      .post(`${import.meta.env.VITE_BASE_URL}/transaction/${endpoint}`, {
         page: currentPage,
+        query: searchQuery,
       })
       .then((res) => {
         setTransactionList(res.data.data);
         setPageCount(res.data.lastPage);
         setIsFetching(false);
       });
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
+
+  const copyTransactionID = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedID(id);
+
+    setTimeout(() => setCopiedID(''), 1000);
+  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     setIsFetching(true);
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+
   return (
-    <div className="">
-      <div className="container" style={{ overflowX: 'auto' }}>
+    <div className="container">
+      <SearchBar onSearch={handleSearch} />
+
+      <div className="mt-2" style={{ overflowX: 'auto' }}>
         <table style={{ minWidth: '960px' }}>
           <thead>
             <tr className="bg-violet-500 text-gray-50">
