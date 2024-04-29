@@ -146,11 +146,7 @@ const TransactionList = () => {
                   {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
                 </td>
                 <td className="border-t border-b border-slate-200 p-3">
-                  {`${new Date(t?.created_at_time)
-                    .toISOString()
-                    .replace('T', ' ')
-                    .replace('Z', '')
-                    .replace(/\.\d+$/, '')}`}
+                  {`${new Date(Number(t?.created_at_time) * 1000).toLocaleString()}`}
                 </td>
               </tr>
             ))}
