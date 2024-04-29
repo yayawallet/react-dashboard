@@ -11,6 +11,7 @@ const CreateTransaction = () => {
   const [isLoading, setLoading] = useState(false);
   const [usersList, setUsersList] = useState<User[]>([]);
   const [noUserFound, setNOUserFound] = useState(false);
+  const [selectedReceiver, setSelectedReceiver] = useState<User>();
 
   const formik = useFormik({
     initialValues: {
@@ -120,6 +121,7 @@ const CreateTransaction = () => {
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" "
             autoComplete="off"
+            disabled={isLoading}
             onChange={formik.handleChange}
             value={formik.values.receiver}
           />
@@ -143,6 +145,7 @@ const CreateTransaction = () => {
                 className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => {
                   formik.setFieldValue('receiver', user.account);
+                  setSelectedReceiver(user);
                   setUsersList([user]);
                 }}
               >
@@ -169,6 +172,7 @@ const CreateTransaction = () => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               autoComplete="off"
+              disabled={isLoading}
               onChange={formik.handleChange}
               value={formik.values.amount}
             />
@@ -191,6 +195,7 @@ const CreateTransaction = () => {
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               autoComplete="off"
+              disabled={isLoading}
               onChange={formik.handleChange}
               value={formik.values.cause}
             />
@@ -209,7 +214,7 @@ const CreateTransaction = () => {
 
         <button
           type="submit"
-          disabled={noUserFound}
+          disabled={noUserFound || !selectedReceiver || isLoading}
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           {isLoading ? 'Sending...' : 'Send Money'}
