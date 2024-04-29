@@ -54,7 +54,7 @@ const CreateTransaction = () => {
   });
 
   useEffect(() => {
-    if (formik.values.receiver.length < 1) return setUsersList([]);
+    if (formik.values.receiver.length < 3) return setUsersList([]);
     // reset NoUserFound
     setNOUserFound(false);
 
@@ -63,7 +63,7 @@ const CreateTransaction = () => {
         query: formik.values.receiver,
       })
       .then((res) => {
-        setUsersList(res.data);
+        setUsersList(res.data.slice(0, 5));
         if (res.data.length === 0) setNOUserFound(true);
       });
   }, [formik.values.receiver]);
@@ -112,7 +112,7 @@ const CreateTransaction = () => {
         </div>
       )}
 
-      <form className="max-w-md mx-auto" onSubmit={formik.handleSubmit}>
+      <form className="max-w-md ml-10" onSubmit={formik.handleSubmit}>
         <div className="relative z-0 w-full mb-1 group">
           <input
             type="Text"
