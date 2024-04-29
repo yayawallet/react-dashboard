@@ -77,8 +77,14 @@ const GetTransactionByID = () => {
       )}
 
       {transaction && (
-        <div className="bg-white overflow-hidden shadow rounded-lg border mb-5">
-          <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+        <div className="bg-white overflow-hidden mb-5">
+          <button
+            type="button"
+            className="block ml-auto py-1.5 px-6 m-1 font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
+          >
+            Print Invoice
+          </button>
+          <div className="border-2 shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
             <dl className="sm:divide-y sm:divide-gray-200">
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">
@@ -110,7 +116,7 @@ const GetTransactionByID = () => {
                     className="text-gray-500 text-sm block"
                     style={{ marginTop: '-3px' }}
                   >
-                    {'@' + transaction.sender.account}
+                    {'@' + transaction.receiver.account}
                   </span>
                 </dd>
               </div>
@@ -133,15 +139,6 @@ const GetTransactionByID = () => {
                 <dt className="text-sm font-medium text-gray-500">Cause</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {transaction.cause}
-                </dd>
-              </div>
-
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Is outgoing transfer
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {String(transaction.is_outgoing_transfer)}
                 </dd>
               </div>
 
