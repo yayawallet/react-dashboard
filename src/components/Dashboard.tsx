@@ -6,6 +6,7 @@ import CreateTransaction from './pages/CreateTransaction';
 import GenerateQRCode from './pages/GenerateQRCode';
 import TransactionList from './pages/TransactionList';
 import TransferList from './pages/TransferList';
+import ScheduledPayment from './pages/ScheduledPayment/Index';
 import VerifyTransactionByID from './pages/VerifyTransactionID';
 import TransferFee from './pages/TransferFee';
 import ExternalAccountLookup from './pages/ExternalAccountLookup';
@@ -30,6 +31,7 @@ const Dashboard = () => {
               <Route path="generate-qr-code" element={<GenerateQRCode />} />
               <Route path="transaction-list" element={<TransactionList />} />
               <Route path="transfer-list" element={<TransferList />} />
+              <Route path="scheduled-payment" element={<ScheduledPayment />} />
               <Route
                 path="verify-transaction-id"
                 element={<VerifyTransactionByID />}
