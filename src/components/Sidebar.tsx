@@ -149,6 +149,15 @@ const Sidebar = () => {
 
               <li>
                 <Link
+                  to="/scheduled-payment"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Scheduled Payment</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
                   to="/verify-transaction-id"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
