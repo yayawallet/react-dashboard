@@ -40,7 +40,7 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform  md:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 z-40 w-72 h-screen transition-transform  md:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
@@ -110,7 +110,7 @@ const Sidebar = () => {
                   to="/create-transaction"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3">Make Transaction</span>
+                  <span className="flex-1 ms-3">Create Transaction</span>
                 </Link>
               </li>
 
@@ -149,10 +149,19 @@ const Sidebar = () => {
 
               <li>
                 <Link
-                  to="/scheduled-payment"
+                  to="/scheduled-payment/create"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3">Scheduled Payment</span>
+                  <span className="flex-1 ms-3">Create Scheduled Payment</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/scheduled-payment/list"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Scheduled Payment List</span>
                 </Link>
               </li>
 
