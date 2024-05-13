@@ -4,6 +4,7 @@ import ConfirmModal from './ConfirmModal';
 import LoadingModal from './LoadingModal';
 import InfoCard from './InfoCard';
 import { ScheduledPayment } from '../../../models';
+import Loading from '../../common/Loading';
 
 const List = () => {
   const [scheduledPaymentList, setScheduledPaymentList] = useState<
@@ -67,9 +68,9 @@ const List = () => {
       <LoadingModal loading={isProcessing} />
       <ConfirmModal openModal={openModal} onConfirm={handleOnConfirm} />
 
-      <div className="mt-2 overflow-x-auto">
+      <div className="mt-2">
         <table className="w-full max-w-[1536px]">
-          <thead>
+          <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
               <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 ID
@@ -98,64 +99,74 @@ const List = () => {
             </tr>
           </thead>
 
-          <tbody>
-            {scheduledPaymentList.map((item) => (
-              <tr key={item.id} className="hover:bg-gray-100">
-                <td
-                  title={item.id}
-                  className="relative border-t border-b border-slate-200 p-3"
-                  onClick={() => copySchedulePaymentId(item.id)}
-                >
-                  {`${item.id.slice(0, 4)}...${item.id.slice(-2)}`}
-                  <span
-                    className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
-                  >
-                    Id Copied
-                  </span>
-                </td>
-
-                <td className="border-t border-b border-slate-200 p-3">
-                  {item.receiver.name.split(' ').slice(0, 2).join(' ')}
-                  <br />
-                  <span
-                    className="text-gray-500 text-xs block"
-                    style={{ marginTop: '-3px' }}
-                  >
-                    {'@' + item.receiver.account}
-                  </span>
-                </td>
-                <td className="border-t border-b border-slate-200 p-3">
-                  <span className="inline-block ml-3 text-red-600">
-                    &#8722;&nbsp;
-                  </span>
-                  {item.amount}
-                </td>
-                <td className="border-t border-b border-slate-200 p-3">
-                  {item.recurring_type}
-                </td>
-                <td className="border-t border-b border-slate-200 p-3">
-                  {item.status}
-                </td>
-                <td className="border-t border-b border-slate-200 p-3">
-                  {`${new Date(Number(item.next_run_time) * 1000).toLocaleString()}`}
-                </td>
-                <td className="border-t border-b border-slate-200 p-3">
-                  {item.receiver_institution.name}
-                </td>
-                <td className="border-t border-b border-slate-200 p-3">
-                  <button
-                    className="text-sm bg-red-600 text-white py-1 px-3 rounded"
-                    onClick={() => {
-                      setArchiveId(item.id);
-                      setOpenModal(true);
-                    }}
-                  >
-                    Archive
-                  </button>
+          {scheduledPaymentList.length === 0 ? (
+            <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+              <tr>
+                <td>
+                  <Loading />
                 </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {scheduledPaymentList.map((item) => (
+                <tr key={item.id} className="hover:bg-gray-100">
+                  <td
+                    title={item.id}
+                    className="relative border-t border-b border-slate-200 p-3"
+                    onClick={() => copySchedulePaymentId(item.id)}
+                  >
+                    {`${item.id.slice(0, 4)}...${item.id.slice(-2)}`}
+                    <span
+                      className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                    >
+                      Id Copied
+                    </span>
+                  </td>
+
+                  <td className="border-t border-b border-slate-200 p-3">
+                    {item.receiver.name.split(' ').slice(0, 2).join(' ')}
+                    <br />
+                    <span
+                      className="text-gray-500 text-xs block"
+                      style={{ marginTop: '-3px' }}
+                    >
+                      {'@' + item.receiver.account}
+                    </span>
+                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">
+                    <span className="inline-block ml-3 text-red-600">
+                      &#8722;&nbsp;
+                    </span>
+                    {item.amount}
+                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">
+                    {item.recurring_type}
+                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">
+                    {item.status}
+                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">
+                    {`${new Date(Number(item.next_run_time) * 1000).toLocaleString()}`}
+                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">
+                    {item.receiver_institution.name}
+                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">
+                    <button
+                      className="text-sm bg-red-600 text-white py-1 px-3 rounded"
+                      onClick={() => {
+                        setArchiveId(item.id);
+                        setOpenModal(true);
+                      }}
+                    >
+                      Archive
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
     </div>
