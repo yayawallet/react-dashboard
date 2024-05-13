@@ -1,12 +1,8 @@
-interface Props {
-  loading: boolean;
-}
-
-const ModalResult = ({ loading }: Props) => {
+const Loading = () => {
   return (
     <div
       id="popup-modal"
-      className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${loading ? 'flex' : 'hidden'}`}
+      className={`flex overflow-hidden justify-center items-center`}
     >
       <div
         aria-label="Loading..."
@@ -90,12 +86,10 @@ const ModalResult = ({ loading }: Props) => {
             strokeWidth="24"
           ></line>
         </svg>
-        <span className="text-4xl font-medium text-gray-500">
-          Processing...
-        </span>
+        <span className="text-4xl font-medium text-gray-500">Loading...</span>
       </div>
     </div>
   );
 };
 
-export default ModalResult;
+export default Loading;
