@@ -51,11 +51,11 @@ const TransactionList = () => {
   };
 
   return (
-    <div className="container">
+    <div className="-mx-4">
       <SearchBar onSearch={handleSearch} />
 
-      <div className="mt-2" style={{ overflowX: 'auto' }}>
-        <table style={{ minWidth: '960px' }}>
+      <div className="mt-2 overflow-x-auto">
+        <table className="w-full max-w-[1536px]">
           <thead>
             <tr className="bg-violet-500 text-gray-50">
               <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
