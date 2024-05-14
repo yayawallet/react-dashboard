@@ -10,7 +10,7 @@ import { recurringContract } from '../../../models';
 const ContractList = () => {
   const [contractList, setContractList] = useState<recurringContract[]>([]);
   const [copiedID, setCopiedID] = useState('');
-  const [archiveID, setArchiveId] = useState('');
+  const [deactivateID, setDeactivateID] = useState('');
   const [openInfoCard, setOpenInfoCard] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,11 +35,11 @@ const ContractList = () => {
     setSuccessMessage('');
     axios
       .get(
-        `${import.meta.env.VITE_BASE_URL}/recurring-contract/archive/${archiveID}`
+        `${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${deactivateID}`
       )
       .then(() => {
-        setSuccessMessage('Scheduled Payment Archived Successfully');
-        setContractList((prev) => prev.filter((l) => l.id != archiveID));
+        setSuccessMessage('Contract Deactivated Successfully');
+        setContractList((prev) => prev.filter((l) => l.id != deactivateID));
         setIsProcessing(false);
         setOpenInfoCard(true);
       })
@@ -110,7 +110,7 @@ const ContractList = () => {
                   >
                     {`${item.id.slice(0, 4)}...${item.id.slice(-2)}`}
                     <span
-                      className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                      className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                     >
                       Id copied
                     </span>
@@ -140,7 +140,7 @@ const ContractList = () => {
                     <button
                       className="text-sm bg-red-600 text-white py-1 px-3 rounded"
                       onClick={() => {
-                        setArchiveId(item.id);
+                        setDeactivateID(item.id);
                         setOpenModal(true);
                       }}
                     >
