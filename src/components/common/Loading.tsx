@@ -2,7 +2,7 @@ const Loading = () => {
   return (
     <div
       id="popup-modal"
-      className={`flex overflow-hidden justify-center items-center`}
+      className="flex overflow-hidden justify-center items-center"
     >
       <div
         aria-label="Loading..."
