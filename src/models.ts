@@ -166,3 +166,19 @@ export interface ScheduledPayment {
   status: string;
   recurring_type: string;
 }
+
+// Recurring - Contrat
+export interface recurringContract {
+  id: string;
+  merchant: {
+    name: string;
+    account: string;
+  };
+  customer: {
+    name: string;
+    account: string;
+  };
+  contract_number: string;
+  service_type: string;
+  status: string;
+}
