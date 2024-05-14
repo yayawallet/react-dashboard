@@ -232,7 +232,7 @@ const Create = () => {
                 onChange={formik.handleChange}
                 value={formik.values.recurring}
               >
-                <option value="" disabled selected>
+                <option value="" disabled>
                   Recurring Type
                 </option>
                 <option value="once">Once</option>
