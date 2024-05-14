@@ -19,7 +19,7 @@ const Create = () => {
       amount: '',
       cause: '',
       recurring: '',
-      start_at: new Date().getTime(),
+      start_at: new Date().getTime() / 1000,
     },
 
     validationSchema: Yup.object({
@@ -41,7 +41,7 @@ const Create = () => {
       // Clear existing values
       setErrorMessage('');
 
-      values.start_at = new Date(values.start_at).getTime();
+      values.start_at = new Date(values.start_at).getTime() / 1000;
       axios
         .post(
           `${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`,
