@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-*:focus {
-  outline: 4px solid #8d66cc;
+* {
+  outline-color: #8d66cc;
 }
 
 input[type='number']::-webkit-inner-spin-button,
