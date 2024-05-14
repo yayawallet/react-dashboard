@@ -46,7 +46,7 @@ const Dashboard = () => {
                 element={<ContractList />}
               />
               <Route
-                path="recurring-contract/payment-request"
+                path="recurring-contract/request-payment"
                 element={<RequestPayment />}
               />
               <Route
