@@ -91,9 +91,7 @@ const CreateContract = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Unsuccessful scheduled payment!
-            </span>
+            <span className="font-medium mr-2">Unsuccessful Process!</span>
             {errorMessage}
           </div>
         </div>
@@ -114,7 +112,7 @@ const CreateContract = () => {
           <span className="sr-only">Info</span>
           <div>
             <span className="font-medium mr-2">
-              Successful scheduled payment!
+              Recurring contract created successfully!
             </span>
             Scheduled Payment ID: {contractID}
           </div>
@@ -229,7 +227,7 @@ const CreateContract = () => {
               name="meta_data"
               id="meta_data"
               placeholder="Any meta_data in JSON Format"
-              className="w-full border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
+              className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
               autoComplete="off"
               disabled={isLoading}
               onChange={formik.handleChange}
