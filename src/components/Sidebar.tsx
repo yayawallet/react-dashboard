@@ -167,6 +167,33 @@ const Sidebar = () => {
 
               <li>
                 <Link
+                  to="/recurring-contract/create"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Create Recurring Contract</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/recurring-contract/list"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Recurring Contract List</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/recurring-contract/request-payment"
+                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                >
+                  <span className="flex-1 ms-3">Create Request Payment</span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
                   to="/verify-transaction-id"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
