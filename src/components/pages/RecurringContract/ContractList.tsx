@@ -5,6 +5,7 @@ import LoadingModal from './LoadingModal';
 import InfoCard from './InfoCard';
 import Loading from '../../common/Loading';
 import NotFound from '../../common/NotFound';
+import SearchBar from '../../common/SearchBar';
 import { recurringContract } from '../../../models';
 
 const ContractList = () => {
@@ -16,6 +17,11 @@ const ContractList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [filterByStatus, setFilterByStatus] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredContractList, setFilteredContractList] = useState<
+    recurringContract[]
+  >([]);
 
   useEffect(() => {
     axios
@@ -26,6 +32,20 @@ const ContractList = () => {
       })
       .catch(() => setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (searchQuery) {
+      handleSearchContractList(searchQuery);
+
+      return;
+    }
+
+    setFilteredContractList(
+      contractList.filter((item) =>
+        filterByStatus ? item.status === filterByStatus : true
+      )
+    );
+  }, [contractList, filterByStatus]);
 
   const handleOnConfirm = (confirm: boolean) => {
     setOpenModal(false);
@@ -58,6 +78,22 @@ const ContractList = () => {
     setTimeout(() => setCopiedID(''), 1000);
   };
 
+  const handleSearchContractList = (query: string) => {
+    setSearchQuery(query);
+    const searchPatt = new RegExp(query, 'i');
+
+    setFilteredContractList(
+      contractList.filter(
+        (item) =>
+          (searchPatt.test(item.contract_number) ||
+            searchPatt.test(item.service_type) ||
+            searchPatt.test(item.customer.account) ||
+            searchPatt.test(item.customer.name)) &&
+          (filterByStatus ? item.status === filterByStatus : true)
+      )
+    );
+  };
+
   return (
     <div className="-mx-4">
       <InfoCard
@@ -69,6 +105,38 @@ const ContractList = () => {
       <ConfirmModal openModal={openModal} onConfirm={handleOnConfirm} />
 
       <div className="mt-2">
+        <div className="flex items-baseline mb-2 mx-5 gap-x-8">
+          <div className="w-80">
+            <SearchBar
+              onSearch={handleSearchContractList}
+              placeholder="Contract, Service Type, Customer, ..."
+            />
+          </div>
+          <div className="">
+            Filter by:
+            <span
+              className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'approved' ? 'bg-violet-600 text-white' : ''}`}
+              onClick={() =>
+                setFilterByStatus((prev) =>
+                  prev === 'approved' ? '' : 'approved'
+                )
+              }
+            >
+              Aproved
+            </span>
+            <span
+              className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}
+              onClick={() =>
+                setFilterByStatus((prev) =>
+                  prev === 'pending' ? '' : 'pending'
+                )
+              }
+            >
+              Pending
+            </span>
+          </div>
+        </div>
+
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
@@ -101,7 +169,7 @@ const ContractList = () => {
             </tbody>
           ) : (
             <tbody>
-              {contractList.map((item) => (
+              {filteredContractList?.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
                   <td
                     title={item.id}
