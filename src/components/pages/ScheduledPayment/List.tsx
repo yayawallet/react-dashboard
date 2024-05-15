@@ -36,7 +36,7 @@ const List = () => {
         `${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${archiveID}`
       )
       .then(() => {
-        setSuccessMessage('Scheduled Payment Archived Successfully');
+        setSuccessMessage('Scheduled Payment Deleted Successfully');
         setScheduledPaymentList((prev) =>
           prev.filter((l) => l.id != archiveID)
         );
@@ -72,28 +72,22 @@ const List = () => {
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 ID
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Receiver
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Amount
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Recurring
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Status
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Next Run-time
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Institution
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Action
               </th>
             </tr>
@@ -110,7 +104,7 @@ const List = () => {
           ) : (
             <tbody>
               {scheduledPaymentList.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-100">
+                <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
                   <td
                     title={item.id}
                     className="relative border-t border-b border-slate-200 p-3"
@@ -135,22 +129,13 @@ const List = () => {
                     </span>
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
-                    <span className="inline-block ml-3 text-red-600">
-                      &#8722;&nbsp;
-                    </span>
-                    {item.amount}
+                    {item.amount.toFixed(2)} ETB
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
                     {item.recurring_type}
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
-                    {item.status}
-                  </td>
-                  <td className="border-t border-b border-slate-200 p-3">
                     {`${new Date(Number(item.next_run_time) * 1000).toLocaleString()}`}
-                  </td>
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {item.receiver_institution.name}
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
                     <button
@@ -160,7 +145,7 @@ const List = () => {
                         setOpenModal(true);
                       }}
                     >
-                      Archive
+                      Delete
                     </button>
                   </td>
                 </tr>
