@@ -115,7 +115,7 @@ const TransactionList = () => {
                       className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                     >
                       <a
-                        href={`https://sandbox.yayawallet.com/en/invoice/transaction/${t.id}`}
+                        href={`${import.meta.env.VITE_INVOICE_URL}/${t.id}`}
                         target="_blank"
                       >
                         Print

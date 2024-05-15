@@ -83,7 +83,7 @@ const GetTransactionByID = () => {
             className="block ml-auto py-1.5 px-6 m-1 font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
           >
             <a
-              href={`https://sandbox.yayawallet.com/en/invoice/transaction/${transaction.id}`}
+              href={`${import.meta.env.VITE_INVOICE_URL}/${transaction.id}`}
               target="_blank"
             >
               Print Invoice
