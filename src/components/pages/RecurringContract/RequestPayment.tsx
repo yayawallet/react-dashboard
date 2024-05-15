@@ -15,7 +15,7 @@ const RequestPayment = () => {
       currency: 'ETB',
       cause: '',
       notification_url: '',
-      // meta_data: '',
+      meta_data: '',
     },
 
     validationSchema: Yup.object({
@@ -29,7 +29,7 @@ const RequestPayment = () => {
       notification_url: Yup.string()
         .max(50, 'Must be 50 characters or less')
         .url('Invalid url'),
-      // meta_data: Yup.string().max(200, 'Must be 200 characters or less'),
+      meta_data: Yup.object().json().typeError('Meta-data must be JSON format'),
     }),
 
     onSubmit: (values) => {
@@ -200,7 +200,7 @@ const RequestPayment = () => {
             </span>
           </div>
 
-          {/* <div className="relative z-0 w-full mb-10 group">
+          <div className="relative z-0 w-full mb-10 group">
             <textarea
               rows={3}
               name="meta_data"
@@ -215,7 +215,7 @@ const RequestPayment = () => {
             <span className="text-xs text-red-600">
               {formik.touched.meta_data && formik.errors.meta_data}
             </span>
-          </div> */}
+          </div>
 
           <button
             type="submit"
