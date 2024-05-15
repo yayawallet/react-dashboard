@@ -72,22 +72,22 @@ const ContractList = () => {
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 ID
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Customer Name
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Contract Number
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Service Type
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Status
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Action
               </th>
             </tr>
@@ -102,7 +102,7 @@ const ContractList = () => {
           ) : (
             <tbody>
               {contractList.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-100">
+                <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
                   <td
                     title={item.id}
                     className="relative border-t border-b border-slate-200 p-3"

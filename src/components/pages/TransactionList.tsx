@@ -61,25 +61,25 @@ const TransactionList = () => {
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3  pl-6 font-medium">
                 ID
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Invoice
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Sender
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Amount
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Receiver
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Cause
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
                 Date
               </th>
             </tr>
@@ -96,7 +96,7 @@ const TransactionList = () => {
           ) : (
             <tbody>
               {transactionList.map((t) => (
-                <tr key={t?.id} className="hover:bg-gray-100">
+                <tr key={t?.id} className="hover:bg-gray-100 text-nowrap">
                   <td
                     title={t?.id}
                     className="relative border-t border-b border-slate-200 p-3"
