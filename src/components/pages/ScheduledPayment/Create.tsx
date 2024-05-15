@@ -254,7 +254,6 @@ const Create = () => {
                 autoComplete="off"
                 disabled={isLoading}
                 onChange={formik.handleChange}
-                // value={new Date(formik.values.start_at).getTime()}
               />
               <label
                 htmlFor="start_at"
