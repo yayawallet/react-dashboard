@@ -239,7 +239,6 @@ const Create = () => {
                 <option value="daily">Daily</option>
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
-                <option value="Yearly">Yearly</option>
               </select>
               <span className="text-xs text-red-600">
                 {formik.touched.recurring && formik.errors.recurring}
