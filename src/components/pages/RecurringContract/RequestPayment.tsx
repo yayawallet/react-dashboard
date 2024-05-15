@@ -37,6 +37,7 @@ const RequestPayment = () => {
 
       // Clear existing values
       setErrorMessage('');
+      values.meta_data = JSON.parse(values.meta_data);
 
       axios
         .post(
