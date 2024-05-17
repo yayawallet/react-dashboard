@@ -325,6 +325,7 @@ const Create = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
+          apiEndpoint="scheduled-payment/bulk-import"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
