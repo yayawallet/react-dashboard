@@ -16,6 +16,10 @@ const CreateContract = () => {
   const [selectedReceiver, setSelectedReceiver] = useState<User>();
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
 
+  const handleOnLoading = (value: boolean) => setLoading(value);
+  const handleOnError = (value: string) => setErrorMessage(value);
+  const handleOnSuccess = (value: string) => setSuccessMessage(value);
+
   const formik = useFormik({
     initialValues: {
       contract_number: '',
@@ -77,10 +81,6 @@ const CreateContract = () => {
       });
   }, [formik.values.customer_account_name]);
 
-  const handleOnLoading = (value: boolean) => setLoading(value);
-  const handleOnError = (value: string) => setErrorMessage(value);
-  const handleOnSuccess = (value: string) => setSuccessMessage(value);
-
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Recurring Contract</h1>
@@ -105,7 +105,7 @@ const CreateContract = () => {
         </div>
       )}
 
-      {contractID && (
+      {(contractID || successMessage) && (
         <div
           className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50"
           role="alert"
@@ -296,6 +296,7 @@ const CreateContract = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
+          instruction="Your file must have the following columns: customer_account_name, service_type, contract_number and one more optional column formeta_data"
         />
       )}
     </div>
