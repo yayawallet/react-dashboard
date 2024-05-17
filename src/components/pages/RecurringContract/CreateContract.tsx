@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import avater from '../../../assets/avater.svg';
 import { User } from '../../../models';
+import * as XLSX from 'xlsx';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
@@ -12,6 +13,61 @@ const CreateContract = () => {
   const [usersList, setUsersList] = useState<User[]>([]);
   const [noUserFound, setNOUserFound] = useState(false);
   const [selectedReceiver, setSelectedReceiver] = useState<User>();
+  const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+  const [inputFileLocation, setInputFileLocation] = useState('online'); // online or local
+  // Bulk import
+  const [excelFile, setExcelFile] = useState(null);
+  const [excelData, setExcelData] = useState(null);
+
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(selectedFile);
+      reader.onload = (e) => setExcelFile(e.target.result);
+    }
+  };
+
+  const handleInputChange = () => {};
+
+  // console.log({ inputFileLocation });
+
+  // const handleFileChange = (e) => {
+  //   console.log(inputFileLocation);
+  //   if (inputFileLocation === 'online') formik1.setFieldValue(excel_file, '');
+  //   else if (inputFileLocation === 'local')
+  //     formik1.setFieldValue(excel_url, '');
+  // };
+
+  const formik1 = useFormik({
+    initialValues: {
+      excel_url: '',
+      excel_file: '',
+    },
+
+    validationSchema: Yup.object({
+      excel_url: Yup.string().url('Invalid URL'),
+      excel_file: Yup.mixed()
+        .required('Required')
+        .test('fileFormat', 'Only Excel files are allowed', (value) => {
+          if (value) {
+            const supportedFormats = ['xlsx', 'xls', 'csv', 'tsv'];
+            return supportedFormats.includes(value.split('.').pop());
+          }
+          return true;
+        }),
+    }),
+
+    onSubmit: (values) => {
+      console.log(values);
+
+      const workbook = XLSX.read(excelFile, { type: 'buffer' });
+      const worksheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[worksheetName];
+      const data = XLSX.utils.sheet_to_json(worksheet);
+      setExcelData(data.slice(0, 10));
+    },
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -119,7 +175,45 @@ const CreateContract = () => {
         </div>
       )}
 
-      <div className="">
+      <div className="border-2 rounded-lg p-2 px-5">
+        <div className="flex gap-x-4 my-2 justify-end">
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('one')}
+          >
+            <input
+              id="oneInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'one'}
+              onChange={() => setInputFormType('one')}
+            />
+            <label htmlFor="topupFor" className="cursor-pointer">
+              Single Contract
+            </label>
+          </button>
+
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'multiple' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('multiple')}
+          >
+            <input
+              id="multipleInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'multiple'}
+              onChange={() => setInputFormType('multiple')}
+            />
+            <label htmlFor="forOther" className="cursor-pointer">
+              Multiple Contracts
+            </label>
+          </button>
+        </div>
+      </div>
+
+      {inputFormType === 'one' ? (
         <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
           <div className="relative z-0 w-full mb-1 group">
             <input
@@ -246,7 +340,92 @@ const CreateContract = () => {
             {isLoading ? 'Please wait...' : 'Create Contract'}
           </button>
         </form>
-      </div>
+      ) : (
+        <div className="">
+          <div className="mt-5 p-10">
+            <p className="text-gray-800">
+              <span className="font-semibold">Instruction: </span>
+              <li>
+                Your file must be in either of the following formats:
+                <span className="font-semibold"> xlsx, xls, csv, tsv</span>
+              </li>
+              <li>
+                Your file must have the following columns:{' '}
+                <span className="font-semibold">
+                  customer_account_name, service_type, contract_number
+                </span>{' '}
+                and one more optional column for{' '}
+                <span className="font-semibold">meta_data</span>
+              </li>
+            </p>
+          </div>
+
+          <form className="max-w-md ml-10" onSubmit={formik1.handleSubmit}>
+            <div className="relative z-0 w-full mb-10 group">
+              <input
+                type="Text"
+                id="excel_url"
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={(e) => {
+                  formik1.handleChange(e);
+                  // handleFileChange(e);
+                  setInputFileLocation('online');
+                  // setExcelFile(null);
+                  handleInputChange();
+                }}
+                value={formik1.values.excel_url}
+              />
+              <label
+                htmlFor="excel_url"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                File URL
+              </label>
+
+              <span className="text-xs text-red-600">
+                {formik1.touched.excel_url && formik1.errors.excel_url}
+              </span>
+            </div>
+
+            <div className="mb-2 text-gray-600 flex items-center align-top h-80">
+              <input type="checkbox" name="" id="" className="w-4 h-4" />
+              <span className="ml-1">or upload a file from your computer</span>
+            </div>
+
+            <div className="relative z-0 w-full mb-10 group">
+              <input
+                type="file"
+                name="excel_file"
+                id="excel_file"
+                placeholder="Upload Excel file"
+                className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
+                disabled={isLoading}
+                onChange={(e) => {
+                  formik1.handleChange(e);
+                  setInputFileLocation('local');
+                  // handleFile(e);
+                  // handleFileChange(e);
+                  handleInputChange();
+                }}
+                value={formik1.values.excel_file}
+              />
+              <span className="text-xs text-red-600">
+                {formik1.touched.excel_file && formik1.errors.excel_file}
+              </span>
+            </div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+            >
+              {isLoading ? 'Please wait...' : 'Process File'}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
