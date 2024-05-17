@@ -2,11 +2,18 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import BulkImport from '../../common/BulkImport';
 
 const RequestPayment = () => {
   const [paymentRequestID, setPaymentRequestID] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+
+  const handleOnLoading = (value: boolean) => setLoading(value);
+  const handleOnError = (value: string) => setErrorMessage(value);
+  const handleOnSuccess = (value: string) => setSuccessMessage(value);
 
   const formik = useFormik({
     initialValues: {
@@ -36,6 +43,7 @@ const RequestPayment = () => {
       setLoading(true);
 
       // Clear existing values
+      setSuccessMessage('');
       setErrorMessage('');
       values.meta_data = JSON.parse(values.meta_data);
 
@@ -82,7 +90,7 @@ const RequestPayment = () => {
         </div>
       )}
 
-      {paymentRequestID && (
+      {(paymentRequestID || successMessage) && (
         <div
           className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50"
           role="alert"
@@ -99,12 +107,52 @@ const RequestPayment = () => {
             <span className="font-medium mr-2">
               Payment requested successfully!
             </span>
-            Scheduled Payment ID: {paymentRequestID}
+            {successMessage
+              ? successMessage
+              : `Payment ID: ${paymentRequestID}`}
           </div>
         </div>
       )}
 
-      <div className="">
+      <div className="border-2 rounded-lg p-2 px-5">
+        <div className="flex gap-x-4 my-2 justify-end">
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('one')}
+          >
+            <input
+              id="oneInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'one'}
+              onChange={() => setInputFormType('one')}
+            />
+            <label htmlFor="topupFor" className="cursor-pointer">
+              Single Payment
+            </label>
+          </button>
+
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'multiple' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('multiple')}
+          >
+            <input
+              id="multipleInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'multiple'}
+              onChange={() => setInputFormType('multiple')}
+            />
+            <label htmlFor="forOther" className="cursor-pointer">
+              Multiple Payments
+            </label>
+          </button>
+        </div>
+      </div>
+
+      {inputFormType ? (
         <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
           <div className="relative z-0 w-full mb-10 group">
             <input
@@ -226,7 +274,14 @@ const RequestPayment = () => {
             {isLoading ? 'Please wait...' : 'Create Contract'}
           </button>
         </form>
-      </div>
+      ) : (
+        <BulkImport
+          isLoading={isLoading}
+          onLoading={handleOnLoading}
+          onError={handleOnError}
+          onSuccess={handleOnSuccess}
+        />
+      )}
     </div>
   );
 };
