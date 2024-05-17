@@ -293,6 +293,7 @@ const CreateContract = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
+          apiEndpoint="recurring-contract/bulk-import"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

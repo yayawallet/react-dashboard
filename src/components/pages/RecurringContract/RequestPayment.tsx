@@ -277,6 +277,7 @@ const RequestPayment = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
+          apiEndpoint="recurring-contract/request-payment/bulk-import"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
