@@ -94,9 +94,7 @@ const Create = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Unsuccessful scheduled payment!
-            </span>
+            <span className="font-medium mr-2">Unsuccessful schedule!</span>
             {errorMessage}
           </div>
         </div>
@@ -116,9 +114,7 @@ const Create = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Successful scheduled payment!
-            </span>
+            <span className="font-medium mr-2">Successful schedule!</span>
             Scheduled Payment ID: {scheduledPaymentID}
           </div>
         </div>
