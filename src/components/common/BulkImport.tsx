@@ -4,12 +4,19 @@ import * as Yup from 'yup';
 
 interface Props {
   isLoading: boolean;
+  instruction?: string;
   onLoading: (value: boolean) => void;
   onError: (value: string) => void;
   onSuccess: (value: string) => void;
 }
 
-const BulkImport = ({ isLoading, onLoading, onError, onSuccess }: Props) => {
+const BulkImport = ({
+  isLoading,
+  instruction,
+  onLoading,
+  onError,
+  onSuccess,
+}: Props) => {
   const formik = useFormik({
     initialValues: {
       excel_file: '',
@@ -65,14 +72,7 @@ const BulkImport = ({ isLoading, onLoading, onError, onSuccess }: Props) => {
             Your file must be in either of the following formats:
             <span className="font-semibold"> xlsx, xls, csv, tsv</span>
           </li>
-          <li>
-            Your file must have the following columns:{' '}
-            <span className="font-semibold">
-              customer_account_name, service_type, contract_number
-            </span>{' '}
-            and one more optional column for{' '}
-            <span className="font-semibold">meta_data</span>
-          </li>
+          {instruction && <li>{instruction}</li>}
         </p>
       </div>
 
