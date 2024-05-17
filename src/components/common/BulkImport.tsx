@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 interface Props {
   isLoading: boolean;
   instruction?: string;
+  apiEndpoint: string;
   onLoading: (value: boolean) => void;
   onError: (value: string) => void;
   onSuccess: (value: string) => void;
@@ -13,6 +14,7 @@ interface Props {
 const BulkImport = ({
   isLoading,
   instruction,
+  apiEndpoint,
   onLoading,
   onError,
   onSuccess,
@@ -44,10 +46,7 @@ const BulkImport = ({
       onError('');
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/recurring-contract/bulk-import`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, values)
         .then(() => {
           onError('');
           onSuccess('Your file is uploaded successfully.');
