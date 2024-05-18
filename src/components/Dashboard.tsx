@@ -6,6 +6,11 @@ import CreateTransaction from './pages/CreateTransaction';
 import GenerateQRCode from './pages/GenerateQRCode';
 import TransactionList from './pages/TransactionList';
 import TransferList from './pages/TransferList';
+import Create from './pages/ScheduledPayment/Create';
+import List from './pages/ScheduledPayment/List';
+import CreateContract from './pages/RecurringContract/CreateContract';
+import ContractList from './pages/RecurringContract/ContractList';
+import RequestPayment from './pages/RecurringContract/RequestPayment';
 import VerifyTransactionByID from './pages/VerifyTransactionID';
 import TransferFee from './pages/TransferFee';
 import ExternalAccountLookup from './pages/ExternalAccountLookup';
@@ -16,7 +21,7 @@ import Layout from './Layout';
 const Dashboard = () => {
   return (
     <>
-      <div className="md:ml-64">
+      <div className="md:ml-72">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -30,6 +35,20 @@ const Dashboard = () => {
               <Route path="generate-qr-code" element={<GenerateQRCode />} />
               <Route path="transaction-list" element={<TransactionList />} />
               <Route path="transfer-list" element={<TransferList />} />
+              <Route path="scheduled-payment/create" element={<Create />} />
+              <Route path="scheduled-payment/list" element={<List />} />
+              <Route
+                path="recurring-contract/create"
+                element={<CreateContract />}
+              />
+              <Route
+                path="recurring-contract/list"
+                element={<ContractList />}
+              />
+              <Route
+                path="recurring-contract/request-payment"
+                element={<RequestPayment />}
+              />
               <Route
                 path="verify-transaction-id"
                 element={<VerifyTransactionByID />}

@@ -82,7 +82,12 @@ const GetTransactionByID = () => {
             type="button"
             className="block ml-auto py-1.5 px-6 m-1 font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
           >
-            Print Invoice
+            <a
+              href={`${import.meta.env.VITE_INVOICE_URL}/${transaction.id}`}
+              target="_blank"
+            >
+              Print Invoice
+            </a>
           </button>
           <div className="border-2 shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
             <dl className="sm:divide-y sm:divide-gray-200">
@@ -155,7 +160,7 @@ const GetTransactionByID = () => {
         </div>
       )}
 
-      <form className="max-w-md ml-10" onSubmit={formik.handleSubmit}>
+      <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
         <div className="relative z-0 w-full mb-10 mt-10 group">
           <input
             type="Text"
