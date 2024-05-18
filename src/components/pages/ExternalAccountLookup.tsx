@@ -129,7 +129,7 @@ const ExternalAccountLookup = () => {
         </div>
       )}
 
-      <form className="max-w-md ml-10" onSubmit={formik.handleSubmit}>
+      <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
         <div className="grid md:grid-cols-2 md:gap-6 mt-16">
           <div className="relative z-0 w-full mb-10 group">
             <select

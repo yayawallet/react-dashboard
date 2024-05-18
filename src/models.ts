@@ -142,3 +142,43 @@ export interface Recharge {
   amount: number;
   phone: string;
 }
+
+export interface ScheduledPayment {
+  id: string;
+  customer: {
+    name: string;
+    account: string;
+    photo_url: string;
+  };
+  receiver_institution: {
+    code: string;
+    name: string;
+    logo_url: string;
+  };
+  receiver: {
+    name: string;
+    account: string;
+    photo_url: null | string;
+  };
+  account_number: string;
+  amount: number;
+  next_run_time: Date;
+  status: string;
+  recurring_type: string;
+}
+
+// Recurring - Contrat
+export interface recurringContract {
+  id: string;
+  merchant: {
+    name: string;
+    account: string;
+  };
+  customer: {
+    name: string;
+    account: string;
+  };
+  contract_number: string;
+  service_type: string;
+  status: string;
+}
