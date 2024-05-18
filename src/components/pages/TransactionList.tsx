@@ -21,11 +21,20 @@ const TransactionList = () => {
   }, []);
 
   useEffect(() => {
-    const endpoint = searchQuery ? 'search' : 'find-by-user';
-
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/transaction/${endpoint}`, {
-        page: currentPage,
+      .get(
+        `${import.meta.env.VITE_BASE_URL}/transaction/find-by-user/${currentPage}`
+      )
+      .then((res) => {
+        setTransactionList(res.data.data);
+        setPageCount(res.data.lastPage);
+        setIsFetching(false);
+      });
+  }, [currentPage]);
+
+  useEffect(() => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
         query: searchQuery,
       })
       .then((res) => {
@@ -33,7 +42,7 @@ const TransactionList = () => {
         setPageCount(res.data.lastPage);
         setIsFetching(false);
       });
-  }, [currentPage, searchQuery]);
+  }, [searchQuery]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
