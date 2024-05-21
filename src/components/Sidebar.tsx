@@ -65,10 +65,7 @@ const Sidebar = () => {
           </button>
 
           <div className="px-3">
-            <ul
-              className="space-y-2 font-medium"
-              onClick={() => setSidebarOpen(false)}
-            >
+            <ul className="space-y-2 font-medium" onClick={() => setSidebarOpen(false)}>
               <li>
                 <div className="flex justify-center p-2">
                   <Link to="/profile">
@@ -85,13 +82,10 @@ const Sidebar = () => {
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">
-                    {profile?.name.split(' ').slice(0, 2).join(' ') || (
-                      <span>&nbsp;</span>
-                    )}
+                    {profile?.name.split(' ').slice(0, 2).join(' ') || <span>&nbsp;</span>}
                   </span>
                   <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
-                    {profile?.type.replace(/([a-zA-Z])(\d)/g, '$1 $2') ||
-                      'LEVEL -'}
+                    {profile?.type.replace(/([a-zA-Z])(\d)/g, '$1 $2') || 'LEVEL -'}
                   </span>
                 </Link>
               </li>
@@ -119,9 +113,7 @@ const Sidebar = () => {
                   to="/generate-qr-code"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Generate QR Code
-                  </span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Generate QR Code</span>
                 </Link>
               </li>
 
@@ -130,9 +122,7 @@ const Sidebar = () => {
                   to="/transfer-list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transfer List
-                  </span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Transfer List</span>
                 </Link>
               </li>
 
@@ -141,9 +131,7 @@ const Sidebar = () => {
                   to="/transaction-list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Transaction List
-                  </span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Transaction List</span>
                 </Link>
               </li>
 
@@ -188,7 +176,7 @@ const Sidebar = () => {
                   to="/recurring-contract/request-payment"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3">Create Request Payment</span>
+                  <span className="flex-1 ms-3">Request Payment</span>
                 </Link>
               </li>
 
@@ -197,9 +185,7 @@ const Sidebar = () => {
                   to="/verify-transaction-id"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Verify Transaction ID
-                  </span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Verify Transaction ID</span>
                 </Link>
               </li>
 
@@ -208,9 +194,7 @@ const Sidebar = () => {
                   to="/check-transfer-fee"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    Check Transfer Fee
-                  </span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Check Transfer Fee</span>
                 </Link>
               </li>
 
@@ -219,9 +203,7 @@ const Sidebar = () => {
                   to="/external-account-lookup"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">
-                    External Account Lookup
-                  </span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">External Account Lookup</span>
                 </Link>
               </li>
             </ul>
