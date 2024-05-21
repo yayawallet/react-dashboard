@@ -30,15 +30,15 @@ const Create = () => {
     },
 
     validationSchema: Yup.object({
-      account_number: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      account_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       amount: Yup.number().required('Required'),
-      cause: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       recurring: Yup.string().required('Select recurring type'),
-      start_at: Yup.date().required().typeError('Select start date & time'),
+      start_at: Yup.date()
+        .required('Select start date & time')
+        .test('startDate', 'start time must be in the future', (value) => {
+          return new Date(value).getTime() > new Date().getTime() + 30000;
+        }),
     }),
 
     onSubmit: (values) => {
@@ -46,15 +46,14 @@ const Create = () => {
       setUsersList([]);
 
       // Clear existing values
+      setScheduledPaymentID('');
       setSuccessMessage('');
       setErrorMessage('');
 
       values.start_at = new Date(values.start_at).getTime() / 1000;
+
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values)
         .then((res) => {
           setScheduledPaymentID(res.data.id);
           setLoading(false);
@@ -63,8 +62,7 @@ const Create = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
@@ -123,9 +121,7 @@ const Create = () => {
           <span className="sr-only">Info</span>
           <div>
             <span className="font-medium mr-2">Successful schedule!</span>
-            {successMessage
-              ? successMessage
-              : `Scheduled Payment ID: ${scheduledPaymentID}`}
+            {successMessage ? successMessage : `Scheduled Payment ID: ${scheduledPaymentID}`}
           </div>
         </div>
       )}
@@ -205,18 +201,12 @@ const Create = () => {
                     setUsersList([user]);
                   }}
                 >
-                  <img
-                    src={user.photo_url || avater}
-                    alt=""
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
                   <span>{user.name}</span>
                 </div>
               ))}
 
-              {noUserFound && (
-                <span className="block text-sm pl-4">No users found.</span>
-              )}
+              {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
             </div>
           </div>
 
@@ -299,7 +289,6 @@ const Create = () => {
                 autoComplete="off"
                 disabled={isLoading}
                 onChange={formik.handleChange}
-                // value={new Date(formik.values.start_at).getTime()}
               />
               <label
                 htmlFor="start_at"
@@ -308,9 +297,7 @@ const Create = () => {
                 Start Date
               </label>
 
-              <span className="text-xs text-red-600">
-                {formik.touched.start_at && formik.errors.start_at}
-              </span>
+              <span className="text-xs text-red-600">{formik.errors.start_at}</span>
             </div>
           </div>
 
