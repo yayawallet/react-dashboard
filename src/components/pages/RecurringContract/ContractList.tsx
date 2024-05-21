@@ -19,9 +19,7 @@ const ContractList = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredContractList, setFilteredContractList] = useState<
-    recurringContract[]
-  >([]);
+  const [filteredContractList, setFilteredContractList] = useState<recurringContract[]>([]);
 
   useEffect(() => {
     axios
@@ -41,9 +39,7 @@ const ContractList = () => {
     }
 
     setFilteredContractList(
-      contractList.filter((item) =>
-        filterByStatus ? item.status === filterByStatus : true
-      )
+      contractList.filter((item) => (filterByStatus ? item.status === filterByStatus : true))
     );
   }, [contractList, filterByStatus]);
 
@@ -54,9 +50,7 @@ const ContractList = () => {
     setIsProcessing(true);
     setSuccessMessage('');
     axios
-      .get(
-        `${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${deactivateID}`
-      )
+      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${deactivateID}`)
       .then(() => {
         setSuccessMessage('Contract Deactivated Successfully');
         setContractList((prev) => prev.filter((l) => l.id != deactivateID));
@@ -116,21 +110,13 @@ const ContractList = () => {
             Filter by:
             <span
               className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'approved' ? 'bg-violet-600 text-white' : ''}`}
-              onClick={() =>
-                setFilterByStatus((prev) =>
-                  prev === 'approved' ? '' : 'approved'
-                )
-              }
+              onClick={() => setFilterByStatus((prev) => (prev === 'approved' ? '' : 'approved'))}
             >
               Aproved
             </span>
             <span
               className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}
-              onClick={() =>
-                setFilterByStatus((prev) =>
-                  prev === 'pending' ? '' : 'pending'
-                )
-              }
+              onClick={() => setFilterByStatus((prev) => (prev === 'pending' ? '' : 'pending'))}
             >
               Pending
             </span>
@@ -140,22 +126,20 @@ const ContractList = () => {
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
-                ID
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Customer Name
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Contract Number
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Service Type
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Status
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Action
               </th>
             </tr>
@@ -187,23 +171,14 @@ const ContractList = () => {
                   <td className="border-t border-b border-slate-200 p-3">
                     {item.customer.name.split(' ').slice(0, 2).join(' ')}
                     <br />
-                    <span
-                      className="text-gray-500 text-xs block"
-                      style={{ marginTop: '-3px' }}
-                    >
+                    <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                       {'@' + item.customer.account}
                     </span>
                   </td>
 
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {item.contract_number}
-                  </td>
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {item.service_type}
-                  </td>
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {item.status}
-                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">{item.contract_number}</td>
+                  <td className="border-t border-b border-slate-200 p-3">{item.service_type}</td>
+                  <td className="border-t border-b border-slate-200 p-3">{item.status}</td>
                   <td className="border-t border-b border-slate-200 p-3">
                     <button
                       className="text-sm bg-red-600 text-white py-1 px-3 rounded"

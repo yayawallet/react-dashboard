@@ -7,9 +7,7 @@ import { ScheduledPayment } from '../../../models';
 import Loading from '../../common/Loading';
 
 const List = () => {
-  const [scheduledPaymentList, setScheduledPaymentList] = useState<
-    ScheduledPayment[]
-  >([]);
+  const [scheduledPaymentList, setScheduledPaymentList] = useState<ScheduledPayment[]>([]);
   const [copiedID, setCopiedID] = useState('');
   const [archiveID, setArchiveId] = useState('');
   const [openInfoCard, setOpenInfoCard] = useState(false);
@@ -18,11 +16,9 @@ const List = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/list`)
-      .then((res) => {
-        setScheduledPaymentList(res.data);
-      });
+    axios.get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/list`).then((res) => {
+      setScheduledPaymentList(res.data);
+    });
   }, []);
 
   const handleOnConfirm = (confirm: boolean) => {
@@ -32,14 +28,10 @@ const List = () => {
     setIsProcessing(true);
     setSuccessMessage('');
     axios
-      .get(
-        `${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${archiveID}`
-      )
+      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${archiveID}`)
       .then(() => {
         setSuccessMessage('Scheduled Payment Deleted Successfully');
-        setScheduledPaymentList((prev) =>
-          prev.filter((l) => l.id != archiveID)
-        );
+        setScheduledPaymentList((prev) => prev.filter((l) => l.id != archiveID));
         setIsProcessing(false);
         setOpenInfoCard(true);
       })
@@ -72,22 +64,20 @@ const List = () => {
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
-                ID
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Receiver
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Amount
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Recurring
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Next Run-time
               </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 pl-6 font-medium">
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Action
               </th>
             </tr>
@@ -121,19 +111,14 @@ const List = () => {
                   <td className="border-t border-b border-slate-200 p-3">
                     {item.receiver.name.split(' ').slice(0, 2).join(' ')}
                     <br />
-                    <span
-                      className="text-gray-500 text-xs block"
-                      style={{ marginTop: '-3px' }}
-                    >
+                    <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                       {'@' + item.receiver.account}
                     </span>
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
                     {item.amount.toFixed(2)} ETB
                   </td>
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {item.recurring_type}
-                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">{item.recurring_type}</td>
                   <td className="border-t border-b border-slate-200 p-3">
                     {`${new Date(Number(item.next_run_time) * 1000).toLocaleString()}`}
                   </td>
