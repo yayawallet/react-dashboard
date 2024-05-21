@@ -29,9 +29,7 @@ const CreateContract = () => {
     },
 
     validationSchema: Yup.object({
-      contract_number: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       service_type: Yup.string().required('Required'),
       customer_account_name: Yup.string()
         .max(50, 'Must be 50 characters or less')
@@ -44,14 +42,12 @@ const CreateContract = () => {
       setUsersList([]);
 
       // Clear existing values
+      setContractID('');
       setSuccessMessage('');
       setErrorMessage('');
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/recurring-contract/create`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/create`, values)
         .then((res) => {
           setContractID(res.data.contract_id);
           setLoading(false);
@@ -60,8 +56,7 @@ const CreateContract = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
@@ -184,8 +179,7 @@ const CreateContract = () => {
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.customer_account_name &&
-                formik.errors.customer_account_name}
+              {formik.touched.customer_account_name && formik.errors.customer_account_name}
             </span>
           </div>
 
@@ -201,18 +195,12 @@ const CreateContract = () => {
                     setUsersList([user]);
                   }}
                 >
-                  <img
-                    src={user.photo_url || avater}
-                    alt=""
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
                   <span>{user.name}</span>
                 </div>
               ))}
 
-              {noUserFound && (
-                <span className="block text-sm pl-4">No users found.</span>
-              )}
+              {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
             </div>
           </div>
 
@@ -259,8 +247,7 @@ const CreateContract = () => {
               </label>
 
               <span className="text-xs text-red-600">
-                {formik.touched.contract_number &&
-                  formik.errors.contract_number}
+                {formik.touched.contract_number && formik.errors.contract_number}
               </span>
             </div>
           </div>
@@ -297,7 +284,7 @@ const CreateContract = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
-          instruction="Your file must have the following columns: customer_account_name, service_type, contract_number and one more optional column formeta_data"
+          instruction="Your file must have the following columns: customer_account_name, service_type, contract_number and meta_data (optional)"
         />
       )}
     </div>
