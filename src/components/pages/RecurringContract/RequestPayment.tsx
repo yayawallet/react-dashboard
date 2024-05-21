@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../common/BulkImport';
 
 const RequestPayment = () => {
-  const [paymentRequestID, setPaymentRequestID] = useState('');
+  const [requestPaymentID, setRequestPaymentID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -26,16 +26,10 @@ const RequestPayment = () => {
     },
 
     validationSchema: Yup.object({
-      contract_number: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       amount: Yup.number().required('Required'),
-      cause: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
-      notification_url: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .url('Invalid url'),
+      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      notification_url: Yup.string().max(50, 'Must be 50 characters or less').url('Invalid url'),
       meta_data: Yup.object().json().typeError('Meta-data must be JSON format'),
     }),
 
@@ -43,32 +37,29 @@ const RequestPayment = () => {
       setLoading(true);
 
       // Clear existing values
+      setRequestPaymentID('');
       setSuccessMessage('');
       setErrorMessage('');
       values.meta_data = JSON.parse(values.meta_data);
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/recurring-contract/request-payment`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/request-payment`, values)
         .then((res) => {
-          setPaymentRequestID(res.data.payment_request_id);
+          setRequestPaymentID(res.data.payment_request_id);
           setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Recurring Contract</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Request Payment</h1>
 
       {errorMessage && (
         <div
@@ -90,7 +81,7 @@ const RequestPayment = () => {
         </div>
       )}
 
-      {(paymentRequestID || successMessage) && (
+      {(requestPaymentID || successMessage) && (
         <div
           className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50"
           role="alert"
@@ -104,12 +95,8 @@ const RequestPayment = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Payment requested successfully!
-            </span>
-            {successMessage
-              ? successMessage
-              : `Payment ID: ${paymentRequestID}`}
+            <span className="font-medium mr-2">Payment requested successfully!</span>
+            {successMessage ? successMessage : `Payment ID: ${requestPaymentID}`}
           </div>
         </div>
       )}
@@ -152,7 +139,7 @@ const RequestPayment = () => {
         </div>
       </div>
 
-      {inputFormType ? (
+      {inputFormType === 'one' ? (
         <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
           <div className="relative z-0 w-full mb-10 group">
             <input
@@ -244,8 +231,7 @@ const RequestPayment = () => {
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.notification_url &&
-                formik.errors.notification_url}
+              {formik.touched.notification_url && formik.errors.notification_url}
             </span>
           </div>
 
