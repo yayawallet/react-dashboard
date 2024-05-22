@@ -2,18 +2,17 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import avater from '../../../assets/avater.svg';
-import { User } from '../../../models';
 import BulkImport from '../../common/BulkImport';
+import SearchUserInline from '../../common/SearchUserInline';
+import InlineNotification from '../../common/InlineNotification';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [usersList, setUsersList] = useState<User[]>([]);
-  const [noUserFound, setNOUserFound] = useState(false);
-  const [selectedReceiver, setSelectedReceiver] = useState<User>();
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
@@ -39,13 +38,13 @@ const CreateContract = () => {
 
     onSubmit: (values) => {
       setLoading(true);
-      setUsersList([]);
 
       // Clear existing values
       setContractID('');
       setSuccessMessage('');
       setErrorMessage('');
 
+      values.customer_account_name = selectedUser;
       axios
         .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/create`, values)
         .then((res) => {
@@ -61,63 +60,17 @@ const CreateContract = () => {
     },
   });
 
-  useEffect(() => {
-    if (formik.values.customer_account_name.length < 3) return setUsersList([]);
-    // reset NoUserFound
-    setNOUserFound(false);
-
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
-        query: formik.values.customer_account_name,
-      })
-      .then((res) => {
-        setUsersList(res.data.slice(0, 5));
-        if (res.data.length === 0) setNOUserFound(true);
-      });
-  }, [formik.values.customer_account_name]);
-
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Recurring Contract</h1>
 
-      {errorMessage && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-red-800 rounded-lg bg-red-50"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Unsuccessful Contract!</span>
-            {errorMessage}
-          </div>
-        </div>
-      )}
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {(contractID || successMessage) && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Successful Contract!</span>
-            {successMessage ? successMessage : `Contract ID: ${contractID}`}
-          </div>
-        </div>
+        <InlineNotification
+          type="success"
+          info={`${successMessage ? successMessage : `Contract ID: ${contractID}`}`}
+        />
       )}
 
       <div className="border-2 rounded-lg p-2 px-5">
@@ -183,26 +136,11 @@ const CreateContract = () => {
             </span>
           </div>
 
-          <div className="relative z-0 w-full mb-5 group">
-            <div className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 outline-none">
-              {usersList?.slice(0, 5).map((user) => (
-                <div
-                  key={user.account}
-                  className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    formik.setFieldValue('customer_account_name', user.account);
-                    setSelectedReceiver(user);
-                    setUsersList([user]);
-                  }}
-                >
-                  <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
-                  <span>{user.name}</span>
-                </div>
-              ))}
-
-              {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
-            </div>
-          </div>
+          <SearchUserInline
+            query={formik.values.customer_account_name}
+            onSelecteUser={(value) => setSelectedUser(value)}
+            onUserNotFound={(value) => setUserNotFound(value)}
+          />
 
           <div className="grid md:grid-cols-2 md:gap-6">
             <div className="relative z-0 w-full mb-10 group">
@@ -271,7 +209,7 @@ const CreateContract = () => {
 
           <button
             type="submit"
-            disabled={noUserFound || !selectedReceiver || isLoading}
+            disabled={userNotFound || !selectedUser || isLoading}
             className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {isLoading ? 'Please wait...' : 'Create Contract'}

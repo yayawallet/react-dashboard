@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { QRCode } from '../../models';
+import InlineNotification from '../common/InlineNotification';
 
 const GenerateQRCode = () => {
   const [QRCode, setQRCode] = useState<QRCode>();
@@ -10,9 +11,7 @@ const GenerateQRCode = () => {
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const copyPaymentLink = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const copyPaymentLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.clipboard.writeText(QRCode?.payment_link || '');
     setPaymentLinkCopied(true);
 
@@ -30,9 +29,7 @@ const GenerateQRCode = () => {
 
     validationSchema: Yup.object({
       amount: Yup.number().required('Required'),
-      cause: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
     }),
 
     onSubmit: (values) => {
@@ -43,10 +40,7 @@ const GenerateQRCode = () => {
       setQRCode(undefined);
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`, values)
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);
@@ -55,8 +49,7 @@ const GenerateQRCode = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
@@ -68,25 +61,7 @@ const GenerateQRCode = () => {
         Receive payments by sharing your generated QR Code.
       </p>
 
-      {errorMessage && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-red-800 rounded-lg bg-red-50"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Error!</span>
-            {errorMessage}
-          </div>
-        </div>
-      )}
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {QRCode && (
         <div className="inline-flex flex-col rounded-lg ml-10 -mt-10 mb-8">

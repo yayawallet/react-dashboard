@@ -115,9 +115,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
           <div className="h-full w-full sticky top-3">
             <div className="flex flex-wrap gap-x-2 gap-y-4">
               {packages
-                .filter((pkg) =>
-                  !selectedCategory ? pkg : pkg.category == selectedCategory
-                )
+                .filter((pkg) => (!selectedCategory ? pkg : pkg.category == selectedCategory))
                 .map((pkg) => (
                   <div
                     key={pkg.code}

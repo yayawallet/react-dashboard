@@ -3,11 +3,10 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../../models';
+import InlineNotification from '../common/InlineNotification';
 
 const ExternalAccountLookup = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState<
-    Institution[]
-  >([]);
+  const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -18,9 +17,7 @@ const ExternalAccountLookup = () => {
         country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
-      .catch((error) =>
-        setErrorMessage(error.response?.data.error || error.message)
-      );
+      .catch((error) => setErrorMessage(error.response?.data.error || error.message));
   }, []);
 
   const formik = useFormik({
@@ -42,10 +39,7 @@ const ExternalAccountLookup = () => {
       setExternalAccount(undefined);
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values)
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);
@@ -62,29 +56,9 @@ const ExternalAccountLookup = () => {
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-10">
-        External Account Lookup
-      </h1>
+      <h1 className="text-2xl font-semibold p-2 mb-10">External Account Lookup</h1>
 
-      {errorMessage && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-red-800 rounded-lg bg-red-50"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Error!</span>
-            {errorMessage}
-          </div>
-        </div>
-      )}
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {externalAccount && (
         <div className="bg-white overflow-hidden shadow rounded-lg border mb-10">
@@ -117,9 +91,7 @@ const ExternalAccountLookup = () => {
                 </dd>
               </div>
               <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Account Number
-                </dt>
+                <dt className="text-sm font-medium text-gray-500">Account Number</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {externalAccount.account_number}
                 </dd>
@@ -146,8 +118,7 @@ const ExternalAccountLookup = () => {
               ))}
             </select>
             <span className="text-xs text-red-600">
-              {formik.touched.institution_code &&
-                formik.errors.institution_code}
+              {formik.touched.institution_code && formik.errors.institution_code}
             </span>
           </div>
 

@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { Transaction } from '../../models';
+import InlineNotification from '../common/InlineNotification';
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState('');
@@ -16,9 +17,7 @@ const GetTransactionByID = () => {
     },
 
     validationSchema: Yup.object({
-      transactionID: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      transactionID: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
     }),
 
     onSubmit: (values) => {
@@ -33,9 +32,7 @@ const GetTransactionByID = () => {
         .then((res) => setOwnAccount(res.data.account));
 
       axios
-        .get(
-          `${import.meta.env.VITE_BASE_URL}/transaction/find/${values.transactionID}`
-        )
+        .get(`${import.meta.env.VITE_BASE_URL}/transaction/find/${values.transactionID}`)
         .then((res) => {
           setTransaction(res.data);
           setLoading(false);
@@ -44,9 +41,7 @@ const GetTransactionByID = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(
-            error.response?.data.error || 'Invalid transaction ID'
-          );
+          setErrorMessage(error.response?.data.error || 'Invalid transaction ID');
           setLoading(false);
         });
     },
@@ -54,29 +49,9 @@ const GetTransactionByID = () => {
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">
-        Verify Transaction IDs
-      </h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Verify Transaction IDs</h1>
 
-      {errorMessage && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-red-800 rounded-lg bg-red-50"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Error!</span>
-            {errorMessage}
-          </div>
-        </div>
-      )}
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {transaction && (
         <div className="bg-white overflow-hidden mb-5">
@@ -84,19 +59,14 @@ const GetTransactionByID = () => {
             type="button"
             className="block ml-auto py-1.5 px-6 m-1 font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
           >
-            <a
-              href={`${import.meta.env.VITE_INVOICE_URL}/${transaction.id}`}
-              target="_blank"
-            >
+            <a href={`${import.meta.env.VITE_INVOICE_URL}/${transaction.id}`} target="_blank">
               Print Invoice
             </a>
           </button>
           <div className="border-2 shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
             <dl className="sm:divide-y sm:divide-gray-200">
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Transaction ID
-                </dt>
+                <dt className="text-sm font-medium text-gray-500">Transaction ID</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {transaction.id}
                 </dd>
@@ -106,10 +76,7 @@ const GetTransactionByID = () => {
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {transaction.sender.name}
                   <br />
-                  <span
-                    className="text-gray-500 text-sm block"
-                    style={{ marginTop: '-3px' }}
-                  >
+                  <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
                     {'@' + transaction.sender.account}
                   </span>
                 </dd>
@@ -119,10 +86,7 @@ const GetTransactionByID = () => {
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {transaction.receiver.name}
                   <br />
-                  <span
-                    className="text-gray-500 text-sm block"
-                    style={{ marginTop: '-3px' }}
-                  >
+                  <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
                     {'@' + transaction.receiver.account}
                   </span>
                 </dd>
@@ -131,13 +95,9 @@ const GetTransactionByID = () => {
                 <dt className="text-sm font-medium text-gray-500">Amount</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {ownAccount === transaction.receiver.account ? (
-                    <span className="inline-block ml-3  text-green-600">
-                      &#43;&nbsp;
-                    </span>
+                    <span className="inline-block ml-3  text-green-600">&#43;&nbsp;</span>
                   ) : (
-                    <span className="inline-block ml-3 text-red-600">
-                      &#8722;&nbsp;
-                    </span>
+                    <span className="inline-block ml-3 text-red-600">&#8722;&nbsp;</span>
                   )}
                   {transaction.amount_with_currency}
                 </dd>
@@ -150,9 +110,7 @@ const GetTransactionByID = () => {
               </div>
 
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Created At
-                </dt>
+                <dt className="text-sm font-medium text-gray-500">Created At</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {`${new Date(Number(transaction?.created_at_time) * 1000).toLocaleString()}`}
                 </dd>
