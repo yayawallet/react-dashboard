@@ -1,19 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import avater from '../../../assets/avater.svg';
-import { User } from '../../../models';
 import BulkImport from '../../common/BulkImport';
+import SearchUserInline from '../../common/SearchUserInline';
 
 const Create = () => {
   const [scheduledPaymentID, setScheduledPaymentID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [usersList, setUsersList] = useState<User[]>([]);
-  const [noUserFound, setNOUserFound] = useState(false);
-  const [selectedReceiver, setSelectedReceiver] = useState<User>();
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
@@ -43,7 +41,6 @@ const Create = () => {
 
     onSubmit: (values) => {
       setLoading(true);
-      setUsersList([]);
 
       // Clear existing values
       setScheduledPaymentID('');
@@ -51,7 +48,7 @@ const Create = () => {
       setErrorMessage('');
 
       values.start_at = new Date(values.start_at).getTime() / 1000;
-
+      values.account_number = selectedUser;
       axios
         .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values)
         .then((res) => {
@@ -66,21 +63,6 @@ const Create = () => {
         });
     },
   });
-
-  useEffect(() => {
-    if (formik.values.account_number.length < 3) return setUsersList([]);
-    // reset NoUserFound
-    setNOUserFound(false);
-
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
-        query: formik.values.account_number,
-      })
-      .then((res) => {
-        setUsersList(res.data.slice(0, 5));
-        if (res.data.length === 0) setNOUserFound(true);
-      });
-  }, [formik.values.account_number]);
 
   return (
     <div className="container">
@@ -189,26 +171,11 @@ const Create = () => {
             </span>
           </div>
 
-          <div className="relative z-0 w-full mb-5 group">
-            <div className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 outline-none">
-              {usersList?.slice(0, 5).map((user) => (
-                <div
-                  key={user.account}
-                  className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => {
-                    formik.setFieldValue('account_number', user.account);
-                    setSelectedReceiver(user);
-                    setUsersList([user]);
-                  }}
-                >
-                  <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
-                  <span>{user.name}</span>
-                </div>
-              ))}
-
-              {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
-            </div>
-          </div>
+          <SearchUserInline
+            query={formik.values.account_number}
+            onSelecteUser={(value) => setSelectedUser(value)}
+            onUserNotFound={(value) => setUserNotFound(value)}
+          />
 
           <div className="grid md:grid-cols-2 md:gap-6">
             <div className="relative z-0 w-full mb-10 group">
@@ -302,7 +269,7 @@ const Create = () => {
 
           <button
             type="submit"
-            disabled={noUserFound || !selectedReceiver || isLoading}
+            disabled={userNotFound || !selectedUser || isLoading}
             className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
             {isLoading ? 'Please wait...' : 'Schedule Payment'}
