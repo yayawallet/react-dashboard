@@ -21,12 +21,11 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
       setUsersList([]);
       return;
     }
-
     setUserNotFound(false);
     setSelectedUser('');
 
+    onUserNotFound(false);
     onSelecteUser('');
-    // reset userNotFound
 
     axios
       .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
