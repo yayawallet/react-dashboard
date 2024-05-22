@@ -47,9 +47,6 @@ const CreateTransaction = () => {
     },
   });
 
-  const handleSelecteUser = (user_account: string) => setSelectedUser(user_account);
-  const handleUserNotFound = (bool: boolean) => setNOUserFound(bool);
-
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Make Transaction</h1>
@@ -120,8 +117,8 @@ const CreateTransaction = () => {
 
         <SearchUserInline
           query={!isLoading ? formik.values.receiver : ''}
-          onSelecteUser={handleSelecteUser}
-          onUserNotFound={handleUserNotFound}
+          onSelecteUser={(value) => setSelectedUser(value)}
+          onUserNotFound={(value) => setNOUserFound(value)}
         />
 
         <div className="grid md:grid-cols-2 md:gap-6">
