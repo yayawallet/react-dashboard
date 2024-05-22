@@ -15,12 +15,10 @@ const InlineNotification = ({ type, info }: Props) => {
         </svg>
         <span className="sr-only">Info</span>
         <div>
-          <span className="font-medium mr-2">{type === 'success' ? 'Success' : 'Error'}</span>
+          <span className="font-medium mr-2">{type === 'success' ? 'Success:' : 'Error:'}</span>
           {info}
         </div>
       </div>
-
-      <div className="flex items-center p-4 mb-10 text-sm " role="alert"></div>
     </div>
   );
 };
