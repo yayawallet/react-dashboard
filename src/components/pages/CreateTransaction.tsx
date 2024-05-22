@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { User } from '../../models';
-import avater from './../../assets/avater.svg';
+import SearchUserInline from '../common/SearchUserInline';
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [usersList, setUsersList] = useState<User[]>([]);
   const [noUserFound, setNOUserFound] = useState(false);
-  const [selectedReceiver, setSelectedReceiver] = useState<User>();
+  const [selectedUser, setSelectedUser] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -28,12 +26,12 @@ const CreateTransaction = () => {
 
     onSubmit: (values) => {
       setLoading(true);
-      setUsersList([]);
 
       // Clear existing values
       setErrorMessage('');
       setTransactionID('');
 
+      values.receiver = selectedUser;
       axios
         .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values)
         .then((res) => {
@@ -49,20 +47,8 @@ const CreateTransaction = () => {
     },
   });
 
-  useEffect(() => {
-    if (formik.values.receiver.length < 3) return setUsersList([]);
-    // reset NoUserFound
-    setNOUserFound(false);
-
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
-        query: formik.values.receiver,
-      })
-      .then((res) => {
-        setUsersList(res.data.slice(0, 5));
-        if (res.data.length === 0) setNOUserFound(true);
-      });
-  }, [formik.values.receiver]);
+  const handleSelecteUser = (user_account: string) => setSelectedUser(user_account);
+  const handleUserNotFound = (bool: boolean) => setNOUserFound(bool);
 
   return (
     <div className="container">
@@ -132,26 +118,11 @@ const CreateTransaction = () => {
           </span>
         </div>
 
-        <div className="relative z-0 w-full mb-10 group">
-          <div className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 outline-none">
-            {usersList?.slice(0, 5).map((user) => (
-              <div
-                key={user.account}
-                className="flex gap-2 items-center p-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => {
-                  formik.setFieldValue('receiver', user.account);
-                  setSelectedReceiver(user);
-                  setUsersList([user]);
-                }}
-              >
-                <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
-                <span>{user.name}</span>
-              </div>
-            ))}
-
-            {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
-          </div>
-        </div>
+        <SearchUserInline
+          query={!isLoading ? formik.values.receiver : ''}
+          onSelecteUser={handleSelecteUser}
+          onUserNotFound={handleUserNotFound}
+        />
 
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-10 group">
@@ -203,7 +174,7 @@ const CreateTransaction = () => {
 
         <button
           type="submit"
-          disabled={noUserFound || !selectedReceiver || isLoading}
+          disabled={noUserFound || !selectedUser || isLoading}
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           {isLoading ? 'Sending...' : 'Send Money'}
