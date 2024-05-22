@@ -35,7 +35,7 @@ const Create = () => {
       start_at: Yup.date()
         .required('Select start date & time')
         .test('startDate', 'start time must be in the future', (value) => {
-          return new Date(value).getTime() > new Date().getTime() + 30000;
+          return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
         }),
     }),
 
