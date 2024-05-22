@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, Fee } from '../../models';
+import InlineNotification from '../common/InlineNotification';
 
 const TransferFee = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
@@ -60,25 +61,7 @@ const TransferFee = () => {
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 mb-10">Check Transfer Fee</h1>
 
-      {errorMessage && (
-        <div
-          className="flex items-center p-4 mb-10 text-sm text-red-800 rounded-lg bg-red-50"
-          role="alert"
-        >
-          <svg
-            className="flex-shrink-0 inline w-4 h-4 me-3"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-          >
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-          </svg>
-          <span className="sr-only">Info</span>
-          <div>
-            <span className="font-medium mr-2">Error!</span>
-            {errorMessage}
-          </div>
-        </div>
-      )}
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {transferFee && (
         <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
