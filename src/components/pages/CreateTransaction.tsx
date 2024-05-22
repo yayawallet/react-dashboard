@@ -8,7 +8,7 @@ const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [noUserFound, setNOUserFound] = useState(false);
+  const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
 
   const formik = useFormik({
@@ -116,9 +116,9 @@ const CreateTransaction = () => {
         </div>
 
         <SearchUserInline
-          query={!isLoading ? formik.values.receiver : ''}
+          query={formik.values.receiver}
           onSelecteUser={(value) => setSelectedUser(value)}
-          onUserNotFound={(value) => setNOUserFound(value)}
+          onUserNotFound={(value) => setUserNotFound(value)}
         />
 
         <div className="grid md:grid-cols-2 md:gap-6">
@@ -171,7 +171,7 @@ const CreateTransaction = () => {
 
         <button
           type="submit"
-          disabled={noUserFound || !selectedUser || isLoading}
+          disabled={userNotFound || !selectedUser || isLoading}
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           {isLoading ? 'Sending...' : 'Send Money'}
