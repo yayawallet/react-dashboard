@@ -55,16 +55,13 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
               </div>
 
               <h3 className="mb-2 text-lg font-normal text-gray-800">
-                <span className="text-xl font-semibold">
-                  -{info?.amount.toFixed(2)}
-                </span>
+                <span className="text-xl font-semibold">-{info?.amount.toFixed(2)}</span>
                 <span className="text-gray-400 font-light"> (ETB)</span>
               </h3>
               <hr className="mb-5" />
               <ul className="list-disc text-sm text-gray-900 text-start px-5">
                 <li className="mb-1">
-                  <span className="text-gray-500">Service Number: </span>{' '}
-                  {info?.phone}
+                  <span className="text-gray-500">Service Number: </span> {info?.phone}
                 </li>
               </ul>
               <button
@@ -85,16 +82,8 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    d="M7.95206 16.048L16.0769 7.92297"
-                    stroke="#EF4444"
-                    strokeWidth="2"
-                  />
-                  <path
-                    d="M16.0914 16.0336L7.90884 7.85101"
-                    stroke="#EF4444"
-                    strokeWidth="2"
-                  />
+                  <path d="M7.95206 16.048L16.0769 7.92297" stroke="#EF4444" strokeWidth="2" />
+                  <path d="M16.0914 16.0336L7.90884 7.85101" stroke="#EF4444" strokeWidth="2" />
                   <path
                     d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
                     stroke="#EF4444"

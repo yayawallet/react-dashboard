@@ -5,9 +5,7 @@ import * as Yup from 'yup';
 import { Institution, Fee } from '../../models';
 
 const TransferFee = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState<
-    Institution[]
-  >([]);
+  const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
   const [institution, setInstitution] = useState('');
   const [transferFee, setTransferFee] = useState<Fee>();
   const [errorMessage, setErrorMessage] = useState('');
@@ -19,9 +17,7 @@ const TransferFee = () => {
         country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
-      .catch((error) =>
-        setErrorMessage(error.response?.data.error || error.message)
-      );
+      .catch((error) => setErrorMessage(error.response?.data.error || error.message));
   }, []);
 
   const formik = useFormik({
@@ -87,8 +83,7 @@ const TransferFee = () => {
       {transferFee && (
         <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
           <p className="text-2xl">
-            Transfer Fee to {institution}:
-            <span className="text-6xl px-2">{transferFee.fee}</span>
+            Transfer Fee to {institution}:<span className="text-6xl px-2">{transferFee.fee}</span>
             <span className="text-4xl font-thin">{transferFee.currency}</span>
           </p>
         </div>
@@ -111,8 +106,7 @@ const TransferFee = () => {
               ))}
             </select>
             <span className="text-xs text-red-600">
-              {formik.touched.institution_code &&
-                formik.errors.institution_code}
+              {formik.touched.institution_code && formik.errors.institution_code}
             </span>
           </div>
 

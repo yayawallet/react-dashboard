@@ -28,36 +28,18 @@ const Dashboard = () => {
               <Route index element={<Home />} />
               <Route path="profile" element={<Profile />} />
               <Route path="airtime" element={<AirTime />} />
-              <Route
-                path="create-transaction"
-                element={<CreateTransaction />}
-              />
+              <Route path="create-transaction" element={<CreateTransaction />} />
               <Route path="generate-qr-code" element={<GenerateQRCode />} />
               <Route path="transaction-list" element={<TransactionList />} />
               <Route path="transfer-list" element={<TransferList />} />
               <Route path="scheduled-payment/create" element={<Create />} />
               <Route path="scheduled-payment/list" element={<List />} />
-              <Route
-                path="recurring-contract/create"
-                element={<CreateContract />}
-              />
-              <Route
-                path="recurring-contract/list"
-                element={<ContractList />}
-              />
-              <Route
-                path="recurring-contract/request-payment"
-                element={<RequestPayment />}
-              />
-              <Route
-                path="verify-transaction-id"
-                element={<VerifyTransactionByID />}
-              />
+              <Route path="recurring-contract/create" element={<CreateContract />} />
+              <Route path="recurring-contract/list" element={<ContractList />} />
+              <Route path="recurring-contract/request-payment" element={<RequestPayment />} />
+              <Route path="verify-transaction-id" element={<VerifyTransactionByID />} />
               <Route path="check-transfer-fee" element={<TransferFee />} />
-              <Route
-                path="external-account-lookup"
-                element={<ExternalAccountLookup />}
-              />
+              <Route path="external-account-lookup" element={<ExternalAccountLookup />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

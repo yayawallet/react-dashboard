@@ -27,17 +27,13 @@ const BulkImport = ({
     validationSchema: Yup.object({
       excel_file: Yup.string()
         .required('Required')
-        .test(
-          'fileFormat',
-          'Only xlsx, xls, csv, and tsv file formats are allowed',
-          (value) => {
-            if (value) {
-              const supportedFormats = ['xlsx', 'xls', 'csv', 'tsv'];
-              return supportedFormats.includes(value.split('.')[1]);
-            }
-            return true;
+        .test('fileFormat', 'Only xlsx, xls, csv, and tsv file formats are allowed', (value) => {
+          if (value) {
+            const supportedFormats = ['xlsx', 'xls', 'csv', 'tsv'];
+            return supportedFormats.includes(value.split('.')[1]);
           }
-        ),
+          return true;
+        }),
     }),
 
     onSubmit: (values) => {
@@ -87,9 +83,7 @@ const BulkImport = ({
             onChange={formik.handleChange}
             value={formik.values.excel_file}
           />
-          <span className="text-sm text-red-600">
-            {formik.errors.excel_file}
-          </span>
+          <span className="text-sm text-red-600">{formik.errors.excel_file}</span>
         </div>
         <button
           type="submit"

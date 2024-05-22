@@ -5,9 +5,7 @@ import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../../models';
 
 const ExternalAccountLookup = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState<
-    Institution[]
-  >([]);
+  const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -18,9 +16,7 @@ const ExternalAccountLookup = () => {
         country: 'Ethiopia',
       })
       .then((res) => setFinancialInstitutionList(res.data))
-      .catch((error) =>
-        setErrorMessage(error.response?.data.error || error.message)
-      );
+      .catch((error) => setErrorMessage(error.response?.data.error || error.message));
   }, []);
 
   const formik = useFormik({
@@ -42,10 +38,7 @@ const ExternalAccountLookup = () => {
       setExternalAccount(undefined);
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values)
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);
@@ -62,9 +55,7 @@ const ExternalAccountLookup = () => {
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-10">
-        External Account Lookup
-      </h1>
+      <h1 className="text-2xl font-semibold p-2 mb-10">External Account Lookup</h1>
 
       {errorMessage && (
         <div
@@ -117,9 +108,7 @@ const ExternalAccountLookup = () => {
                 </dd>
               </div>
               <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  Account Number
-                </dt>
+                <dt className="text-sm font-medium text-gray-500">Account Number</dt>
                 <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                   {externalAccount.account_number}
                 </dd>
@@ -146,8 +135,7 @@ const ExternalAccountLookup = () => {
               ))}
             </select>
             <span className="text-xs text-red-600">
-              {formik.touched.institution_code &&
-                formik.errors.institution_code}
+              {formik.touched.institution_code && formik.errors.institution_code}
             </span>
           </div>
 

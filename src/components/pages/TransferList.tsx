@@ -26,9 +26,7 @@ const TransferList = () => {
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                ID
-              </th>
+              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
               <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                 Sender
               </th>
@@ -77,44 +75,29 @@ const TransferList = () => {
                   <td className="border-t border-b border-slate-200 p-3">
                     {t?.user.name.split(' ').slice(0, 2).join(' ')}
                     <br />
-                    <span
-                      className="text-gray-500 text-sm block"
-                      style={{ marginTop: '-3px' }}
-                    >
+                    <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
                       {'@' + t?.user.account}
                     </span>
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
                     {t?.user.account === t?.payment_method.account_number ? (
-                      <span className="inline-block ml-3  text-green-600">
-                        &#43;&nbsp;
-                      </span>
+                      <span className="inline-block ml-3  text-green-600">&#43;&nbsp;</span>
                     ) : (
-                      <span className="inline-block ml-3 text-red-600">
-                        &#8722;&nbsp;
-                      </span>
+                      <span className="inline-block ml-3 text-red-600">&#8722;&nbsp;</span>
                     )}
                     {t?.amount}&nbsp;{t?.currency}
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
-                    {t?.payment_method.full_name
-                      .split(' ')
-                      .slice(0, 2)
-                      .join(' ')}
+                    {t?.payment_method.full_name.split(' ').slice(0, 2).join(' ')}
                     <br />
-                    <span
-                      className="text-gray-500 text-sm block"
-                      style={{ marginTop: '-3px' }}
-                    >
+                    <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
                       {'@' + t?.payment_method.account_number}
                     </span>
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
                     {t?.payment_method.institution.name}
                   </td>
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {t?.ref_code}
-                  </td>
+                  <td className="border-t border-b border-slate-200 p-3">{t?.ref_code}</td>
                 </tr>
               ))}
             </tbody>
