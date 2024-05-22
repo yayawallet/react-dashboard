@@ -8,15 +8,8 @@ const ModalResult = ({ loading }: Props) => {
       id="popup-modal"
       className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${loading ? 'flex' : 'hidden'}`}
     >
-      <div
-        aria-label="Loading..."
-        role="status"
-        className="flex items-center space-x-2"
-      >
-        <svg
-          className="h-20 w-20 animate-spin stroke-gray-500"
-          viewBox="0 0 256 256"
-        >
+      <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
+        <svg className="h-20 w-20 animate-spin stroke-gray-500" viewBox="0 0 256 256">
           <line
             x1="128"
             y1="32"
@@ -90,9 +83,7 @@ const ModalResult = ({ loading }: Props) => {
             strokeWidth="24"
           ></line>
         </svg>
-        <span className="text-4xl font-medium text-gray-500">
-          Processing...
-        </span>
+        <span className="text-4xl font-medium text-gray-500">Processing...</span>
       </div>
     </div>
   );

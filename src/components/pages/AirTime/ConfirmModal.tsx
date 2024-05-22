@@ -6,13 +6,7 @@ interface Props {
   onConfirm: (a: boolean) => void;
 }
 
-const Modal = ({
-  amount,
-  message,
-  phoneNumber,
-  openModal,
-  onConfirm,
-}: Props) => {
+const Modal = ({ amount, message, phoneNumber, openModal, onConfirm }: Props) => {
   return (
     <div
       id="popup-modal"
@@ -67,9 +61,7 @@ const Modal = ({
                 <span className="text-gray-500">{message}</span>
               </li>
               <li className="mb-1">
-                <span className="text-gray-500">
-                  Service Number: {phoneNumber}
-                </span>
+                <span className="text-gray-500">Service Number: {phoneNumber}</span>
               </li>
             </ul>
             <button

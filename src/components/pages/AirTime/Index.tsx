@@ -28,9 +28,7 @@ const AirTime = () => {
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">
-        Top-up Airtime or Package
-      </h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Top-up Airtime or Package</h1>
 
       <div className="">
         <div className="border-2 rounded-lg p-2 px-5">
@@ -89,9 +87,7 @@ const AirTime = () => {
               }}
             />
           </div>
-          <span className="block text-red-600 text-sm pl-10">
-            {errorMessage}
-          </span>
+          <span className="block text-red-600 text-sm pl-10">{errorMessage}</span>
         </div>
 
         <div className="flex gap-x-4 my-4 px-4a mb-10">
@@ -112,15 +108,9 @@ const AirTime = () => {
       </div>
 
       {selectedCategory == 'airtime' ? (
-        <BuyAirTime
-          phoneNumber={phoneNumber}
-          isInvalidNumber={errorMessage ? true : false}
-        />
+        <BuyAirTime phoneNumber={phoneNumber} isInvalidNumber={errorMessage ? true : false} />
       ) : (
-        <BuyPackage
-          phoneNumber={phoneNumber}
-          isInvalidNumber={errorMessage ? true : false}
-        />
+        <BuyPackage phoneNumber={phoneNumber} isInvalidNumber={errorMessage ? true : false} />
       )}
     </div>
   );

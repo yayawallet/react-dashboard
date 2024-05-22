@@ -10,9 +10,7 @@ const GenerateQRCode = () => {
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const copyPaymentLink = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const copyPaymentLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.clipboard.writeText(QRCode?.payment_link || '');
     setPaymentLinkCopied(true);
 
@@ -30,9 +28,7 @@ const GenerateQRCode = () => {
 
     validationSchema: Yup.object({
       amount: Yup.number().required('Required'),
-      cause: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
     }),
 
     onSubmit: (values) => {
@@ -43,10 +39,7 @@ const GenerateQRCode = () => {
       setQRCode(undefined);
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`, values)
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);
@@ -55,8 +48,7 @@ const GenerateQRCode = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });

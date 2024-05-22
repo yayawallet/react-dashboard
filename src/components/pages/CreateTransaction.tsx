@@ -21,13 +21,9 @@ const CreateTransaction = () => {
     },
 
     validationSchema: Yup.object({
-      receiver: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      receiver: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       amount: Yup.number().required('Required'),
-      cause: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
     }),
 
     onSubmit: (values) => {
@@ -48,8 +44,7 @@ const CreateTransaction = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
@@ -149,18 +144,12 @@ const CreateTransaction = () => {
                   setUsersList([user]);
                 }}
               >
-                <img
-                  src={user.photo_url || avater}
-                  alt=""
-                  className="h-8 w-8 rounded-full"
-                />
+                <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
                 <span>{user.name}</span>
               </div>
             ))}
 
-            {noUserFound && (
-              <span className="block text-sm pl-4">No users found.</span>
-            )}
+            {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
           </div>
         </div>
 
