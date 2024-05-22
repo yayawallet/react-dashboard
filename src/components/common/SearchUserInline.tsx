@@ -15,7 +15,10 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
   const [userNotFound, setUserNotFound] = useState(false);
 
   useEffect(() => {
+    if (query === selectedUser) return;
+
     if (query.length < 3) {
+      setUsersList([]);
       return;
     }
 
