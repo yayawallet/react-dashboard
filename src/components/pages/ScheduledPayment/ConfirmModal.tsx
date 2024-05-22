@@ -50,9 +50,8 @@ const Modal = ({ openModal, onConfirm }: Props) => {
               />
             </svg>
             <h3 className="mb-2 text-lg font-normal text-gray-500">
-              Are you sure you want to{' '}
-              <span className="text-gray-600 font-semibold">Delete</span>this
-              payment?
+              Are you sure you want to <span className="text-gray-600 font-semibold">Delete</span>{' '}
+              this payment?
             </h3>
             <hr className="mb-5" />
             <button
