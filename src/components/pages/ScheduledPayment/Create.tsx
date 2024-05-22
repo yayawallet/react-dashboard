@@ -4,14 +4,21 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import avater from '../../../assets/avater.svg';
 import { User } from '../../../models';
+import BulkImport from '../../common/BulkImport';
 
 const Create = () => {
   const [scheduledPaymentID, setScheduledPaymentID] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [usersList, setUsersList] = useState<User[]>([]);
   const [noUserFound, setNOUserFound] = useState(false);
   const [selectedReceiver, setSelectedReceiver] = useState<User>();
+  const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+
+  const handleOnLoading = (value: boolean) => setLoading(value);
+  const handleOnError = (value: string) => setErrorMessage(value);
+  const handleOnSuccess = (value: string) => setSuccessMessage(value);
 
   const formik = useFormik({
     initialValues: {
@@ -23,15 +30,15 @@ const Create = () => {
     },
 
     validationSchema: Yup.object({
-      account_number: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      account_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       amount: Yup.number().required('Required'),
-      cause: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       recurring: Yup.string().required('Select recurring type'),
-      start_at: Yup.date().required().typeError('Select start date & time'),
+      start_at: Yup.date()
+        .required('Select start date & time')
+        .test('startDate', 'start time must be in the future', (value) => {
+          return new Date(value).getTime() > new Date().getTime() + 30000;
+        }),
     }),
 
     onSubmit: (values) => {
@@ -39,14 +46,14 @@ const Create = () => {
       setUsersList([]);
 
       // Clear existing values
+      setScheduledPaymentID('');
+      setSuccessMessage('');
       setErrorMessage('');
 
       values.start_at = new Date(values.start_at).getTime() / 1000;
+
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values)
         .then((res) => {
           setScheduledPaymentID(res.data.id);
           setLoading(false);
@@ -55,8 +62,7 @@ const Create = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
@@ -94,15 +100,13 @@ const Create = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Unsuccessful scheduled payment!
-            </span>
+            <span className="font-medium mr-2">Unsuccessful schedule!</span>
             {errorMessage}
           </div>
         </div>
       )}
 
-      {scheduledPaymentID && (
+      {(scheduledPaymentID || successMessage) && (
         <div
           className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
           role="alert"
@@ -116,15 +120,51 @@ const Create = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Successful scheduled payment!
-            </span>
-            Scheduled Payment ID: {scheduledPaymentID}
+            <span className="font-medium mr-2">Successful schedule!</span>
+            {successMessage ? successMessage : `Scheduled Payment ID: ${scheduledPaymentID}`}
           </div>
         </div>
       )}
 
-      <div className="">
+      <div className="border-2 rounded-lg p-2 px-5">
+        <div className="flex gap-x-4 my-2 justify-end">
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('one')}
+          >
+            <input
+              id="oneInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'one'}
+              onChange={() => setInputFormType('one')}
+            />
+            <label htmlFor="topupFor" className="cursor-pointer">
+              Single Schedule
+            </label>
+          </button>
+
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'multiple' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('multiple')}
+          >
+            <input
+              id="multipleInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'multiple'}
+              onChange={() => setInputFormType('multiple')}
+            />
+            <label htmlFor="forOther" className="cursor-pointer">
+              Multiple Schedules
+            </label>
+          </button>
+        </div>
+      </div>
+
+      {inputFormType === 'one' ? (
         <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
           <div className="relative z-0 w-full mb-1 group">
             <input
@@ -161,18 +201,12 @@ const Create = () => {
                     setUsersList([user]);
                   }}
                 >
-                  <img
-                    src={user.photo_url || avater}
-                    alt=""
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
                   <span>{user.name}</span>
                 </div>
               ))}
 
-              {noUserFound && (
-                <span className="block text-sm pl-4">No users found.</span>
-              )}
+              {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
             </div>
           </div>
 
@@ -262,9 +296,7 @@ const Create = () => {
                 Start Date
               </label>
 
-              <span className="text-xs text-red-600">
-                {formik.touched.start_at && formik.errors.start_at}
-              </span>
+              <span className="text-xs text-red-600">{formik.errors.start_at}</span>
             </div>
           </div>
 
@@ -276,7 +308,15 @@ const Create = () => {
             {isLoading ? 'Please wait...' : 'Schedule Payment'}
           </button>
         </form>
-      </div>
+      ) : (
+        <BulkImport
+          isLoading={isLoading}
+          apiEndpoint="scheduled-payment/bulk-import"
+          onLoading={handleOnLoading}
+          onError={handleOnError}
+          onSuccess={handleOnSuccess}
+        />
+      )}
     </div>
   );
 };

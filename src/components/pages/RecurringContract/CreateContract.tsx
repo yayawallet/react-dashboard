@@ -4,14 +4,21 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import avater from '../../../assets/avater.svg';
 import { User } from '../../../models';
+import BulkImport from '../../common/BulkImport';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [usersList, setUsersList] = useState<User[]>([]);
   const [noUserFound, setNOUserFound] = useState(false);
   const [selectedReceiver, setSelectedReceiver] = useState<User>();
+  const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+
+  const handleOnLoading = (value: boolean) => setLoading(value);
+  const handleOnError = (value: string) => setErrorMessage(value);
+  const handleOnSuccess = (value: string) => setSuccessMessage(value);
 
   const formik = useFormik({
     initialValues: {
@@ -22,9 +29,7 @@ const CreateContract = () => {
     },
 
     validationSchema: Yup.object({
-      contract_number: Yup.string()
-        .max(50, 'Must be 50 characters or less')
-        .required('Required'),
+      contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       service_type: Yup.string().required('Required'),
       customer_account_name: Yup.string()
         .max(50, 'Must be 50 characters or less')
@@ -37,13 +42,12 @@ const CreateContract = () => {
       setUsersList([]);
 
       // Clear existing values
+      setContractID('');
+      setSuccessMessage('');
       setErrorMessage('');
 
       axios
-        .post(
-          `${import.meta.env.VITE_BASE_URL}/recurring-contract/create`,
-          values
-        )
+        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/create`, values)
         .then((res) => {
           setContractID(res.data.contract_id);
           setLoading(false);
@@ -52,8 +56,7 @@ const CreateContract = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message),
-            setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
         });
     },
   });
@@ -91,13 +94,13 @@ const CreateContract = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">Unsuccessful Process!</span>
+            <span className="font-medium mr-2">Unsuccessful Contract!</span>
             {errorMessage}
           </div>
         </div>
       )}
 
-      {contractID && (
+      {(contractID || successMessage) && (
         <div
           className="flex items-center p-4 mb-10 text-sm text-blue-800 rounded-lg bg-blue-50"
           role="alert"
@@ -111,15 +114,51 @@ const CreateContract = () => {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium mr-2">
-              Recurring contract created successfully!
-            </span>
-            Scheduled Payment ID: {contractID}
+            <span className="font-medium mr-2">Successful Contract!</span>
+            {successMessage ? successMessage : `Contract ID: ${contractID}`}
           </div>
         </div>
       )}
 
-      <div className="">
+      <div className="border-2 rounded-lg p-2 px-5">
+        <div className="flex gap-x-4 my-2 justify-end">
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('one')}
+          >
+            <input
+              id="oneInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'one'}
+              onChange={() => setInputFormType('one')}
+            />
+            <label htmlFor="topupFor" className="cursor-pointer">
+              Single Contract
+            </label>
+          </button>
+
+          <button
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'multiple' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('multiple')}
+          >
+            <input
+              id="multipleInput"
+              type="radio"
+              name="input-type"
+              className="w-4 h-4 cursor-pointer"
+              checked={inputFormType === 'multiple'}
+              onChange={() => setInputFormType('multiple')}
+            />
+            <label htmlFor="forOther" className="cursor-pointer">
+              Multiple Contracts
+            </label>
+          </button>
+        </div>
+      </div>
+
+      {inputFormType === 'one' ? (
         <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
           <div className="relative z-0 w-full mb-1 group">
             <input
@@ -140,8 +179,7 @@ const CreateContract = () => {
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.customer_account_name &&
-                formik.errors.customer_account_name}
+              {formik.touched.customer_account_name && formik.errors.customer_account_name}
             </span>
           </div>
 
@@ -157,18 +195,12 @@ const CreateContract = () => {
                     setUsersList([user]);
                   }}
                 >
-                  <img
-                    src={user.photo_url || avater}
-                    alt=""
-                    className="h-8 w-8 rounded-full"
-                  />
+                  <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
                   <span>{user.name}</span>
                 </div>
               ))}
 
-              {noUserFound && (
-                <span className="block text-sm pl-4">No users found.</span>
-              )}
+              {noUserFound && <span className="block text-sm pl-4">No users found.</span>}
             </div>
           </div>
 
@@ -215,8 +247,7 @@ const CreateContract = () => {
               </label>
 
               <span className="text-xs text-red-600">
-                {formik.touched.contract_number &&
-                  formik.errors.contract_number}
+                {formik.touched.contract_number && formik.errors.contract_number}
               </span>
             </div>
           </div>
@@ -246,7 +277,16 @@ const CreateContract = () => {
             {isLoading ? 'Please wait...' : 'Create Contract'}
           </button>
         </form>
-      </div>
+      ) : (
+        <BulkImport
+          isLoading={isLoading}
+          apiEndpoint="recurring-contract/bulk-import"
+          onLoading={handleOnLoading}
+          onError={handleOnError}
+          onSuccess={handleOnSuccess}
+          instruction="Your file must have the following columns: customer_account_name, service_type, contract_number and meta_data (optional)"
+        />
+      )}
     </div>
   );
 };
