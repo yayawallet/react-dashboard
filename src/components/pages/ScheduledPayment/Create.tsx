@@ -263,7 +263,9 @@ const Create = () => {
                 Start Date
               </label>
 
-              <span className="text-xs text-red-600">{formik.errors.start_at}</span>
+              <span className="text-xs text-red-600">
+                {formik.touched.start_at && formik.errors.start_at}
+              </span>
             </div>
           </div>
 
