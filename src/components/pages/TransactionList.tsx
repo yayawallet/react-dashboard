@@ -10,7 +10,7 @@ const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  // const [searchQuery, setSearchQuery] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [ownAccount, setOwnAccount] = useState('');
   const [copiedID, setCopiedID] = useState('');
@@ -31,18 +31,6 @@ const TransactionList = () => {
       });
   }, [currentPage]);
 
-  useEffect(() => {
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
-        query: searchQuery,
-      })
-      .then((res) => {
-        setTransactionList(res.data.data);
-        setPageCount(res.data.lastPage);
-        setIsFetching(false);
-      });
-  }, [searchQuery]);
-
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedID(id);
@@ -55,14 +43,22 @@ const TransactionList = () => {
     setIsFetching(true);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
+  const handleSearchTransaction = (query: string) => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
+        query: query,
+      })
+      .then((res) => {
+        setTransactionList(res.data.data);
+        setPageCount(res.data.lastPage);
+        setIsFetching(false);
+      });
   };
 
   return (
     <div className="-mx-4">
       <div className="ml-8">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
       </div>
 
       <div className="mt-2">
