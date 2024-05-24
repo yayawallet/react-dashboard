@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner';
-import ConfirmModal from './ConfirmModal';
-import LoadingModal from './LoadingModal';
-import InfoCard from './InfoCard';
+import ConfirmationModal from '../../common/Modals/ConfirmationModal';
+import ProcessingModal from '../../common/Modals/ProcessingModal';
+import ResultModal from '../../common/Modals/ResultModal';
 import { TopUp, Package } from './../../../models';
 
 const packageCategories = [
@@ -66,6 +66,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
       .then((res) => {
         setIsProcessing(false);
         setTopup(res.data);
+        console.log('hiiii');
+        console.log(res.data);
         setOpenInfoCard(true);
         setIsSucceed(true);
       })
@@ -83,23 +85,23 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
 
   return (
     <div>
-      <InfoCard
-        openModal={openInfoCard}
-        onCloseModal={handleCloseInfoCard}
-        isSucceed={isSucceed}
-        info={topup}
-      />
-      <LoadingModal loading={isProcessing} />
-      <ConfirmModal
+      <ConfirmationModal
         openModal={openConfirmModal}
         onConfirm={handleConfirm}
-        amount={selectedPackageAmount}
-        message={selectedPackageName}
-        phoneNumber={phoneNumber}
+        header={`Are you sure you want to pay ${selectedPackageAmount} Birr?`}
+        infoList={[selectedPackageName, `Service Number: ${phoneNumber}`]}
+      />
+      <ProcessingModal isProcessing={isProcessing} />
+      <ResultModal
+        openModal={openInfoCard}
+        onCloseModal={handleCloseInfoCard}
+        successMessage={
+          isSucceed ? `You've paid ${topup?.amount.toFixed(2)} ETB for ${topup?.phone}` : ''
+        }
       />
 
-      <div className="flex gap-6 border-2 rounded-lg p-5">
-        <div className="flex flex-col gap-y-3">
+      <div className="flex flex-col sm:flex-row gap-6 border-2 rounded-lg p-5">
+        <div className="flex sm:flex-col flex-wrap gap-x-2 gap-y-5">
           {categories.map((c) => (
             <div
               className={`border border-violet-200 rounded-lg text-violet-900 font-semibold md:w-40 p-2 py-4 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
@@ -113,13 +115,22 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
 
         {packages.length > 0 ? (
           <div className="h-full w-full sticky top-3">
-            <div className="flex flex-wrap gap-x-2 gap-y-4">
+            <div
+              className=""
+              style={{
+                display: 'grid',
+                gridGap: '20px',
+                gridRowGap: '20px',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                gridTemplateRows: '1fr',
+              }}
+            >
               {packages
                 .filter((pkg) => (!selectedCategory ? pkg : pkg.category == selectedCategory))
                 .map((pkg) => (
                   <div
                     key={pkg.code}
-                    className={`border border-violet-200 text-gray-900 hover:bg-violet-50 rounded-lg w-max-[19rem] lg:w-[19.5rem] px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
+                    className={`border border-violet-200 text-gray-900 hover:bg-violet-50 rounded-lg px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
                     onClick={() => {
                       setSelectedPackage(pkg.code);
                       setSelectedPackageAmount(pkg.amount);

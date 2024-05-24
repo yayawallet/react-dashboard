@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ConfirmModal from './ConfirmModal';
-import LoadingModal from './LoadingModal';
-import InfoCard from './InfoCard';
+import ConfirmationModal from '../../common/Modals/ConfirmationModal';
+import ProcessingModal from '../../common/Modals/ProcessingModal';
+import ResultModal from '../../common/Modals/ResultModal';
 import Loading from '../../common/Loading';
 import NotFound from '../../common/NotFound';
 import SearchBar from '../../common/SearchBar';
@@ -11,7 +11,7 @@ import { recurringContract } from '../../../models';
 const ContractList = () => {
   const [contractList, setContractList] = useState<recurringContract[]>([]);
   const [copiedID, setCopiedID] = useState('');
-  const [deactivateID, setDeactivateID] = useState('');
+  const [selectedContract, setSelectedContract] = useState<recurringContract>();
   const [openInfoCard, setOpenInfoCard] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -50,10 +50,10 @@ const ContractList = () => {
     setIsProcessing(true);
     setSuccessMessage('');
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${deactivateID}`)
+      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${selectedContract?.id}`)
       .then(() => {
         setSuccessMessage('Contract Deactivated Successfully');
-        setContractList((prev) => prev.filter((l) => l.id != deactivateID));
+        setContractList((prev) => prev.filter((l) => l.id != selectedContract?.id));
         setIsProcessing(false);
         setOpenInfoCard(true);
       })
@@ -90,13 +90,22 @@ const ContractList = () => {
 
   return (
     <div className="-mx-4">
-      <InfoCard
+      <ConfirmationModal
+        header="Are you sure you want to Deactivate this contract?"
+        infoList={[
+          `Contract Number: ${selectedContract?.contract_number}`,
+          `Service Type: ${selectedContract?.service_type}`,
+          `Customer Name: ${selectedContract?.customer.name}`,
+        ]}
+        openModal={openModal}
+        onConfirm={handleOnConfirm}
+      />
+      <ProcessingModal isProcessing={isProcessing} />
+      <ResultModal
         openModal={openInfoCard}
         onCloseModal={handleCloseInfoCard}
         successMessage={successMessage}
       />
-      <LoadingModal loading={isProcessing} />
-      <ConfirmModal openModal={openModal} onConfirm={handleOnConfirm} />
 
       <div className="mt-2">
         <div className="flex items-baseline mb-2 mx-5 gap-x-8">
@@ -183,7 +192,7 @@ const ContractList = () => {
                     <button
                       className="text-sm bg-red-600 text-white py-1 px-3 rounded"
                       onClick={() => {
-                        setDeactivateID(item.id);
+                        setSelectedContract(item);
                         setOpenModal(true);
                       }}
                     >

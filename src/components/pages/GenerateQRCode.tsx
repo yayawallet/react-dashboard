@@ -57,9 +57,7 @@ const GenerateQRCode = () => {
   return (
     <div className="container">
       <h1 className="text-2xl font-semibold p-2 ">Generate QR Code</h1>
-      <p className="pl-2 mb-10 text-gray-600">
-        Receive payments by sharing your generated QR Code.
-      </p>
+      <p className="pl-2 mb-10 text-gray-600">Receive payments by sharing QR Code.</p>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
@@ -81,8 +79,11 @@ const GenerateQRCode = () => {
         </div>
       )}
 
-      <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
-        <div className="grid md:grid-cols-2 md:gap-6">
+      <form
+        className="max-w-lg ml-10 mt-16 shadow shadow-gray-300 px-10 py-6 rounded-lg"
+        onSubmit={formik.handleSubmit}
+      >
+        <div className="grid md:grid-cols-2 md:gap-6 mt-10">
           <div className="relative z-0 w-full mb-10 group">
             <input
               type="number"

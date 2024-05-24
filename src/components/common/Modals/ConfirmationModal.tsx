@@ -1,9 +1,11 @@
 interface Props {
+  header: string;
+  infoList?: (string | number)[];
   openModal: boolean;
   onConfirm: (a: boolean) => void;
 }
 
-const Modal = ({ openModal, onConfirm }: Props) => {
+const ConfirmationModal = ({ header, infoList, openModal, onConfirm }: Props) => {
   return (
     <div
       id="popup-modal"
@@ -49,11 +51,21 @@ const Modal = ({ openModal, onConfirm }: Props) => {
                 d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <h3 className="mb-2 text-lg font-normal text-gray-500">
-              Are you sure you want to <span className="text-gray-600 font-semibold">Delete</span>{' '}
-              this payment?
-            </h3>
+
+            <h3 className="mb-2 text-lg font-normal text-gray-500">{header}</h3>
+
             <hr className="mb-5" />
+
+            {infoList && (
+              <ul className="list-disc text-gray-900 text-start px-5">
+                {infoList.map((list, index) => (
+                  <li key={index} className="mb-1">
+                    <span className="text-gray-500">{list}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+
             <button
               data-modal-hide="popup-modal"
               type="button"
@@ -76,4 +88,4 @@ const Modal = ({ openModal, onConfirm }: Props) => {
   );
 };
 
-export default Modal;
+export default ConfirmationModal;

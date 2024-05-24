@@ -1,12 +1,12 @@
 interface Props {
-  loading: boolean;
+  isProcessing: boolean;
 }
 
-const ModalResult = ({ loading }: Props) => {
+const ProcessingModal = ({ isProcessing }: Props) => {
   return (
     <div
       id="popup-modal"
-      className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${loading ? 'flex' : 'hidden'}`}
+      className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${isProcessing ? 'flex' : 'hidden'}`}
     >
       <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
         <svg className="h-20 w-20 animate-spin stroke-gray-500" viewBox="0 0 256 256">
@@ -89,4 +89,4 @@ const ModalResult = ({ loading }: Props) => {
   );
 };
 
-export default ModalResult;
+export default ProcessingModal;

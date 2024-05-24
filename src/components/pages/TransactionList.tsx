@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Pagination from '../common/Pagination';
 import SearchBar from '../common/SearchBar';
+import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
 import Loading from '../common/Loading';
 
@@ -9,7 +10,7 @@ const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  // const [searchQuery, setSearchQuery] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [ownAccount, setOwnAccount] = useState('');
   const [copiedID, setCopiedID] = useState('');
@@ -22,25 +23,13 @@ const TransactionList = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user/${currentPage}`)
+      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user?p=${currentPage}`)
       .then((res) => {
         setTransactionList(res.data.data);
         setPageCount(res.data.lastPage);
         setIsFetching(false);
       });
   }, [currentPage]);
-
-  useEffect(() => {
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
-        query: searchQuery,
-      })
-      .then((res) => {
-        setTransactionList(res.data.data);
-        setPageCount(res.data.lastPage);
-        setIsFetching(false);
-      });
-  }, [searchQuery]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -54,14 +43,22 @@ const TransactionList = () => {
     setIsFetching(true);
   };
 
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
+  const handleSearchTransaction = (query: string) => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
+        query: query,
+      })
+      .then((res) => {
+        setTransactionList(res.data.data);
+        setPageCount(res.data.lastPage);
+        setIsFetching(false);
+      });
   };
 
   return (
     <div className="-mx-4">
       <div className="ml-8">
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
       </div>
 
       <div className="mt-2">
@@ -117,7 +114,7 @@ const TransactionList = () => {
                       type="button"
                       className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                     >
-                      <a href={`${import.meta.env.VITE_INVOICE_URL}/${t.id}`} target="_blank">
+                      <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
                         Print
                       </a>
                     </button>

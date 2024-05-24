@@ -112,7 +112,7 @@ const CreateContract = () => {
       </div>
 
       {inputFormType === 'one' ? (
-        <form className="max-w-md ml-10 mt-16" onSubmit={formik.handleSubmit}>
+        <form className="max-w-lg ml-10 mt-16" onSubmit={formik.handleSubmit}>
           <div className="relative z-0 w-full mb-1 group">
             <input
               type="Text"

@@ -1,13 +1,10 @@
-import { TopUp } from '../../../models';
-
 interface Props {
   openModal: boolean;
   onCloseModal: () => void;
-  isSucceed: boolean;
-  info: TopUp | undefined;
+  successMessage: string;
 }
 
-const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
+const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
   return (
     <div
       id="popup-modal"
@@ -37,7 +34,7 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
             </svg>
           </button>
 
-          {isSucceed ? (
+          {successMessage ? (
             <div className="p-4 md:p-5 text-center">
               <div className="mb-5">
                 <svg
@@ -54,16 +51,8 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
                 <span className="text-green-500">Successful</span>
               </div>
 
-              <h3 className="mb-2 text-lg font-normal text-gray-800">
-                <span className="text-xl font-semibold">-{info?.amount.toFixed(2)}</span>
-                <span className="text-gray-400 font-light"> (ETB)</span>
-              </h3>
-              <hr className="mb-5" />
-              <ul className="list-disc text-sm text-gray-900 text-start px-5">
-                <li className="mb-1">
-                  <span className="text-gray-500">Service Number: </span> {info?.phone}
-                </li>
-              </ul>
+              <h3 className="mb-3 text-lg font-normal text-gray-800">{successMessage}</h3>
+              <hr className="mb-2" />
               <button
                 data-modal-hide="popup-modal"
                 type="button"
@@ -90,14 +79,14 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
                     strokeWidth="2"
                   />
                 </svg>
-                <span className="text-red-500">Error!!</span>
               </div>
+
+              <h3 className="mb-3 text-lg font-normal text-gray-800">
+                Couldn't process your request!
+              </h3>
 
               <hr className="mb-2" />
 
-              <h3 className="mb-2 text-lg font-normal text-gray-800">
-                Couldn't process your request
-              </h3>
               <button
                 type="button"
                 className="mt-5 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
@@ -113,4 +102,4 @@ const InfoCard = ({ openModal, onCloseModal, isSucceed, info }: Props) => {
   );
 };
 
-export default InfoCard;
+export default ResultModal;

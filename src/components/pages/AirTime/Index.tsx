@@ -79,7 +79,7 @@ const AirTime = () => {
               placeholder="Phone number"
               value={topupFor === 'self' ? ownPhoneNumber : phoneNumber}
               onChange={(e) => {
-                setPhoneNumber(e.currentTarget.value.replace(/^0+/, ''));
+                setPhoneNumber(e.currentTarget.value);
                 setTopupFor('other');
                 /(^09\d{8}$|^9\d{8}$)/.test(e.currentTarget.value)
                   ? setErrorMessage('')
@@ -108,9 +108,15 @@ const AirTime = () => {
       </div>
 
       {selectedCategory == 'airtime' ? (
-        <BuyAirTime phoneNumber={phoneNumber} isInvalidNumber={errorMessage ? true : false} />
+        <BuyAirTime
+          phoneNumber={phoneNumber.startsWith('0') ? phoneNumber.slice(1) : phoneNumber}
+          isInvalidNumber={errorMessage ? true : false}
+        />
       ) : (
-        <BuyPackage phoneNumber={phoneNumber} isInvalidNumber={errorMessage ? true : false} />
+        <BuyPackage
+          phoneNumber={phoneNumber.startsWith('0') ? phoneNumber.slice(1) : phoneNumber}
+          isInvalidNumber={errorMessage ? true : false}
+        />
       )}
     </div>
   );
