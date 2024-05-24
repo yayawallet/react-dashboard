@@ -23,7 +23,7 @@ const TransactionList = () => {
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user/${currentPage}`)
+      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user?p=${currentPage}`)
       .then((res) => {
         setTransactionList(res.data.data);
         setPageCount(res.data.lastPage);
