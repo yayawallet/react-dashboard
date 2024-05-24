@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
+import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
 import InlineNotification from '../common/InlineNotification';
 
@@ -59,7 +60,7 @@ const GetTransactionByID = () => {
             type="button"
             className="block ml-auto py-1.5 px-6 m-1 font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
           >
-            <a href={`${import.meta.env.VITE_INVOICE_URL}/${transaction.id}`} target="_blank">
+            <a href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`} target="_blank">
               Print Invoice
             </a>
           </button>
