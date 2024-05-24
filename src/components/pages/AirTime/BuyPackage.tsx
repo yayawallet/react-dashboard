@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner';
-import ConfirmModal from './ConfirmModal';
-import LoadingModal from './LoadingModal';
-import InfoCard from './InfoCard';
+import ConfirmationModal from '../../common/Modals/ConfirmationModal';
+import ProcessingModal from '../../common/Modals/ProcessingModal';
+import ResultModal from '../../common/Modals/ResultModal';
 import { TopUp, Package } from './../../../models';
 
 const packageCategories = [
@@ -66,6 +66,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
       .then((res) => {
         setIsProcessing(false);
         setTopup(res.data);
+        console.log('hiiii');
+        console.log(res.data);
         setOpenInfoCard(true);
         setIsSucceed(true);
       })
@@ -83,19 +85,19 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
 
   return (
     <div>
-      <InfoCard
-        openModal={openInfoCard}
-        onCloseModal={handleCloseInfoCard}
-        isSucceed={isSucceed}
-        info={topup}
-      />
-      <LoadingModal loading={isProcessing} />
-      <ConfirmModal
+      <ConfirmationModal
         openModal={openConfirmModal}
         onConfirm={handleConfirm}
-        amount={selectedPackageAmount}
-        message={selectedPackageName}
-        phoneNumber={phoneNumber}
+        header={`Are you sure you want to pay ${selectedPackageAmount} Birr?`}
+        infoList={[selectedPackageName, `Service Number: ${phoneNumber}`]}
+      />
+      <ProcessingModal isProcessing={isProcessing} />
+      <ResultModal
+        openModal={openInfoCard}
+        onCloseModal={handleCloseInfoCard}
+        successMessage={
+          isSucceed ? `You've paid ${topup?.amount.toFixed(2)} ETB for ${topup?.phone}` : ''
+        }
       />
 
       <div className="flex gap-6 border-2 rounded-lg p-5">

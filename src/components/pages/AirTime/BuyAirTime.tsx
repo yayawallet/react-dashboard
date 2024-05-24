@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import axios from 'axios';
-import ConfirmModal from './ConfirmModal';
-import LoadingModal from './LoadingModal';
-import InfoCard from './InfoCard';
+// import ConfirmModal from './ConfirmModal';
+// import LoadingModal from './LoadingModal';
+// import InfoCard from './InfoCard';
+import ConfirmationModal from '../../common/Modals/ConfirmationModal';
+import ProcessingModal from '../../common/Modals/ProcessingModal';
+import ResultModal from '../../common/Modals/ResultModal';
 import { TopUp } from '../../../models';
 
 interface Props {
@@ -51,20 +54,21 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
 
   return (
     <div className="border-2 rounded-lg p-5">
-      <InfoCard
-        openModal={openInfoCard}
-        onCloseModal={handleCloseInfoCard}
-        isSucceed={isSucceed}
-        info={topup}
-      />
-      <LoadingModal loading={isProcessing} />
-      <ConfirmModal
+      <ConfirmationModal
         openModal={openConfirmModal}
         onConfirm={handleConfirm}
-        amount={selectedAmount}
-        message={`Ethio telecom Airtime Topup, ${selectedAmount} Br.`}
-        phoneNumber={phoneNumber}
+        header={`Are you sure you want to pay ${selectedAmount} Birr?`}
+        infoList={[`Ethio Telecom Airtime`, `Service Number: ${phoneNumber}`]}
       />
+      <ProcessingModal isProcessing={isProcessing} />
+      <ResultModal
+        openModal={openInfoCard}
+        onCloseModal={handleCloseInfoCard}
+        successMessage={
+          isSucceed ? `You've paid ${topup?.amount.toFixed(2)} ETB for ${topup?.phone}` : ''
+        }
+      />
+
       <h2 className="font-semibold mb-2">Select Denomination</h2>
 
       <div className="flex flex-wrap gap-4 mb-8 text-xl">

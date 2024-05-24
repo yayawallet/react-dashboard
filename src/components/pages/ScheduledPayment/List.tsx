@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ConfirmModal from './ConfirmModal';
-import LoadingModal from './LoadingModal';
-import InfoCard from './InfoCard';
+import ConfirmationModal from '../../common/Modals/ConfirmationModal';
+import ProcessingModal from '../../common/Modals/ProcessingModal';
+import ResultModal from '../../common/Modals/ResultModal';
 import { ScheduledPayment } from '../../../models';
 import Loading from '../../common/Loading';
 
 const List = () => {
   const [scheduledPaymentList, setScheduledPaymentList] = useState<ScheduledPayment[]>([]);
   const [copiedID, setCopiedID] = useState('');
-  const [archiveID, setArchiveId] = useState('');
+  const [selectedSchedule, setSelectedSchedule] = useState<ScheduledPayment>();
   const [openInfoCard, setOpenInfoCard] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -28,10 +28,10 @@ const List = () => {
     setIsProcessing(true);
     setSuccessMessage('');
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${archiveID}`)
+      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${selectedSchedule?.id}`)
       .then(() => {
         setSuccessMessage('Scheduled Payment Deleted Successfully');
-        setScheduledPaymentList((prev) => prev.filter((l) => l.id != archiveID));
+        setScheduledPaymentList((prev) => prev.filter((l) => l.id != selectedSchedule?.id));
         setIsProcessing(false);
         setOpenInfoCard(true);
       })
@@ -52,13 +52,22 @@ const List = () => {
 
   return (
     <div className="-mx-4">
-      <InfoCard
+      <ConfirmationModal
+        header="Are you sure you want to Delete this schedule?"
+        infoList={[
+          `Amount: ${selectedSchedule?.amount.toFixed(2)} ETB`,
+          `Recurring: ${selectedSchedule?.recurring_type}`,
+          `Receiver: ${selectedSchedule?.receiver.name}`,
+        ]}
+        openModal={openModal}
+        onConfirm={handleOnConfirm}
+      />
+      <ProcessingModal isProcessing={isProcessing} />
+      <ResultModal
         openModal={openInfoCard}
         onCloseModal={handleCloseInfoCard}
         successMessage={successMessage}
       />
-      <LoadingModal loading={isProcessing} />
-      <ConfirmModal openModal={openModal} onConfirm={handleOnConfirm} />
 
       <div className="mt-2">
         <table className="w-full max-w-[1536px]">
@@ -126,7 +135,7 @@ const List = () => {
                     <button
                       className="text-sm bg-red-600 text-white py-1 px-3 rounded"
                       onClick={() => {
-                        setArchiveId(item.id);
+                        setSelectedSchedule(item);
                         setOpenModal(true);
                       }}
                     >
