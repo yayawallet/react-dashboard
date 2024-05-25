@@ -40,7 +40,7 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-80 h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
         <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
@@ -119,19 +119,19 @@ const Sidebar = () => {
 
               <li>
                 <Link
-                  to="/transfer-list"
+                  to="/transaction-list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Transfer List</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Transaction List</span>
                 </Link>
               </li>
 
               <li>
                 <Link
-                  to="/transaction-list"
+                  to="/verify-transaction-id"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Transaction List</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Verify Transactions</span>
                 </Link>
               </li>
 
@@ -158,7 +158,7 @@ const Sidebar = () => {
                   to="/recurring-contract/create"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3">Create Recurring Contract</span>
+                  <span className="flex-1 ms-3">Create Contract</span>
                 </Link>
               </li>
 
@@ -167,7 +167,7 @@ const Sidebar = () => {
                   to="/recurring-contract/list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
-                  <span className="flex-1 ms-3">Recurring Contract List</span>
+                  <span className="flex-1 ms-3">Contract List</span>
                 </Link>
               </li>
 
@@ -182,10 +182,10 @@ const Sidebar = () => {
 
               <li>
                 <Link
-                  to="/verify-transaction-id"
+                  to="/transfer-list"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
                 >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Verify Transaction ID</span>
+                  <span className="flex-1 ms-3 whitespace-nowrap">Transfer List</span>
                 </Link>
               </li>
 
