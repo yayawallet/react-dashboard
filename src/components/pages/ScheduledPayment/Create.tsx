@@ -254,6 +254,7 @@ const Create = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
+          instruction="Your file must have the following columns: account_number, amount, cause, recurring, start_at"
         />
       )}
     </div>
