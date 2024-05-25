@@ -6,6 +6,10 @@
   outline-color: #8d66cc;
 }
 
+table {
+  font-size: 15px;
+}
+
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
