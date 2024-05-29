@@ -6,7 +6,7 @@ const Header = () => {
     <div className="shadow-sm">
       <header className="flex justify-between px-4">
         <Link to="/">
-          <img src={yayawalletLogo} width={120} alt="" className="md:hidden" />
+          <img src={yayawalletLogo} width={120} alt="" className="lg:hidden" />
         </Link>
 
         <ul className="flex text-lg ml-auto">
