@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import avater from '../../assets/avater.svg';
-import { User } from '../../models';
+import avater from '../assets/avater.svg';
+import { User } from '../models';
 
 interface Props {
   query: string;

@@ -1,5 +1,5 @@
 import LoginForm from './LoginForm';
-import yayaLogo from '../../../assets/yaya-logo.svg';
+import yayaLogo from '../../assets/yaya-logo.svg';
 
 const Index = () => {
   return (

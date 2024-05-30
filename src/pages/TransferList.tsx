@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Transfer } from '../../models';
-import Loading from '../common/Loading';
+import { Transfer } from '../models';
+import Loading from '../components/ui/LoadingSpinner';
 
 const TransferList = () => {
   const [transferList, setTransferList] = useState<Transfer[]>([]);

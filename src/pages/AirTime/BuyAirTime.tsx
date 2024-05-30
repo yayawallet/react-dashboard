@@ -1,12 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
-// import ConfirmModal from './ConfirmModal';
-// import LoadingModal from './LoadingModal';
-// import InfoCard from './InfoCard';
-import ConfirmationModal from '../../common/Modals/ConfirmationModal';
-import ProcessingModal from '../../common/Modals/ProcessingModal';
-import ResultModal from '../../common/Modals/ResultModal';
-import { TopUp } from '../../../models';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import ProcessingModal from '../../components/modals/ProcessingModal';
+import ResultModal from '../../components/modals/ResultModal';
+import { TopUp } from '../../models';
 
 interface Props {
   phoneNumber: string;

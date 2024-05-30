@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Institution, EXternalAccount } from '../../models';
-import InlineNotification from '../common/InlineNotification';
+import { Institution, Fee } from '../models';
+import InlineNotification from '../components/InlineNotification';
 
-const ExternalAccountLookup = () => {
+const TransferFee = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
-  const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
+  const [institution, setInstitution] = useState('');
+  const [transferFee, setTransferFee] = useState<Fee>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
@@ -23,12 +24,12 @@ const ExternalAccountLookup = () => {
   const formik = useFormik({
     initialValues: {
       institution_code: '',
-      account_number: '',
+      amount: '',
     },
 
     validationSchema: Yup.object({
       institution_code: Yup.string().required('Required'),
-      account_number: Yup.string().required('Required'),
+      amount: Yup.number().required('Required'),
     }),
 
     onSubmit: (values) => {
@@ -36,12 +37,14 @@ const ExternalAccountLookup = () => {
 
       // Clear existing values
       setErrorMessage('');
-      setExternalAccount(undefined);
+      setTransferFee(undefined);
+      setInstitution('');
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values)
         .then((res) => {
-          setExternalAccount(res.data);
+          setInstitution(values.institution_code);
+          setTransferFee(res.data);
           setLoading(false);
 
           // clear input fields
@@ -56,53 +59,21 @@ const ExternalAccountLookup = () => {
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-10">External Account Lookup</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-10">Check Transfer Fee</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {externalAccount && (
-        <div className="bg-white overflow-hidden shadow rounded-lg border mb-10">
-          <div className="flex flex-wrap justify-between px-4 py-5 sm:px-6">
-            <div className="">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
-                {externalAccount.institution.name}
-              </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                {'code: ' + externalAccount.institution.code}
-                <br />
-                {'Id: ' + externalAccount.institution.institution_id}
-              </p>
-            </div>
-
-            <div className="h-20">
-              <img
-                src={externalAccount.institution.logo_url}
-                alt="Institution Logo"
-                className="h-full"
-              />
-            </div>
-          </div>
-          <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-            <dl className="sm:divide-y sm:divide-gray-200">
-              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Full Name</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {externalAccount.full_name}
-                </dd>
-              </div>
-              <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Account Number</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {externalAccount.account_number}
-                </dd>
-              </div>
-            </dl>
-          </div>
+      {transferFee && (
+        <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
+          <p className="text-2xl">
+            Transfer Fee to {institution}:<span className="text-6xl px-2">{transferFee.fee}</span>
+            <span className="text-4xl font-thin">{transferFee.currency}</span>
+          </p>
         </div>
       )}
 
       <form
-        className="max-w-lg ml-10 mt-16 shadow shadow-gray-300 px-10 py-6 rounded-lg"
+        className="max-w-lg ml-10 mt-16 shadow shadow-slate-300 px-10 py-6 rounded-lg"
         onSubmit={formik.handleSubmit}
       >
         <div className="grid md:grid-cols-2 md:gap-6 mt-10">
@@ -127,23 +98,24 @@ const ExternalAccountLookup = () => {
 
           <div className="relative z-0 w-full mb-10 group">
             <input
-              type="string"
-              id="account_number"
+              type="number"
+              id="amount"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               disabled={isLoading}
+              autoComplete="off"
               onChange={formik.handleChange}
-              value={formik.values.account_number}
+              value={formik.values.amount}
             />
             <label
-              htmlFor="account_number"
+              htmlFor="amount"
               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Account Number
+              Amount
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.account_number && formik.errors.account_number}
+              {formik.touched.amount && formik.errors.amount}
             </span>
           </div>
         </div>
@@ -153,11 +125,11 @@ const ExternalAccountLookup = () => {
           disabled={isLoading}
           className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          {isLoading ? 'Please wait...' : 'Lookup Account'}
+          {isLoading ? 'Checking...' : 'Check Fee'}
         </button>
       </form>
     </div>
   );
 };
 
-export default ExternalAccountLookup;
+export default TransferFee;

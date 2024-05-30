@@ -1,9 +1,9 @@
-import Dashboard from './components/Dashboard';
+import AppRouter from './AppRouter';
 
 const App = () => {
   return (
     <>
-      <Dashboard />
+      <AppRouter />
     </>
   );
 };

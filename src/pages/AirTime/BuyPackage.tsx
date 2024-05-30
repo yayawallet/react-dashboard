@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadingSpinner from './LoadingSpinner';
-import ConfirmationModal from '../../common/Modals/ConfirmationModal';
-import ProcessingModal from '../../common/Modals/ProcessingModal';
-import ResultModal from '../../common/Modals/ResultModal';
-import { TopUp, Package } from './../../../models';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import ProcessingModal from '../../components/modals/ProcessingModal';
+import ResultModal from '../../components/modals/ResultModal';
+import { TopUp, Package } from './../../models';
 
 const packageCategories = [
   'One-Birr Package',

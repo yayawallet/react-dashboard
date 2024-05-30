@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { UserProfile } from '../models';
-
-import yayawalletLogo from '../assets/yayawallet-brand.svg';
-import avater from '../assets/avater.svg';
+import { UserProfile } from '../../models';
+import yayawalletLogo from '../../assets/yayawallet-brand.svg';
+import avater from '../../assets/avater.svg';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

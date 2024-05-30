@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
-import { Transaction } from '../../models';
-import InlineNotification from '../common/InlineNotification';
+import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
+import { Transaction } from '../models';
+import InlineNotification from '../components/InlineNotification';
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState('');

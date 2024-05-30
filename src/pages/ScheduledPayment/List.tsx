@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ConfirmationModal from '../../common/Modals/ConfirmationModal';
-import ProcessingModal from '../../common/Modals/ProcessingModal';
-import ResultModal from '../../common/Modals/ResultModal';
-import { ScheduledPayment } from '../../../models';
-import Loading from '../../common/Loading';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import ProcessingModal from '../../components/modals/ProcessingModal';
+import ResultModal from '../../components/modals/ResultModal';
+import { ScheduledPayment } from '../../models';
+import Loading from '../../components/ui/LoadingSpinner';
 
 const List = () => {
   const [scheduledPaymentList, setScheduledPaymentList] = useState<ScheduledPayment[]>([]);

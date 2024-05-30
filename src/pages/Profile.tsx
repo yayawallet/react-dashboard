@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { UserProfile } from '../../models';
+import { UserProfile } from '../models';
 
 const Profile = () => {
   const [profile, setProfile] = useState<UserProfile>();

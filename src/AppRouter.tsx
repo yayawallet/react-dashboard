@@ -16,9 +16,9 @@ import TransferFee from './pages/TransferFee';
 import ExternalAccountLookup from './pages/ExternalAccountLookup';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
-import Layout from './Layout';
+import Layout from './components/layouts/Index';
 
-const Dashboard = () => {
+const AppRouter = () => {
   return (
     <>
       <div className="lg:ml-[300px]">
@@ -49,4 +49,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AppRouter;

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import ConfirmationModal from '../../common/Modals/ConfirmationModal';
-import ProcessingModal from '../../common/Modals/ProcessingModal';
-import ResultModal from '../../common/Modals/ResultModal';
-import Loading from '../../common/Loading';
-import NotFound from '../../common/NotFound';
-import SearchBar from '../../common/SearchBar';
-import { recurringContract } from '../../../models';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import ProcessingModal from '../../components/modals/ProcessingModal';
+import ResultModal from '../../components/modals/ResultModal';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
+import NotFound from '../../components/NotFound';
+import SearchBar from '../../components/SearchBar';
+import { recurringContract } from '../../models';
 
 const ContractList = () => {
   const [contractList, setContractList] = useState<recurringContract[]>([]);
@@ -157,7 +157,7 @@ const ContractList = () => {
           {contractList.length === 0 ? (
             <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
               <tr>
-                <td>{isLoading ? <Loading /> : <NotFound />}</td>
+                <td>{isLoading ? <LoadingSpinner /> : <NotFound />}</td>
               </tr>
             </tbody>
           ) : (

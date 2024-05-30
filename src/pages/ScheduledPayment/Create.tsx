@@ -2,14 +2,17 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import BulkImport from '../../common/BulkImport';
-import InlineNotification from '../../common/InlineNotification';
+import BulkImport from '../../components/BulkImport';
+import SearchUserInline from '../../components/SearchUserInline';
+import InlineNotification from '../../components/InlineNotification';
 
-const RequestPayment = () => {
-  const [requestPaymentID, setRequestPaymentID] = useState('');
+const Create = () => {
+  const [scheduledPaymentID, setScheduledPaymentID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [userNotFound, setUserNotFound] = useState(false);
+  const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
@@ -18,35 +21,39 @@ const RequestPayment = () => {
 
   const formik = useFormik({
     initialValues: {
-      contract_number: '',
+      account_number: '',
       amount: '',
-      currency: 'ETB',
       cause: '',
-      notification_url: '',
-      meta_data: '',
+      recurring: '',
+      start_at: new Date().getTime() / 1000,
     },
 
     validationSchema: Yup.object({
-      contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      account_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       amount: Yup.number().required('Required'),
       cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      notification_url: Yup.string().max(50, 'Must be 50 characters or less').url('Invalid url'),
-      meta_data: Yup.object().json().typeError('Meta-data must be JSON format'),
+      recurring: Yup.string().required('Select recurring type'),
+      start_at: Yup.date()
+        .required('Select start date & time')
+        .test('startDate', 'start time must be in the future', (value) => {
+          return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
+        }),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
 
       // Clear existing values
-      setRequestPaymentID('');
+      setScheduledPaymentID('');
       setSuccessMessage('');
       setErrorMessage('');
-      values.meta_data = JSON.parse(values.meta_data);
 
+      values.start_at = new Date(values.start_at).getTime() / 1000;
+      values.account_number = selectedUser;
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/request-payment`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values)
         .then((res) => {
-          setRequestPaymentID(res.data.payment_request_id);
+          setScheduledPaymentID(res.data.id);
           setLoading(false);
 
           // clear input fields
@@ -60,14 +67,14 @@ const RequestPayment = () => {
 
   return (
     <div className="container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Request Payment</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Schedule Payments</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {(requestPaymentID || successMessage) && (
+      {(scheduledPaymentID || successMessage) && (
         <InlineNotification
           type="success"
-          info={`${successMessage ? successMessage : `Payment ID: ${requestPaymentID}`}`}
+          info={`${successMessage ? successMessage : `Scheduled Payment ID: ${scheduledPaymentID}`}`}
         />
       )}
 
@@ -86,7 +93,7 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('one')}
             />
             <label htmlFor="topupFor" className="cursor-pointer">
-              Single Payment
+              Single Schedule
             </label>
           </button>
 
@@ -103,7 +110,7 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('multiple')}
             />
             <label htmlFor="forOther" className="cursor-pointer">
-              Multiple Payments
+              Multiple Schedules
             </label>
           </button>
         </div>
@@ -111,28 +118,34 @@ const RequestPayment = () => {
 
       {inputFormType === 'one' ? (
         <form className="max-w-lg ml-10 mt-16" onSubmit={formik.handleSubmit}>
-          <div className="relative z-0 w-full mb-10 group">
+          <div className="relative z-0 w-full mb-1 group">
             <input
               type="Text"
-              id="contract_number"
+              id="account_number"
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               autoComplete="off"
               disabled={isLoading}
               onChange={formik.handleChange}
-              value={formik.values.contract_number}
+              value={formik.values.account_number}
             />
             <label
-              htmlFor="contract_number"
+              htmlFor="account_number"
               className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
             >
-              Contract Number
+              Receiver
             </label>
 
             <span className="text-xs text-red-600">
-              {formik.touched.contract_number && formik.errors.contract_number}
+              {formik.touched.account_number && formik.errors.account_number}
             </span>
           </div>
+
+          <SearchUserInline
+            query={formik.values.account_number}
+            onSelecteUser={(value) => setSelectedUser(value)}
+            onUserNotFound={(value) => setUserNotFound(value)}
+          />
 
           <div className="grid md:grid-cols-2 md:gap-6">
             <div className="relative z-0 w-full mb-10 group">
@@ -182,65 +195,70 @@ const RequestPayment = () => {
             </div>
           </div>
 
-          <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="Text"
-              id="notification_url"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.notification_url}
-            />
-            <label
-              htmlFor="notification_url"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Notification URL
-            </label>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="relative z-0 w-full mb-10 group">
+              <select
+                id="recurring"
+                className="w-full bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
+                onChange={formik.handleChange}
+                value={formik.values.recurring}
+              >
+                <option value="" disabled>
+                  Recurring Type
+                </option>
+                <option value="once">Once</option>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+              <span className="text-xs text-red-600">
+                {formik.touched.recurring && formik.errors.recurring}
+              </span>
+            </div>
 
-            <span className="text-xs text-red-600">
-              {formik.touched.notification_url && formik.errors.notification_url}
-            </span>
-          </div>
+            <div className="relative z-0 w-full mb-10 group">
+              <input
+                type="datetime-local"
+                id="start_at"
+                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                placeholder=" "
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+              />
+              <label
+                htmlFor="start_at"
+                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              >
+                Start Date
+              </label>
 
-          <div className="relative z-0 w-full mb-10 group">
-            <textarea
-              rows={3}
-              name="meta_data"
-              id="meta_data"
-              placeholder="Any meta_data in JSON Format"
-              className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.meta_data}
-            ></textarea>
-            <span className="text-xs text-red-600">
-              {formik.touched.meta_data && formik.errors.meta_data}
-            </span>
+              <span className="text-xs text-red-600">
+                {formik.touched.start_at && formik.errors.start_at}
+              </span>
+            </div>
           </div>
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={userNotFound || !selectedUser || isLoading}
             className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
           >
-            {isLoading ? 'Please wait...' : 'Create Contract'}
+            {isLoading ? 'Please wait...' : 'Schedule Payment'}
           </button>
         </form>
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/request-payment/bulk-import"
+          apiEndpoint="scheduled-payment/bulk-import"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
+          instruction="Your file must have the following columns: account_number, amount, cause, recurring, start_at"
         />
       )}
     </div>
   );
 };
 
-export default RequestPayment;
+export default Create;

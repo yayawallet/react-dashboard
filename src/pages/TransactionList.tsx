@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Pagination from '../common/Pagination';
-import SearchBar from '../common/SearchBar';
-import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
-import { Transaction } from '../../models';
-import Loading from '../common/Loading';
+import Pagination from '../components/Pagination';
+import SearchBar from '../components/SearchBar';
+import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
+import { Transaction } from '../models';
+import Loading from '../components/ui/LoadingSpinner';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
