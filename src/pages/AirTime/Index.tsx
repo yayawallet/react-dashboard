@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import BuyAirTime from './BuyAirTime';
 import BuyPackage from './BuyPackage';
+import useFetchData from '../../hooks/useFetchData';
 
 const AirTime = () => {
   const [topupFor, setTopupFor] = useState('');
-  const [ownPhoneNumber, setOwnPhoneNumber] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('airtime');
   const [errorMessage, setErrorMessage] = useState<string | boolean>(true);
 
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => {
-      setOwnPhoneNumber(res.data.phone);
-    });
-  }, []);
+  const result = useFetchData(['profile'], '/user/profile');
+  const ownPhoneNumber = result.data ? result.data.phone : '';
 
   useEffect(() => {
     if (topupFor === 'self') {

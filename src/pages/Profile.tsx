@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { UserProfile } from '../models';
+// import { useEffect, useState } from 'react';
+// import axios from 'axios';
+// import { UserProfile } from '../models';
+import useFetchData from '../hooks/useFetchData';
 
 const Profile = () => {
-  const [profile, setProfile] = useState<UserProfile>();
+  // const [profile, setProfile] = useState<UserProfile>();
 
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => setProfile(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => setProfile(res.data));
+  // }, []);
+
+  const { data: profile } = useFetchData(['profile'], '/user/profile');
 
   return (
     <div className="container">

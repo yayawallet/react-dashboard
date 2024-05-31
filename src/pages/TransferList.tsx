@@ -1,10 +1,9 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import { Transfer } from '../models';
 import Loading from '../components/ui/LoadingSpinner';
+import useFetchData from '../hooks/useFetchData';
 
 const TransferList = () => {
-  const [transferList, setTransferList] = useState<Transfer[]>([]);
   const [copiedID, setCopiedID] = useState('');
 
   const copyTransferID = (id: string) => {
@@ -14,11 +13,7 @@ const TransferList = () => {
     setTimeout(() => setCopiedID(''), 1000);
   };
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/transfer/list`)
-      .then((res) => setTransferList(res.data));
-  }, []);
+  const { data: transferList } = useFetchData(['transferList'], '/transfer/list');
 
   return (
     <div className="-mx-4">
@@ -44,7 +39,7 @@ const TransferList = () => {
               </th>
             </tr>
           </thead>
-          {transferList.length === 0 ? (
+          {transferList?.length === 0 ? (
             <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
               <tr>
                 <td>
@@ -54,7 +49,7 @@ const TransferList = () => {
             </tbody>
           ) : (
             <tbody>
-              {transferList.map((t) => (
+              {transferList?.map((t: Transfer) => (
                 <tr
                   key={t?.id}
                   className="hover:bg-gray-100"

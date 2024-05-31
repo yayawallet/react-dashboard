@@ -1,19 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { UserProfile } from '../../models';
+// import { UserProfile } from '../../models';
 import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
+import useFetchData from '../../hooks/useFetchData';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const [profile, setProfile] = useState<UserProfile>();
-
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => {
-      setProfile(res.data);
-    });
-  }, []);
+  const { data: profile } = useFetchData(['profile'], '/user/profile');
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);
