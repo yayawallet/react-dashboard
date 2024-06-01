@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const Create = () => {
   const [scheduledPaymentID, setScheduledPaymentID] = useState('');
@@ -14,6 +15,8 @@ const Create = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+
+  const { accessToken } = useAccessToken();
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -51,7 +54,9 @@ const Create = () => {
       values.start_at = new Date(values.start_at).getTime() / 1000;
       values.account_number = selectedUser;
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setScheduledPaymentID(res.data.id);
           setLoading(false);

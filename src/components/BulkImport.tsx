@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import useAccessToken from '../hooks/useAccessToken';
 
 interface Props {
   isLoading: boolean;
@@ -19,6 +20,8 @@ const BulkImport = ({
   onError,
   onSuccess,
 }: Props) => {
+  const { accessToken } = useAccessToken();
+
   const formik = useFormik({
     initialValues: {
       excel_file: '',
@@ -42,7 +45,9 @@ const BulkImport = ({
       onError('');
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then(() => {
           onError('');
           onSuccess('Your file is uploaded successfully.');

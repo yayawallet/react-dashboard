@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import avater from '../assets/avater.svg';
 import { User } from '../models';
+import useAccessToken from '../hooks/useAccessToken';
 
 interface Props {
   query: string;
@@ -13,6 +14,8 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
   const [usersList, setUsersList] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState('');
   const [userNotFound, setUserNotFound] = useState(false);
+
+  const { accessToken } = useAccessToken();
 
   useEffect(() => {
     if (query === selectedUser) return;
@@ -28,9 +31,13 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
     onSelecteUser('');
 
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
-        query: query,
-      })
+      .post(
+        `${import.meta.env.VITE_BASE_URL}/user/search`,
+        {
+          query: query,
+        },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         setUsersList(res.data.slice(0, 5));
 

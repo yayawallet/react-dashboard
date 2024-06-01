@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import SearchUserInline from '../components/SearchUserInline';
 import InlineNotification from '../components/InlineNotification';
+import useAccessToken from '../hooks/useAccessToken';
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
@@ -11,6 +12,8 @@ const CreateTransaction = () => {
   const [isLoading, setLoading] = useState(false);
   const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
+
+  const { accessToken } = useAccessToken();
 
   const formik = useFormik({
     initialValues: {
@@ -34,7 +37,9 @@ const CreateTransaction = () => {
 
       values.receiver = selectedUser;
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setTransactionID(res.data.transaction_id);
           setLoading(false);

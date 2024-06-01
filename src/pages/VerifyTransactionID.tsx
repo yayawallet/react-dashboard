@@ -5,12 +5,15 @@ import * as Yup from 'yup';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
 import { Transaction } from '../models';
 import InlineNotification from '../components/InlineNotification';
+import useAccessToken from '../hooks/useAccessToken';
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState('');
   const [transaction, setTransaction] = useState<Transaction>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+
+  const { accessToken } = useAccessToken();
 
   const formik = useFormik({
     initialValues: {
@@ -29,11 +32,15 @@ const GetTransactionByID = () => {
       setTransaction(undefined);
 
       axios
-        .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
+        .get(`${import.meta.env.VITE_BASE_URL}/user/profile`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => setOwnAccount(res.data.account));
 
       axios
-        .get(`${import.meta.env.VITE_BASE_URL}/transaction/find/${values.transactionID}`)
+        .get(`${import.meta.env.VITE_BASE_URL}/transaction/find/${values.transactionID}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setTransaction(res.data);
           setLoading(false);

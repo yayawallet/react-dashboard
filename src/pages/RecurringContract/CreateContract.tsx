@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
@@ -14,6 +15,9 @@ const CreateContract = () => {
   const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+
+  const { accessToken } = useAccessToken();
+  console.log(accessToken);
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -46,7 +50,9 @@ const CreateContract = () => {
 
       values.customer_account_name = selectedUser;
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/create`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/create`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setContractID(res.data.contract_id);
           setLoading(false);
@@ -218,7 +224,7 @@ const CreateContract = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/bulk-import"
+          apiEndpoint="recurring-contract/bulk-import-contract"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

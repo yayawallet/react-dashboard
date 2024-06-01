@@ -7,6 +7,7 @@ import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import NotFound from '../../components/NotFound';
 import SearchBar from '../../components/SearchBar';
 import { recurringContract } from '../../models';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const ContractList = () => {
   const [contractList, setContractList] = useState<recurringContract[]>([]);
@@ -21,15 +22,19 @@ const ContractList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredContractList, setFilteredContractList] = useState<recurringContract[]>([]);
 
+  const { accessToken } = useAccessToken();
+
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/list`)
+      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/list`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then((res) => {
         setContractList(res.data);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
-  }, []);
+  }, [accessToken]);
 
   useEffect(() => {
     if (searchQuery) {
@@ -41,7 +46,7 @@ const ContractList = () => {
     setFilteredContractList(
       contractList.filter((item) => (filterByStatus ? item.status === filterByStatus : true))
     );
-  }, [contractList, filterByStatus]);
+  }, [contractList, filterByStatus, accessToken]);
 
   const handleOnConfirm = (confirm: boolean) => {
     setOpenModal(false);
@@ -50,7 +55,10 @@ const ContractList = () => {
     setIsProcessing(true);
     setSuccessMessage('');
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${selectedContract?.id}`)
+      .get(
+        `${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${selectedContract?.id}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then(() => {
         setSuccessMessage('Contract Deactivated Successfully');
         setContractList((prev) => prev.filter((l) => l.id != selectedContract?.id));

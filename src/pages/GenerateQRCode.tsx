@@ -4,12 +4,15 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { QRCode } from '../models';
 import InlineNotification from '../components/InlineNotification';
+import useAccessToken from '../hooks/useAccessToken';
 
 const GenerateQRCode = () => {
   const [QRCode, setQRCode] = useState<QRCode>();
   const [errorMessage, setErrorMessage] = useState('');
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);
+
+  const { accessToken } = useAccessToken();
 
   const copyPaymentLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     navigator.clipboard.writeText(QRCode?.payment_link || '');
@@ -40,7 +43,9 @@ const GenerateQRCode = () => {
       setQRCode(undefined);
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);

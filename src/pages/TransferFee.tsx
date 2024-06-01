@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, Fee } from '../models';
 import InlineNotification from '../components/InlineNotification';
+import useAccessToken from '../hooks/useAccessToken';
 
 const TransferFee = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
@@ -12,14 +13,20 @@ const TransferFee = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
+  const { accessToken } = useAccessToken();
+
   useEffect(() => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/financial-institution/list`, {
-        country: 'Ethiopia',
-      })
+      .post(
+        `${import.meta.env.VITE_BASE_URL}/financial-institution/list`,
+        {
+          country: 'Ethiopia',
+        },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => setFinancialInstitutionList(res.data))
       .catch((error) => setErrorMessage(error.response?.data.error || error.message));
-  }, []);
+  }, [accessToken]);
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +48,9 @@ const TransferFee = () => {
       setInstitution('');
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);
@@ -66,7 +75,8 @@ const TransferFee = () => {
       {transferFee && (
         <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
           <p className="text-2xl">
-            Transfer Fee to {institution}:<span className="text-6xl px-2">{transferFee.fee}</span>
+            Transfer Fee to {institution}:
+            <span className="text-6xl px-2">{transferFee.fee.toFixed(4)}</span>
             <span className="text-4xl font-thin">{transferFee.currency}</span>
           </p>
         </div>

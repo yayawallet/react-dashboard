@@ -5,6 +5,7 @@ import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
 import Loading from '../../components/ui/LoadingSpinner';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const List = () => {
   const [scheduledPaymentList, setScheduledPaymentList] = useState<ScheduledPayment[]>([]);
@@ -15,10 +16,16 @@ const List = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
+  const { accessToken } = useAccessToken();
+
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/list`).then((res) => {
-      setScheduledPaymentList(res.data);
-    });
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/list`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => {
+        setScheduledPaymentList(res.data);
+      });
   }, []);
 
   const handleOnConfirm = (confirm: boolean) => {
@@ -28,7 +35,9 @@ const List = () => {
     setIsProcessing(true);
     setSuccessMessage('');
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${selectedSchedule?.id}`)
+      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${selectedSchedule?.id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then(() => {
         setSuccessMessage('Scheduled Payment Deleted Successfully');
         setScheduledPaymentList((prev) => prev.filter((l) => l.id != selectedSchedule?.id));

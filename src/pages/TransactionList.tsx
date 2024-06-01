@@ -5,6 +5,7 @@ import SearchBar from '../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
 import { Transaction } from '../models';
 import Loading from '../components/ui/LoadingSpinner';
+import useAccessToken from '../hooks/useAccessToken';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
@@ -15,21 +16,27 @@ const TransactionList = () => {
   const [ownAccount, setOwnAccount] = useState('');
   const [copiedID, setCopiedID] = useState('');
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
-      .then((res) => setOwnAccount(res.data.account));
-  }, []);
+  const { accessToken } = useAccessToken();
 
   useEffect(() => {
     axios
-      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user?p=${currentPage}`)
+      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((res) => setOwnAccount(res.data.account));
+  }, [accessToken]);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user?p=${currentPage}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then((res) => {
         setTransactionList(res.data.data);
         setPageCount(res.data.lastPage);
         setIsFetching(false);
       });
-  }, [currentPage]);
+  }, [currentPage, accessToken]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -45,9 +52,13 @@ const TransactionList = () => {
 
   const handleSearchTransaction = (query: string) => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
-        query: query,
-      })
+      .post(
+        `${import.meta.env.VITE_BASE_URL}/transaction/search`,
+        {
+          query: query,
+        },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => {
         setTransactionList(res.data.data);
         setPageCount(res.data.lastPage);
@@ -128,9 +139,13 @@ const TransactionList = () => {
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">
                     {ownAccount === t?.receiver.account ? (
-                      <span className="inline-block ml-3  text-green-600">&#43;&nbsp;</span>
+                      <span className="inline-block ml-3 font-semibold text-green-600">
+                        &#43;&nbsp;
+                      </span>
                     ) : (
-                      <span className="inline-block ml-3 text-red-600">&#8722;&nbsp;</span>
+                      <span className="inline-block ml-3 font-semibold text-red-600">
+                        &#8722;&nbsp;
+                      </span>
                     )}
                     {t?.amount_with_currency}
                   </td>

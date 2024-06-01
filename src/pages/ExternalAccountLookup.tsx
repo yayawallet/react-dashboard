@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../models';
 import InlineNotification from '../components/InlineNotification';
+import useAccessToken from '../hooks/useAccessToken';
 
 const ExternalAccountLookup = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
@@ -11,11 +12,17 @@ const ExternalAccountLookup = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
+  const { accessToken } = useAccessToken();
+
   useEffect(() => {
     axios
-      .post(`${import.meta.env.VITE_BASE_URL}/financial-institution/list`, {
-        country: 'Ethiopia',
-      })
+      .post(
+        `${import.meta.env.VITE_BASE_URL}/financial-institution/list`,
+        {
+          country: 'Ethiopia',
+        },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      )
       .then((res) => setFinancialInstitutionList(res.data))
       .catch((error) => setErrorMessage(error.response?.data.error || error.message));
   }, []);
@@ -39,7 +46,9 @@ const ExternalAccountLookup = () => {
       setExternalAccount(undefined);
 
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values)
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);
