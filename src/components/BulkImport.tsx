@@ -28,15 +28,7 @@ const BulkImport = ({
     },
 
     validationSchema: Yup.object({
-      excel_file: Yup.mixed()
-        .required('Required')
-        .test('fileFormat', 'Only xlsx, xls, csv, and tsv file formats are allowed', (value) => {
-          if (value) {
-            const supportedFormats = ['xlsx', 'xls', 'csv', 'tsv'];
-            return supportedFormats.includes(value.name.split('.')[1]);
-          }
-          return true;
-        }),
+      excel_file: Yup.mixed().required('Required'),
     }),
 
     onSubmit: (values) => {
