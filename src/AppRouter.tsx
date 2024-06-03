@@ -17,6 +17,8 @@ import ExternalAccountLookup from './pages/ExternalAccountLookup';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Layout from './components/layouts/Index';
+import BulkImportReport from './components/BulkImportReport';
+import BulkImportReportDetails from './components/BulkImportReportDetails';
 
 const AppRouter = () => {
   return (
@@ -26,8 +28,8 @@ const AppRouter = () => {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="airtime" element={<AirTime />} />
+              <Route path="profile" element={<BulkImportReportDetails />} />
+              <Route path="airtime" element={<BulkImportReport />} />
               <Route path="create-transaction" element={<CreateTransaction />} />
               <Route path="generate-qr-code" element={<GenerateQRCode />} />
               <Route path="transaction-list" element={<TransactionList />} />
