@@ -28,12 +28,12 @@ const BulkImport = ({
     },
 
     validationSchema: Yup.object({
-      excel_file: Yup.string()
+      excel_file: Yup.mixed()
         .required('Required')
         .test('fileFormat', 'Only xlsx, xls, csv, and tsv file formats are allowed', (value) => {
           if (value) {
             const supportedFormats = ['xlsx', 'xls', 'csv', 'tsv'];
-            return supportedFormats.includes(value.split('.')[1]);
+            return supportedFormats.includes(value.name.split('.')[1]);
           }
           return true;
         }),
@@ -82,11 +82,13 @@ const BulkImport = ({
             type="file"
             name="excel_file"
             id="excel_file"
+            accept=".xlsx, .xls, .csv, .tsv"
             placeholder="Upload Excel file"
             className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
             disabled={isLoading}
-            onChange={formik.handleChange}
-            value={formik.values.excel_file}
+            onChange={(e) =>
+              formik.setFieldValue('excel_file', e.target.files && e.target.files[0])
+            }
           />
           <span className="text-sm text-red-600">{formik.errors.excel_file}</span>
         </div>
