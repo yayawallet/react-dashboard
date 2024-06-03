@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import useAccessToken from './useAccessToken';
 
-const useMutateData = (key: (string | number)[], path: string, body: object) => {
+const useMutation = (key: (string | number)[], path: string, body: object) => {
   const { accessToken } = useAccessToken();
 
   const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -17,4 +17,4 @@ const useMutateData = (key: (string | number)[], path: string, body: object) => 
   return useQuery({ queryKey: key, queryFn: fetchData });
 };
 
-export default useMutateData;
+export default useMutation;
