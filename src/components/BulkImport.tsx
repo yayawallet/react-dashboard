@@ -67,6 +67,12 @@ const BulkImport = ({
             <span className="font-semibold"> xlsx, xls, csv, tsv</span>
           </li>
           {instruction && <li>{instruction}</li>}
+          <button
+            disabled={isLoading}
+            className="mt-2 text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
+          >
+            Download sample file
+          </button>
         </p>
       </div>
 
