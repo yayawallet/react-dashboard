@@ -95,14 +95,14 @@ const BulkImportReport = () => {
                       className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                     >
                       <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
-                        detail
+                        Detail
                       </a>
                     </button>
                   </td>
-                  <td className="text-green-600 font-semibold border-t border-b border-slate-200 p-3 text-center">
+                  <td className="text-green-600 font-semibold border-t border-b border-slate-200 p-3">
                     {t?.succeed}
                   </td>
-                  <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3 text-center">
+                  <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3">
                     {t?.failed}
                   </td>
                   <td className="border-t border-b border-slate-200 p-3">{t?.remark}</td>
