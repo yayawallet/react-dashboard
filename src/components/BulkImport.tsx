@@ -25,10 +25,12 @@ const BulkImport = ({
   const formik = useFormik({
     initialValues: {
       excel_file: '',
+      remark: '',
     },
 
     validationSchema: Yup.object({
       excel_file: Yup.mixed().required('Required'),
+      remark: Yup.string().required('Required').max(20, 'Remark must be less than 20 characters'),
     }),
 
     onSubmit: (values) => {
@@ -68,22 +70,48 @@ const BulkImport = ({
         </p>
       </div>
 
-      <form className="max-w-md ml-10" onSubmit={formik.handleSubmit}>
-        <div className="relative z-0 w-full mb-10 group">
-          <input
-            type="file"
-            name="excel_file"
-            id="excel_file"
-            accept=".xlsx, .xls, .csv, .tsv"
-            placeholder="Upload Excel file"
-            className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
-            disabled={isLoading}
-            onChange={(e) =>
-              formik.setFieldValue('excel_file', e.target.files && e.target.files[0])
-            }
-          />
-          <span className="text-sm text-red-600">{formik.errors.excel_file}</span>
+      <form className="max-w-lg ml-10" onSubmit={formik.handleSubmit}>
+        <div className="grid md:grid-cols-5 md:gap-10">
+          <div className="relative z-0 w-full mb-10 group col-span-3">
+            <input
+              type="file"
+              name="excel_file"
+              id="excel_file"
+              accept=".xlsx, .xls, .csv, .tsv"
+              placeholder="Upload Excel file"
+              className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
+              disabled={isLoading}
+              onChange={(e) =>
+                formik.setFieldValue('excel_file', e.target.files && e.target.files[0])
+              }
+            />
+            <span className="text-sm text-red-600">{formik.errors.excel_file}</span>
+          </div>
+
+          <div className="relative z-0 w-full mb-10 group col-span-2">
+            <input
+              type="text"
+              id="remark"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              placeholder=" "
+              autoComplete="off"
+              disabled={isLoading}
+              onChange={formik.handleChange}
+              value={formik.values.remark}
+            />
+            <label
+              htmlFor="remark"
+              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            >
+              Remark
+            </label>
+
+            <span className="text-xs text-red-600">
+              {formik.touched.remark && formik.errors.remark}
+            </span>
+          </div>
         </div>
+
         <button
           type="submit"
           disabled={isLoading}
