@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -5,7 +6,7 @@ import useAccessToken from '../hooks/useAccessToken';
 
 interface Props {
   isLoading: boolean;
-  instruction?: string;
+  instruction?: string | ReactNode;
   apiEndpoint: string;
   onLoading: (value: boolean) => void;
   onError: (value: string) => void;
