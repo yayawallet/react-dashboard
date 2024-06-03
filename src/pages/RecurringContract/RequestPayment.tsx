@@ -242,6 +242,14 @@ const RequestPayment = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
+          instruction={
+            <>
+              Your file must have the following columns:{' '}
+              <span className="font-semibold">contract_number, amount, cause</span> &{' '}
+              <span className="font-semibold">notification_url</span> (optional),{' '}
+              <span className="font-semibold">meta_data</span> (optional)
+            </>
+          }
         />
       )}
     </div>

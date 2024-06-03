@@ -259,7 +259,14 @@ const Create = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
-          instruction="Your file must have the following columns: account_number, amount, cause, recurring, start_at"
+          instruction={
+            <>
+              Your file must have the following columns:{' '}
+              <span className="font-semibold">
+                account_number, amount, cause, recurring, start_at
+              </span>
+            </>
+          }
         />
       )}
     </div>
