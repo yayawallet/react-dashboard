@@ -1,15 +1,7 @@
-// import { useEffect, useState } from 'react';
-// import axios from 'axios';
-// import { UserProfile } from '../models';
 import useFetchData from '../hooks/useFetchData';
+// import { UserProfile } from '../models';
 
 const Profile = () => {
-  // const [profile, setProfile] = useState<UserProfile>();
-
-  // useEffect(() => {
-  //   axios.get(`${import.meta.env.VITE_BASE_URL}/user/profile`).then((res) => setProfile(res.data));
-  // }, []);
-
   const { data: profile } = useFetchData(['profile'], '/user/profile');
 
   return (
