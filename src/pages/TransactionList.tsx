@@ -31,7 +31,7 @@ const TransactionList = () => {
     isSuccess,
     data: { data: transactionList } = { data: [] },
     data: { lastPage: pageCount } = { lastPage: 0 },
-  } = useFetchData(['transaction', 'find-by-user'], `/transaction/find-by-user?p=${currentPage}`);
+  } = useFetchData(['transaction-list', currentPage], `/transaction/find-by-user?p=${currentPage}`);
 
   console.log(transactionList);
 
@@ -44,8 +44,6 @@ const TransactionList = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    console.log('hey', page);
-    // setIsFetching(true);
   };
 
   // const handleSearchTransaction = (query: string) => {
