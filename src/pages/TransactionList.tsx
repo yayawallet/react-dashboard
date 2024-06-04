@@ -17,8 +17,9 @@ const TransactionList = () => {
   const [copiedID, setCopiedID] = useState('');
 
   const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
+
   const { isPending: isPendingTransactionData, data: transactionData } = useFetchData(
-    ['transaction-list'],
+    ['transaction-list', currentPage],
     `/transaction/find-by-user?p=${currentPage}`
   );
 
