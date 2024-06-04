@@ -65,7 +65,11 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
               setUsersList([user]);
             }}
           >
-            <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
+            <img
+              src={user.photo_url || avater}
+              alt=""
+              className="h-8 w-8 rounded-full border-2 border-white"
+            />
             <span>{user.name}</span>
           </div>
         ))}
