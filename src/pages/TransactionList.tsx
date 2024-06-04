@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Pagination from '../components/Pagination';
 import SearchBar from '../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
@@ -13,7 +12,7 @@ const TransactionList = () => {
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isFetching, setIsFetching] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [copiedID, setCopiedID] = useState('');
 
   const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
@@ -32,7 +31,7 @@ const TransactionList = () => {
   useEffect(() => {
     if (transactionData) {
       setTransactionList(transactionData.data);
-      setIsFetching(isPendingTransactionData);
+      setIsPending(isPendingTransactionData);
       setPageCount(transactionData.lastPage);
     }
   }, [transactionData]);
@@ -40,7 +39,7 @@ const TransactionList = () => {
   useEffect(() => {
     if (searchResult) {
       setTransactionList(searchResult.data);
-      setIsFetching(isPendingSearch);
+      setIsPending(isPendingSearch);
     }
   }, [searchResult]);
 
@@ -53,7 +52,7 @@ const TransactionList = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    setIsFetching(true);
+    setIsPending(true);
   };
 
   const handleSearchTransaction = (query: string) => {
@@ -167,7 +166,7 @@ const TransactionList = () => {
         <Pagination
           page={currentPage}
           pageCount={pageCount}
-          isFetching={isFetching}
+          isPending={isPending}
           onPageChange={handlePageChange}
         />
       )}

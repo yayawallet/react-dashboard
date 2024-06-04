@@ -1,11 +1,11 @@
 interface Props {
   page: number;
   pageCount: number;
-  isFetching: boolean;
+  isPending: boolean;
   onPageChange: (newPage: number) => void;
 }
 
-const Pagination = ({ page, pageCount, isFetching, onPageChange }: Props) => {
+const Pagination = ({ page, pageCount, isPending, onPageChange }: Props) => {
   return (
     <div className="my-10 flxe text-center text-lg">
       <button
@@ -17,7 +17,7 @@ const Pagination = ({ page, pageCount, isFetching, onPageChange }: Props) => {
       </button>
 
       <button className="inline-block border-y border-violet-500 py-1 px-6 bg-violet-500 text-white">
-        {isFetching ? '...' : page}
+        {isPending ? '...' : page}
       </button>
       <button
         disabled={page >= pageCount}
