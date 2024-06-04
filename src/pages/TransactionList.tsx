@@ -1,39 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Pagination from '../components/Pagination';
-// import SearchBar from '../components/SearchBar';
+import SearchBar from '../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
-// import { Transaction } from '../models';
+import { Transaction } from '../models';
 import Loading from '../components/ui/LoadingSpinner';
 import useFetchData from '../hooks/useFetchData';
-import { Transaction } from '../models';
+import useMutateData from '../hooks/useMutateData';
 
 const TransactionList = () => {
+  const [transactionList, setTransactionList] = useState<Transaction[]>([]);
+  const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   // const [searchQuery, setSearchQuery] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
+  const [ownAccount, setOwnAccount] = useState('');
   const [copiedID, setCopiedID] = useState('');
 
-  // const { accessToken } = useAccessToken();
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
+      .then((res) => setOwnAccount(res.data.account));
+  }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_BASE_URL}/user/profile`, {
-  //       headers: { Authorization: `Bearer ${accessToken}` },
-  //     })
-  //     .then((res) => setOwnAccount(res.data.account));
-
-  //   console.log(accessToken);
-  // }, []);
-  console.log('what');
-  const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
-  const {
-    isFetching,
-    isError,
-    isSuccess,
-    data: { data: transactionList } = { data: [] },
-    data: { lastPage: pageCount } = { lastPage: 0 },
-  } = useFetchData(['transaction-list', currentPage], `/transaction/find-by-user?p=${currentPage}`);
-
-  console.log(transactionList);
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user?p=${currentPage}`)
+      .then((res) => {
+        setTransactionList(res.data.data);
+        setPageCount(res.data.lastPage);
+        setIsFetching(false);
+      });
+  }, [currentPage]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -44,28 +42,25 @@ const TransactionList = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    setIsFetching(true);
   };
 
-  // const handleSearchTransaction = (query: string) => {
-  //   axios
-  //     .post(
-  //       `${import.meta.env.VITE_BASE_URL}/transaction/search`,
-  //       {
-  //         query: query,
-  //       },
-  //       { headers: { Authorization: `Bearer ${accessToken}` } }
-  //     )
-  //     .then((res) => {
-  //       setTransactionList(res.data.data);
-  //       setPageCount(res.data.lastPage);
-  //       setIsFetching(false);
-  //     });
-  // };
+  const handleSearchTransaction = (query: string) => {
+    axios
+      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
+        query: query,
+      })
+      .then((res) => {
+        setTransactionList(res.data.data);
+        setPageCount(res.data.lastPage);
+        setIsFetching(false);
+      });
+  };
 
   return (
     <div className="-mx-4">
       <div className="ml-8">
-        {/* <SearchBar onSearch={(query) => handleSearchTransaction(query)} /> */}
+        <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
       </div>
 
       <div className="mt-2">
@@ -92,7 +87,7 @@ const TransactionList = () => {
             </tr>
           </thead>
 
-          {transactionList?.length === 0 ? (
+          {transactionList.length === 0 ? (
             <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
               <tr>
                 <td>
@@ -102,7 +97,7 @@ const TransactionList = () => {
             </tbody>
           ) : (
             <tbody>
-              {transactionList?.map((t: Transaction) => (
+              {transactionList.map((t) => (
                 <tr key={t?.id} className="hover:bg-gray-100 text-nowrap">
                   <td
                     title={t?.id}
