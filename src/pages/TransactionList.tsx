@@ -12,7 +12,7 @@ const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [isFetching, setIsFetching] = useState(false);
   const [copiedID, setCopiedID] = useState('');
 
@@ -23,6 +23,12 @@ const TransactionList = () => {
     `/transaction/find-by-user?p=${currentPage}`
   );
 
+  const { isPending: isPendingSearch, data: searchResult } = useMutateData(
+    [searchQuery],
+    '/transaction/search',
+    { query: searchQuery }
+  );
+
   useEffect(() => {
     if (transactionData) {
       setTransactionList(transactionData.data);
@@ -30,6 +36,13 @@ const TransactionList = () => {
       setPageCount(transactionData.lastPage);
     }
   }, [transactionData]);
+
+  useEffect(() => {
+    if (searchResult) {
+      setTransactionList(searchResult.data);
+      setIsFetching(isPendingSearch);
+    }
+  }, [searchResult]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -44,15 +57,7 @@ const TransactionList = () => {
   };
 
   const handleSearchTransaction = (query: string) => {
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/transaction/search`, {
-        query: query,
-      })
-      .then((res) => {
-        setTransactionList(res.data.data);
-        setPageCount(res.data.lastPage);
-        setIsFetching(false);
-      });
+    setSearchQuery(query);
   };
 
   return (
