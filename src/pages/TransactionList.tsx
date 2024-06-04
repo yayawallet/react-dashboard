@@ -14,14 +14,9 @@ const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // const [searchQuery, setSearchQuery] = useState('');
   const [isFetching, setIsFetching] = useState(false);
-  const [ownAccount, setOwnAccount] = useState('');
   const [copiedID, setCopiedID] = useState('');
 
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/user/profile`)
-      .then((res) => setOwnAccount(res.data.account));
-  }, []);
+  const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
 
   useEffect(() => {
     axios
