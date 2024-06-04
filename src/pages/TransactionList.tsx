@@ -17,16 +17,18 @@ const TransactionList = () => {
   const [copiedID, setCopiedID] = useState('');
 
   const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
+  const { isPending: isPendingTransactionData, data: transactionData } = useFetchData(
+    ['transaction-list'],
+    `/transaction/find-by-user?p=${currentPage}`
+  );
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/transaction/find-by-user?p=${currentPage}`)
-      .then((res) => {
-        setTransactionList(res.data.data);
-        setPageCount(res.data.lastPage);
-        setIsFetching(false);
-      });
-  }, [currentPage]);
+    if (transactionData) {
+      setTransactionList(transactionData.data);
+      setIsFetching(isPendingTransactionData);
+      setPageCount(transactionData.lastPage);
+    }
+  }, [transactionData]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
