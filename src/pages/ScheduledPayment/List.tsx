@@ -60,7 +60,7 @@ const List = () => {
   };
 
   return (
-    <div className="-mx-4">
+    <div>
       <ConfirmationModal
         header="Are you sure you want to Delete this schedule?"
         infoList={[

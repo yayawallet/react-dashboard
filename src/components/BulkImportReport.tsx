@@ -34,7 +34,7 @@ const BulkImportReport = () => {
   };
 
   return (
-    <div className="-mx-4">
+    <div>
       <div className="ml-8">
         {/* <SearchBar onSearch={(query) => handleSearchTransaction(query)} /> */}
       </div>

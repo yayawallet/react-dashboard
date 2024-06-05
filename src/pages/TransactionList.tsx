@@ -3,7 +3,7 @@ import Pagination from '../components/Pagination';
 import SearchBar from '../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
 import { Transaction } from '../models';
-import Loading from '../components/ui/LoadingSpinner';
+import PageLoading from '../components/ui/PageLoading';
 import useFetchData from '../hooks/useFetchData';
 import useMutateData from '../hooks/useMutateData';
 
@@ -60,44 +60,40 @@ const TransactionList = () => {
   };
 
   return (
-    <div className="-mx-4">
+    <div>
       <div className="ml-8">
         <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
       </div>
 
-      <div className="mt-2">
-        <table className="w-full max-w-[1536px]">
-          <thead className="sticky top-0 z-10">
-            <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Invoice
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Sender
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Amount
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Receiver
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Cause
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">Date</th>
-            </tr>
-          </thead>
-
-          {transactionList.length === 0 ? (
-            <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-              <tr>
-                <td>
-                  <Loading />
-                </td>
+      {transactionList.length >= 0 ? (
+        <PageLoading />
+      ) : (
+        <div className="mt-2">
+          <table className="w-full max-w-[1536px]">
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-violet-500 text-gray-50">
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Invoice
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Sender
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Amount
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Receiver
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Cause
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Date
+                </th>
               </tr>
-            </tbody>
-          ) : (
+            </thead>
+
             <tbody>
               {transactionList.map((t) => (
                 <tr key={t?.id} className="hover:bg-gray-100 text-nowrap">
@@ -158,17 +154,17 @@ const TransactionList = () => {
                 </tr>
               ))}
             </tbody>
-          )}
-        </table>
-      </div>
+          </table>
 
-      {pageCount > 1 && (
-        <Pagination
-          page={currentPage}
-          pageCount={pageCount}
-          isPending={isPending}
-          onPageChange={handlePageChange}
-        />
+          {pageCount > 1 && (
+            <Pagination
+              page={currentPage}
+              pageCount={pageCount}
+              isPending={isPending}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </div>
       )}
     </div>
   );
