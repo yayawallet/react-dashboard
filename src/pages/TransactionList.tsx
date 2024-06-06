@@ -65,7 +65,7 @@ const TransactionList = () => {
         <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
       </div>
 
-      {transactionList.length >= 0 ? (
+      {transactionList.length <= 0 ? (
         <PageLoading />
       ) : (
         <div className="mt-2">
