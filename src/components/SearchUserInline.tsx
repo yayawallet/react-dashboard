@@ -28,7 +28,6 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
     setSelectedUser('');
 
     onUserNotFound(false);
-    onSelecteUser('');
 
     axios
       .post(
