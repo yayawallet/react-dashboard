@@ -27,7 +27,7 @@ const Sidebar = () => {
         { title: 'Verify IDs', path: '/transaction/verify-id' },
       ],
     },
-    { title: 'Generate QR Code', path: '/generate-qr-code' },
+    { title: 'Generate QR Code', path: '/qr-code' },
     {
       title: 'Scheduled Payment',
       path: '/scheduled-payment',
