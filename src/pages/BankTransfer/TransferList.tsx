@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Transfer } from '../models';
-import Loading from '../components/ui/LoadingSpinner';
-import useFetchData from '../hooks/useFetchData';
+import { Transfer } from '../../models';
+import Loading from '../../components/ui/LoadingSpinner';
+import useFetchData from '../../hooks/useFetchData';
 
 const TransferList = () => {
   const [copiedID, setCopiedID] = useState('');

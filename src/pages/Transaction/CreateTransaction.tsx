@@ -2,9 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import SearchUserInline from '../components/SearchUserInline';
-import InlineNotification from '../components/InlineNotification';
-import useFetchData from '../hooks/useFetchData';
+import SearchUserInline from '../../components/SearchUserInline';
+import InlineNotification from '../../components/InlineNotification';
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
