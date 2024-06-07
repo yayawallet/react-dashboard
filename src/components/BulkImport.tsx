@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import useAccessToken from '../hooks/useAccessToken';
 
 interface Props {
   isLoading: boolean;
@@ -21,8 +20,6 @@ const BulkImport = ({
   onError,
   onSuccess,
 }: Props) => {
-  const { accessToken } = useAccessToken();
-
   const formik = useFormik({
     initialValues: {
       excel_file: '',
@@ -31,7 +28,7 @@ const BulkImport = ({
 
     validationSchema: Yup.object({
       excel_file: Yup.mixed().required('Required'),
-      remark: Yup.string().required('Required').max(20, 'Remark must be less than 20 characters'),
+      remark: Yup.string().max(20, 'Remark must be less than 20 characters'),
     }),
 
     onSubmit: (values) => {
@@ -39,10 +36,11 @@ const BulkImport = ({
       onSuccess('');
       onError('');
 
+      const formData = new FormData();
+      formData.append('file', values.excel_file);
+
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+        .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, formData)
         .then(() => {
           onError('');
           onSuccess('Your file is uploaded successfully.');
