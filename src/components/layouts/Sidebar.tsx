@@ -4,14 +4,58 @@ import { Link } from 'react-router-dom';
 import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import useFetchData from '../../hooks/useFetchData';
+import SidebarItem from './SidebarItem';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   const { data: profile } = useFetchData(['profile'], '/user/profile');
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);
   };
+
+  const menus = [
+    { title: 'Profile', path: '/profile' },
+    { title: 'Airtime/Package', path: '/airtime' },
+    {
+      title: 'Transaction',
+      path: '/transaction',
+      submenuItems: [
+        { title: 'Create', path: '/transaction/create' },
+        { title: 'List', path: '/transaction/list' },
+        { title: 'Verify IDs', path: '/transaction/verify-id' },
+      ],
+    },
+    { title: 'Generate QR Code', path: '/generate-qr-code' },
+    {
+      title: 'Scheduled Payment',
+      path: '/scheduled-payment',
+      submenuItems: [
+        { title: 'Create', path: '/scheduled-payment/create' },
+        { title: 'List', path: '/scheduled-payment/list' },
+      ],
+    },
+    {
+      title: 'Recurring Contract',
+      path: '/recurring-contract',
+      submenuItems: [
+        { title: 'Create', path: '/recurring-contract/create' },
+        { title: 'List', path: '/recurring-contract/list' },
+        { title: 'Request Payment', path: '/recurring-contract/request-payment' },
+      ],
+    },
+    {
+      title: 'Bank Transfer',
+      path: '/transfer',
+      submenuItems: [
+        { title: 'Create', path: '/transfer/create' },
+        { title: 'List', path: '/transfer/list' },
+        { title: 'Check Fee', path: '/transfer/check-fee' },
+        { title: 'External Account Lookup', path: '/transfer/account-lookup' },
+      ],
+    },
+  ];
 
   return (
     <>
@@ -83,122 +127,9 @@ const Sidebar = () => {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  to="/airtime"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Airtime/Package</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/create-transaction"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Create Transaction</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/generate-qr-code"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Generate QR Code</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/transaction-list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Transaction List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/verify-transaction-id"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Verify Transactions</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/scheduled-payment/create"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Create Scheduled Payment</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/scheduled-payment/list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Scheduled Payment List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/recurring-contract/create"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Create Contract</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/recurring-contract/list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Contract List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/recurring-contract/request-payment"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Request Payment</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/transfer-list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Transfer List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/check-transfer-fee"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Check Transfer Fee</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/external-account-lookup"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">External Account Lookup</span>
-                </Link>
-              </li>
+              {menus.map((menu, index) => (
+                <SidebarItem key={index} menu={menu} />
+              ))}
             </ul>
           </div>
         </div>
