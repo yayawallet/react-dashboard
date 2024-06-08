@@ -22,9 +22,9 @@ const Sidebar = () => {
       title: 'Transaction',
       path: '/transaction',
       submenuItems: [
-        { title: 'Create', path: '/transaction/create' },
-        { title: 'List', path: '/transaction/list' },
-        { title: 'Verify IDs', path: '/transaction/verify-id' },
+        { title: 'Create Transaction', path: '/transaction/create' },
+        { title: 'List Transactions', path: '/transaction/list' },
+        { title: 'Verify Transaction', path: '/transaction/verify-id' },
       ],
     },
     { title: 'Generate QR Code', path: '/qr-code' },
@@ -32,16 +32,16 @@ const Sidebar = () => {
       title: 'Scheduled Payment',
       path: '/scheduled-payment',
       submenuItems: [
-        { title: 'Create', path: '/scheduled-payment/create' },
-        { title: 'List', path: '/scheduled-payment/list' },
+        { title: 'Create Schedule', path: '/scheduled-payment/create' },
+        { title: 'List Schedules', path: '/scheduled-payment/list' },
       ],
     },
     {
       title: 'Recurring Contract',
       path: '/recurring-contract',
       submenuItems: [
-        { title: 'Create', path: '/recurring-contract/create' },
-        { title: 'List', path: '/recurring-contract/list' },
+        { title: 'Create Contract', path: '/recurring-contract/create' },
+        { title: 'List Contracts', path: '/recurring-contract/list' },
         { title: 'Request Payment', path: '/recurring-contract/request-payment' },
       ],
     },
@@ -49,10 +49,10 @@ const Sidebar = () => {
       title: 'Bank Transfer',
       path: '/transfer',
       submenuItems: [
-        { title: 'Create', path: '/transfer/create' },
-        { title: 'List', path: '/transfer/list' },
+        { title: 'Create Transfer', path: '/transfer/create' },
+        { title: 'List Transfers', path: '/transfer/list' },
         { title: 'Check Fee', path: '/transfer/check-fee' },
-        { title: 'External Account Lookup', path: '/transfer/account-lookup' },
+        { title: 'Account Lookup', path: '/transfer/account-lookup' },
       ],
     },
   ];
