@@ -10,6 +10,16 @@ table {
   font-size: 15px;
 }
 
+table > thead > tr > th:first-child,
+table > tbody > tr > td:first-child {
+  padding-left: 2rem !important;
+}
+
+table > thead > tr > th:last-child,
+table > tbody > tr > td:last-child {
+  padding-right: 2rem !important;
+}
+
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
