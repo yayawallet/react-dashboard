@@ -28,7 +28,7 @@ const BulkImport = ({
 
     validationSchema: Yup.object({
       excel_file: Yup.mixed().required('Required'),
-      remark: Yup.string().max(20, 'Remark must be less than 20 characters'),
+      remark: Yup.string().required('Required').max(20, 'Remark must be less than 20 characters'),
     }),
 
     onSubmit: (values) => {
@@ -38,6 +38,7 @@ const BulkImport = ({
 
       const formData = new FormData();
       formData.append('file', values.excel_file);
+      formData.append('remark', values.remark);
 
       axios
         .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, formData)
