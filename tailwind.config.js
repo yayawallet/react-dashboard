@@ -8,5 +8,18 @@ export default {
       center: false,
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        '.page-container': {
+          padding: '2rem',
+          'max-width': '1536px',
+        },
+        '.table-container': {
+          'max-width': '1536px',
+        },
+      };
+      addUtilities(newUtilities, ['responsive', 'hover']);
+    },
+  ],
 };
