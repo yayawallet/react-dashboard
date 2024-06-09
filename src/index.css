@@ -8,8 +8,6 @@
 
 table {
   font-size: 15px;
-  margin-left: -1rem;
-  margin-right: -1rem;
 }
 
 input[type='number']::-webkit-inner-spin-button,
