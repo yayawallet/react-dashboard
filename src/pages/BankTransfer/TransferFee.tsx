@@ -76,7 +76,7 @@ const TransferFee = () => {
         <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
           <p className="text-2xl">
             Transfer Fee to {institution}:
-            <span className="text-6xl px-2">{transferFee.fee.toFixed(4)}</span>
+            <span className="text-6xl px-2">{transferFee.fee.toFixed(2)}</span>
             <span className="text-4xl font-thin">{transferFee.currency}</span>
           </p>
         </div>

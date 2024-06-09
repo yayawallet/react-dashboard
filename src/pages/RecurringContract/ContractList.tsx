@@ -3,11 +3,11 @@ import axios from 'axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import NotFound from '../../components/NotFound';
 import SearchBar from '../../components/SearchBar';
 import { recurringContract } from '../../models';
 import useAccessToken from '../../hooks/useAccessToken';
+import PageLoading from '../../components/ui/PageLoading';
 
 const ContractList = () => {
   const [contractList, setContractList] = useState<recurringContract[]>([]);
@@ -115,103 +115,115 @@ const ContractList = () => {
         successMessage={successMessage}
       />
 
-      <div className="mt-2">
-        <div className="flex items-baseline mb-2 mx-5 gap-x-8">
-          <div className="w-80">
-            <SearchBar
-              onSearch={handleSearchContractList}
-              placeholder="Contract, Service Type, Customer, ..."
-            />
-          </div>
-          <div className="">
-            Filter by:
-            <span
-              className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'approved' ? 'bg-violet-600 text-white' : ''}`}
-              onClick={() => setFilterByStatus((prev) => (prev === 'approved' ? '' : 'approved'))}
-            >
-              Aproved
-            </span>
-            <span
-              className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}
-              onClick={() => setFilterByStatus((prev) => (prev === 'pending' ? '' : 'pending'))}
-            >
-              Pending
-            </span>
-          </div>
-        </div>
-
-        <table className="w-full max-w-[1536px]">
-          <thead className="sticky top-0 z-10">
-            <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Customer Name
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Contract Number
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Service Type
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Status
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Action
-              </th>
-            </tr>
-          </thead>
-
-          {contractList.length === 0 ? (
-            <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-              <tr>
-                <td>{isLoading ? <LoadingSpinner /> : <NotFound />}</td>
-              </tr>
-            </tbody>
+      <div className="mt-5">
+        {contractList.length === 0 ? (
+          isLoading ? (
+            <PageLoading />
           ) : (
-            <tbody>
-              {filteredContractList?.map((item) => (
-                <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
-                  <td
-                    title={item.id}
-                    className="relative border-t border-b border-slate-200 p-3"
-                    onClick={() => copySchedulePaymentId(item.id)}
-                  >
-                    {`${item.id.slice(0, 4)}...${item.id.slice(-2)}`}
-                    <span
-                      className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
-                    >
-                      Id copied
-                    </span>
-                  </td>
+            <NotFound />
+          )
+        ) : (
+          <>
+            <div className="flex items-baseline mb-2 mx-5 gap-x-8">
+              <div className="w-80">
+                <SearchBar
+                  onSearch={handleSearchContractList}
+                  placeholder="Contract, Service Type, Customer, ..."
+                />
+              </div>
+              <div className="">
+                Filter by:
+                <span
+                  className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'approved' ? 'bg-violet-600 text-white' : ''}`}
+                  onClick={() =>
+                    setFilterByStatus((prev) => (prev === 'approved' ? '' : 'approved'))
+                  }
+                >
+                  Aproved
+                </span>
+                <span
+                  className={`inline-flex items-center bg-gray-100 text-gray-500 px-4 py-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}
+                  onClick={() => setFilterByStatus((prev) => (prev === 'pending' ? '' : 'pending'))}
+                >
+                  Pending
+                </span>
+              </div>
+            </div>
 
-                  <td className="border-t border-b border-slate-200 p-3">
-                    {item.customer.name.split(' ').slice(0, 2).join(' ')}
-                    <br />
-                    <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
-                      {'@' + item.customer.account}
-                    </span>
-                  </td>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-violet-500 text-gray-50">
+                    <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                      ID
+                    </th>
+                    <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                      Customer Name
+                    </th>
+                    <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                      Contract Number
+                    </th>
+                    <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                      Service Type
+                    </th>
+                    <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                      Status
+                    </th>
+                    <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
 
-                  <td className="border-t border-b border-slate-200 p-3">{item.contract_number}</td>
-                  <td className="border-t border-b border-slate-200 p-3">{item.service_type}</td>
-                  <td className="border-t border-b border-slate-200 p-3">{item.status}</td>
-                  <td className="border-t border-b border-slate-200 p-3">
-                    <button
-                      className="text-sm bg-red-600 text-white py-1 px-3 rounded"
-                      onClick={() => {
-                        setSelectedContract(item);
-                        setOpenModal(true);
-                      }}
-                    >
-                      Deactivate
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          )}
-        </table>
+                <tbody>
+                  {filteredContractList?.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
+                      <td
+                        title={item.id}
+                        className="relative border-t border-b border-slate-200 p-3"
+                        onClick={() => copySchedulePaymentId(item.id)}
+                      >
+                        {`${item.id.slice(0, 4)}...${item.id.slice(-2)}`}
+                        <span
+                          className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                        >
+                          Id copied
+                        </span>
+                      </td>
+
+                      <td className="border-t border-b border-slate-200 p-3">
+                        {item.customer.name.split(' ').slice(0, 2).join(' ')}
+                        <br />
+                        <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
+                          {'@' + item.customer.account}
+                        </span>
+                      </td>
+
+                      <td className="border-t border-b border-slate-200 p-3">
+                        {item.contract_number}
+                      </td>
+                      <td className="border-t border-b border-slate-200 p-3">
+                        {item.service_type}
+                      </td>
+                      <td className="border-t border-b border-slate-200 p-3">{item.status}</td>
+                      <td className="border-t border-b border-slate-200 p-3">
+                        <button
+                          className="text-sm bg-red-600 text-white py-1 px-3 rounded"
+                          onClick={() => {
+                            setSelectedContract(item);
+                            setOpenModal(true);
+                          }}
+                        >
+                          Deactivate
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
