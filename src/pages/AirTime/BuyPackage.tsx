@@ -114,7 +114,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         </div>
 
         {packages.length > 0 ? (
-          <div className="h-full w-full sticky top-3">
+          <div className="h-full w-full sticky top-20">
             <div
               className=""
               style={{

@@ -87,29 +87,31 @@ const Sidebar = () => {
         className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
-        <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
-          <Link to="/" className="flex items-center ps-2.5 mb-5 shadow-sm">
+        <div className="h-full pb-3 overflow-y-auto bg-gray-50">
+          <Link
+            to="/"
+            className="flex items-center h-16 ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
+          >
             <img src={yayawalletLogo} className="h-12" alt="YaYaWallet Logo" />
           </Link>
 
-          <button
-            type="button"
-            className="lg:hidden flex text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-4 end-5 items-center justify-center"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-
-          <div className="px-3">
-            <ul className="space-y-2 font-medium" onClick={() => setSidebarOpen(false)}>
+          <div className="px-3 pt-5 relative">
+            <button
+              type="button"
+              className="lg:hidden flex text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-3 end-2 items-center justify-center"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+            <ul className="space-y-2 font-medium">
               <li>
                 <div className="flex justify-center p-2">
                   <Link to="/profile">

@@ -24,7 +24,7 @@ const AirTime = () => {
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Top-up Airtime or Package</h1>
+      <h1 className="text-2xl font-semibold mb-5">Top-up Airtime or Package</h1>
 
       <div className="">
         <div className="border-2 rounded-lg p-2 px-5">
@@ -71,6 +71,7 @@ const AirTime = () => {
             <input
               type="number"
               id="phone-number"
+              autoComplete="off"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-14 p-2.5 outline-none"
               placeholder="Phone number"
               value={topupFor === 'self' ? ownPhoneNumber : phoneNumber}

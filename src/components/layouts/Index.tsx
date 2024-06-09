@@ -6,7 +6,9 @@ import Sidebar from './Sidebar';
 const Index = () => {
   return (
     <>
-      <Header />
+      <div className="sticky top-0 left-0 right-0 z-10 bg-white">
+        <Header />
+      </div>
       <Sidebar />
       <Outlet />
     </>

@@ -11,6 +11,7 @@ const SearchBar = ({ onSearch, placeholder }: Props) => {
           <input
             type="search"
             id="search-dropdown"
+            autoComplete="off"
             className="block p-2.5 w-full z-20 text-gray-900 bg-gray-50 rounded-lg border-e-gray-200 border-s-2 border border-gray-300 focus:ring-1 ring-violet-200 focus:border-violet-200 outline-none"
             placeholder={placeholder || 'Sender, Receiver, Cause, ID...'}
             onChange={(e) => onSearch(e.currentTarget.value)}
