@@ -17,17 +17,18 @@ import TransferFee from './pages/BankTransfer/TransferFee';
 import ScheduledPayment from './pages/ScheduledPayment/Index';
 import CreateScheduled from './pages/ScheduledPayment/Create';
 import ListScheduled from './pages/ScheduledPayment/List';
+import ReportSchedule from './pages/ScheduledPayment/Report';
 
 import RecurringContract from './pages/RecurringContract/Index';
 import CreateContract from './pages/RecurringContract/CreateContract';
 import ContractList from './pages/RecurringContract/ContractList';
 import RequestPayment from './pages/RecurringContract/RequestPayment';
+import ReportContract from './pages/RecurringContract/ReportContract';
+import ReportRequestPayment from './pages/RecurringContract/ReportRequestPayment';
 
-import Home from './pages/Home';
+import Home from './pages/Authentication/Index';
 import NotFound from './pages/NotFound';
 import Layout from './components/layouts/Index';
-import BulkImportReport from './components/BulkImportReport';
-import BulkImportReportDetails from './components/BulkImportReportDetails';
 
 const AppRouter = () => {
   return (
@@ -55,11 +56,17 @@ const AppRouter = () => {
               <Route path="scheduled-payment" element={<ScheduledPayment />} />
               <Route path="scheduled-payment/create" element={<CreateScheduled />} />
               <Route path="scheduled-payment/list" element={<ListScheduled />} />
+              <Route path="scheduled-payment/report" element={<ReportSchedule />} />
 
               <Route path="recurring-contract" element={<RecurringContract />} />
               <Route path="recurring-contract/create" element={<CreateContract />} />
               <Route path="recurring-contract/list" element={<ContractList />} />
               <Route path="recurring-contract/request-payment" element={<RequestPayment />} />
+              <Route path="recurring-contract/report" element={<ReportContract />} />
+              <Route
+                path="recurring-contract/request-payment/report"
+                element={<ReportRequestPayment />}
+              />
 
               <Route path="*" element={<NotFound />} />
             </Route>

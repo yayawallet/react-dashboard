@@ -23,7 +23,7 @@ const Sidebar = () => {
       path: '/transaction',
       submenuItems: [
         { title: 'Create Transaction', path: '/transaction/create' },
-        { title: 'List Transactions', path: '/transaction/list' },
+        { title: 'Transaction List', path: '/transaction/list' },
         { title: 'Verify Transaction', path: '/transaction/verify-id' },
       ],
     },
@@ -33,7 +33,8 @@ const Sidebar = () => {
       path: '/scheduled-payment',
       submenuItems: [
         { title: 'Create Schedule', path: '/scheduled-payment/create' },
-        { title: 'List Schedules', path: '/scheduled-payment/list' },
+        { title: 'Scheduled List', path: '/scheduled-payment/list' },
+        { title: 'Scheduled Report', path: '/scheduled-payment/report' },
       ],
     },
     {
@@ -41,19 +42,25 @@ const Sidebar = () => {
       path: '/recurring-contract',
       submenuItems: [
         { title: 'Create Contract', path: '/recurring-contract/create' },
-        { title: 'List Contracts', path: '/recurring-contract/list' },
+        { title: 'Contract List', path: '/recurring-contract/list' },
         { title: 'Request Payment', path: '/recurring-contract/request-payment' },
+        { title: 'Contract Report', path: '/recurring-contract/report' },
+        { title: 'Request Payments Report', path: '/recurring-contract/request-payment/report' },
       ],
     },
     {
-      title: 'Bank Transfer',
+      title: 'Other Banks',
       path: '/transfer',
       submenuItems: [
-        { title: 'Create Transfer', path: '/transfer/create' },
-        { title: 'List Transfers', path: '/transfer/list' },
+        { title: 'Transfer Money', path: '/transfer/create' },
+        { title: 'Transfer List', path: '/transfer/list' },
         { title: 'Check Fee', path: '/transfer/check-fee' },
         { title: 'Account Lookup', path: '/transfer/account-lookup' },
       ],
+    },
+    {
+      title: 'Help Center',
+      path: '/help-center',
     },
   ];
 
