@@ -1,30 +1,30 @@
-import { useState } from 'react';
-import Pagination from '../components/Pagination';
-import SearchBar from '../components/SearchBar';
+import { useEffect, useState } from 'react';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
-import Loading from '../components/ui/LoadingSpinner';
+import PageLoading from '../components/ui/PageLoading';
+import axios from 'axios';
 
-const BulkImportReport = () => {
+interface Props {
+  documentType: string;
+}
+
+type ReportSchedule = {
+  uuid: string;
+  succeed_count: number;
+  failed_count: number;
+  file_name: string;
+  remark: string;
+  created_at: Date;
+};
+
+const BulkImportReport = ({ documentType }: Props) => {
   const [copiedID, setCopiedID] = useState('');
+  const [reportList, setReportList] = useState<ReportSchedule[]>([]);
 
-  const bulkReportList = [
-    {
-      id: 'id0001',
-      succeed: 24,
-      failed: 2,
-      remark: 'Electric Bill',
-      fileName: 'Bill042024',
-      uploadedAt: 'Jun 2, 2024 - 09:16:33',
-    },
-    {
-      id: 'id0002',
-      succeed: 4,
-      failed: 0,
-      remark: 'Staff Salary',
-      fileName: 'salary112024',
-      uploadedAt: 'Jun 5, 2024 - 09:16:33',
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/report/list?document_type=' + documentType)
+      .then((res) => setReportList(res.data));
+  }, []);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -35,56 +35,48 @@ const BulkImportReport = () => {
 
   return (
     <div>
-      <div className="ml-8">
-        {/* <SearchBar onSearch={(query) => handleSearchTransaction(query)} /> */}
-      </div>
+      <div className="ml-8"></div>
 
       <div className="mt-2">
-        <table className="w-full max-w-[1536px]">
-          <thead className="sticky top-0 z-10">
-            <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Report
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Succeed
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Failed
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Remark
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                File Name
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Upload Date
-              </th>
-            </tr>
-          </thead>
-
-          {bulkReportList.length === 0 ? (
-            <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-              <tr>
-                <td>
-                  <Loading />
-                </td>
+        {reportList.length <= 0 ? (
+          <PageLoading />
+        ) : (
+          <table className="w-full max-w-[1536px]">
+            <thead className="sticky top-0 z-10">
+              <tr className="bg-violet-500 text-gray-50">
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Report
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Succeed
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Failed
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Remark
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  File Name
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Upload Date
+                </th>
               </tr>
-            </tbody>
-          ) : (
+            </thead>
+
             <tbody>
-              {bulkReportList.map((t) => (
-                <tr key={t?.id} className="hover:bg-gray-100 text-nowrap">
+              {reportList.map((list) => (
+                <tr key={list?.uuid} className="hover:bg-gray-100 text-nowrap">
                   <td
-                    title={t?.id}
+                    title={list?.uuid}
                     className="relative border-t border-b border-slate-200 p-3"
-                    onClick={() => copyTransactionID(t?.id)}
+                    onClick={() => copyTransactionID(list?.uuid)}
                   >
-                    {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
+                    {`${list?.uuid.slice(0, 4)}...${list?.uuid.slice(-2)}`}
                     <span
-                      className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                      className={`${copiedID === list?.uuid ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                     >
                       ID Copied
                     </span>
@@ -94,37 +86,28 @@ const BulkImportReport = () => {
                       type="button"
                       className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                     >
-                      <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
+                      <a href={`${TRANSACTION_INVOICE_URL}/${list?.uuid}`} target="_blank">
                         Detail
                       </a>
                     </button>
                   </td>
                   <td className="text-green-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {t?.succeed}
+                    {list?.succeed_count || 92}
                   </td>
                   <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {t?.failed}
+                    {list?.failed_count || 8}
                   </td>
-                  <td className="border-t border-b border-slate-200 p-3">{t?.remark}</td>
-                  <td className="border-t border-b border-slate-200 p-3">{t?.fileName}</td>
+                  <td className="border-t border-b border-slate-200 p-3">{list?.remark}</td>
+                  <td className="border-t border-b border-slate-200 p-3">{list?.file_name}</td>
                   <td className="border-t border-b border-slate-200 p-3">
-                    {`${new Date(Number(t?.uploadedAt) * 1000).toLocaleString()}`}
+                    {`${new Date(list?.created_at).toLocaleString()}`}
                   </td>
                 </tr>
               ))}
             </tbody>
-          )}
-        </table>
+          </table>
+        )}
       </div>
-
-      {/* {pageCount > 1 && (
-        <Pagination
-          page={currentPage}
-          pageCount={pageCount}
-          isFetching={isFetching}
-          onPageChange={handlePageChange}
-        />
-      )} */}
     </div>
   );
 };
