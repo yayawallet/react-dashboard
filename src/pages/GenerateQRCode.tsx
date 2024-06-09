@@ -60,7 +60,7 @@ const GenerateQRCode = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 ">Generate QR Code</h1>
       <p className="pl-2 mb-10 text-gray-600">Receive payments by sharing QR Code.</p>
 

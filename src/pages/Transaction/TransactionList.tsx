@@ -60,7 +60,7 @@ const TransactionList = () => {
   };
 
   return (
-    <div>
+    <div className="table-container">
       <div className="ml-8">
         <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
       </div>
@@ -69,7 +69,7 @@ const TransactionList = () => {
         <PageLoading />
       ) : (
         <div className="mt-2">
-          <table className="w-full max-w-[1536px]">
+          <table className="w-full">
             <thead className="sticky top-0 z-10">
               <tr className="bg-violet-500 text-gray-50">
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>

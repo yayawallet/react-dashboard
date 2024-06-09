@@ -49,7 +49,7 @@ const CreateTransaction = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Make Transaction</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}

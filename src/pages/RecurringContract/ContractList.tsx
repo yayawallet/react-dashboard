@@ -97,7 +97,7 @@ const ContractList = () => {
   };
 
   return (
-    <div>
+    <div className="table-container">
       <ConfirmationModal
         header="Are you sure you want to Deactivate this contract?"
         infoList={[

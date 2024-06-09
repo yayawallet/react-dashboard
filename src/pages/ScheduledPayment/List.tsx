@@ -78,7 +78,7 @@ const List = () => {
         successMessage={successMessage}
       />
 
-      <div className="mt-2">
+      <div className="table-container">
         <table className="w-full max-w-[1536px]">
           <thead className="sticky top-0 z-10">
             <tr className="bg-violet-500 text-gray-50">

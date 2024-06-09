@@ -2,7 +2,7 @@ const BulkImportReportDetails = () => {
   const detailReport = [];
 
   return (
-    <div>
+    <div className="table-container">
       <h2 className="text-xl font-semibold p-2 mb-2">Report on Remark</h2>
 
       <ul className="space-y-2 text-gray-500 list-disc list-inside mb-10">

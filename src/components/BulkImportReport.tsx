@@ -34,7 +34,7 @@ const BulkImportReport = ({ documentType }: Props) => {
   };
 
   return (
-    <div>
+    <div className="table-container">
       <div className="ml-8"></div>
 
       <div className="mt-2">

@@ -19,6 +19,7 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
       setUsersList([]);
       return;
     }
+
     setUserNotFound(false);
     setSelectedUser('');
 
