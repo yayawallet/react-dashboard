@@ -5,6 +5,7 @@ import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import useFetchData from '../../hooks/useFetchData';
 import SidebarItem from './SidebarItem';
+import { menus } from './navigation';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -15,54 +16,7 @@ const Sidebar = () => {
     setSidebarOpen(true);
   };
 
-  const menus = [
-    { title: 'Profile', path: '/profile' },
-    { title: 'Airtime/Package', path: '/airtime' },
-    {
-      title: 'Transaction',
-      path: '/transaction',
-      submenuItems: [
-        { title: 'Create Transaction', path: '/transaction/create' },
-        { title: 'Transaction List', path: '/transaction/list' },
-        { title: 'Verify Transaction', path: '/transaction/verify-id' },
-      ],
-    },
-    { title: 'Generate QR Code', path: '/qr-code' },
-    {
-      title: 'Scheduled Payment',
-      path: '/scheduled-payment',
-      submenuItems: [
-        { title: 'Create Schedule', path: '/scheduled-payment/create' },
-        { title: 'Scheduled List', path: '/scheduled-payment/list' },
-        { title: 'Scheduled Report', path: '/scheduled-payment/report' },
-      ],
-    },
-    {
-      title: 'Recurring Contract',
-      path: '/recurring-contract',
-      submenuItems: [
-        { title: 'Create Contract', path: '/recurring-contract/create' },
-        { title: 'Contract List', path: '/recurring-contract/list' },
-        { title: 'Request Payment', path: '/recurring-contract/request-payment' },
-        { title: 'Contract Report', path: '/recurring-contract/report' },
-        { title: 'Request Payments Report', path: '/recurring-contract/request-payment/report' },
-      ],
-    },
-    {
-      title: 'Other Banks',
-      path: '/transfer',
-      submenuItems: [
-        { title: 'Transfer Money', path: '/transfer/create' },
-        { title: 'Transfer List', path: '/transfer/list' },
-        { title: 'Check Fee', path: '/transfer/check-fee' },
-        { title: 'Account Lookup', path: '/transfer/account-lookup' },
-      ],
-    },
-    {
-      title: 'Help Center',
-      path: '/help-center',
-    },
-  ];
+  const sidebarMenus = menus.filter((menu) => menu.title);
 
   return (
     <>
@@ -87,7 +41,7 @@ const Sidebar = () => {
         className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
-        <div className="h-full pb-3 overflow-y-auto bg-gray-50">
+        <div className="h-full pb-3 overflow-y-scroll loverflow-y-auto bg-gray-50">
           <Link
             to="/"
             className="flex items-center h-16 ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
@@ -111,7 +65,7 @@ const Sidebar = () => {
                 />
               </svg>
             </button>
-            <ul className="space-y-2 font-medium">
+            <ul className="space-y-2 mb-20 font-medium">
               <li>
                 <div className="flex justify-center p-2">
                   <Link to="/profile">
@@ -136,7 +90,8 @@ const Sidebar = () => {
                 </Link>
               </li>
 
-              {menus.map((menu, index) => (
+              {sidebarMenus.map((menu, index) => (
+                // @ts-ignore
                 <SidebarItem key={index} menu={menu} />
               ))}
             </ul>
