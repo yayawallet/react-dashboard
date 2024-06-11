@@ -12,12 +12,12 @@ export default {
     function ({ addUtilities }) {
       const newUtilities = {
         '.page-container': {
-          padding: '1rem 4rem',
+          padding: '1rem 3rem',
           'max-width': '1536px',
         },
         '@media (max-width: 1024px)': {
           '.page-container': {
-            padding: '1rem',
+            padding: '0 2rem',
           },
         },
         '.table-container': {
