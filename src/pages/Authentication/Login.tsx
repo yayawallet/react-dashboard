@@ -1,7 +1,7 @@
 import LoginForm from './LoginForm';
 import yayaLogo from '../../assets/yaya-logo.svg';
 
-const Index = () => {
+const Login = () => {
   return (
     <div>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:h-[calc(100vh-100px)] lg:py-0">
@@ -22,4 +22,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Login;
