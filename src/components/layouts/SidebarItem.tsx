@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useState } from 'react';
 
 type MenuTypes = {
   title: string;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const SidebarItem = ({ menu }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const pathName = useLocation().pathname;
 
   return (
@@ -23,15 +25,16 @@ const SidebarItem = ({ menu }: Props) => {
         className={({ isActive }) =>
           `flex items-center p-2 text-gray-900 rounded-lg ${isActive ? 'bg-gray-200' : ''}`
         }
+        onClick={() => setIsOpen(!isOpen)}
       >
-        {menu.icon}
+        {/* {menu.icon} */}
         <span className="flex-1 ms-3">{menu.title}</span>
         {menu.submenuItems && <IoIosArrowDown />}
       </NavLink>
 
       {menu.submenuItems && (
         <ul
-          className={`px-2 rounded ${pathName.startsWith('/' + menu.path) ? 'bg-gray-100' : 'hidden'}`}
+          className={`px-2 rounded ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-gray-100' : 'hidden'}`}
         >
           {menu.submenuItems.map((item, index) => (
             <li key={index}>
