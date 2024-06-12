@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
 import PageLoading from '../components/ui/PageLoading';
 import axios from 'axios';
+import useAccessToken from '../hooks/useAccessToken';
 
 interface Props {
   documentType: string;
@@ -17,14 +18,18 @@ type ReportSchedule = {
 };
 
 const BulkImportReport = ({ documentType }: Props) => {
+  const { accessToken } = useAccessToken();
   const [copiedID, setCopiedID] = useState('');
   const [reportList, setReportList] = useState<ReportSchedule[]>([]);
 
   useEffect(() => {
+    console.log(accessToken);
     axios
-      .get('http://localhost:8000/report/list?document_type=' + documentType)
+      .get('http://localhost:8000/report/list?document_type=' + documentType, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
       .then((res) => setReportList(res.data));
-  }, []);
+  }, [accessToken]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);

@@ -26,7 +26,7 @@ const List = () => {
       .then((res) => {
         setScheduledPaymentList(res.data);
       });
-  }, []);
+  }, [accessToken]);
 
   const handleOnConfirm = (confirm: boolean) => {
     setOpenModal(false);
