@@ -23,8 +23,8 @@ import RequestPayment from '../../pages/RecurringContract/RequestPayment';
 import ReportContract from '../../pages/RecurringContract/ReportContract';
 import ReportRequestPayment from '../../pages/RecurringContract/ReportRequestPayment';
 
-// Not on the Menu
-import Home from '../../pages/Authentication/Index';
+// Non-menu navigations
+import Home from '../../pages/Authentication/Login';
 import NotFound from '../../pages/NotFound';
 import Profile from '../../pages/Profile';
 
