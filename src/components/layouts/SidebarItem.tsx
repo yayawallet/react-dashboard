@@ -25,7 +25,9 @@ const SidebarItem = ({ menu }: Props) => {
         className={({ isActive }) =>
           `flex items-center p-2 text-gray-900 rounded-lg ${isActive ? 'bg-gray-200' : ''}`
         }
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() =>
+          pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true)
+        }
       >
         {/* {menu.icon} */}
         <span className="flex-1 ms-3">{menu.title}</span>
