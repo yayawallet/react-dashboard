@@ -1,7 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from '../components/layouts/Index';
 import { menus } from './navigation';
 import { useAuth } from '../auth/AuthProvider';
+import Login from '../pages/Authentication/Login';
+import DefaultHeader from '../components/layouts/DefaultHeader';
 
 const RenderRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -24,9 +26,15 @@ const RenderRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          {[...menuRoutes, ...subMenuRoutes]}
-        </Route>
+        {isAuthenticated ? (
+          <Route path="/" element={<Layout />}>
+            {[...menuRoutes, ...subMenuRoutes]}
+          </Route>
+        ) : (
+          <Route path="/" element={<DefaultHeader />}>
+            <Route path="*" element={<Login />} />
+          </Route>
+        )}
       </Routes>
     </BrowserRouter>
   );

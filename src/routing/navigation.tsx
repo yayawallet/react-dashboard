@@ -24,9 +24,10 @@ import ReportContract from '../pages/RecurringContract/ReportContract';
 import ReportRequestPayment from '../pages/RecurringContract/ReportRequestPayment';
 
 // Non-menu navigations
-import Home from '../pages/Authentication/Login';
-import NotFound from '../pages/NotFound';
+import Home from '../pages/Home';
 import Profile from '../pages/Profile';
+import Login from '../pages/Authentication/Login';
+import NotFound from '../pages/NotFound';
 
 // Icons
 import { MdSendToMobile } from 'react-icons/md';
@@ -38,6 +39,7 @@ import { MdOutlineHelpCenter } from 'react-icons/md';
 import { RiBankFill } from 'react-icons/ri';
 
 const privateNavs = [
+  { path: '/', element: <Home />, accessRoles: ['admin', 'clerk'] },
   { path: 'profile', element: <Profile />, accessRoles: ['admin', 'clerk'] },
   {
     title: 'Airtime/Package',
@@ -177,7 +179,7 @@ const privateNavs = [
 ];
 
 const publicNavs = [
-  { path: '/', element: <Home /> }, // index
+  { path: '/login', element: <Login /> }, // index
   { title: 'Help Center', path: 'help-center', icon: <MdOutlineHelpCenter /> },
   { path: '*', element: <NotFound /> },
 ];
