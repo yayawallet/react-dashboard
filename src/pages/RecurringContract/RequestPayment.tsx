@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
@@ -46,10 +46,8 @@ const RequestPayment = () => {
       setErrorMessage('');
       values.meta_data = JSON.parse(values.meta_data);
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/request-payment`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post('/recurring-contract/request-payment', values)
         .then((res) => {
           setRequestPaymentID(res.data.payment_request_id);
           setLoading(false);

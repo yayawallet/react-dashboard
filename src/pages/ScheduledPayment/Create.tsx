@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
@@ -53,10 +53,8 @@ const Create = () => {
 
       values.start_at = new Date(values.start_at).getTime() / 1000;
       values.account_number = selectedUser;
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/create`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post('/scheduled-payment/create', values)
         .then((res) => {
           setScheduledPaymentID(res.data.id);
           setLoading(false);

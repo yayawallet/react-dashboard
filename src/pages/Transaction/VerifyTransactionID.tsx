@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import * as Yup from 'yup';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
@@ -31,16 +31,10 @@ const GetTransactionByID = () => {
       setErrorMessage('');
       setTransaction(undefined);
 
-      axios
-        .get(`${import.meta.env.VITE_BASE_URL}/user/profile`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-        .then((res) => setOwnAccount(res.data.account));
+      authAxios.get('/user/profile').then((res) => setOwnAccount(res.data.account));
 
-      axios
-        .get(`${import.meta.env.VITE_BASE_URL}/transaction/find/${values.transactionID}`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .get(`/transaction/find/${values.transactionID}`)
         .then((res) => {
           setTransaction(res.data);
           setLoading(false);

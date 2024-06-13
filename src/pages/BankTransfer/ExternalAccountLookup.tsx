@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../../models';
@@ -15,14 +15,10 @@ const ExternalAccountLookup = () => {
   const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    axios
-      .post(
-        `${import.meta.env.VITE_BASE_URL}/financial-institution/list`,
-        {
-          country: 'Ethiopia',
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      )
+    authAxios
+      .post('/financial-institution/list', {
+        country: 'Ethiopia',
+      })
       .then((res) => setFinancialInstitutionList(res.data))
       .catch((error) => setErrorMessage(error.response?.data.error || error.message));
   }, []);

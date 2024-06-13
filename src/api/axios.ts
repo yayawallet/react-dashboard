@@ -5,9 +5,9 @@ const baseURL = import.meta.env.VITE_BASE_URL;
 
 export default axios.create({
   baseURL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // },
 });
 
 const fetchAccessToken = async () => {
@@ -19,9 +19,9 @@ const fetchAccessToken = async () => {
 
 export const authAxios = axios.create({
   baseURL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  // headers: {
+  //   'Content-Type': 'application/json',
+  // },
 });
 
 authAxios.interceptors.request.use(

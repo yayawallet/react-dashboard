@@ -84,7 +84,7 @@ const privateNavs = [
     accessRoles: ['admin', 'clerk'],
   },
   {
-    title: 'Scheduled Payment/',
+    title: 'Scheduled Payment',
     path: 'scheduled-payment',
     icon: <RiCalendarScheduleLine />,
     element: <ScheduledPayment />,

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, Fee } from '../../models';
@@ -16,14 +16,10 @@ const TransferFee = () => {
   const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    axios
-      .post(
-        `${import.meta.env.VITE_BASE_URL}/financial-institution/list`,
-        {
-          country: 'Ethiopia',
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      )
+    authAxios
+      .post('/financial-institution/list', {
+        country: 'Ethiopia',
+      })
       .then((res) => setFinancialInstitutionList(res.data))
       .catch((error) => setErrorMessage(error.response?.data.error || error.message));
   }, [accessToken]);
@@ -47,10 +43,8 @@ const TransferFee = () => {
       setTransferFee(undefined);
       setInstitution('');
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values)
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);

@@ -7,6 +7,7 @@ import DefaultHeader from '../components/layouts/DefaultHeader';
 
 const RenderRoutes = () => {
   const { isAuthenticated } = useAuth();
+  console.log('WWW', isAuthenticated);
 
   const subMenuRoutes: JSX.Element[] = [];
 

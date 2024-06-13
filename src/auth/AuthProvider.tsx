@@ -25,16 +25,22 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user_role, setUserRole] = useState<string>(localStorage.getItem('user_role') || '');
   const [username, setUsername] = useState<string>(localStorage.getItem('username') || '');
 
-  const decodedToken: TokenType = jwtDecode(Cookies.get('access_token') || '');
-  const expireDate = Number(decodedToken.exp) * 1000;
+  const accessToken = Cookies.get('access_token');
+
+  const decodedToken: TokenType | null = accessToken
+    ? jwtDecode(Cookies.get('access_token') || '')
+    : null;
 
   useEffect(() => {
+    if (!decodedToken) return;
+
+    const expireDate = Number(decodedToken.exp) * 1000;
     if (expireDate < new Date().getTime()) setIsAuthenticated(false);
     else setIsAuthenticated(true);
   }, []);
 
   const login = (accessToken: string, refreshToken: string, user_id: string, username: string) => {
-    const user_role = decodedToken.roles[0].toLocaleLowerCase() || '';
+    const user_role = decodedToken ? decodedToken.roles[0].toLocaleLowerCase() : '';
 
     Cookies.set('access_token', accessToken);
     Cookies.set('refresh_token', refreshToken);

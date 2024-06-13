@@ -2,13 +2,13 @@ import { useState } from 'react';
 import axios from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+// import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthProvider';
-import { Navigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [success, setSuccess] = useState(false);
+  // const [success, setSuccess] = useState(false);
 
   const { login } = useAuth();
 
@@ -37,12 +37,13 @@ const LoginForm = () => {
         .post('/login', values)
         .then((res) => {
           console.log('Success Login', res.data);
+          // setSuccess(true);
           setIsLoading(false);
           login(res.data.access, res.data.refresh, res.data.user_id, res.data.username);
         })
         .catch(() => {
           console.log('Invalid login');
-          setSuccess(true);
+          // setSuccess(false);
           setIsLoading(false);
           setErrorMessage('Incorrect username or password');
         })
@@ -52,9 +53,9 @@ const LoginForm = () => {
     },
   });
 
-  if (success) {
-    return <Navigate to="/" />;
-  }
+  // if (success) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <div>

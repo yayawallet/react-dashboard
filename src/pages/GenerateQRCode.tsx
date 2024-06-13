@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { QRCode } from '../models';
@@ -42,10 +42,8 @@ const GenerateQRCode = () => {
       setErrorMessage('');
       setQRCode(undefined);
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transaction/qr-generate`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post('/transaction/qr-generate', values)
         .then((res) => {
           setQRCode(res.data);
           setLoading(false);

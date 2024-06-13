@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
@@ -19,13 +19,9 @@ const List = () => {
   const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/list`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-      .then((res) => {
-        setScheduledPaymentList(res.data);
-      });
+    authAxios.get('/scheduled-payment/list').then((res) => {
+      setScheduledPaymentList(res.data);
+    });
   }, [accessToken]);
 
   const handleOnConfirm = (confirm: boolean) => {
@@ -34,10 +30,8 @@ const List = () => {
 
     setIsProcessing(true);
     setSuccessMessage('');
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/scheduled-payment/archive/${selectedSchedule?.id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    authAxios
+      .get(`/scheduled-payment/archive/${selectedSchedule?.id}`)
       .then(() => {
         setSuccessMessage('Scheduled Payment Deleted Successfully');
         setScheduledPaymentList((prev) => prev.filter((l) => l.id != selectedSchedule?.id));

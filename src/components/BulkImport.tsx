@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import axios from 'axios';
+import { authAxios } from '../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -28,7 +28,7 @@ const BulkImport = ({
 
     validationSchema: Yup.object({
       excel_file: Yup.mixed().required('Required'),
-      remark: Yup.string().required('Required').max(20, 'Remark must be less than 20 characters'),
+      remark: Yup.string().required('Required').max(50, 'Remark must be less than 20 characters'),
     }),
 
     onSubmit: (values) => {
@@ -40,15 +40,16 @@ const BulkImport = ({
       formData.append('file', values.excel_file);
       formData.append('remark', values.remark);
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/${apiEndpoint}`, formData)
+      authAxios
+        .post(`/${apiEndpoint}`, formData)
         .then(() => {
           onError('');
           onSuccess('Your file is uploaded successfully.');
         })
-        .catch(() => {
+        .catch((err) => {
           onSuccess('');
           onError('Failed to upload your file.');
+          console.log(err);
         })
         .finally(() => {
           onLoading(false);

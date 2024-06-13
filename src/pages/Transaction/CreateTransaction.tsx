@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import SearchUserInline from '../../components/SearchUserInline';
@@ -33,8 +33,8 @@ const CreateTransaction = () => {
       setTransactionID('');
 
       values.receiver = selectedUser;
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values)
+      authAxios
+        .post('/transaction/create', values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
           setLoading(false);
