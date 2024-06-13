@@ -117,7 +117,7 @@ const publicNavs = [
   { path: '*', element: <NotFound /> },
 ];
 
-const privateMenus = privateNavs.map((menu) => ({ ...menu, isPrivate: true }));
+const privateMenus = privateNavs.map((menu) => ({ ...menu, isPrivate: true, accessRoles: [] }));
 const publicMenus = publicNavs.map((menu) => ({ ...menu, isPrivate: false }));
 
 export const menus = [...privateMenus, ...publicMenus];

@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  role: string;
+  user_role: string;
   username: string;
   login: (accessToken: string, refreshToken: string, user_id: string, username: string) => void;
   logout: () => void;
@@ -16,7 +16,7 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!Cookies.get('accessToken'));
-  const [role, setRole] = useState<string>(localStorage.getItem('role') || '');
+  const [user_role, setUserRole] = useState<string>(localStorage.getItem('userRole') || '');
   const [username, setUsername] = useState<string>(localStorage.getItem('username') || '');
 
   const login = (accessToken: string, refreshToken: string, user_id: string, username: string) => {
@@ -25,16 +25,16 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     const decodedToken: TokenType = jwtDecode(accessToken);
-    const role = decodedToken.roles[0] || '';
+    const user_role = decodedToken.roles[0] || '';
 
     Cookies.set('access_token', accessToken);
     Cookies.set('refresh_token', refreshToken);
     localStorage.setItem('user_id', user_id);
     localStorage.setItem('username', username);
-    localStorage.setItem('role', role);
+    localStorage.setItem('user_role', user_role);
 
     setIsAuthenticated(true);
-    setRole(role);
+    setUserRole(user_role);
     setUsername(localStorage.getItem('username') || '');
   };
 
@@ -43,15 +43,15 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     Cookies.remove('refresh_token');
     localStorage.removeItem('user_Id');
     localStorage.removeItem('username');
-    localStorage.removeItem('role');
+    localStorage.removeItem('user_role');
 
     setIsAuthenticated(false);
-    setRole('');
+    setUserRole('');
     setUsername('');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, role, username, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user_role, username, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
