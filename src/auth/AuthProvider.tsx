@@ -25,7 +25,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     };
 
     const decodedToken: TokenType = jwtDecode(accessToken);
-    const user_role = decodedToken.roles[0] || '';
+    const user_role = decodedToken.roles[0].toLocaleLowerCase() || '';
 
     Cookies.set('access_token', accessToken);
     Cookies.set('refresh_token', refreshToken);
