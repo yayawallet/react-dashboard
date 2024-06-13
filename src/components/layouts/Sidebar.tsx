@@ -5,7 +5,7 @@ import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import useFetchData from '../../hooks/useFetchData';
 import SidebarItem from './SidebarItem';
-import { menus } from './navigation';
+import { menus } from '../../routing/navigation';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);

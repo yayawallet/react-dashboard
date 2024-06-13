@@ -1,15 +1,12 @@
-import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthWrapper } from './auth/AuthWrapper';
+import RenderRoutes from './routing/RenderRoutes';
 
 const App = () => {
   const queryClient = new QueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthWrapper />
-      </BrowserRouter>
+      <RenderRoutes />
     </QueryClientProvider>
   );
 };
