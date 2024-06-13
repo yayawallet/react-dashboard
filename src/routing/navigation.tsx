@@ -38,20 +38,38 @@ import { MdOutlineHelpCenter } from 'react-icons/md';
 import { RiBankFill } from 'react-icons/ri';
 
 const privateNavs = [
-  { path: 'profile', element: <Profile /> },
-  { title: 'Airtime/Package', path: 'airtime', icon: <MdSendToMobile />, element: <AirTime /> },
+  { path: 'profile', element: <Profile />, accessRoles: ['admin', 'clerk'] },
+  {
+    title: 'Airtime/Package',
+    path: 'airtime',
+    icon: <MdSendToMobile />,
+    element: <AirTime />,
+    accessRoles: ['admin', 'clerk'],
+  },
   {
     title: 'Transaction',
     path: 'transaction/',
     icon: <BiTransferAlt />,
     element: <Transaction />,
+    accessRoles: ['admin', 'clerk'],
     submenuItems: [
-      { title: 'Create Transaction', path: 'transaction/create', element: <CreateTransaction /> },
-      { title: 'Transaction List', path: 'transaction/list', element: <TransactionList /> },
+      {
+        title: 'Create Transaction',
+        path: 'transaction/create',
+        element: <CreateTransaction />,
+        accessRoles: ['admin'],
+      },
+      {
+        title: 'Transaction List',
+        path: 'transaction/list',
+        element: <TransactionList />,
+        accessRoles: ['admin', 'clerk'],
+      },
       {
         title: 'Verify Transaction',
         path: 'transaction/verify-id',
         element: <VerifyTransactionByID />,
+        accessRoles: ['admin', 'clerk'],
       },
     ],
   },
@@ -60,16 +78,33 @@ const privateNavs = [
     path: 'qr-code',
     icon: <IoQrCode />,
     element: <GenerateQRCode />,
+    accessRoles: ['admin', 'clerk'],
   },
   {
     title: 'Scheduled Payment/',
     path: 'scheduled-payment',
     icon: <RiCalendarScheduleLine />,
     element: <ScheduledPayment />,
+    accessRoles: ['admin', 'clerk'],
     submenuItems: [
-      { title: 'Create Schedule', path: 'scheduled-payment/create', element: <CreateScheduled /> },
-      { title: 'Scheduled List', path: 'scheduled-payment/list', element: <ListScheduled /> },
-      { title: 'Scheduled Report', path: 'scheduled-payment/report', element: <ReportSchedule /> },
+      {
+        title: 'Create Schedule',
+        path: 'scheduled-payment/create',
+        element: <CreateScheduled />,
+        accessRoles: ['admin'],
+      },
+      {
+        title: 'Scheduled List',
+        path: 'scheduled-payment/list',
+        element: <ListScheduled />,
+        accessRoles: ['admin', 'clerk'],
+      },
+      {
+        title: 'Scheduled Report',
+        path: 'scheduled-payment/report',
+        element: <ReportSchedule />,
+        accessRoles: ['admin', 'clerk'],
+      },
     ],
   },
   {
@@ -77,19 +112,37 @@ const privateNavs = [
     path: 'recurring-contract/',
     icon: <MdOutlinePayments />,
     element: <RecurringContract />,
+    accessRoles: ['admin', 'clerk'],
     submenuItems: [
-      { title: 'Create Contract', path: 'recurring-contract/create', element: <CreateContract /> },
-      { title: 'Contract List', path: 'recurring-contract/list', element: <ContractList /> },
+      {
+        title: 'Create Contract',
+        path: 'recurring-contract/create',
+        element: <CreateContract />,
+        accessRoles: ['admin'],
+      },
+      {
+        title: 'Contract List',
+        path: 'recurring-contract/list',
+        element: <ContractList />,
+        accessRoles: ['admin', 'clerk'],
+      },
       {
         title: 'Request Payment',
         path: 'recurring-contract/request-payment',
         element: <RequestPayment />,
+        accessRoles: ['admin'],
       },
-      { title: 'Contract Report', path: 'recurring-contract/report', element: <ReportContract /> },
+      {
+        title: 'Contract Report',
+        path: 'recurring-contract/report',
+        element: <ReportContract />,
+        accessRoles: ['admin', 'clerk'],
+      },
       {
         title: 'Request Payments Report',
         path: 'recurring-contract/request-payment/report',
         element: <ReportRequestPayment />,
+        accessRoles: ['admin', 'clerk'],
       },
     ],
   },
@@ -98,14 +151,26 @@ const privateNavs = [
     path: 'transfer/',
     icon: <RiBankFill />,
     element: <Transfer />,
+    accessRoles: ['admin', 'clerk'],
     submenuItems: [
-      { title: 'Transfer Money', path: 'transfer/create' },
-      { title: 'Transfer List', path: 'transfer/list', element: <TransferList /> },
-      { title: 'Check Fee', path: 'transfer/check-fee', element: <TransferFee /> },
+      { title: 'Transfer Money', path: 'transfer/create', accessRoles: ['admin'] },
+      {
+        title: 'Transfer List',
+        path: 'transfer/list',
+        element: <TransferList />,
+        accessRoles: ['admin', 'clerk'],
+      },
+      {
+        title: 'Check Fee',
+        path: 'transfer/check-fee',
+        element: <TransferFee />,
+        accessRoles: ['admin', 'clerk'],
+      },
       {
         title: 'Account Lookup',
         path: 'transfer/account-lookup',
         element: <ExternalAccountLookup />,
+        accessRoles: ['admin', 'clerk'],
       },
     ],
   },
@@ -117,7 +182,10 @@ const publicNavs = [
   { path: '*', element: <NotFound /> },
 ];
 
-const privateMenus = privateNavs.map((menu) => ({ ...menu, isPrivate: true, accessRoles: [] }));
+const privateMenus = privateNavs.map((menu) => ({
+  ...menu,
+  isPrivate: true,
+}));
 const publicMenus = publicNavs.map((menu) => ({ ...menu, isPrivate: false }));
 
 export const menus = [...privateMenus, ...publicMenus];
