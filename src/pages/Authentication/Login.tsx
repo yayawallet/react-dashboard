@@ -1,7 +1,7 @@
 import LoginForm from './LoginForm';
 import yayaLogo from '../../assets/yaya-logo.svg';
 import { useAuth } from '../../auth/AuthProvider';
-import { Navigate } from 'react-router-dom';
+// import { Navigate } from 'react-router-dom';
 
 const Login = () => {
   const { isAuthenticated } = useAuth();

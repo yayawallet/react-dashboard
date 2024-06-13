@@ -7,7 +7,6 @@ import DefaultHeader from '../components/layouts/DefaultHeader';
 
 const RenderRoutes = () => {
   const { isAuthenticated } = useAuth();
-  console.log('WWW', isAuthenticated);
 
   const subMenuRoutes: JSX.Element[] = [];
 
@@ -32,9 +31,10 @@ const RenderRoutes = () => {
             {[...menuRoutes, ...subMenuRoutes]}
           </Route>
         ) : (
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace={true} />} />
         )}
         <Route path="/" element={<DefaultHeader />}>
+          <Route index element={<Navigate to="/login" replace={true} />} />
           <Route path="login" element={<Login />} />
         </Route>
       </Routes>
