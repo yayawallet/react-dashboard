@@ -2,12 +2,13 @@ import { useState } from 'react';
 import axios from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import useAccessToken from '../../hooks/useAccessToken';
+import { useAuth } from '../../auth/AuthProvider';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const { setAccessToken } = useAccessToken();
+
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -33,10 +34,12 @@ const LoginForm = () => {
       axios
         .post('/login', values)
         .then((res) => {
+          console.log('Success Login', res.data);
           setIsLoading(false);
-          setAccessToken(res.data.access);
+          login(res.data.access, res.data.refresh, res.data.user_id, res.data.username);
         })
         .catch(() => {
+          console.log('Invalid login');
           setIsLoading(false);
           setErrorMessage('Incorrect username or password');
         })
