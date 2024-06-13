@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from '../components/layouts/Index';
 import { menus } from './navigation';
 import { useAuth } from '../auth/AuthProvider';
@@ -31,10 +31,11 @@ const RenderRoutes = () => {
             {[...menuRoutes, ...subMenuRoutes]}
           </Route>
         ) : (
-          <Route path="/" element={<DefaultHeader />}>
-            <Route path="*" element={<Login />} />
-          </Route>
+          <Route path="*" element={<Navigate to="/login" replace />} />
         )}
+        <Route path="/" element={<DefaultHeader />}>
+          <Route path="login" element={<Login />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
