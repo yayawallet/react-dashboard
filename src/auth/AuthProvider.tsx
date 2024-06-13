@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
@@ -10,21 +10,30 @@ interface AuthContextType {
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+type TokenType = {
+  exp: Date;
+  roles: string[];
+};
+
+// @ts-ignore
+export const AuthContext = createContext<AuthContextType>();
 
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!Cookies.get('accessToken'));
-  const [user_role, setUserRole] = useState<string>(localStorage.getItem('userRole') || '');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user_role, setUserRole] = useState<string>(localStorage.getItem('user_role') || '');
   const [username, setUsername] = useState<string>(localStorage.getItem('username') || '');
 
-  const login = (accessToken: string, refreshToken: string, user_id: string, username: string) => {
-    type TokenType = {
-      roles: string[];
-    };
+  const decodedToken: TokenType = jwtDecode(Cookies.get('access_token') || '');
+  const expireDate = Number(decodedToken.exp) * 1000;
 
-    const decodedToken: TokenType = jwtDecode(accessToken);
+  useEffect(() => {
+    if (expireDate < new Date().getTime()) setIsAuthenticated(false);
+    else setIsAuthenticated(true);
+  }, []);
+
+  const login = (accessToken: string, refreshToken: string, user_id: string, username: string) => {
     const user_role = decodedToken.roles[0].toLocaleLowerCase() || '';
 
     Cookies.set('access_token', accessToken);
