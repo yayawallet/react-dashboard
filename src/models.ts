@@ -182,3 +182,14 @@ export interface recurringContract {
   service_type: string;
   status: string;
 }
+
+export interface ReportType {
+  uuid: string;
+  uploaded_count: number;
+  failed_count: number;
+  on_queue_count: number;
+  total_count: number;
+  file_name: string;
+  remark: string;
+  created_at: Date;
+}
