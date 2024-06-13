@@ -11,7 +11,7 @@ const UserSettings = () => {
   const user_id = localStorage.getItem('user_id') || '-';
 
   return (
-    <div className="absolute top-16 right-8">
+    <div className="absolute top-16 right-8 bg-white z-50">
       <ul className="pt-6 shadow rounded text-lg text-gray-600">
         <li className="flex items-center px-6 pr-24 py-1 cursor-pointer hover:text-blue-600 hover:bg-slate-50">
           <span className="text-xl px-3 py-2">
