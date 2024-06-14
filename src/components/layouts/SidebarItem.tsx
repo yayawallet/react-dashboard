@@ -29,7 +29,7 @@ const SidebarItem = ({ menu }: Props) => {
           pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true)
         }
       >
-        {menu.icon}
+        <span className="text-xl text-gray-600">{menu.icon}</span>
         <span className="flex-1 ms-3">{menu.title}</span>
         {menu.submenuItems ? (
           pathName.startsWith('/' + menu.path) && isOpen ? (
