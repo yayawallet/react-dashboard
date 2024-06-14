@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
@@ -36,6 +37,7 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const login = (accessToken: string, refreshToken: string, user_id: string, username: string) => {
+    const decodedToken: TokenType | null = accessToken ? jwtDecode(accessToken || '') : null;
     const user_role = decodedToken ? decodedToken.roles[0].toLocaleLowerCase() : '';
 
     Cookies.set('access_token', accessToken);
@@ -47,6 +49,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsAuthenticated(true);
     setUserRole(user_role);
     setUsername(localStorage.getItem('username') || '');
+
+    <Navigate to="/profile" />;
   };
 
   const logout = () => {
@@ -59,6 +63,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsAuthenticated(false);
     setUserRole('');
     setUsername('');
+
+    <Navigate to="/login" replace={true} />;
   };
 
   return (
