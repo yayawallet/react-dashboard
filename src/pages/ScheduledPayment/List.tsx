@@ -4,8 +4,8 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
-import Loading from '../../components/ui/LoadingSpinner';
 import useAccessToken from '../../hooks/useAccessToken';
+import PageLoading from '../../components/ui/PageLoading';
 
 const List = () => {
   const [scheduledPaymentList, setScheduledPaymentList] = useState<ScheduledPayment[]>([]);
@@ -26,7 +26,7 @@ const List = () => {
       .then((res) => {
         setScheduledPaymentList(res.data);
       });
-  }, []);
+  }, [accessToken]);
 
   const handleOnConfirm = (confirm: boolean) => {
     setOpenModal(false);
@@ -60,7 +60,7 @@ const List = () => {
   };
 
   return (
-    <div className="-mx-4">
+    <div className="table-container">
       <ConfirmationModal
         header="Are you sure you want to Delete this schedule?"
         infoList={[
@@ -78,38 +78,32 @@ const List = () => {
         successMessage={successMessage}
       />
 
-      <div className="mt-2">
-        <table className="w-full max-w-[1536px]">
-          <thead className="sticky top-0 z-10">
-            <tr className="bg-violet-500 text-gray-50">
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Receiver
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Amount
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Recurring
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Next Run-time
-              </th>
-              <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                Action
-              </th>
-            </tr>
-          </thead>
-
-          {scheduledPaymentList.length === 0 ? (
-            <tbody className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
-              <tr>
-                <td>
-                  <Loading />
-                </td>
+      {scheduledPaymentList.length === 0 ? (
+        <PageLoading />
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-violet-500 text-gray-50">
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">ID</th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Receiver
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Amount
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Recurring
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Next Run-time
+                </th>
+                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                  Action
+                </th>
               </tr>
-            </tbody>
-          ) : (
+            </thead>
+
             <tbody>
               {scheduledPaymentList.map((item) => (
                 <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
@@ -154,9 +148,9 @@ const List = () => {
                 </tr>
               ))}
             </tbody>
-          )}
-        </table>
-      </div>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

@@ -68,11 +68,20 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
 
       <h2 className="font-semibold mb-2">Select Denomination</h2>
 
-      <div className="flex flex-wrap gap-4 mb-8 text-xl">
+      <div
+        className="mb-8 text-xl"
+        style={{
+          display: 'grid',
+          gridGap: '20px',
+          gridRowGap: '20px',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(10rem, 1fr))',
+          gridTemplateRows: '1fr',
+        }}
+      >
         {definedAmounts.map((amount) => (
           <div
             key={amount}
-            className={`flex justify-center items-center border border-violet-200 hover:bg-violet-50 rounded w-40 p-2 py-5 cursor-pointer ${selectedAmount === amount ? 'ring-4 ring-violet-300' : ''}`}
+            className={`flex justify-center items-center border border-violet-200 hover:bg-violet-50 rounded p-2 py-5 cursor-pointer ${selectedAmount === amount ? 'ring-4 ring-violet-300' : ''}`}
             onClick={() => {
               setSelectedAmount(amount);
               setErrorMessge('');

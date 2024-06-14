@@ -2,9 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import SearchUserInline from '../components/SearchUserInline';
-import InlineNotification from '../components/InlineNotification';
-import useAccessToken from '../hooks/useAccessToken';
+import SearchUserInline from '../../components/SearchUserInline';
+import InlineNotification from '../../components/InlineNotification';
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
@@ -12,8 +11,6 @@ const CreateTransaction = () => {
   const [isLoading, setLoading] = useState(false);
   const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
-
-  const { accessToken } = useAccessToken();
 
   const formik = useFormik({
     initialValues: {
@@ -23,9 +20,9 @@ const CreateTransaction = () => {
     },
 
     validationSchema: Yup.object({
-      receiver: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      receiver: Yup.string().required('Required').max(12, 'Must be 12 characters'),
       amount: Yup.number().required('Required'),
-      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      cause: Yup.string().required('Required').max(50, 'Must be 50 characters or less'),
     }),
 
     onSubmit: (values) => {
@@ -37,9 +34,7 @@ const CreateTransaction = () => {
 
       values.receiver = selectedUser;
       axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+        .post(`${import.meta.env.VITE_BASE_URL}/transaction/create`, values)
         .then((res) => {
           setTransactionID(res.data.transaction_id);
           setLoading(false);
@@ -54,7 +49,7 @@ const CreateTransaction = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Make Transaction</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
@@ -75,7 +70,10 @@ const CreateTransaction = () => {
             placeholder=" "
             autoComplete="off"
             disabled={isLoading}
-            onChange={formik.handleChange}
+            onChange={(e) => {
+              formik.handleChange(e);
+              setSelectedUser('');
+            }}
             value={formik.values.receiver}
           />
           <label
@@ -92,7 +90,10 @@ const CreateTransaction = () => {
 
         <SearchUserInline
           query={formik.values.receiver}
-          onSelecteUser={(value) => setSelectedUser(value)}
+          onSelecteUser={(value) => {
+            setSelectedUser(value);
+            formik.setFieldValue('receiver', value);
+          }}
           onUserNotFound={(value) => setUserNotFound(value)}
         />
 

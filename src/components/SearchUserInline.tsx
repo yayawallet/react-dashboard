@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import avater from '../assets/avater.svg';
 import { User } from '../models';
-import useAccessToken from '../hooks/useAccessToken';
 
 interface Props {
   query: string;
@@ -15,29 +14,21 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
   const [selectedUser, setSelectedUser] = useState('');
   const [userNotFound, setUserNotFound] = useState(false);
 
-  const { accessToken } = useAccessToken();
-
   useEffect(() => {
-    if (query === selectedUser) return;
-
     if (query.length < 3) {
       setUsersList([]);
       return;
     }
+
     setUserNotFound(false);
     setSelectedUser('');
 
     onUserNotFound(false);
-    onSelecteUser('');
 
     axios
-      .post(
-        `${import.meta.env.VITE_BASE_URL}/user/search`,
-        {
-          query: query,
-        },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      )
+      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
+        query: query,
+      })
       .then((res) => {
         setUsersList(res.data.slice(0, 5));
 
@@ -65,7 +56,11 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
               setUsersList([user]);
             }}
           >
-            <img src={user.photo_url || avater} alt="" className="h-8 w-8 rounded-full" />
+            <img
+              src={user.photo_url || avater}
+              alt=""
+              className="h-8 w-8 rounded-full border-2 border-white"
+            />
             <span>{user.name}</span>
           </div>
         ))}

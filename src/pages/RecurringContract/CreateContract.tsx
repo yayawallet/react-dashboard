@@ -67,7 +67,7 @@ const CreateContract = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Recurring Contract</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
@@ -228,7 +228,15 @@ const CreateContract = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
-          instruction="Your file must have the following columns: customer_account_name, service_type, contract_number and meta_data (optional)"
+          instruction={
+            <>
+              Your file must have the following columns:{' '}
+              <span className="font-semibold">
+                customer_account_name, service_type, contract_number
+              </span>{' '}
+              and <span className="font-semibold">meta_data</span> (optional)
+            </>
+          }
         />
       )}
     </div>

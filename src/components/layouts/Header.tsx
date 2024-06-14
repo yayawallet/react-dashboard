@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom';
-import yayawalletLogo from '../../assets/yayawallet-brand.svg';
+import BreadCrumbs from './BreadCrumbs';
 
 const Header = () => {
   return (
-    <div className="shadow-sm">
+    <div className="h-16 shadow-sm">
       <header className="flex justify-between px-4">
-        <Link to="/">
-          <img src={yayawalletLogo} width={120} alt="" className="lg:hidden" />
-        </Link>
+        <div className="self-end">{/* <BreadCrumbs /> */}</div>
 
         <ul className="flex text-lg ml-auto">
           <li className="hover:bg-blue-50 flex items-center">

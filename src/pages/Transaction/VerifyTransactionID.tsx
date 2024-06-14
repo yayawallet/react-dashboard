@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import * as Yup from 'yup';
-import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
-import { Transaction } from '../models';
-import InlineNotification from '../components/InlineNotification';
-import useAccessToken from '../hooks/useAccessToken';
+import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
+import { Transaction } from '../../models';
+import InlineNotification from '../../components/InlineNotification';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState('');
@@ -56,7 +56,7 @@ const GetTransactionByID = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Verify Transaction IDs</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}

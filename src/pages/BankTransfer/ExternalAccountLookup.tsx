@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Institution, EXternalAccount } from '../models';
-import InlineNotification from '../components/InlineNotification';
-import useAccessToken from '../hooks/useAccessToken';
+import { Institution, EXternalAccount } from '../../models';
+import InlineNotification from '../../components/InlineNotification';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const ExternalAccountLookup = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
@@ -64,7 +64,7 @@ const ExternalAccountLookup = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-10">External Account Lookup</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}

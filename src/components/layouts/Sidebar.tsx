@@ -4,14 +4,19 @@ import { Link } from 'react-router-dom';
 import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import useFetchData from '../../hooks/useFetchData';
+import SidebarItem from './SidebarItem';
+import { menus } from './navigation';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+
   const { data: profile } = useFetchData(['profile'], '/user/profile');
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);
   };
+
+  const sidebarMenus = menus.filter((menu) => menu.title);
 
   return (
     <>
@@ -36,29 +41,31 @@ const Sidebar = () => {
         className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
-        <div className="h-full  py-3 overflow-y-auto bg-gray-50 ">
-          <Link to="/" className="flex items-center ps-2.5 mb-5 shadow-sm">
+        <div className="h-full pb-3 overflow-y-scroll loverflow-y-auto bg-gray-50">
+          <Link
+            to="/"
+            className="flex items-center h-16 ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
+          >
             <img src={yayawalletLogo} className="h-12" alt="YaYaWallet Logo" />
           </Link>
 
-          <button
-            type="button"
-            className="lg:hidden flex text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-4 end-5 items-center justify-center"
-            onClick={() => setSidebarOpen(false)}
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-
-          <div className="px-3">
-            <ul className="space-y-2 font-medium" onClick={() => setSidebarOpen(false)}>
+          <div className="px-3 pt-5 relative">
+            <button
+              type="button"
+              className="lg:hidden flex text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-3 end-2 items-center justify-center"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+            <ul className="space-y-2 mb-20 font-medium">
               <li>
                 <div className="flex justify-center p-2">
                   <Link to="/profile">
@@ -83,122 +90,10 @@ const Sidebar = () => {
                 </Link>
               </li>
 
-              <li>
-                <Link
-                  to="/airtime"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Airtime/Package</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/create-transaction"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Create Transaction</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/generate-qr-code"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Generate QR Code</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/transaction-list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Transaction List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/verify-transaction-id"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Verify Transactions</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/scheduled-payment/create"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Create Scheduled Payment</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/scheduled-payment/list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Scheduled Payment List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/recurring-contract/create"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Create Contract</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/recurring-contract/list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Contract List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/recurring-contract/request-payment"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
-                >
-                  <span className="flex-1 ms-3">Request Payment</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/transfer-list"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Transfer List</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/check-transfer-fee"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">Check Transfer Fee</span>
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/external-account-lookup"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
-                >
-                  <span className="flex-1 ms-3 whitespace-nowrap">External Account Lookup</span>
-                </Link>
-              </li>
+              {sidebarMenus.map((menu, index) => (
+                // @ts-ignore
+                <SidebarItem key={index} menu={menu} />
+              ))}
             </ul>
           </div>
         </div>

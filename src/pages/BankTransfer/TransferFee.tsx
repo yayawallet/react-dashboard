@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Institution, Fee } from '../models';
-import InlineNotification from '../components/InlineNotification';
-import useAccessToken from '../hooks/useAccessToken';
+import { Institution, Fee } from '../../models';
+import InlineNotification from '../../components/InlineNotification';
+import useAccessToken from '../../hooks/useAccessToken';
 
 const TransferFee = () => {
   const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
@@ -67,7 +67,7 @@ const TransferFee = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-10">Check Transfer Fee</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
@@ -76,7 +76,7 @@ const TransferFee = () => {
         <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-20">
           <p className="text-2xl">
             Transfer Fee to {institution}:
-            <span className="text-6xl px-2">{transferFee.fee.toFixed(4)}</span>
+            <span className="text-6xl px-2">{transferFee.fee.toFixed(2)}</span>
             <span className="text-4xl font-thin">{transferFee.currency}</span>
           </p>
         </div>

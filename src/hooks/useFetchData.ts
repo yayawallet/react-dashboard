@@ -1,10 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import useAccessToken from './useAccessToken';
 
 const useFetchData = (key: (string | number)[], path: string) => {
   const { accessToken } = useAccessToken();
-
   const baseUrl = import.meta.env.VITE_BASE_URL;
   const url = baseUrl + path;
 
@@ -14,7 +13,11 @@ const useFetchData = (key: (string | number)[], path: string) => {
       .then((res) => res.data);
   };
 
-  return useQuery({ queryKey: key, queryFn: fetchData });
+  const options = {
+    placeholderData: keepPreviousData,
+  };
+
+  return useQuery({ queryKey: key, queryFn: fetchData, ...options });
 };
 
 export default useFetchData;

@@ -6,12 +6,13 @@ import Sidebar from './Sidebar';
 const Index = () => {
   return (
     <>
-      <Header />
+      <div className="lg:ml-[300px] sticky top-0 left-0 right-0 z-10 bg-white">
+        <Header />
+      </div>
+
       <Sidebar />
 
-      <div className="p-4">
-        <Outlet />
-      </div>
+      <div className="lg:ml-[300px]">{<Outlet />}</div>
     </>
   );
 };

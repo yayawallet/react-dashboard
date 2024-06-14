@@ -71,7 +71,7 @@ const Create = () => {
   });
 
   return (
-    <div className="container">
+    <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-5">Schedule Payments</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
@@ -259,7 +259,14 @@ const Create = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
-          instruction="Your file must have the following columns: account_number, amount, cause, recurring, start_at"
+          instruction={
+            <>
+              Your file must have the following columns:{' '}
+              <span className="font-semibold">
+                account_number, amount, cause, recurring, start_at
+              </span>
+            </>
+          }
         />
       )}
     </div>
