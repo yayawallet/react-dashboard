@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { Navigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
@@ -22,7 +21,7 @@ export const AuthContext = createContext<AuthContextType>();
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
   const [user_role, setUserRole] = useState<string>(localStorage.getItem('user_role') || '');
   const [username, setUsername] = useState<string>(localStorage.getItem('username') || '');
 
@@ -49,8 +48,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsAuthenticated(true);
     setUserRole(user_role);
     setUsername(localStorage.getItem('username') || '');
-
-    <Navigate to="/profile" />;
   };
 
   const logout = () => {
@@ -63,8 +60,6 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setIsAuthenticated(false);
     setUserRole('');
     setUsername('');
-
-    <Navigate to="/login" replace={true} />;
   };
 
   return (
