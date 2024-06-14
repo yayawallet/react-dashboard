@@ -4,6 +4,8 @@ import { menus } from './navigation';
 import { useAuth } from '../auth/AuthProvider';
 import Login from '../pages/Authentication/Login';
 import DefaultHeader from '../components/layouts/DefaultHeader';
+import Home from '../pages/Home';
+import Profile from '../pages/Profile';
 
 const RenderRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -23,20 +25,32 @@ const RenderRoutes = () => {
     return <Route key={menu.path} path={menu.path} element={menu.element} />;
   });
 
+  console.log({ isAuthenticated });
+
   return (
     <BrowserRouter>
       <Routes>
-        {isAuthenticated ? (
-          <Route path="/" element={<Layout />}>
-            {[...menuRoutes, ...subMenuRoutes]}
-          </Route>
-        ) : (
-          <Route path="*" element={<Navigate to="/login" replace={true} />} />
+        {isAuthenticated && (
+          <>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              {menuRoutes}
+              {subMenuRoutes}
+            </Route>
+          </>
         )}
-        <Route path="/" element={<DefaultHeader />}>
-          <Route index element={<Navigate to="/login" replace={true} />} />
-          <Route path="login" element={<Login />} />
-        </Route>
+
+        {isAuthenticated === false && (
+          <>
+            <Route path="/" element={<DefaultHeader />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<Navigate to="/login" replace={true} />} />
+            </Route>
+          </>
+        )}
+
+        {/* <Route index element={<Navigate to="/login" replace={true} />} /> */}
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
