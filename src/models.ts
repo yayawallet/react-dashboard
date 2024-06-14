@@ -185,10 +185,10 @@ export interface recurringContract {
 
 export interface ReportType {
   uuid: string;
-  uploaded_count: number;
+  successful_count: number;
   failed_count: number;
   on_queue_count: number;
-  total_count: number;
+  // total_count: number;
   file_name: string;
   remark: string;
   created_at: Date;
