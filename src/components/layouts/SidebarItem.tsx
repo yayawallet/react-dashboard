@@ -1,5 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { GoDotFill } from 'react-icons/go';
 import { useState } from 'react';
 
 type MenuTypes = {
@@ -29,7 +30,7 @@ const SidebarItem = ({ menu }: Props) => {
           pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true)
         }
       >
-        <span className="text-xl text-gray-600">{menu.icon}</span>
+        <span className="text-xl">{menu.icon}</span>
         <span className="flex-1 ms-3">{menu.title}</span>
         {menu.submenuItems ? (
           pathName.startsWith('/' + menu.path) && isOpen ? (
@@ -52,7 +53,15 @@ const SidebarItem = ({ menu }: Props) => {
                   `flex items-center p-2 text-gray-600 rounded-lg ${isActive ? 'text-gray-900' : ''}`
                 }
               >
-                <span className="flex-1 ms-3">{item.title}</span>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `text-xs ${isActive ? 'text-gray-900 -mr-3' : 'hidden'}`
+                  }
+                >
+                  <GoDotFill />
+                </NavLink>
+                <span className="flex-1 ms-6">{item.title}</span>
               </NavLink>
             </li>
           ))}

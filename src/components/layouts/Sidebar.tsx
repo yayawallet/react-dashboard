@@ -21,7 +21,16 @@ const Sidebar = () => {
   const sidebarMenus = menus
     .filter((menu) => (menu.isPrivate ? isAuthenticated : true))
     .filter((menu) => (menu.accessRoles ? menu.accessRoles.includes(user_role) : true))
+    .filter((menu) =>
+      menu.submenuItems
+        ? menu.submenuItems.filter((submenu) =>
+            submenu.accessRoles ? submenu.accessRoles.includes(user_role) : true
+          )
+        : true
+    )
     .filter((menu) => menu.title);
+
+  console.log(sidebarMenus);
 
   return (
     <>
