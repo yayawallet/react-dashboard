@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
@@ -26,8 +26,8 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/airtime/buy`, {
+    authAxios
+      .post('/airtime/buy', {
         phone: '+251' + phoneNumber,
         amount: selectedAmount,
       })

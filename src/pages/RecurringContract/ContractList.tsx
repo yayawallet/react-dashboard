@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
@@ -25,10 +25,8 @@ const ContractList = () => {
   const { accessToken } = useAccessToken();
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BASE_URL}/recurring-contract/list`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    authAxios
+      .get('/recurring-contract/list')
       .then((res) => {
         setContractList(res.data);
         setIsLoading(false);
@@ -54,11 +52,8 @@ const ContractList = () => {
 
     setIsProcessing(true);
     setSuccessMessage('');
-    axios
-      .get(
-        `${import.meta.env.VITE_BASE_URL}/recurring-contract/deactivate/${selectedContract?.id}`,
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      )
+    authAxios
+      .get(`/recurring-contract/deactivate/${selectedContract?.id}`)
       .then(() => {
         setSuccessMessage('Contract Deactivated Successfully');
         setContractList((prev) => prev.filter((l) => l.id != selectedContract?.id));

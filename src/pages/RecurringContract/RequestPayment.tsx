@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import InlineNotification from '../../components/InlineNotification';
-import useAccessToken from '../../hooks/useAccessToken';
 
 const RequestPayment = () => {
   const [requestPaymentID, setRequestPaymentID] = useState('');
@@ -12,8 +11,6 @@ const RequestPayment = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
-
-  const { accessToken } = useAccessToken();
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -46,10 +43,8 @@ const RequestPayment = () => {
       setErrorMessage('');
       values.meta_data = JSON.parse(values.meta_data);
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/recurring-contract/request-payment`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post('/recurring-contract/request-payment', values)
         .then((res) => {
           setRequestPaymentID(res.data.payment_request_id);
           setLoading(false);
@@ -238,7 +233,7 @@ const RequestPayment = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/request-payment/bulk-import"
+          apiEndpoint="recurring-contract/bulk-import-recurring-payment-request"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

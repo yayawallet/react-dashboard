@@ -5,10 +5,12 @@ import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import useFetchData from '../../hooks/useFetchData';
 import SidebarItem from './SidebarItem';
-import { menus } from './navigation';
+import { menus } from '../../routing/navigation';
+import { useAuth } from '../../auth/AuthProvider';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const { isAuthenticated, user_role } = useAuth();
 
   const { data: profile } = useFetchData(['profile'], '/user/profile');
 
@@ -16,7 +18,10 @@ const Sidebar = () => {
     setSidebarOpen(true);
   };
 
-  const sidebarMenus = menus.filter((menu) => menu.title);
+  const sidebarMenus = menus
+    .filter((menu) => (menu.isPrivate ? isAuthenticated : true))
+    .filter((menu) => (menu.accessRoles ? menu.accessRoles.includes(user_role) : true))
+    .filter((menu) => menu.title);
 
   return (
     <>

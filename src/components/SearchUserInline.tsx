@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { authAxios } from '../api/axios';
 import avater from '../assets/avater.svg';
 import { User } from '../models';
 
@@ -25,8 +25,8 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
 
     onUserNotFound(false);
 
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/user/search`, {
+    authAxios
+      .post('/user/search', {
         query: query,
       })
       .then((res) => {

@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import useAccessToken from '../../hooks/useAccessToken';
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthProvider';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const { setAccessToken } = useAccessToken();
+  const [success, setSuccess] = useState(false);
+
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -17,9 +20,11 @@ const LoginForm = () => {
 
     validationSchema: Yup.object({
       username: Yup.string()
+        .min(4, 'Invalid username')
         .max(20, 'Must be 30 characters or less')
         .required('username is required'),
       password: Yup.string()
+        .min(8, 'Password must be atleast 8 characters long')
         .max(50, 'Must be 50 characters or less')
         .required('password is required'),
     }),
@@ -29,22 +34,33 @@ const LoginForm = () => {
       setErrorMessage('');
 
       axios
-        .post('http://localhost:8000/login', values)
+        .post('/login', values)
         .then((res) => {
+          console.log('Success Login!!', res.data);
+          setSuccess(true);
           setIsLoading(false);
-          setAccessToken(res.data.access);
+          login(res.data.access, res.data.refresh, res.data.user_id, res.data.username);
         })
         .catch(() => {
+          console.log('Login Failed!!');
+          setSuccess(false);
           setIsLoading(false);
-          setErrorMessage('username or password is Incorrect');
+          setErrorMessage('Incorrect username or password');
+        })
+        .finally(() => {
+          formik.resetForm();
         });
     },
   });
 
+  if (success) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div>
       {errorMessage && (
-        <p className="my-2 px-4 py-1 bg-red-50 text-red-600 border-2 border-red-100 rounded">
+        <p className="my-2 px-4 py-1 bg-red-50 text-center text-red-600 border-2 border-red-100 rounded">
           {errorMessage}
         </p>
       )}
@@ -62,7 +78,10 @@ const LoginForm = () => {
             placeholder="username"
             autoComplete="username"
             disabled={isLoading}
-            onChange={formik.handleChange}
+            onChange={(e) => {
+              formik.handleChange(e);
+              setErrorMessage('');
+            }}
             value={formik.values.username}
           />
 
@@ -82,7 +101,10 @@ const LoginForm = () => {
             placeholder="••••••••"
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5"
             disabled={isLoading}
-            onChange={formik.handleChange}
+            onChange={(e) => {
+              formik.handleChange(e);
+              setErrorMessage('');
+            }}
             value={formik.values.password}
           />
 

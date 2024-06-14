@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { authAxios } from '../../api/axios';
 import LoadingSpinner from './LoadingSpinner';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
@@ -39,8 +39,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [openInfoCard, setOpenInfoCard] = useState(false);
 
   useEffect(() => {
-    axios
-      .post(`${import.meta.env.VITE_BASE_URL}/airtime/packages`, {
+    authAxios
+      .post('/airtime/packages', {
         phone: '+2519', // Ethio telecom packages
       })
       .then((res) => setPackages(res.data));
@@ -58,7 +58,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    axios
+    authAxios
       .post(`${import.meta.env.VITE_BASE_URL}/package/buy`, {
         phone: '+251' + phoneNumber,
         package: selectedPackage,
