@@ -1,15 +1,9 @@
 import { useAuth } from '../auth/AuthProvider';
-import {
-  IoLogOutOutline,
-  IoPersonCircleOutline,
-  IoKeyOutline,
-  IoLockOpenOutline,
-} from 'react-icons/io5';
+import { IoLogOutOutline, IoPersonCircleOutline, IoLockOpenOutline } from 'react-icons/io5';
 
 const UserSettings = () => {
   const user_role = localStorage.getItem('user_role') || 'user';
   const username = localStorage.getItem('username') || '-';
-  const user_id = localStorage.getItem('user_id') || '-';
 
   const { logout } = useAuth();
 
@@ -21,13 +15,6 @@ const UserSettings = () => {
             <IoLockOpenOutline />
           </span>
           <span>{user_role}</span>
-        </li>
-
-        <li className="flex items-center px-6 pr-24">
-          <span className="text-xl px-3 py-2">
-            <IoKeyOutline />
-          </span>
-          <span>user id: {user_id}</span>
         </li>
 
         <li className="flex items-center px-6 pr-24">

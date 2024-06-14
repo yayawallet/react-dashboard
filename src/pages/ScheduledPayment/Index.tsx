@@ -1,7 +1,13 @@
-import React from 'react';
+import IndexPage from '../../components/IndexPage';
 
 const Index = () => {
-  return <div>Index</div>;
+  const links = [
+    { path: '/scheduled-payment/create', name: 'Create Scheduled Payment' },
+    { path: '/scheduled-payment/list', name: 'List of Scheduled Payments' },
+    { path: '/scheduled-payment/report', name: 'Scheduled Payment Report' },
+  ];
+
+  return <IndexPage links={links} />;
 };
 
 export default Index;
