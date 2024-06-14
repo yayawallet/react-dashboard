@@ -28,7 +28,7 @@ const BulkImport = ({
 
     validationSchema: Yup.object({
       excel_file: Yup.mixed().required('Required'),
-      remark: Yup.string().required('Required').max(50, 'Remark must be less than 20 characters'),
+      remark: Yup.string().required('Required').max(50, 'Remark must be less than 50 characters'),
     }),
 
     onSubmit: (values) => {
@@ -44,7 +44,7 @@ const BulkImport = ({
         .post(`/${apiEndpoint}`, formData)
         .then(() => {
           onError('');
-          onSuccess('Your file is uploaded successfully.');
+          onSuccess('Uploaded! Your file is being processed.');
         })
         .catch((err) => {
           onSuccess('');

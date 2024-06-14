@@ -1,4 +1,3 @@
-import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
 import PageLoading from '../components/ui/PageLoading';
 import useFetchData from '../hooks/useFetchData';
 import NotFound from './NotFound';
@@ -25,6 +24,8 @@ const BulkImportReportDetails = ({ id, documentType }: Props) => {
     isSuccess,
     data: reportDetails,
   } = useFetchData(['report', documentType], `/report/details/${id}?document_type=${documentType}`);
+
+  console.log(reportDetails);
 
   return (
     <div className="table-container">
@@ -67,7 +68,7 @@ const BulkImportReportDetails = ({ id, documentType }: Props) => {
           </div>
 
           <div className="mt-2 overflow-auto">
-            <table className="w-full">
+            {/* <table className="w-full">
               <thead className="">
                 <tr className="bg-violet-500 text-gray-50">
                   <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
@@ -133,7 +134,7 @@ const BulkImportReportDetails = ({ id, documentType }: Props) => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table> */}
           </div>
         </>
       )}

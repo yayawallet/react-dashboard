@@ -4,7 +4,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import InlineNotification from '../../components/InlineNotification';
-import useAccessToken from '../../hooks/useAccessToken';
 
 const RequestPayment = () => {
   const [requestPaymentID, setRequestPaymentID] = useState('');
@@ -12,8 +11,6 @@ const RequestPayment = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
-
-  const { accessToken } = useAccessToken();
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -236,7 +233,7 @@ const RequestPayment = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/request-payment/bulk-import"
+          apiEndpoint="recurring-contract/bulk-import-recurring-payment-request"
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

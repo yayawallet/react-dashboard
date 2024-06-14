@@ -1,5 +1,4 @@
 import { Link, Outlet } from 'react-router-dom';
-import UserSettings from '../UserSettings';
 
 const DefaultHeader = () => {
   return (
@@ -12,8 +11,6 @@ const DefaultHeader = () => {
             </Link>
           </li>
         </ul>
-
-        <UserSettings />
       </header>
       <Outlet />
     </div>

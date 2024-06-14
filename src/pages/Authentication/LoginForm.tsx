@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-// import { Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthProvider';
 
 const LoginForm = () => {
@@ -53,9 +53,9 @@ const LoginForm = () => {
     },
   });
 
-  // if (success) {
-  //   return <Navigate to="/" />;
-  // }
+  if (success) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div>

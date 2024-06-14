@@ -27,7 +27,6 @@ import ReportRequestPayment from '../pages/RecurringContract/ReportRequestPaymen
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 import Login from '../pages/Authentication/Login';
-import Logout from '../pages/Authentication/Logout';
 import NotFound from '../pages/NotFound';
 
 // Icons
@@ -181,7 +180,6 @@ const privateNavs = [
 
 const publicNavs = [
   { path: '/login', element: <Login /> },
-  { path: '/logout', element: <Logout /> },
   { title: 'Help Center', path: 'help-center', icon: <MdOutlineHelpCenter /> },
   { title: 'About YaYa', path: 'about-us', icon: <MdOutlineHelpCenter /> },
   { path: '*', element: <NotFound /> },

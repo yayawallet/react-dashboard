@@ -5,6 +5,7 @@ import useFetchData from '../hooks/useFetchData';
 import NotFound from './NotFound';
 import FetchingError from './layouts/FetchingError';
 import { ReportType } from '../models';
+import { authAxios } from '../api/axios';
 
 interface Props {
   documentType: string;
@@ -12,6 +13,10 @@ interface Props {
 
 const BulkImportReport = ({ documentType }: Props) => {
   const [copiedID, setCopiedID] = useState('');
+  const [rs, setRS] = useState();
+
+  console.log('rs', rs);
+  // console.log(reportList);
 
   const {
     isFetching,
@@ -20,13 +25,15 @@ const BulkImportReport = ({ documentType }: Props) => {
     data: reportList,
   } = useFetchData(['report', documentType], `/report/list?document_type=${documentType}`);
 
-  console.log(reportList);
-
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedID(id);
 
     setTimeout(() => setCopiedID(''), 1000);
+  };
+
+  const fetchDetails = (id: string) => {
+    authAxios.get(`/report/details/${id}}`).then((res) => setRS(res.data));
   };
 
   return (
@@ -55,9 +62,9 @@ const BulkImportReport = ({ documentType }: Props) => {
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Queued
                 </th>
-                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
+                {/* <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Total
-                </th>
+                </th> */}
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Remark
                 </th>
@@ -89,14 +96,15 @@ const BulkImportReport = ({ documentType }: Props) => {
                     <button
                       type="button"
                       className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
+                      onClick={() => fetchDetails(list.uuid)}
                     >
-                      <a href={`${TRANSACTION_INVOICE_URL}/${list?.uuid}`} target="_blank">
-                        Detail
-                      </a>
+                      {/* <a href={`${TRANSACTION_INVOICE_URL}/${list?.uuid}`} target="_blank"> */}
+                      Detail
+                      {/* </a> */}
                     </button>
                   </td>
                   <td className="text-green-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {list?.uploaded_count}
+                    {list?.successful_count}
                   </td>
                   <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.failed_count}
@@ -104,9 +112,9 @@ const BulkImportReport = ({ documentType }: Props) => {
                   <td className="text-slate-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.on_queue_count}
                   </td>
-                  <td className="text-blue-600 font-semibold border-t border-b border-slate-200 p-3">
+                  {/* <td className="text-blue-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.total_count}
-                  </td>
+                  </td> */}
                   <td className="border-t border-b border-slate-200 p-3">{list?.remark}</td>
                   <td className="border-t border-b border-slate-200 p-3">{list?.file_name}</td>
                   <td className="border-t border-b border-slate-200 p-3">
