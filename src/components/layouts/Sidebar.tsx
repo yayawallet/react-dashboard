@@ -21,13 +21,17 @@ const Sidebar = () => {
   const sidebarMenus = menus
     .filter((menu) => (menu.isPrivate ? isAuthenticated : true))
     .filter((menu) => (menu.accessRoles ? menu.accessRoles.includes(user_role) : true))
-    .filter((menu) =>
-      menu.submenuItems
-        ? menu.submenuItems.filter((submenu) =>
-            submenu.accessRoles ? submenu.accessRoles.includes(user_role) : true
-          )
-        : true
-    )
+    .filter((menu) => {
+      if (menu.submenuItems) {
+        // Filter submenuItems based on accessRoles
+        menu.submenuItems = menu.submenuItems.filter((submenu) =>
+          submenu.accessRoles ? submenu.accessRoles.includes(user_role) : true
+        );
+        // Only include menu if there are any submenuItems left after filtering
+        return menu.submenuItems.length > 0;
+      }
+      return true;
+    })
     .filter((menu) => menu.title);
 
   console.log(sidebarMenus);
