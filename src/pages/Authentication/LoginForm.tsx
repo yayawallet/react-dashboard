@@ -8,7 +8,7 @@ import { useAuth } from '../../auth/AuthProvider';
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  // const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const { login } = useAuth();
 
@@ -36,14 +36,14 @@ const LoginForm = () => {
       axios
         .post('/login', values)
         .then((res) => {
-          console.log('Success Login', res.data);
-          // setSuccess(true);
+          console.log('Success Login!!', res.data);
+          setSuccess(true);
           setIsLoading(false);
           login(res.data.access, res.data.refresh, res.data.user_id, res.data.username);
         })
         .catch(() => {
-          console.log('Invalid login');
-          // setSuccess(false);
+          console.log('Login Failed!!');
+          setSuccess(false);
           setIsLoading(false);
           setErrorMessage('Incorrect username or password');
         })
