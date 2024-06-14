@@ -21,19 +21,15 @@ export const AuthContext = createContext<AuthContextType>();
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
   const [user_role, setUserRole] = useState<string>(localStorage.getItem('user_role') || '');
   const [username, setUsername] = useState<string>(localStorage.getItem('username') || '');
 
   const accessToken = Cookies.get('access_token');
-
-  const decodedToken: TokenType | null = accessToken
-    ? jwtDecode(Cookies.get('access_token') || '')
-    : null;
+  const decodedToken: TokenType | null = accessToken ? jwtDecode(accessToken || '') : null;
 
   useEffect(() => {
     if (!decodedToken) return;
-
     const expireDate = Number(decodedToken.exp) * 1000;
     if (expireDate < new Date().getTime()) setIsAuthenticated(false);
     else setIsAuthenticated(true);
