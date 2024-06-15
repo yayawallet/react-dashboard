@@ -39,7 +39,21 @@
 }
 
 table {
-  font-size: 15px;
+  font-size: 15px !important;
+  color: rgb(24, 36, 51) !important;
+}
+
+table > thead > tr {
+  background-color: rgb(246, 248, 251) !important;
+  color: rgb(108, 122, 145) !important;
+}
+
+table > tbody > tr > td:first-child {
+  color: rgb(108, 122, 145) !important;
+}
+
+table > tbody > tr > td {
+  font-size: 15px !important;
 }
 
 table > thead > tr > th:first-child,
