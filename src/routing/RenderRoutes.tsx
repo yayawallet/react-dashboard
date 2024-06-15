@@ -49,9 +49,10 @@ const RenderRoutes = () => {
         )}
 
         <Route path="/" element={<DefaultHeader />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/help-center" element={<HelpCenter />} />
-          <Route path="/about-yaya" element={<AboutYaYa />} />
+          <Route path="login" element={<Login />} />
+          <Route path="help-center" element={<HelpCenter />} />
+          <Route path="about-yaya" element={<AboutYaYa />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
