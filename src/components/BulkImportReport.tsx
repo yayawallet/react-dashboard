@@ -94,16 +94,14 @@ const BulkImportReport = ({ documentType }: Props) => {
                       className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                       onClick={() => fetchDetails(list.uuid)}
                     >
-                      {/* <a href={`${TRANSACTION_INVOICE_URL}/${list?.uuid}`} target="_blank"> */}
                       Detail
-                      {/* </a> */}
                     </button>
                   </td>
                   <td className="text-green-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {list?.successful_count}
+                    {list?.successful_count || '~'}
                   </td>
                   <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {list?.failed_count}
+                    {list?.failed_count || '~'}
                   </td>
                   {/* <td className="text-slate-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.on_queue_count}
