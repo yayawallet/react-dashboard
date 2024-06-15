@@ -67,6 +67,7 @@ const RequestPayment = () => {
       {(requestPaymentID || successMessage) && (
         <InlineNotification
           type="success"
+          customType="Uploaded"
           info={`${successMessage ? successMessage : `Payment ID: ${requestPaymentID}`}`}
         />
       )}

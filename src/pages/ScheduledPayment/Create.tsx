@@ -74,6 +74,7 @@ const Create = () => {
       {(scheduledPaymentID || successMessage) && (
         <InlineNotification
           type="success"
+          customType="Uploaded"
           info={`${successMessage ? successMessage : `Scheduled Payment ID: ${scheduledPaymentID}`}`}
         />
       )}
