@@ -44,7 +44,7 @@ const BulkImport = ({
         .post(`/${apiEndpoint}`, formData)
         .then(() => {
           onError('');
-          onSuccess('Uploaded! Your file is being processed.');
+          onSuccess('Your file is being processed.');
         })
         .catch((err) => {
           onSuccess('');

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { TRANSACTION_INVOICE_URL } from '../CONSTANTS';
 import PageLoading from '../components/ui/PageLoading';
 import useFetchData from '../hooks/useFetchData';
 import NotFound from './NotFound';
@@ -59,11 +58,8 @@ const BulkImportReport = ({ documentType }: Props) => {
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Failed
                 </th>
-                <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                  Queued
-                </th>
                 {/* <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                  Total
+                  Queued
                 </th> */}
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Remark
@@ -109,11 +105,8 @@ const BulkImportReport = ({ documentType }: Props) => {
                   <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.failed_count}
                   </td>
-                  <td className="text-slate-600 font-semibold border-t border-b border-slate-200 p-3">
+                  {/* <td className="text-slate-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.on_queue_count}
-                  </td>
-                  {/* <td className="text-blue-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {list?.total_count}
                   </td> */}
                   <td className="border-t border-b border-slate-200 p-3">{list?.remark}</td>
                   <td className="border-t border-b border-slate-200 p-3">{list?.file_name}</td>
