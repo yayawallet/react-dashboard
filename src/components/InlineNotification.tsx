@@ -1,9 +1,10 @@
 interface Props {
   type: 'success' | 'error';
+  customType?: string;
   info: string;
 }
 
-const InlineNotification = ({ type, info }: Props) => {
+const InlineNotification = ({ type, customType, info }: Props) => {
   return (
     <div>
       <div
@@ -15,7 +16,9 @@ const InlineNotification = ({ type, info }: Props) => {
         </svg>
         <span className="sr-only">Info</span>
         <div>
-          <span className="font-medium mr-2">{type === 'success' ? 'Success:' : 'Error:'}</span>
+          <span className="font-medium mr-2">
+            {customType ? customType : type === 'success' ? 'Success:' : 'Error:'}
+          </span>
           {info}
         </div>
       </div>

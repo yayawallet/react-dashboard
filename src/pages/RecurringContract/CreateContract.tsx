@@ -69,6 +69,7 @@ const CreateContract = () => {
       {(contractID || successMessage) && (
         <InlineNotification
           type="success"
+          customType="Uploaded"
           info={`${successMessage ? successMessage : `Contract ID: ${contractID}`}`}
         />
       )}
