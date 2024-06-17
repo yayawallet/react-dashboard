@@ -8,7 +8,8 @@ type MenuTypes = {
   path: string;
   icon?: JSX.Element;
   element: JSX.Element;
-  submenuItems?: MenuTypes[];
+  accessRoles: string[];
+  children?: MenuTypes[];
 };
 
 interface Props {
@@ -32,7 +33,7 @@ const SidebarItem = ({ menu }: Props) => {
       >
         <span className="text-xl">{menu.icon}</span>
         <span className="flex-1 ms-3">{menu.title}</span>
-        {menu.submenuItems ? (
+        {menu.children ? (
           pathName.startsWith('/' + menu.path) && isOpen ? (
             <IoIosArrowUp />
           ) : (
@@ -41,11 +42,11 @@ const SidebarItem = ({ menu }: Props) => {
         ) : undefined}
       </NavLink>
 
-      {menu.submenuItems && (
+      {menu.children && (
         <ul
           className={`px-2 rounded ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-gray-100' : 'hidden'}`}
         >
-          {menu.submenuItems.map((item, index) => (
+          {menu.children.map((item, index) => (
             <li key={index}>
               <NavLink
                 to={item.path}
@@ -53,14 +54,6 @@ const SidebarItem = ({ menu }: Props) => {
                   `flex items-center p-2 text-gray-600 rounded-lg ${isActive ? 'text-gray-900' : ''}`
                 }
               >
-                <NavLink
-                  to={item.path}
-                  className={({ isActive }) =>
-                    `text-xs ${isActive ? 'text-gray-900 -mr-3' : 'hidden'}`
-                  }
-                >
-                  <GoDotFill />
-                </NavLink>
                 <span className="flex-1 ms-6">{item.title}</span>
               </NavLink>
             </li>
