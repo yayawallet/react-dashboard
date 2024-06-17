@@ -1,6 +1,6 @@
 const AboutYaYa = () => {
   return (
-    <div>
+    <div className="">
       <iframe
         src="https://yayawallet.com/en/about-us"
         height={'650px'}
