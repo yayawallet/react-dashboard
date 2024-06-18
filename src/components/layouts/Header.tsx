@@ -14,7 +14,7 @@ const Header = () => {
         </div>
 
         <div
-          className="h-full w-full flex items-center justify-end text-lg font-semibold text-violet-800 cursor-pointer"
+          className="h-full w-full flex items-center ml-auto text-lg font-semibold text-violet-800 cursor-pointer"
           onClick={() => setOpen(!open)}
         >
           <img src={avater} alt="" className="h-full p-3" />
