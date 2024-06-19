@@ -22,11 +22,9 @@ const Sidebar = () => {
     .filter((menu) => (menu.accessRoles ? menu.accessRoles.includes(user_role) : true))
     .filter((menu) => {
       if (menu.children) {
-        // Filter children based on accessRoles
         menu.children = menu.children.filter((submenu) =>
           submenu.accessRoles ? submenu.accessRoles.includes(user_role) : true
         );
-        // Only include menu if there are any children left after filtering
         return menu.children.length > 0;
       }
       return true;

@@ -1,6 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
-import { GoDotFill } from 'react-icons/go';
 import { useState } from 'react';
 
 type MenuTypes = {
@@ -49,7 +48,7 @@ const SidebarItem = ({ menu }: Props) => {
           {menu.children.map((item, index) => (
             <li key={index}>
               <NavLink
-                to={item.path}
+                to={`${menu.path}/${item.path}`}
                 className={({ isActive }) =>
                   `flex items-center p-2 text-gray-600 rounded-lg ${isActive ? 'text-gray-900' : ''}`
                 }
