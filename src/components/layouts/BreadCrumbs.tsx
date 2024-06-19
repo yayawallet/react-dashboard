@@ -1,16 +1,26 @@
 import { Link, useLocation } from 'react-router-dom';
+import { sidebarNavs } from '../../routing/navigation';
 
 const BreadCrumbs = () => {
   const location = useLocation();
 
-  let currentLink = '';
-  const crumbs = location.pathname.split('/').filter((crumb) => crumb !== '');
+  const paths = location.pathname.split('/').filter((crumb) => crumb !== '');
+
+  const sidebarPaths = sidebarNavs
+    .map((nav) =>
+      nav.children ? [nav.path, ...nav.children.map((subNav) => subNav.path)] : nav.path
+    )
+    .flat();
+
+  const crumbs = paths.every((path) => sidebarPaths.includes(path))
+    ? paths
+    : [...paths.filter((path) => sidebarPaths.includes(path)), 'not-found'];
 
   return (
     <ol className="flex items-center whitespace-nowrap">
       <li className="inline-flex items-center">
         <Link
-          className="flex items-center text-sm text-gray-800 hover:text-blue-600 focus:outline-none focus:text-blue-600"
+          className="flex items-center text-sm text-gray-600 hover:text-blue-600 focus:outline-none focus:text-blue-600"
           to="/"
         >
           <svg
@@ -33,11 +43,13 @@ const BreadCrumbs = () => {
       </li>
 
       {crumbs.map((crumb) => {
+        let currentLink = '';
+
         currentLink += `/${crumb}`;
         return (
           <li className="inline-flex items-center" key={crumb}>
             <Link
-              className={`flex items-center text-sm ${crumbs.indexOf(crumb) === crumbs.length - 1 ? 'text-gray-400 cursor-default' : 'text-gray-800 hover:text-blue-600'}`}
+              className={`flex items-center text-sm ${crumbs.indexOf(crumb) === crumbs.length - 1 ? 'text-gray-400 cursor-default' : 'text-gray-600 hover:text-blue-600'}`}
               to={currentLink}
             >
               <svg
