@@ -44,10 +44,10 @@ authAxios.interceptors.response.use(
     console.log('Axios request failed');
     console.log('Axios request failed');
 
-    if (error.response && error.response.status === 401) {
-      localStorage.clear();
-      window.location.href = '/login';
-    }
+    // if (error.response && error.response.status === 401) {
+    //   localStorage.clear();
+    //   window.location.href = '/login';
+    // }
 
     return Promise.reject(error);
   }
