@@ -11,21 +11,21 @@ const DefaultHeader = () => {
           </Link>
         </div>
 
-        <ul className="flex text-lg ml-auto">
+        <ul className="flex ml-auto">
           <li className="hover:bg-slate-50 flex items-end">
-            <Link to="/login" className="font-semibold text-blue-800 px-4 py-3">
+            <Link to="/login" className="font-semibold text-blue-900 px-4 py-3">
               Login
             </Link>
           </li>
 
           <li className="hover:bg-slate-50 flex items-end">
-            <Link to="/help-center" className="font-semibold text-blue-800 px-4 py-3">
+            <Link to="/help-center" className="font-semibold text-blue-900 px-4 py-3">
               Help Center
             </Link>
           </li>
 
           <li className="hover:bg-slate-50 flex items-end">
-            <Link to="/about-yaya" className="font-semibold text-blue-800 px-4 py-3">
+            <Link to="/about-yaya" className="font-semibold text-blue-900 px-4 py-3">
               About YaYa
             </Link>
           </li>
