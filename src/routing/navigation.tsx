@@ -160,7 +160,7 @@ export const sidebarNavs = [
   },
   {
     title: 'Other Banks',
-    path: 'transfer/',
+    path: 'transfer',
     icon: <RiBankFill />,
     element: <Transfer />,
     accessRoles: ['admin', 'clerk'],
@@ -209,11 +209,11 @@ export const sidebarNavs = [
 
 export const privateNavs = [
   {
-    path: '/',
+    path: '',
     element: <Layout />,
     children: [
       ...sidebarNavs,
-      { path: '/', element: <Home /> },
+      { path: '', element: <Home /> },
       { path: 'profile', elemnet: <Profile /> },
       { path: 'me', element: <AboutMe /> },
       { path: 'login', element: <Navigate to="/" replace={true} /> },
@@ -224,10 +224,10 @@ export const privateNavs = [
 
 export const publicNavs = [
   {
-    path: '/',
+    path: '',
     element: <DefaultHeader />,
     children: [
-      { path: '/', element: <Navigate to="/login" replace={true} /> },
+      { path: '', element: <Navigate to="/login" replace={true} /> },
       { path: 'login', element: <Login /> },
       { path: 'help-center', element: <HelpCenter /> },
       { path: 'about-yaya', element: <AboutYaYa /> },
