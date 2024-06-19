@@ -5,7 +5,9 @@ export const useLocalStorage = (keyName: string) => {
     try {
       const value = localStorage.getItem(keyName) || 'null';
       return JSON.parse(value);
-    } catch (err) {}
+    } catch (err) {
+      return undefined;
+    }
   });
 
   const setValue = (newValue: any) => {

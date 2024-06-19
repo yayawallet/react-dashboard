@@ -12,7 +12,8 @@ type NavType = {
 };
 
 const AppRoutes = () => {
-  const { isAuthenticated, user_role } = useAuth();
+  const { user } = useAuth();
+  const user_role = user?.user_role || '';
 
   const publicRoutes = publicNavs;
   const privateRoutes = privateNavs
@@ -27,7 +28,7 @@ const AppRoutes = () => {
       return nav.children.length > 0;
     });
 
-  return useRoutes(isAuthenticated ? privateRoutes : publicRoutes);
+  return useRoutes(user ? privateRoutes : publicRoutes);
 };
 
 export default AppRoutes;

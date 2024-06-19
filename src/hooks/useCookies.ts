@@ -1,20 +1,24 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 
-export const useCookies = (keyName: string) => {
-  const [CookieValue, setCookieValue] = useState(() => {
+type SetCookieFunction = (newValue: string) => void;
+
+export const useCookies = (keyName: string): [string | undefined, SetCookieFunction] => {
+  const [storedValue, setStoredValue] = useState<string | undefined>(() => {
     try {
-      return Cookies.get(keyName);
-    } catch (err) {}
+      const value = Cookies.get(keyName);
+      return value;
+    } catch (err) {
+      return undefined;
+    }
   });
 
-  const setValue = (newValue: any) => {
+  const setValue: SetCookieFunction = (newValue: string) => {
     try {
       Cookies.set(keyName, newValue);
+      setStoredValue(newValue);
     } catch (err) {}
-
-    setCookieValue(newValue);
   };
 
-  return [CookieValue, setValue];
+  return [storedValue, setValue];
 };

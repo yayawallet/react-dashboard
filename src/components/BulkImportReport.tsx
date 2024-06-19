@@ -14,7 +14,7 @@ const BulkImportReport = ({ documentType }: Props) => {
   const [copiedID, setCopiedID] = useState('');
   const [rs, setRS] = useState();
 
-  console.log('rs', rs);
+  console.log(rs ? rs : 'hi');
   // console.log(reportList);
 
   const {
