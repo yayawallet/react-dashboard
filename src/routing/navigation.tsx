@@ -214,7 +214,7 @@ export const privateNavs = [
     children: [
       ...sidebarNavs,
       { path: '', element: <Home /> },
-      { path: 'profile', elemnet: <Profile /> },
+      { path: 'profile', element: <Profile /> },
       { path: 'me', element: <AboutMe /> },
       { path: 'login', element: <Navigate to="/" replace={true} /> },
       { path: '*', element: <NotFound /> },
