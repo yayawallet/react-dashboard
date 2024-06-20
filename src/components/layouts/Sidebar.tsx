@@ -10,7 +10,9 @@ import { useAuth } from '../../auth/AuthProvider';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const { user_role } = useAuth();
+
+  const { user } = useAuth();
+  const user_role = user?.user_role || '';
 
   const { data: profile } = useFetchData(['profile'], '/user/profile');
 
