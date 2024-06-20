@@ -1,11 +1,11 @@
 const HelpCenter = () => {
   return (
-    <div>
+    <div style={{ height: 'calc(100vh - 64px)' }}>
       <iframe
         src="https://docs.yayawallet.com"
-        height={'650px'}
+        height={'100%'}
         width={'100%'}
-        title="Iframe Example"
+        title="yaya help-center"
       ></iframe>
     </div>
   );
