@@ -8,8 +8,13 @@ type UserType = {
   user_id: string;
 };
 
+type FilteredUserType = {
+  username: string;
+  user_role: string;
+};
+
 type AuthContextType = {
-  user: UserType | null;
+  user: FilteredUserType | null;
   login: (accessToken: string, refreshToken: string, user: UserType) => void;
   logout: () => void;
 };
@@ -25,18 +30,17 @@ export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useLocalStorage('userrr');
-  const [accessToken, setAccessToken] = useCookies('access_token');
-  const [refreshToken, setRefreshToken] = useCookies('refresh_token');
-
-  console.log(user);
+  const [user, setUser] = useLocalStorage('user');
+  const [, setAccessToken] = useCookies('access_token');
+  const [, setRefreshToken] = useCookies('refresh_token');
 
   const login = (accessToken: string, refreshToken: string, user: UserType) => {
-    const properUser = { user_id: user.user_id, username: user.username, user_role: user.roles[0] };
+    const { user_id, username, roles } = user;
+    const user_role = roles?.length ? roles[0].toLowerCase() : '';
 
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
-    setUser(properUser);
+    setUser({ user_id, username, user_role });
   };
 
   const logout = () => {
