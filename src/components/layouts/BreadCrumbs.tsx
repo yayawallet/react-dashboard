@@ -43,14 +43,11 @@ const BreadCrumbs = () => {
       </li>
 
       {crumbs.map((crumb) => {
-        let currentLink = '';
-
-        currentLink += `/${crumb}`;
         return (
           <li className="inline-flex items-center" key={crumb}>
             <Link
               className={`flex items-center text-sm ${crumbs.indexOf(crumb) === crumbs.length - 1 ? 'text-gray-400 cursor-default' : 'text-gray-600 hover:text-blue-600'}`}
-              to={currentLink}
+              to={crumbs.slice(0, crumbs.indexOf(crumb) + 1).join('/')}
             >
               <svg
                 className="flex-shrink-0 mx-2 overflow-visible size-4 text-gray-400"
