@@ -13,11 +13,13 @@ const Header = () => {
           <BreadCrumbs />
         </div>
 
-        <div
-          className="h-full w-full flex items-center justify-end text-lg font-semibold text-violet-800 cursor-pointer"
-          onClick={() => setOpen(!open)}
-        >
-          <img src={avater} alt="" className="h-full p-3" />
+        <div className="h-full w-full flex items-center justify-end">
+          <img
+            src={avater}
+            alt="Img"
+            className="h-full p-3 cursor-pointer"
+            onClick={() => setOpen(!open)}
+          />
         </div>
 
         <div className={`${open ? '' : 'hidden'}`}>

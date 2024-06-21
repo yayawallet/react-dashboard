@@ -2,7 +2,7 @@ import useFetchData from '../hooks/useFetchData';
 // import { UserProfile } from '../models';
 
 const Profile = () => {
-  const { data: profile } = useFetchData(['profile'], '/user/profile');
+  const { data: profile } = useFetchData('/user/profile');
 
   return (
     <div className="page-container">
@@ -65,16 +65,19 @@ const Profile = () => {
 
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Balance Limit</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile && profile?.currency + ' ' + profile?.balance_limit?.toLocaleString()}
+              <dd className="mt-1 text-sm text-gray-900 font-medium sm:mt-0 sm:col-span-2">
+                {profile && profile.type === 'BUSINESS'
+                  ? 'Unlimited'
+                  : profile?.currency + ' ' + profile?.balance_limit?.toLocaleString()}
               </dd>
             </div>
 
             <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-500">Daily transaction limit</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile &&
-                  profile?.currency + ' ' + profile?.daily_transaction_limit?.toLocaleString()}
+              <dd className="mt-1 text-sm text-gray-900 font-medium sm:mt-0 sm:col-span-2">
+                {profile && profile.type === 'BUSINESS'
+                  ? 'Unlimited'
+                  : profile?.currency + ' ' + profile?.daily_transaction_limit?.toLocaleString()}
               </dd>
             </div>
           </dl>

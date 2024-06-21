@@ -36,13 +36,11 @@ const LoginForm = () => {
       axios
         .post('/login', values)
         .then((res) => {
-          console.log('Success Login!!', res.data);
           setSuccess(true);
           setIsLoading(false);
-          login(res.data.access, res.data.refresh, res.data.user_id, res.data.username);
+          login(res.data.access, res.data.refresh, res.data.user);
         })
         .catch(() => {
-          console.log('Login Failed!!');
           setSuccess(false);
           setIsLoading(false);
           setErrorMessage('Incorrect username or password');

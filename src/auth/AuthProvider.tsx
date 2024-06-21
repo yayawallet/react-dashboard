@@ -1,72 +1,55 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
+import { createContext, useContext, ReactNode } from 'react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useCookies } from '../hooks/useCookies';
 
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user_role: string;
-  username: string;
-  login: (accessToken: string, refreshToken: string, user_id: string, username: string) => void;
-  logout: () => void;
-}
-
-type TokenType = {
-  exp: Date;
+type UserType = {
   roles: string[];
+  username: string;
+  user_id: string;
 };
 
-// @ts-ignore
-export const AuthContext = createContext<AuthContextType>();
+type FilteredUserType = {
+  username: string;
+  user_role: string;
+};
+
+type AuthContextType = {
+  user: FilteredUserType | null;
+  login: (accessToken: string, refreshToken: string, user: UserType) => void;
+  logout: () => void;
+};
+
+const defaultAuthContext: AuthContextType = {
+  user: null,
+  login: () => {},
+  logout: () => {},
+};
+
+export const AuthContext = createContext<AuthContextType>(defaultAuthContext);
 
 export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
-  const [user_role, setUserRole] = useState<string>(localStorage.getItem('user_role') || '');
-  const [username, setUsername] = useState<string>(localStorage.getItem('username') || '');
+  const [user, setUser] = useLocalStorage('user');
+  const [, setAccessToken] = useCookies('access_token');
+  const [, setRefreshToken] = useCookies('refresh_token');
 
-  const accessToken = Cookies.get('access_token');
-  const decodedToken: TokenType | null = accessToken ? jwtDecode(accessToken || '') : null;
+  const login = (accessToken: string, refreshToken: string, user: UserType) => {
+    const { user_id, username, roles } = user;
+    const user_role = roles?.length ? roles[0].toLowerCase() : '';
 
-  useEffect(() => {
-    if (!decodedToken) return;
-    const expireDate = Number(decodedToken.exp) * 1000;
-    if (expireDate < new Date().getTime()) setIsAuthenticated(false);
-    else setIsAuthenticated(true);
-  }, []);
-
-  const login = (accessToken: string, refreshToken: string, user_id: string, username: string) => {
-    const decodedToken: TokenType | null = accessToken ? jwtDecode(accessToken || '') : null;
-    const user_role = decodedToken ? decodedToken.roles[0].toLocaleLowerCase() : '';
-
-    Cookies.set('access_token', accessToken);
-    Cookies.set('refresh_token', refreshToken);
-    localStorage.setItem('user_id', user_id);
-    localStorage.setItem('username', username);
-    localStorage.setItem('user_role', user_role);
-
-    setIsAuthenticated(true);
-    setUserRole(user_role);
-    setUsername(localStorage.getItem('username') || '');
+    setAccessToken(accessToken);
+    setRefreshToken(refreshToken);
+    setUser({ user_id, username, user_role });
   };
 
   const logout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    localStorage.removeItem('user_Id');
-    localStorage.removeItem('username');
-    localStorage.removeItem('user_role');
-
-    setIsAuthenticated(false);
-    setUserRole('');
-    setUsername('');
+    setAccessToken('');
+    setRefreshToken('');
+    setUser(null);
   };
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, user_role, username, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

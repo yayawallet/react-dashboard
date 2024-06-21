@@ -5,36 +5,32 @@ import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import useFetchData from '../../hooks/useFetchData';
 import SidebarItem from './SidebarItem';
-import { menus } from '../../routing/navigation';
+import { sidebarNavs } from '../../routing/navigation';
 import { useAuth } from '../../auth/AuthProvider';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const { isAuthenticated, user_role } = useAuth();
 
-  const { data: profile } = useFetchData(['profile'], '/user/profile');
+  const { user } = useAuth();
+  const user_role = user?.user_role || '';
+
+  const { data: profile } = useFetchData('/user/profile');
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);
   };
 
-  const sidebarMenus = menus
-    .filter((menu) => (menu.isPrivate ? isAuthenticated : true))
+  const sidebarMenus = sidebarNavs
     .filter((menu) => (menu.accessRoles ? menu.accessRoles.includes(user_role) : true))
     .filter((menu) => {
-      if (menu.submenuItems) {
-        // Filter submenuItems based on accessRoles
-        menu.submenuItems = menu.submenuItems.filter((submenu) =>
+      if (menu.children) {
+        menu.children = menu.children.filter((submenu) =>
           submenu.accessRoles ? submenu.accessRoles.includes(user_role) : true
         );
-        // Only include menu if there are any submenuItems left after filtering
-        return menu.submenuItems.length > 0;
+        return menu.children.length > 0;
       }
       return true;
-    })
-    .filter((menu) => menu.title);
-
-  console.log(sidebarMenus);
+    });
 
   return (
     <>
@@ -109,7 +105,6 @@ const Sidebar = () => {
               </li>
 
               {sidebarMenus.map((menu, index) => (
-                // @ts-ignore
                 <SidebarItem key={index} menu={menu} />
               ))}
             </ul>

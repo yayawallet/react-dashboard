@@ -58,12 +58,12 @@ table > tbody > tr > td {
 
 table > thead > tr > th:first-child,
 table > tbody > tr > td:first-child {
-  padding-left: 2rem !important;
+  padding-left: 1rem !important;
 }
 
 table > thead > tr > th:last-child,
 table > tbody > tr > td:last-child {
-  padding-right: 2rem !important;
+  padding-right: 1rem !important;
 }
 
 input[type='number']::-webkit-inner-spin-button,

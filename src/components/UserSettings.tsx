@@ -2,10 +2,8 @@ import { useAuth } from '../auth/AuthProvider';
 import { IoLogOutOutline, IoPersonCircleOutline, IoLockOpenOutline } from 'react-icons/io5';
 
 const UserSettings = () => {
-  const user_role = localStorage.getItem('user_role') || 'user';
-  const username = localStorage.getItem('username') || '-';
-
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const { username, user_role } = user || {};
 
   return (
     <div className="absolute top-16 right-8 bg-white z-50">
@@ -14,14 +12,14 @@ const UserSettings = () => {
           <span className="text-xl px-3 py-2">
             <IoLockOpenOutline />
           </span>
-          <span>{user_role}</span>
+          <span>{user_role && user_role}</span>
         </li>
 
         <li className="flex items-center px-6 pr-24">
-          <span className="text-2xl px-3 py-2">
+          <span className="text-xl px-3 py-2">
             <IoPersonCircleOutline />
           </span>
-          <span>{username}</span>
+          <span>{username && username}</span>
         </li>
 
         <li

@@ -1,33 +1,19 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useAuth } from '../auth/AuthProvider';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
 export default axios.create({
   baseURL,
-  // headers: {
-  //   'Content-Type': 'application/json',
-  // },
 });
-
-const fetchAccessToken = async () => {
-  const storedAccessToken = Cookies.get('access_token');
-  if (!storedAccessToken) return null;
-
-  return storedAccessToken;
-};
 
 export const authAxios = axios.create({
   baseURL,
-  // headers: {
-  //   'Content-Type': 'application/json',
-  // },
 });
 
 authAxios.interceptors.request.use(
-  async (config) => {
-    const accessToken = await fetchAccessToken();
+  (config) => {
+    const accessToken = Cookies.get('access_token');
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -41,11 +27,14 @@ authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
     console.log('Axios request failed');
-    console.log('Axios request failed');
-    console.log('Axios request failed');
+    console.log(error);
 
     if (error.response && error.response.status === 401) {
-      localStorage.clear();
+      console.log('Unauthorized request failed');
+      localStorage.removeItem('user');
+      Cookies.remove('access_token');
+      Cookies.remove('refresh_token');
+
       window.location.href = '/login';
     }
 

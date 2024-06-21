@@ -1,3 +1,5 @@
+import { Navigate } from 'react-router-dom';
+
 import AirTime from '../pages/AirTime/Index';
 
 import Transaction from '../pages/Transaction/Index';
@@ -5,12 +7,6 @@ import CreateTransaction from '../pages/Transaction/CreateTransaction';
 import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
-
-import Transfer from '../pages/BankTransfer/Index';
-import CreateTransfer from '../pages/BankTransfer/CreateTransfer';
-import TransferList from '../pages/BankTransfer/TransferList';
-import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
-import TransferFee from '../pages/BankTransfer/TransferFee';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/Create';
@@ -24,14 +20,23 @@ import RequestPayment from '../pages/RecurringContract/RequestPayment';
 import ReportContract from '../pages/RecurringContract/ReportContract';
 import ReportRequestPayment from '../pages/RecurringContract/ReportRequestPayment';
 
+import Transfer from '../pages/BankTransfer/Index';
+import CreateTransfer from '../pages/BankTransfer/CreateTransfer';
+import TransferList from '../pages/BankTransfer/TransferList';
+import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
+import TransferFee from '../pages/BankTransfer/TransferFee';
+
 import Support from '../pages/Support';
 import Guide from '../pages/Guide';
 import HelpCenter from '../pages/HelpCenter';
 import AboutYaYa from '../pages/AboutYaYa';
 
 // Non-menu navigations
+import DefaultHeader from '../components/layouts/DefaultHeader';
+import Layout from '../components/layouts/Index';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
+import AboutMe from '../pages/AboutMe';
 import Login from '../pages/Authentication/Login';
 import NotFound from '../pages/NotFound';
 
@@ -45,9 +50,7 @@ import { RiBankFill } from 'react-icons/ri';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
 
-const privateNavs = [
-  { path: '/', element: <Home />, accessRoles: ['admin', 'clerk'] },
-  { path: 'profile', element: <Profile />, accessRoles: ['admin', 'clerk'] },
+export const sidebarNavs = [
   {
     title: 'Airtime/Package',
     path: 'airtime',
@@ -57,26 +60,26 @@ const privateNavs = [
   },
   {
     title: 'Transaction',
-    path: 'transaction/',
+    path: 'transaction',
     icon: <BiTransferAlt />,
     element: <Transaction />,
     accessRoles: ['admin', 'clerk'],
-    submenuItems: [
+    children: [
       {
         title: 'Create Transaction',
-        path: 'transaction/create',
+        path: 'create',
         element: <CreateTransaction />,
         accessRoles: ['admin'],
       },
       {
         title: 'Transaction List',
-        path: 'transaction/list',
+        path: 'list',
         element: <TransactionList />,
         accessRoles: ['admin', 'clerk'],
       },
       {
         title: 'Verify Transaction',
-        path: 'transaction/verify-id',
+        path: 'verify-id',
         element: <VerifyTransactionByID />,
         accessRoles: ['admin', 'clerk'],
       },
@@ -95,22 +98,22 @@ const privateNavs = [
     icon: <RiCalendarScheduleLine />,
     element: <ScheduledPayment />,
     accessRoles: ['admin', 'clerk'],
-    submenuItems: [
+    children: [
       {
         title: 'Create Schedule',
-        path: 'scheduled-payment/create',
+        path: 'create',
         element: <CreateScheduled />,
         accessRoles: ['admin'],
       },
       {
         title: 'Scheduled List',
-        path: 'scheduled-payment/list',
+        path: 'list',
         element: <ListScheduled />,
         accessRoles: ['admin', 'clerk'],
       },
       {
         title: 'Scheduled Report',
-        path: 'scheduled-payment/report',
+        path: 'report',
         element: <ReportSchedule />,
         accessRoles: ['admin', 'clerk'],
       },
@@ -118,38 +121,38 @@ const privateNavs = [
   },
   {
     title: 'Recurring Contract',
-    path: 'recurring-contract/',
+    path: 'recurring-contract',
     icon: <MdOutlinePayments />,
     element: <RecurringContract />,
     accessRoles: ['admin', 'clerk'],
-    submenuItems: [
+    children: [
       {
         title: 'Create Contract',
-        path: 'recurring-contract/create',
+        path: 'create',
         element: <CreateContract />,
         accessRoles: ['admin'],
       },
       {
         title: 'Contract List',
-        path: 'recurring-contract/list',
+        path: 'list',
         element: <ContractList />,
         accessRoles: ['admin', 'clerk'],
       },
       {
         title: 'Contract Report',
-        path: 'recurring-contract/report',
+        path: 'report',
         element: <ReportContract />,
         accessRoles: ['admin', 'clerk'],
       },
       {
         title: 'Request Payment',
-        path: 'recurring-contract/request-payment',
+        path: 'request-payment',
         element: <RequestPayment />,
         accessRoles: ['admin'],
       },
       {
         title: 'Request Payments Report',
-        path: 'recurring-contract/request-payment/report',
+        path: 'request-payment/report',
         element: <ReportRequestPayment />,
         accessRoles: ['admin', 'clerk'],
       },
@@ -157,52 +160,82 @@ const privateNavs = [
   },
   {
     title: 'Other Banks',
-    path: 'transfer/',
+    path: 'transfer',
     icon: <RiBankFill />,
     element: <Transfer />,
     accessRoles: ['admin', 'clerk'],
-    submenuItems: [
+    children: [
       {
         title: 'Transfer Money',
-        path: 'transfer/create',
+        path: 'create',
         element: <CreateTransfer />,
         accessRoles: ['admin'],
       },
       {
         title: 'Transfer List',
-        path: 'transfer/list',
+        path: 'list',
         element: <TransferList />,
         accessRoles: ['admin', 'clerk'],
       },
       {
         title: 'Check Fee',
-        path: 'transfer/check-fee',
+        path: 'check-fee',
         element: <TransferFee />,
         accessRoles: ['admin', 'clerk'],
       },
       {
         title: 'Account Lookup',
-        path: 'transfer/account-lookup',
+        path: 'account-lookup',
         element: <ExternalAccountLookup />,
         accessRoles: ['admin', 'clerk'],
       },
     ],
   },
-  { title: 'User Guide', path: 'guide', element: <Guide />, icon: <MdOutlineContactSupport /> },
-  { title: 'Support', path: 'support', element: <Support />, icon: <HiOutlineSupport /> },
+  {
+    title: 'User Guide',
+    path: 'guide',
+    element: <Guide />,
+    icon: <MdOutlineContactSupport />,
+    accessRoles: ['admin', 'clerk'],
+  },
+  {
+    title: 'Support',
+    path: 'support',
+    element: <Support />,
+    icon: <HiOutlineSupport />,
+    accessRoles: ['admin', 'clerk'],
+  },
 ];
 
-const publicNavs = [
-  { path: '/login', element: <Login /> },
-  { path: '/help-center', element: <HelpCenter /> }, // Header Menu
-  { path: '/about-yaya', element: <AboutYaYa /> }, // Header Menu
-  { path: '*', element: <NotFound /> },
+export const privateNavs = [
+  {
+    path: '',
+    element: <Layout />,
+    children: [
+      ...sidebarNavs.map((nav) => ({
+        path: nav.path,
+        element: nav.element,
+        children: nav.children,
+      })),
+      { path: '', element: <Home /> },
+      { path: 'profile', element: <Profile /> },
+      { path: 'me', element: <AboutMe /> },
+      { path: 'login', element: <Navigate to="/" replace={true} /> },
+      { path: '*', element: <NotFound /> },
+    ],
+  },
 ];
 
-const privateMenus = privateNavs.map((menu) => ({
-  ...menu,
-  isPrivate: true,
-}));
-const publicMenus = publicNavs.map((menu) => ({ ...menu, isPrivate: false }));
-
-export const menus = [...privateMenus, ...publicMenus];
+export const publicNavs = [
+  {
+    path: '',
+    element: <DefaultHeader />,
+    children: [
+      { path: '', element: <Navigate to="/login" replace={true} /> },
+      { path: 'login', element: <Login /> },
+      { path: 'help-center', element: <HelpCenter /> },
+      { path: 'about-yaya', element: <AboutYaYa /> },
+      { path: '*', element: <Navigate to="/login" replace={true} /> },
+    ],
+  },
+];

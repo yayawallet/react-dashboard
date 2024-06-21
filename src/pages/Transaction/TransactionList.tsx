@@ -15,18 +15,15 @@ const TransactionList = () => {
   const [isPending, setIsPending] = useState(false);
   const [copiedID, setCopiedID] = useState('');
 
-  const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
+  const { data: ownAccount } = useFetchData('/user/profile');
 
-  const { isPending: isPendingTransactionData, data: transactionData } = useFetchData(
-    ['transaction-list', currentPage],
+  const { isLoading: isPendingTransactionData, data: transactionData } = useFetchData(
     `/transaction/find-by-user?p=${currentPage}`
   );
 
-  const { isPending: isPendingSearch, data: searchResult } = useMutateData(
-    [searchQuery],
-    '/transaction/search',
-    { query: searchQuery }
-  );
+  const { isMutating: isPendingSearch, data: searchResult } = useMutateData('/transaction/search', {
+    query: searchQuery,
+  });
 
   useEffect(() => {
     if (transactionData) {
@@ -61,39 +58,27 @@ const TransactionList = () => {
 
   return (
     <div className="table-container">
-      <div className="ml-8 mt-5">
-        <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
-      </div>
-
       {transactionList.length <= 0 ? (
         <PageLoading />
       ) : (
         <>
-          <div className="mt-2 overflow-auto">
+          <div className="ml-8 mt-5">
+            <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+          </div>
+
+          <div className="mt-2 mx-4 overflow-auto border border-slate-200 rounded-xl">
+            <h3 className="px-5 py-4 font-medium">Transactions</h3>
+
             <table className="w-full">
-              <thead className="">
-                <tr className="bg-violet-500 text-gray-50">
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    ID
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Invoice
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Sender
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Amount
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Receiver
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Cause
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Date
-                  </th>
+              <thead>
+                <tr className="text-gray-50 border">
+                  <th className="text-left px-4 py-2 font-medium">ID</th>
+                  <th className="text-left px-4 py-2 font-medium">Invoice</th>
+                  <th className="text-left px-4 py-2 font-medium">Sender</th>
+                  <th className="text-left px-4 py-2 font-medium">Amount</th>
+                  <th className="text-left px-4 py-2 font-medium">Receiver</th>
+                  <th className="text-left px-4 py-2 font-medium">Cause</th>
+                  <th className="text-left px-4 py-2 font-medium">Date</th>
                 </tr>
               </thead>
 
@@ -102,7 +87,7 @@ const TransactionList = () => {
                   <tr key={t?.id} className="hover:bg-gray-100 text-nowrap">
                     <td
                       title={t?.id}
-                      className="relative border-t border-b border-slate-200 p-3"
+                      className="relative border-b border-slate-200 p-3"
                       onClick={() => copyTransactionID(t?.id)}
                     >
                       {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
@@ -112,7 +97,7 @@ const TransactionList = () => {
                         Transaction ID Copied
                       </span>
                     </td>
-                    <td className="relative border-t border-b border-slate-200 p-3">
+                    <td className="relative border-b border-slate-200 p-3">
                       <button
                         type="button"
                         className="pb-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
@@ -122,14 +107,14 @@ const TransactionList = () => {
                         </a>
                       </button>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {t?.sender.name.split(' ').slice(0, 2).join(' ')}
                       <br />
                       <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                         {'@' + t?.sender.account}
                       </span>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {ownAccount === t?.receiver.account ? (
                         <span className="inline-block font-semibold text-green-600">
                           &#43;&nbsp;
@@ -141,17 +126,17 @@ const TransactionList = () => {
                       )}
                       {t?.amount_with_currency}
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {t?.receiver.name.split(' ').slice(0, 2).join(' ')}
                       <br />
                       <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                         {'@' + t?.receiver.account}
                       </span>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {`${new Date(Number(t?.created_at_time) * 1000).toLocaleString()}`}
                     </td>
                   </tr>

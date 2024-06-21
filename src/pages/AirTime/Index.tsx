@@ -9,7 +9,7 @@ const AirTime = () => {
   const [selectedCategory, setSelectedCategory] = useState('airtime');
   const [errorMessage, setErrorMessage] = useState<string | boolean>(true);
 
-  const result = useFetchData(['profile'], '/user/profile');
+  const result = useFetchData('/user/profile');
   const ownPhoneNumber = result.data ? result.data.phone : '';
 
   useEffect(() => {

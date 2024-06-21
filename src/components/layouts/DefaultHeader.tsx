@@ -1,11 +1,7 @@
 import { Link, Outlet } from 'react-router-dom';
 import yayaBrand from '../../assets/yayawallet-brand.svg';
-import { useLocation } from 'react-router-dom';
 
 const DefaultHeader = () => {
-  const pathName = useLocation().pathname;
-  console.log(pathName);
-
   return (
     <div className="h-16 shadow-sm">
       <header className="h-full flex justify-between px-8">
@@ -15,24 +11,22 @@ const DefaultHeader = () => {
           </Link>
         </div>
 
-        <ul className="flex text-lg ml-auto">
-          <li
-            className={`hover:bg-slate-50 flex items-end ${pathName.endsWith('login') ? 'hidden' : ''} `}
-          >
-            <Link to="/login" className="font-semibold text-blue-800 px-4 py-3">
+        <ul className="flex ml-auto">
+          <li className="hover:bg-slate-50 flex items-end">
+            <Link to="/login" className="font-semibold text-blue-900 px-4 py-3">
               Login
             </Link>
           </li>
 
           <li className="hover:bg-slate-50 flex items-end">
-            <Link to="/about-yaya" className="font-semibold text-blue-800 px-4 py-3">
-              About YaYa
+            <Link to="/help-center" className="font-semibold text-blue-900 px-4 py-3">
+              Help Center
             </Link>
           </li>
 
           <li className="hover:bg-slate-50 flex items-end">
-            <Link to="/help-center" className="font-semibold text-blue-800 px-4 py-3">
-              Help Center
+            <Link to="/about-yaya" className="font-semibold text-blue-900 px-4 py-3">
+              About YaYa
             </Link>
           </li>
         </ul>
