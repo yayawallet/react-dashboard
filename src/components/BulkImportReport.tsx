@@ -18,11 +18,10 @@ const BulkImportReport = ({ documentType }: Props) => {
   // console.log(reportList);
 
   const {
-    isFetching,
-    isError,
-    isSuccess,
+    isLoading,
+    error,
     data: reportList,
-  } = useFetchData(['report', documentType], `/report/list?document_type=${documentType}`);
+  } = useFetchData(`/report/list?document_type=${documentType}`);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -37,11 +36,11 @@ const BulkImportReport = ({ documentType }: Props) => {
 
   return (
     <div className="table-container">
-      {isFetching ? (
+      {isLoading ? (
         <PageLoading />
-      ) : isError ? (
+      ) : error ? (
         <FetchingError />
-      ) : isSuccess && reportList.length === 0 ? (
+      ) : reportList?.length === 0 ? (
         <NotFound />
       ) : (
         <div className="mt-2 overflow-auto">

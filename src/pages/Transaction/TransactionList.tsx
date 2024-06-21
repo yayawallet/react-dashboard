@@ -15,18 +15,15 @@ const TransactionList = () => {
   const [isPending, setIsPending] = useState(false);
   const [copiedID, setCopiedID] = useState('');
 
-  const { data: ownAccount } = useFetchData(['profile'], '/user/profile');
+  const { data: ownAccount } = useFetchData('/user/profile');
 
-  const { isPending: isPendingTransactionData, data: transactionData } = useFetchData(
-    ['transaction-list', currentPage],
+  const { isLoading: isPendingTransactionData, data: transactionData } = useFetchData(
     `/transaction/find-by-user?p=${currentPage}`
   );
 
-  const { isPending: isPendingSearch, data: searchResult } = useMutateData(
-    [searchQuery],
-    '/transaction/search',
-    { query: searchQuery }
-  );
+  const { isMutating: isPendingSearch, data: searchResult } = useMutateData('/transaction/search', {
+    query: searchQuery,
+  });
 
   useEffect(() => {
     if (transactionData) {

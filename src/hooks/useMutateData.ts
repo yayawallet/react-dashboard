@@ -1,12 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import useSWRMutation from 'swr/mutation';
 import { authAxios } from '../api/axios';
 
-const useMutateData = (key: (string | number)[], path: string, body: object) => {
-  const fetchData = () => {
-    return authAxios.post(path, body).then((res) => res.data);
-  };
+const useMutateData = async (path: string, body: object) => {
+  const fetcher = () => authAxios.post(path, body).then((res) => res.data);
 
-  return useQuery({ queryKey: key, queryFn: fetchData });
+  const { trigger, data, error, isMutating } = useSWRMutation(path, fetcher);
+  return { data, error, isMutating, fetcher: trigger };
 };
 
 export default useMutateData;

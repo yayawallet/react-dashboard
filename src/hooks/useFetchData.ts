@@ -1,16 +1,10 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import useSWR from 'swr';
 import { authAxios } from '../api/axios';
 
-const useFetchData = (key: (string | number)[], path: string) => {
-  const fetchData = () => {
-    return authAxios.get(path).then((res) => res.data);
-  };
+const useFetchData = (path: string) => {
+  const fetcher = () => authAxios.get(path).then((res) => res.data);
 
-  const options = {
-    placeholderData: keepPreviousData,
-  };
-
-  return useQuery({ queryKey: key, queryFn: fetchData, ...options });
+  return useSWR(path, fetcher);
 };
 
 export default useFetchData;

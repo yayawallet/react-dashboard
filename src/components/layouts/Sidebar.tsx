@@ -14,7 +14,7 @@ const Sidebar = () => {
   const { user } = useAuth();
   const user_role = user?.user_role || '';
 
-  const { data: profile } = useFetchData(['profile'], '/user/profile');
+  const { data: profile } = useFetchData('/user/profile');
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);

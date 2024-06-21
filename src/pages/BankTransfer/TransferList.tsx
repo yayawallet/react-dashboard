@@ -13,7 +13,7 @@ const TransferList = () => {
     setTimeout(() => setCopiedID(''), 1000);
   };
 
-  const { data: transferList } = useFetchData(['transferList'], '/transfer/list');
+  const { data: transferList } = useFetchData('/transfer/list');
 
   return (
     <div className="table-container">

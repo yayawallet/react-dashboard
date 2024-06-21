@@ -2,7 +2,7 @@ import useFetchData from '../hooks/useFetchData';
 // import { UserProfile } from '../models';
 
 const Profile = () => {
-  const { data: profile } = useFetchData(['profile'], '/user/profile');
+  const { data: profile } = useFetchData('/user/profile');
 
   return (
     <div className="page-container">

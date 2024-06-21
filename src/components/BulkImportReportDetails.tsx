@@ -13,11 +13,10 @@ const BulkImportReportDetails = ({ id, documentType }: Props) => {
   const [column, setColumn] = useState<any[]>([]);
 
   const {
-    isFetching,
-    isError,
-    isSuccess,
+    isLoading,
+    error,
     data: reportDetails,
-  } = useFetchData(['report', documentType], `/report/details/${id}?document_type=${documentType}`);
+  } = useFetchData(`/report/details/${id}?document_type=${documentType}`);
 
   useEffect(() => {
     if (reportDetails?.length < 1) return;
@@ -27,11 +26,11 @@ const BulkImportReportDetails = ({ id, documentType }: Props) => {
 
   return (
     <div className="page-container">
-      {isFetching ? (
+      {isLoading ? (
         <PageLoading />
-      ) : isError ? (
+      ) : error ? (
         <FetchingError />
-      ) : isSuccess && reportDetails.length === 0 ? (
+      ) : reportDetails?.length === 0 ? (
         <NotFound />
       ) : (
         <>
