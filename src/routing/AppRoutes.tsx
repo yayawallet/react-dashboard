@@ -21,9 +21,19 @@ const AppRoutes = () => {
     .filter((nav: NavType) => {
       if (!nav.children) return true;
 
-      nav.children = nav.children.filter((subNav: NavType) =>
-        subNav.accessRoles ? subNav.accessRoles.includes(user_role) : true
-      );
+      nav.children = nav.children
+        .filter((subNav: NavType) =>
+          subNav.accessRoles ? subNav.accessRoles.includes(user_role) : true
+        )
+        .filter((subNav: NavType) => {
+          if (!subNav.children) return true;
+
+          subNav.children = subNav.children.filter((subNav2: NavType) =>
+            subNav2.accessRoles ? subNav2.accessRoles.includes(user_role) : true
+          );
+
+          return subNav.children.length > 0;
+        });
 
       return nav.children.length > 0;
     });
