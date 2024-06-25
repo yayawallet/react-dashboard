@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import PageLoading from '../components/ui/PageLoading';
 import { useGetData } from '../hooks/useSWR';
-import NotFound from './NotFound';
-import FetchingError from './layouts/FetchingError';
 import { ReportType } from '../models';
 import { authAxios } from '../api/axios';
+import DataFetching from './ui/DataFetching';
+import FetchError from './ui/FetchError';
+import NoItems from './ui/NoItems';
 
 interface Props {
   documentType: string;
@@ -36,12 +36,12 @@ const BulkImportReport = ({ documentType }: Props) => {
 
   return (
     <div className="table-container">
-      {isLoading ? (
-        <PageLoading />
-      ) : error ? (
-        <FetchingError />
+      {error ? (
+        <FetchError />
+      ) : isLoading ? (
+        <DataFetching />
       ) : reportList?.length === 0 ? (
-        <NotFound />
+        <NoItems />
       ) : (
         <div className="mt-2 overflow-auto">
           <table className="w-full">
