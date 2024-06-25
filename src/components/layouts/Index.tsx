@@ -12,7 +12,7 @@ const Index = () => {
 
       <Sidebar />
 
-      <div className="lg:ml-[300px]">{<Outlet />}</div>
+      <div className="lg:ml-[300px] p-4">{<Outlet />}</div>
     </>
   );
 };
