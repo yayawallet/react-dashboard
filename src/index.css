@@ -41,12 +41,9 @@ table > thead > tr {
   color: rgb(108, 122, 145) !important;
 }
 
+/* Table ID */
 table > tbody > tr > td:first-child {
   color: rgb(108, 122, 145) !important;
-}
-
-table > tbody > tr > td {
-  font-size: 15px !important;
 }
 
 table > thead > tr > th:first-child,
