@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 // import { UserProfile } from '../../models';
 import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
-import useFetchData from '../../hooks/useFetchData';
+import { useGetData } from '../../hooks/useSWR';
 import SidebarItem from './SidebarItem';
 import { sidebarNavs } from '../../routing/navigation';
 import { useAuth } from '../../auth/AuthProvider';
@@ -14,7 +14,7 @@ const Sidebar = () => {
   const { user } = useAuth();
   const user_role = user?.user_role || '';
 
-  const { data: profile } = useFetchData('/user/profile');
+  const { data: profile } = useGetData('/user/profile');
 
   const openSidebarMenu = () => {
     setSidebarOpen(true);

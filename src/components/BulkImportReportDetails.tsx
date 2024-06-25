@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import PageLoading from '../components/ui/PageLoading';
-import useFetchData from '../hooks/useFetchData';
+import { useGetData } from '../hooks/useSWR';
 import NotFound from './NotFound';
 import FetchingError from './layouts/FetchingError';
 
@@ -16,7 +16,7 @@ const BulkImportReportDetails = ({ id, documentType }: Props) => {
     isLoading,
     error,
     data: reportDetails,
-  } = useFetchData(`/report/details/${id}?document_type=${documentType}`);
+  } = useGetData(`/report/details/${id}?document_type=${documentType}`);
 
   useEffect(() => {
     if (reportDetails?.length < 1) return;

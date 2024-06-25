@@ -4,8 +4,7 @@ import SearchBar from '../../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
 import PageLoading from '../../components/ui/PageLoading';
-import useFetchData from '../../hooks/useFetchData';
-import useMutateData from '../../hooks/useMutateData';
+import { useGetData, usePostData } from '../../hooks/useSWR';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
@@ -15,15 +14,18 @@ const TransactionList = () => {
   const [isPending, setIsPending] = useState(false);
   const [copiedID, setCopiedID] = useState('');
 
-  const { data: ownAccount } = useFetchData('/user/profile');
+  const { data: ownAccount } = useGetData('/user/profile');
 
-  const { isLoading: isPendingTransactionData, data: transactionData } = useFetchData(
+  const { isLoading: isPendingTransactionData, data: transactionData } = useGetData(
     `/transaction/find-by-user?p=${currentPage}`
   );
 
-  const { isMutating: isPendingSearch, data: searchResult } = useMutateData('/transaction/search', {
-    query: searchQuery,
-  });
+  const { isLoading: isPendingSearch, data: searchResult } = usePostData(
+    ['/transaction/search', searchQuery],
+    {
+      query: searchQuery,
+    }
+  );
 
   useEffect(() => {
     if (transactionData) {

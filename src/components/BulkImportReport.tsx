@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PageLoading from '../components/ui/PageLoading';
-import useFetchData from '../hooks/useFetchData';
+import { useGetData } from '../hooks/useSWR';
 import NotFound from './NotFound';
 import FetchingError from './layouts/FetchingError';
 import { ReportType } from '../models';
@@ -21,7 +21,7 @@ const BulkImportReport = ({ documentType }: Props) => {
     isLoading,
     error,
     data: reportList,
-  } = useFetchData(`/report/list?document_type=${documentType}`);
+  } = useGetData(`/report/list?document_type=${documentType}`);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -57,9 +57,6 @@ const BulkImportReport = ({ documentType }: Props) => {
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Failed
                 </th>
-                {/* <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                  Queued
-                </th> */}
                 <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
                   Remark
                 </th>
@@ -102,9 +99,6 @@ const BulkImportReport = ({ documentType }: Props) => {
                   <td className="text-red-600 font-semibold border-t border-b border-slate-200 p-3">
                     {list?.failed_count || '~'}
                   </td>
-                  {/* <td className="text-slate-600 font-semibold border-t border-b border-slate-200 p-3">
-                    {list?.on_queue_count}
-                  </td> */}
                   <td className="border-t border-b border-slate-200 p-3">{list?.remark}</td>
                   <td className="border-t border-b border-slate-200 p-3">{list?.file_name}</td>
                   <td className="border-t border-b border-slate-200 p-3">
