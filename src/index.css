@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --header-height: 64px;
+}
+
 * {
   outline-color: #8d66cc;
 }
