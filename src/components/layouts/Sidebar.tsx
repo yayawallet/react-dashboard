@@ -58,9 +58,9 @@ const Sidebar = () => {
         <div className="h-full pb-3 overflow-y-scroll loverflow-y-auto bg-gray-50">
           <Link
             to="/"
-            className="flex items-center h-16 ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
+            className="flex items-center h-header ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
           >
-            <img src={yayawalletLogo} className="h-12" alt="YaYaWallet Logo" />
+            <img src={yayawalletLogo} className="h-full" alt="YaYaWallet Logo" />
           </Link>
 
           <div className="px-3 pt-5 relative">

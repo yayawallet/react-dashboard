@@ -1,6 +1,7 @@
 const AboutYaYa = () => {
   return (
-    <div style={{ height: 'calc(100vh - 64px)' }}>
+    <div style={{ height: 'calc(100vh - var(--header-height) - 2rem)' }}>
+      {/* height = screen - header - top and bottom padding of layout */}
       <iframe
         src="https://yayawallet.com/en/about-us"
         height={'100%'}

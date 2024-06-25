@@ -7,7 +7,7 @@ const Header = () => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="h-16 shadow-sm">
+    <div className="h-header shadow-sm">
       <header className="flex justify-between px-4 md:px-8 h-full">
         <div className="self-end pb-1">
           <BreadCrumbs />

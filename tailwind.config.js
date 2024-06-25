@@ -2,7 +2,11 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      height: {
+        header: 'var(--header-height)',
+      },
+    },
     container: {
       padding: '1rem',
       center: false,
