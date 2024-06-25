@@ -55,7 +55,7 @@ const Sidebar = () => {
         className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
-        <div className="h-full pb-3 overflow-y-scroll loverflow-y-auto bg-gray-50">
+        <div className="h-full pb-3 overflow-y-scroll sidebar-scrollbar loverflow-y-auto bg-gray-50">
           <Link
             to="/"
             className="flex items-center h-header ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
