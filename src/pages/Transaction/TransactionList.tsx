@@ -66,7 +66,7 @@ const TransactionList = () => {
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-3">
-            <h3 className="py-2 font-medium">Transactions</h3>
+            <h3 className="py-2 text-lg font-medium">Transactions</h3>
             <div className="w-64">
               <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
             </div>
@@ -76,8 +76,8 @@ const TransactionList = () => {
             <NoItems />
           ) : (
             <>
-              <div className="mt-2mx-4 overflow-auto ">
-                <table className="w-full ">
+              <div className="mt-2mx-4 overflow-auto">
+                <table className="w-full">
                   <thead>
                     <tr className="text-gray-50 border">
                       <th className="text-left px-4 py-2 font-medium">ID</th>
