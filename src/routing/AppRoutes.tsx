@@ -1,5 +1,5 @@
 import { useRoutes } from 'react-router-dom';
-import { publicNavs, privateNavs } from './navigation';
+import { publicNavs, privateNavs, sidebarNavs } from './navigation';
 import { useAuth } from '../auth/AuthProvider';
 
 type NavType = {
@@ -16,6 +16,8 @@ const AppRoutes = () => {
   const user_role = user?.user_role || '';
 
   const publicRoutes = publicNavs;
+  if (!user) return useRoutes(publicRoutes);
+
   const privateRoutes = privateNavs
     .filter((nav: NavType) => (nav.accessRoles ? nav.accessRoles.includes(user_role) : true))
     .filter((nav: NavType) => {
@@ -38,7 +40,7 @@ const AppRoutes = () => {
       return nav.children.length > 0;
     });
 
-  return useRoutes(user ? privateRoutes : publicRoutes);
+  return useRoutes(privateRoutes);
 };
 
 export default AppRoutes;

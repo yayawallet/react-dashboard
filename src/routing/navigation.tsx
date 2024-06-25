@@ -212,11 +212,7 @@ export const privateNavs = [
     path: '',
     element: <Layout />,
     children: [
-      ...sidebarNavs.map((nav) => ({
-        path: nav.path,
-        element: nav.element,
-        children: nav.children,
-      })),
+      ...sidebarNavs,
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
       { path: 'me', element: <AboutMe /> },
