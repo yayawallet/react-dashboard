@@ -86,7 +86,7 @@ const TransactionList = () => {
                       <th className="text-left px-4 py-2 font-medium">Sender</th>
                       <th className="text-left px-4 py-2 font-medium">Amount</th>
                       <th className="text-left px-4 py-2 font-medium">Receiver</th>
-                      <th className="text-left px-4 py-2 font-medium">Cause</th>
+                      <th className="text-left px-4 py-2 font-medium">Reason</th>
                       <th className="text-left px-4 py-2 font-medium">Date</th>
                     </tr>
                   </thead>
