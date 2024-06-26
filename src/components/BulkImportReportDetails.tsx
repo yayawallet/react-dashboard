@@ -1,68 +1,79 @@
-import { useEffect, useState } from 'react';
-import PageLoading from '../components/ui/PageLoading';
+import { useState } from 'react';
 import { useGetData } from '../hooks/useSWR';
-import NotFound from './NotFound';
-import FetchingError from './layouts/FetchingError';
+import DataFetching from './ui/DataFetching';
+import FetchError from './ui/FetchError';
+import NoItems from './ui/NoItems';
+import { ReportDetailType } from '../models';
+import { useParams } from 'react-router-dom';
 
-interface Props {
-  id: string;
-  documentType: string;
-}
+const BulkImportReportDetails = () => {
+  const [copiedID, setCopiedID] = useState('');
 
-const BulkImportReportDetails = ({ id, documentType }: Props) => {
-  const [column, setColumn] = useState<any[]>([]);
+  const { id } = useParams();
 
-  const {
-    isLoading,
-    error,
-    data: reportDetails,
-  } = useGetData(`/report/details/${id}?document_type=${documentType}`);
+  const { error, isLoading, data: reportDetails } = useGetData(`/report/details/${id}}`);
+  console.log(reportDetails);
 
-  useEffect(() => {
-    if (reportDetails?.length < 1) return;
+  const copyTransactionID = (id: string) => {
+    navigator.clipboard.writeText(id);
+    setCopiedID(id);
 
-    setColumn(Object.keys(reportDetails[0]));
-  }, [reportDetails]);
+    setTimeout(() => setCopiedID(''), 1000);
+  };
 
   return (
-    <div className="page-container">
-      {isLoading ? (
-        <PageLoading />
-      ) : error ? (
-        <FetchingError />
+    <div className="table-container">
+      {error ? (
+        <FetchError />
+      ) : isLoading ? (
+        <DataFetching />
       ) : reportDetails?.length === 0 ? (
-        <NotFound />
+        <NoItems />
       ) : (
-        <>
-          <div className="mt-2 overflow-auto">
+        <div className="border border-slate-200 rounded-xl">
+          <div className="flex flex-wrap justify-between items-center m-3">
+            <h3 className="py-2 text-lg font-medium">Failed Records</h3>
+            <ul>
+              <li className="text-gray-600 font-semibold mr-4">
+                Failed Count: {reportDetails.failed_count}
+              </li>
+            </ul>
+          </div>
+          <div className="overflow-auto">
             <table className="w-full">
               <thead className="">
                 <tr className="bg-violet-500 text-gray-50">
-                  {column?.map((col, index) => (
-                    <th
-                      key={index}
-                      className="border-t border-b border-slate-100 text-left p-3 font-medium"
-                    >
-                      {col}
-                    </th>
-                  ))}
+                  <th className="text-left px-4 py-2 font-medium">ID</th>
+                  <th className="text-left px-4 py-2 font-medium">Row&nbsp;#</th>
+                  <th className="text-left px-4 py-2 font-medium">Error Message</th>
                 </tr>
               </thead>
 
               <tbody>
-                {reportDetails?.map((detail: any) => (
-                  <tr key={detail.uuid} className="hover:bg-gray-100 text-nowrap">
-                    {column?.map((col) => (
-                      <td className="relative border-t border-b border-slate-200 p-3">
-                        {detail[col]}
-                      </td>
-                    ))}
+                {reportDetails.failed?.map((list: ReportDetailType) => (
+                  <tr key={list.uuid} className="hover:bg-gray-100 text-nowrap">
+                    <td
+                      title={list.uuid}
+                      className="relative border-b border-slate-200 p-3 cursor-pointer"
+                      onClick={() => copyTransactionID(list.uuid)}
+                    >
+                      {`${list.uuid.slice(0, 6)}...${list.uuid.slice(-2)}`}
+                      <span
+                        className={`${copiedID === list.uuid ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                      >
+                        ID Copied
+                      </span>
+                    </td>
+                    <td className="border-b border-slate-200 p-3">{list.row_number}</td>
+                    <td className="border-b border-slate-200 p-3">
+                      {list.error_message.substring(0, 80) + '...'}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

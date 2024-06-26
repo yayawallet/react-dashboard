@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useGetData } from '../hooks/useSWR';
 import { ReportType } from '../models';
-import { authAxios } from '../api/axios';
 import DataFetching from './ui/DataFetching';
 import FetchError from './ui/FetchError';
 import NoItems from './ui/NoItems';
+import { Link } from 'react-router-dom';
 
 interface Props {
   documentType: string;
@@ -12,10 +12,6 @@ interface Props {
 
 const BulkImportReport = ({ documentType }: Props) => {
   const [copiedID, setCopiedID] = useState('');
-  const [rs, setRS] = useState();
-
-  console.log(rs ? rs : 'hi');
-  // console.log(reportList);
 
   const {
     isLoading,
@@ -28,10 +24,6 @@ const BulkImportReport = ({ documentType }: Props) => {
     setCopiedID(id);
 
     setTimeout(() => setCopiedID(''), 1000);
-  };
-
-  const fetchDetails = (id: string) => {
-    authAxios.get(`/report/details/${id}}`).then((res) => setRS(res.data));
   };
 
   return (
@@ -79,10 +71,9 @@ const BulkImportReport = ({ documentType }: Props) => {
                     <td className="relative border-b border-slate-200 p-3">
                       <button
                         type="button"
-                        className="py-0.5 px-3 text-sm text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
-                        onClick={() => fetchDetails(list.uuid)}
+                        className="px-2 text-sm focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                       >
-                        Detail
+                        <Link to={list.uuid}>Detail</Link>
                       </button>
                     </td>
                     <td className="text-green-600 font-semibold border-b border-slate-200 p-3">
