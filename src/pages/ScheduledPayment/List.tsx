@@ -6,6 +6,7 @@ import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
 import useAccessToken from '../../hooks/useAccessToken';
 import PageLoading from '../../components/ui/PageLoading';
+import { capitalize } from '../../utils/table_utils';
 
 const List = () => {
   const [scheduledPaymentList, setScheduledPaymentList] = useState<ScheduledPayment[]>([]);
@@ -83,25 +84,13 @@ const List = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-violet-500 text-gray-50">
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    ID
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Receiver
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Amount
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Recurring
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Next Run-time
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Action
-                  </th>
+                <tr>
+                  <th className="text-left px-4 py-2 font-medium">ID</th>
+                  <th className="text-left px-4 py-2 font-medium">Receiver</th>
+                  <th className="text-left px-4 py-2 font-medium">Amount</th>
+                  <th className="text-left px-4 py-2 font-medium">Recurring</th>
+                  <th className="text-left px-4 py-2 font-medium">Next Run-time</th>
+                  <th className="text-left px-4 py-2 font-medium">Action</th>
                 </tr>
               </thead>
 
@@ -110,34 +99,30 @@ const List = () => {
                   <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
                     <td
                       title={item.id}
-                      className="relative border-t border-b border-slate-200 p-3"
+                      className="relative border-b border-slate-200 p-3 cursor-pointer"
                       onClick={() => copySchedulePaymentId(item.id)}
                     >
-                      {`${item.id.slice(0, 4)}...${item.id.slice(-2)}`}
+                      {`${item.id.slice(0, 6)}...${item.id.slice(-2)}`}
                       <span
-                        className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                        className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                       >
-                        Id Copied
+                        ID Copied
                       </span>
                     </td>
 
-                    <td className="border-t border-b border-slate-200 p-3">
-                      {item.receiver.name.split(' ').slice(0, 2).join(' ')}
+                    <td className="border-b border-slate-200 p-3">
+                      {capitalize(item.receiver.name).split(' ').slice(0, 2).join(' ')}
                       <br />
                       <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                         {'@' + item.receiver.account}
                       </span>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
-                      {item.amount.toFixed(2)} ETB
-                    </td>
-                    <td className="border-t border-b border-slate-200 p-3">
-                      {item.recurring_type}
-                    </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">{item.amount.toFixed(2)} ETB</td>
+                    <td className="border-b border-slate-200 p-3">{item.recurring_type}</td>
+                    <td className="border-b border-slate-200 p-3">
                       {`${new Date(Number(item.next_run_time) * 1000).toLocaleString()}`}
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       <button
                         className="text-sm bg-red-600 text-white py-1 px-3 rounded"
                         onClick={() => {

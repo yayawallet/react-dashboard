@@ -4,6 +4,7 @@ import { useGetData } from '../../hooks/useSWR';
 import DataFetching from '../../components/ui/DataFetching';
 import FetchError from '../../components/ui/FetchError';
 import NoItems from '../../components/ui/NoItems';
+import { capitalize } from '../../utils/table_utils';
 
 const TransferList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -33,25 +34,13 @@ const TransferList = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="bg-violet-500 text-gray-50">
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    ID
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Sender
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Amount
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Receiver
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Institution
-                  </th>
-                  <th className="border-t border-b border-slate-100 text-left p-3 font-medium">
-                    Ref code
-                  </th>
+                <tr>
+                  <th className="text-left px-4 py-2 font-medium">ID</th>
+                  <th className="text-left px-4 py-2 font-medium">Sender</th>
+                  <th className="text-left px-4 py-2 font-medium">Amount</th>
+                  <th className="text-left px-4 py-2 font-medium">Receiver</th>
+                  <th className="text-left px-4 py-2 font-medium">Institution</th>
+                  <th className="text-left px-4 py-2 font-medium">Ref code</th>
                 </tr>
               </thead>
 
@@ -64,24 +53,24 @@ const TransferList = () => {
                   >
                     <td
                       title={t?.id}
-                      className="relative border-t border-b border-slate-200 p-3"
+                      className="relative border-b border-slate-200 p-3  cursor-pointer"
                       onClick={() => copyTransferID(t?.id)}
                     >
-                      {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
+                      {`${t?.id.slice(0, 6)}...${t?.id.slice(-2)}`}
                       <span
-                        className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg z-index`}
+                        className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                       >
-                        ID copied
+                        ID Copied
                       </span>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {t?.user.name.split(' ').slice(0, 2).join(' ')}
                       <br />
                       <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                         {'@' + t?.user.account}
                       </span>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {t?.user.account === t?.payment_method.account_number ? (
                         <span className="inline-block font-semibold text-green-600">
                           &#43;&nbsp;
@@ -93,17 +82,17 @@ const TransferList = () => {
                       )}
                       {t?.amount}&nbsp;{t?.currency}
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
-                      {t?.payment_method.full_name.split(' ').slice(0, 2).join(' ')}
+                    <td className="border-b border-slate-200 p-3">
+                      {capitalize(t?.payment_method.full_name).split(' ').slice(0, 2).join(' ')}
                       <br />
                       <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
                         {'@' + t?.payment_method.account_number}
                       </span>
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">
+                    <td className="border-b border-slate-200 p-3">
                       {t?.payment_method.institution.name}
                     </td>
-                    <td className="border-t border-b border-slate-200 p-3">{t?.ref_code}</td>
+                    <td className="border-b border-slate-200 p-3">{t?.ref_code}</td>
                   </tr>
                 ))}
               </tbody>

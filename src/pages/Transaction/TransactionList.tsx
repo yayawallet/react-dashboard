@@ -7,6 +7,7 @@ import { useGetData, usePostData } from '../../hooks/useSWR';
 import DataFetching from '../../components/ui/DataFetching';
 import FetchError from '../../components/ui/FetchError';
 import NoItems from '../../components/ui/NoItems';
+import { capitalize } from '../../utils/table_utils';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
@@ -65,8 +66,8 @@ const TransactionList = () => {
         <DataFetching />
       ) : (
         <div className="border border-slate-200 rounded-xl">
-          <div className="flex flex-wrap justify-between items-center m-3">
-            <h3 className="py-2 text-lg font-medium">Transactions</h3>
+          <div className="flex flex-wrap justify-between items-center m-4">
+            <h3 className="text-lg font-medium">Transactions</h3>
             <div className="w-64">
               <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
             </div>
@@ -76,10 +77,10 @@ const TransactionList = () => {
             <NoItems />
           ) : (
             <>
-              <div className="mt-2mx-4 overflow-auto">
+              <div className="overflow-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="text-gray-50 border">
+                    <tr>
                       <th className="text-left px-4 py-2 font-medium">ID</th>
                       <th className="text-left px-4 py-2 font-medium">Invoice</th>
                       <th className="text-left px-4 py-2 font-medium">Sender</th>
@@ -95,12 +96,12 @@ const TransactionList = () => {
                       <tr key={t?.id} className="hover:bg-gray-100 text-nowrap">
                         <td
                           title={t?.id}
-                          className="relative border-b border-slate-200 p-3"
+                          className="relative border-b border-slate-200 p-3 cursor-pointer"
                           onClick={() => copyTransactionID(t?.id)}
                         >
-                          {`${t?.id.slice(0, 4)}...${t?.id.slice(-2)}`}
+                          {`${t?.id.slice(0, 6)}...${t?.id.slice(-2)}`}
                           <span
-                            className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 w-40 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                            className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                           >
                             Transaction ID Copied
                           </span>
@@ -116,7 +117,7 @@ const TransactionList = () => {
                           </button>
                         </td>
                         <td className="border-b border-slate-200 p-3">
-                          {t?.sender.name.split(' ').slice(0, 2).join(' ')}
+                          {capitalize(t?.sender.name).split(' ').slice(0, 2).join(' ')}
                           <br />
                           <span
                             className="text-gray-500 text-xs block"
@@ -138,7 +139,7 @@ const TransactionList = () => {
                           {t?.amount_with_currency}
                         </td>
                         <td className="border-b border-slate-200 p-3">
-                          {t?.receiver.name.split(' ').slice(0, 2).join(' ')}
+                          {capitalize(t?.receiver.name).split(' ').slice(0, 2).join(' ')}
                           <br />
                           <span
                             className="text-gray-500 text-xs block"
@@ -162,7 +163,7 @@ const TransactionList = () => {
               {pageCount > 1 && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-slate-100 rounded-t rounded-xl">
                   <p>
-                    Showing {isLoading ? '...' : currentPage} of {pageCount} records
+                    Showing {isLoading ? '...' : currentPage} of {pageCount} pages
                   </p>
                   <Pagination
                     page={currentPage}
