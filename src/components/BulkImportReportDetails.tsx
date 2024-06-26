@@ -27,8 +27,6 @@ const BulkImportReportDetails = () => {
         <FetchError />
       ) : isLoading ? (
         <DataFetching />
-      ) : reportDetails?.length === 0 ? (
-        <NoItems />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-3">
@@ -39,40 +37,45 @@ const BulkImportReportDetails = () => {
               </li>
             </ul>
           </div>
-          <div className="overflow-auto">
-            <table className="w-full">
-              <thead className="">
-                <tr className="bg-violet-500 text-gray-50">
-                  <th className="text-left px-4 py-2 font-medium">ID</th>
-                  <th className="text-left px-4 py-2 font-medium">Row&nbsp;#</th>
-                  <th className="text-left px-4 py-2 font-medium">Error Message</th>
-                </tr>
-              </thead>
 
-              <tbody>
-                {reportDetails.failed?.map((list: ReportDetailType) => (
-                  <tr key={list.uuid} className="hover:bg-gray-100 text-nowrap">
-                    <td
-                      title={list.uuid}
-                      className="relative border-b border-slate-200 p-3 cursor-pointer"
-                      onClick={() => copyTransactionID(list.uuid)}
-                    >
-                      {`${list.uuid.slice(0, 6)}...${list.uuid.slice(-2)}`}
-                      <span
-                        className={`${copiedID === list.uuid ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
-                      >
-                        ID Copied
-                      </span>
-                    </td>
-                    <td className="border-b border-slate-200 p-3">{list.row_number}</td>
-                    <td className="border-b border-slate-200 p-3">
-                      {list.error_message.substring(0, 80) + '...'}
-                    </td>
+          {reportDetails?.length === 0 ? (
+            <NoItems />
+          ) : (
+            <div className="overflow-auto">
+              <table className="w-full">
+                <thead className="">
+                  <tr className="bg-violet-500 text-gray-50">
+                    <th className="text-left px-4 py-2 font-medium">ID</th>
+                    <th className="text-left px-4 py-2 font-medium">Row&nbsp;#</th>
+                    <th className="text-left px-4 py-2 font-medium">Error Message</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+
+                <tbody>
+                  {reportDetails.failed?.map((list: ReportDetailType) => (
+                    <tr key={list.uuid} className="hover:bg-gray-100 text-nowrap">
+                      <td
+                        title={list.uuid}
+                        className="relative border-b border-slate-200 p-3 cursor-pointer"
+                        onClick={() => copyTransactionID(list.uuid)}
+                      >
+                        {`${list.uuid.slice(0, 6)}...${list.uuid.slice(-2)}`}
+                        <span
+                          className={`${copiedID === list.uuid ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                        >
+                          ID Copied
+                        </span>
+                      </td>
+                      <td className="border-b border-slate-200 p-3">{list.row_number}</td>
+                      <td className="border-b border-slate-200 p-3">
+                        {list.error_message.substring(0, 80) + '...'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
     </div>
