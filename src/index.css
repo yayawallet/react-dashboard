@@ -39,6 +39,7 @@ table {
 table > thead > tr {
   background-color: rgb(246, 248, 251) !important;
   color: rgb(108, 122, 145) !important;
+  border: 1px solid #e2e8f0 !important;
 }
 
 /* Table ID */
