@@ -57,7 +57,7 @@ const GenerateQRCode = () => {
   return (
     <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 ">Generate QR Code</h1>
-      <p className="pl-2 mb-10 text-gray-600">Receive payments by sharing QR Code.</p>
+      <p className="pl-2 mb-10 text-gray-600">Receive payments by sharing your QR Code.</p>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
