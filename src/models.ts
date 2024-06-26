@@ -187,9 +187,14 @@ export interface ReportType {
   uuid: string;
   successful_count: number;
   failed_count: number;
-  on_queue_count: number;
-  // total_count: number;
   file_name: string;
   remark: string;
+  created_at: Date;
+}
+
+export interface ReportDetailType {
+  uuid: string;
+  row_number: number;
+  error_message: string;
   created_at: Date;
 }
