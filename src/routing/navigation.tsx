@@ -49,6 +49,7 @@ import { MdOutlinePayments } from 'react-icons/md';
 import { RiBankFill } from 'react-icons/ri';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
+import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
 export const sidebarNavs = [
   {
@@ -213,6 +214,12 @@ export const privateNavs = [
     element: <Layout />,
     children: [
       ...sidebarNavs,
+      { path: 'scheduled-payment/report/:id', element: <BulkImportReportDetails /> },
+      { path: 'recurring-contract/report/:id', element: <BulkImportReportDetails /> },
+      {
+        path: 'recurring-contract/request-payment/report/:id',
+        element: <BulkImportReportDetails />,
+      },
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
       { path: 'me', element: <AboutMe /> },
