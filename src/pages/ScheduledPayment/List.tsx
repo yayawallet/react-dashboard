@@ -4,7 +4,7 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
-import { capitalize } from '../../utils/table_utils';
+import { capitalize, dateFormatter } from '../../utils/table_utils';
 import DataFetching from '../../components/ui/DataFetching';
 import FetchError from '../../components/ui/FetchError';
 import NoItems from '../../components/ui/NoItems';
@@ -121,7 +121,7 @@ const List = () => {
                       </td>
                       <td className="border-b border-slate-200 p-3">{item.recurring_type}</td>
                       <td className="border-b border-slate-200 p-3">
-                        {`${new Date(Number(item.next_run_time) * 1000).toLocaleString()}`}
+                        {dateFormatter(item.next_run_time)}
                       </td>
                       <td className="border-b border-slate-200 p-3">
                         <button

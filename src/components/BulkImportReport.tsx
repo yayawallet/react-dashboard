@@ -5,6 +5,7 @@ import DataFetching from './ui/DataFetching';
 import FetchError from './ui/FetchError';
 import NoItems from './ui/NoItems';
 import { Link } from 'react-router-dom';
+import { dateFormatter } from '../utils/table_utils';
 
 interface Props {
   documentType: string;
@@ -86,7 +87,7 @@ const BulkImportReport = ({ documentType }: Props) => {
                       <td className="border-b border-slate-200 p-3">{list?.remark}</td>
                       <td className="border-b border-slate-200 p-3">{list?.file_name}</td>
                       <td className="border-b border-slate-200 p-3">
-                        {`${new Date(list?.created_at).toLocaleString()}`}
+                        {dateFormatter(list?.created_at)}
                       </td>
                     </tr>
                   ))}

@@ -7,7 +7,7 @@ import { useGetData, usePostData } from '../../hooks/useSWR';
 import DataFetching from '../../components/ui/DataFetching';
 import FetchError from '../../components/ui/FetchError';
 import NoItems from '../../components/ui/NoItems';
-import { capitalize } from '../../utils/table_utils';
+import { capitalize, dateFormatter } from '../../utils/table_utils';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
@@ -152,7 +152,7 @@ const TransactionList = () => {
                           {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
                         </td>
                         <td className="border-b border-slate-200 p-3">
-                          {`${new Date(Number(t?.created_at_time) * 1000).toLocaleString()}`}
+                          {dateFormatter(t?.created_at_time)}
                         </td>
                       </tr>
                     ))}
