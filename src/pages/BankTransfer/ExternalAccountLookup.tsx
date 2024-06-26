@@ -1,27 +1,19 @@
-import { useEffect, useState } from 'react';
-import { authAxios } from '../../api/axios';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
-import useAccessToken from '../../hooks/useAccessToken';
+import { usePostData } from '../../hooks/useSWR';
+import { authAxios } from '../../api/axios';
 
 const ExternalAccountLookup = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const { accessToken } = useAccessToken();
-
-  useEffect(() => {
-    authAxios
-      .post('/financial-institution/list', {
-        country: 'Ethiopia',
-      })
-      .then((res) => setFinancialInstitutionList(res.data))
-      .catch((error) => setErrorMessage(error.response?.data.error || error.message));
-  }, []);
+  const { data: institutionList } = usePostData('/financial-institution/list', {
+    country: 'Ethiopia',
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -41,10 +33,8 @@ const ExternalAccountLookup = () => {
       setErrorMessage('');
       setExternalAccount(undefined);
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post(`/transfer/lookup-external`, values)
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);
@@ -119,7 +109,7 @@ const ExternalAccountLookup = () => {
               value={formik.values.institution_code}
             >
               <option label="Choose Institution code"></option>
-              {financialInstitutionList?.map((list) => (
+              {institutionList?.map((list: Institution) => (
                 <option key={list.code} value={list.code}>
                   {`${list.code} - ${list.name}`}
                 </option>

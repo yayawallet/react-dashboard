@@ -4,25 +4,26 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, Fee } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
-import useAccessToken from '../../hooks/useAccessToken';
+import { usePostData } from '../../hooks/useSWR';
 
 const TransferFee = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
   const [institution, setInstitution] = useState('');
   const [transferFee, setTransferFee] = useState<Fee>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const { accessToken } = useAccessToken();
+  const { data: institutionList } = usePostData('/financial-institution/list', {
+    country: 'Ethiopia',
+  });
 
   useEffect(() => {
     authAxios
       .post('/financial-institution/list', {
         country: 'Ethiopia',
       })
-      .then((res) => setFinancialInstitutionList(res.data))
+      .then((res) => institutionList(res.data))
       .catch((error) => setErrorMessage(error.response?.data.error || error.message));
-  }, [accessToken]);
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -44,7 +45,7 @@ const TransferFee = () => {
       setInstitution('');
 
       authAxios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/fee`, values)
+        .post(`/transfer/fee`, values)
         .then((res) => {
           setInstitution(values.institution_code);
           setTransferFee(res.data);
@@ -89,7 +90,7 @@ const TransferFee = () => {
               value={formik.values.institution_code}
             >
               <option label="Choose Institution code"></option>
-              {financialInstitutionList?.map((list) => (
+              {institutionList?.map((list: Institution) => (
                 <option key={list.code} value={list.code}>
                   {`${list.code} - ${list.name}`}
                 </option>
