@@ -8,7 +8,7 @@ export const useGetData = (path: string) => {
 };
 
 export const usePostData = (key: string | any[], body: object) => {
-  const path = key.length ? key[0] : key;
+  const path = Array.isArray(key) ? key[0] : key;
 
   const fetcher = () => authAxios.post(path, body).then((res) => res.data);
 
