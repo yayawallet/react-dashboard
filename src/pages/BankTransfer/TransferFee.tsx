@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -15,15 +15,6 @@ const TransferFee = () => {
   const { data: institutionList } = usePostData('/financial-institution/list', {
     country: 'Ethiopia',
   });
-
-  useEffect(() => {
-    authAxios
-      .post('/financial-institution/list', {
-        country: 'Ethiopia',
-      })
-      .then((res) => institutionList(res.data))
-      .catch((error) => setErrorMessage(error.response?.data.error || error.message));
-  }, []);
 
   const formik = useFormik({
     initialValues: {
