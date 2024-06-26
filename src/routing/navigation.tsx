@@ -21,7 +21,7 @@ import ReportContract from '../pages/RecurringContract/ReportContract';
 import ReportRequestPayment from '../pages/RecurringContract/ReportRequestPayment';
 
 import Transfer from '../pages/BankTransfer/Index';
-import CreateTransfer from '../pages/BankTransfer/CreateTransfer';
+import CreateTransfer from '../pages/BankTransfer/SendMoney';
 import TransferList from '../pages/BankTransfer/TransferList';
 import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
 import TransferFee from '../pages/BankTransfer/TransferFee';
@@ -167,8 +167,8 @@ export const sidebarNavs = [
     accessRoles: ['admin', 'clerk'],
     children: [
       {
-        title: 'Transfer Money',
-        path: 'create',
+        title: 'Send Money',
+        path: 'send',
         element: <CreateTransfer />,
         accessRoles: ['admin'],
       },
@@ -179,8 +179,8 @@ export const sidebarNavs = [
         accessRoles: ['admin', 'clerk'],
       },
       {
-        title: 'Check Fee',
-        path: 'check-fee',
+        title: 'Transfer Fee',
+        path: 'transfer-fee',
         element: <TransferFee />,
         accessRoles: ['admin', 'clerk'],
       },
