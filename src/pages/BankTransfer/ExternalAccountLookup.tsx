@@ -104,16 +104,22 @@ const ExternalAccountLookup = () => {
           <div className="relative z-0 w-full mb-10 group">
             <select
               id="institution_code"
-              className="w-full bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
+              className="w-full bg-gray-50 border-2 border-gray-300 rounded-lg focus:ring-4 ring-gray-200 p-2.5 outline-none sidebar-scrollbar"
               onChange={formik.handleChange}
               value={formik.values.institution_code}
             >
-              <option label="Choose Institution code"></option>
+              <option
+                label="Choose Institution"
+                disabled
+                className="text-lg font-semibold"
+              ></option>
+              <option disabled className="text-[6px]"></option>
               {institutionList?.map((list: Institution) => (
-                <option key={list.code} value={list.code}>
+                <option key={list.code} value={list.code} className="bg-slate-100 text-gray-800">
                   {`${list.code} - ${list.name}`}
                 </option>
               ))}
+              <option disabled></option>
             </select>
             <span className="text-xs text-red-600">
               {formik.touched.institution_code && formik.errors.institution_code}

@@ -13,7 +13,7 @@ const IndexPage = ({ parentPath }: Props) => {
   return (
     <>
       {outlet || (
-        <div className="page-container">
+        <div className="page-container mt-6">
           <div className="flex flex-col items-center p-8 border rounded-lg">
             <h2 className="text-2xl font-semibold">
               {parentPath.replace('-', ' ').replace(/\b\w{1}/g, (match) => match.toUpperCase())}
