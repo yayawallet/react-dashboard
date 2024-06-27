@@ -7,10 +7,9 @@ import { usePostData } from '../../hooks/useSWR';
 import { Institution } from '../../models';
 
 const CreateTransfer = () => {
-  const [transactionID, setTransactionID] = useState('');
+  const [transferID, setTransferID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [selectedUser, setSelectedUser] = useState('');
 
   const { data: institutionList } = usePostData('/financial-institution/list', {
     country: 'Ethiopia',
@@ -25,7 +24,7 @@ const CreateTransfer = () => {
     },
 
     validationSchema: Yup.object({
-      account_number: Yup.string().required('Required').max(12, 'Must be 12 characters'),
+      account_number: Yup.string().required('Required').max(30, 'Must be less than 30 characters'),
       amount: Yup.number().required('Required'),
       sender_note: Yup.string().required('Required').max(50, 'Must be 50 characters or less'),
     }),
@@ -35,22 +34,20 @@ const CreateTransfer = () => {
 
       // Clear existing values
       setErrorMessage('');
-      setTransactionID('');
+      setTransferID('');
 
-      values.account_number = selectedUser;
       authAxios
         .post('/transfer/send', values)
         .then((res) => {
-          setTransactionID(res.data.transaction_id);
+          setTransferID(res.data.transfer_id);
           setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
-          console.log('One: ', error.response?.data.error);
-          console.log('Two: ', error.message);
+          setErrorMessage(error.response?.data.error || error.message);
+          setLoading(false);
         });
     },
   });
@@ -61,28 +58,32 @@ const CreateTransfer = () => {
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {transactionID && (
-        <InlineNotification type="success" info={`Transaction ID: ${transactionID}`} />
-      )}
+      {transferID && <InlineNotification type="success" info={`Transaction ID: ${transferID}`} />}
 
       <form
         className="max-w-xl ml-10 mt-16 shadow shadow-gray-300 px-10 py-6 rounded-lg"
         onSubmit={formik.handleSubmit}
       >
         <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-16">
+          <div className="relative z-0 w-full mb-10">
             <select
               id="institution_code"
-              className="w-full bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
+              className="w-full bg-gray-50 border-2 border-gray-300 rounded-lg focus:ring-4 ring-gray-200 p-2.5 outline-none sidebar-scrollbar"
               onChange={formik.handleChange}
               value={formik.values.institution_code}
             >
-              <option label="Choose Institution code"></option>
+              <option
+                label="Choose Institution"
+                disabled
+                className="text-lg font-semibold"
+              ></option>
+              <option disabled className="text-[6px]"></option>
               {institutionList?.map((list: Institution) => (
-                <option key={list.code} value={list.code}>
+                <option key={list.code} value={list.code} className="bg-slate-100 text-gray-800">
                   {`${list.code} - ${list.name}`}
                 </option>
               ))}
+              <option disabled></option>
             </select>
             <span className="text-xs text-red-600">
               {formik.touched.institution_code && formik.errors.institution_code}
@@ -97,10 +98,7 @@ const CreateTransfer = () => {
               placeholder=" "
               autoComplete="off"
               disabled={isLoading}
-              onChange={(e) => {
-                formik.handleChange(e);
-                setSelectedUser('');
-              }}
+              onChange={formik.handleChange}
               value={formik.values.account_number}
             />
             <label
