@@ -28,7 +28,7 @@ const RequestPayment = () => {
 
     validationSchema: Yup.object({
       contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      amount: Yup.number().required('Required'),
+      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
       cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       notification_url: Yup.string().max(50, 'Must be 50 characters or less').url('Invalid url'),
       meta_data: Yup.object().json().typeError('Meta-data must be JSON format'),

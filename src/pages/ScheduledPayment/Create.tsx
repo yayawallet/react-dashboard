@@ -30,7 +30,7 @@ const Create = () => {
 
     validationSchema: Yup.object({
       account_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      amount: Yup.number().required('Required'),
+      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
       cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       recurring: Yup.string().required('Select recurring type'),
       start_at: Yup.date()

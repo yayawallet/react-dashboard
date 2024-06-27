@@ -21,7 +21,7 @@ const CreateTransaction = () => {
 
     validationSchema: Yup.object({
       receiver: Yup.string().required('Required').max(12, 'Must be 12 characters'),
-      amount: Yup.number().required('Required'),
+      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
       cause: Yup.string().required('Required').max(50, 'Must be 50 characters or less'),
     }),
 
