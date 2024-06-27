@@ -73,7 +73,7 @@ const BulkImportReport = ({ documentType }: Props) => {
                       <td className="relative border-b border-slate-200 p-3">
                         <button
                           type="button"
-                          className="px-2 text-sm focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                          className="py-0.5 px-3 text-sm focus:outline-none bg-white rounded border border-gray-200 hover:bg-gray-100 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                         >
                           <Link to={list.uuid}>Detail</Link>
                         </button>

@@ -18,6 +18,7 @@ const SearchBar = ({ onSearch, placeholder }: Props) => {
           />
           <button
             type="submit"
+            aria-label="search"
             className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-violet-500 rounded-e border border-violet-500 hover:bg-violet-600 focus:ring-4 focus:outline-none focus:ring-violet-300"
           >
             <svg

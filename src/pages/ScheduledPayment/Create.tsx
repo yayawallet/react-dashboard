@@ -200,6 +200,7 @@ const Create = () => {
             <div className="relative z-0 w-full mb-10 group">
               <select
                 id="recurring"
+                aria-label="Recurring type"
                 className="w-full bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
                 onChange={formik.handleChange}
                 value={formik.values.recurring}

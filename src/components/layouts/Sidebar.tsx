@@ -57,7 +57,11 @@ const Sidebar = () => {
       >
         <div className="h-full relative pb-3 overflow-y-scroll sidebar-scrollbar loverflow-y-auto bg-gray-50">
           <div className="flex justify-between items-center shadow-sm sticky top-0 z-10 bg-gray-50">
-            <Link to="/" className="flex items-center h-header ps-2.5 pt-2 pb-1">
+            <Link
+              to="/"
+              aria-label="home page"
+              className="flex items-center h-header ps-2.5 pt-2 pb-1"
+            >
               <img src={yayawalletLogo} className="h-full" alt="YaYaWallet Logo" />
             </Link>
             <button
@@ -81,7 +85,7 @@ const Sidebar = () => {
             <ul className="space-y-2 mb-20 font-medium">
               <li>
                 <div className="flex justify-center p-2">
-                  <Link to="/profile">
+                  <Link to="/profile" aria-label="profile">
                     <img
                       src={profile?.photo_url || avater}
                       alt=""
@@ -92,6 +96,7 @@ const Sidebar = () => {
 
                 <Link
                   to="/profile"
+                  aria-label="profile"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">

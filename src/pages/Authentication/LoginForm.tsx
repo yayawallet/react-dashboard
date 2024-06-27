@@ -127,9 +127,12 @@ const LoginForm = () => {
               </label>
             </div>
           </div>
-          <a href="#" className="text-sm font-medium text-violet-600 hover:underline">
+          <span
+            className="text-sm font-medium text-violet-600 hover:underline cursor-pointer"
+            onClick={() => alert("If you lost your password, please contact the company's Admins.")}
+          >
             Forgot password?
-          </a>
+          </span>
         </div>
         <button
           type="submit"
