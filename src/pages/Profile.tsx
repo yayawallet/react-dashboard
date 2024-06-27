@@ -1,8 +1,8 @@
-import useFetchData from '../hooks/useFetchData';
+import { useGetData } from '../hooks/useSWR';
 // import { UserProfile } from '../models';
 
 const Profile = () => {
-  const { data: profile } = useFetchData('/user/profile');
+  const { data: profile } = useGetData('/user/profile');
 
   return (
     <div className="page-container">

@@ -1,24 +1,27 @@
 import { Link, useOutlet } from 'react-router-dom';
+import { sidebarNavs } from '../routing/navigation';
 
 interface Props {
-  links: { path: string; name: string }[];
+  parentPath: string;
 }
 
-const IndexPage = ({ links }: Props) => {
+const IndexPage = ({ parentPath }: Props) => {
   const outlet = useOutlet();
+
+  const menus = sidebarNavs.filter((nav) => nav.path === parentPath)[0]?.children;
 
   return (
     <>
       {outlet || (
         <div className="page-container">
           <ul className="flex flex-wrap justify-center gap-5 mt-10">
-            {links.map((link) => (
+            {menus?.map((menu) => (
               <li
-                key={link.path}
+                key={menu.path}
                 className="border border-blue-100 text-center p-4 rounded text-blue-800 hover:text-blue-600 hover:bg-slate-50"
               >
-                <Link to={link.path} className="p-6">
-                  {link.name}
+                <Link to={menu.path} className="p-6">
+                  {menu.title}
                 </Link>
               </li>
             ))}

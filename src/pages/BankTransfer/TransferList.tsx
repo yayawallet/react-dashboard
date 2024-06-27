@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Transfer } from '../../models';
 import PageLoading from '../../components/ui/PageLoading';
-import useFetchData from '../../hooks/useFetchData';
+import { useGetData } from '../../hooks/useSWR';
 
 const TransferList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -13,7 +13,7 @@ const TransferList = () => {
     setTimeout(() => setCopiedID(''), 1000);
   };
 
-  const { data: transferList } = useFetchData('/transfer/list');
+  const { data: transferList } = useGetData('/transfer/list');
 
   return (
     <div className="table-container">

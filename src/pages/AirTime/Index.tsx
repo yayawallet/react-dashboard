@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import BuyAirTime from './BuyAirTime';
 import BuyPackage from './BuyPackage';
-import useFetchData from '../../hooks/useFetchData';
+import { useGetData } from '../../hooks/useSWR';
 
 const AirTime = () => {
   const [topupFor, setTopupFor] = useState('');
@@ -9,7 +9,7 @@ const AirTime = () => {
   const [selectedCategory, setSelectedCategory] = useState('airtime');
   const [errorMessage, setErrorMessage] = useState<string | boolean>(true);
 
-  const result = useFetchData('/user/profile');
+  const result = useGetData('/user/profile');
   const ownPhoneNumber = result.data ? result.data.phone : '';
 
   useEffect(() => {
