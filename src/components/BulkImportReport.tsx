@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useGetData } from '../hooks/useSWR';
 import { ReportType } from '../models';
-import DataFetching from './ui/DataFetching';
-import FetchError from './ui/FetchError';
-import NoItems from './ui/NoItems';
+import Loading from './ui/Loading';
+import Error from './ui/Error';
+import EmptyList from './ui/EmptyList';
 import { Link } from 'react-router-dom';
 import { dateFormatter } from '../utils/table_utils';
 
@@ -30,16 +30,16 @@ const BulkImportReport = ({ documentType }: Props) => {
   return (
     <div className="table-container">
       {error ? (
-        <FetchError />
+        <Error />
       ) : isLoading ? (
-        <DataFetching />
+        <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-3">
             <h3 className="py-2 text-lg font-medium">Bulk Report</h3>
           </div>
           {reportList?.length === 0 ? (
-            <NoItems />
+            <EmptyList />
           ) : (
             <div className="overflow-auto">
               <table className="w-full">

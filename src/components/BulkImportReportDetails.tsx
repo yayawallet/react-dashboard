@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useGetData } from '../hooks/useSWR';
-import DataFetching from './ui/DataFetching';
-import FetchError from './ui/FetchError';
-import NoItems from './ui/NoItems';
+import Loading from './ui/Loading';
+import Error from './ui/Error';
+import EmptyList from './ui/EmptyList';
 import { ReportDetailType } from '../models';
 import { useParams } from 'react-router-dom';
 
@@ -24,9 +24,9 @@ const BulkImportReportDetails = () => {
   return (
     <div className="table-container">
       {error ? (
-        <FetchError />
+        <Error />
       ) : isLoading ? (
-        <DataFetching />
+        <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-3">
@@ -39,7 +39,7 @@ const BulkImportReportDetails = () => {
           </div>
 
           {reportDetails?.length === 0 ? (
-            <NoItems />
+            <EmptyList />
           ) : (
             <div className="overflow-auto">
               <table className="w-full">

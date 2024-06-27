@@ -7,9 +7,9 @@ import SearchBar from '../../components/SearchBar';
 import { recurringContract } from '../../models';
 import { capitalize } from '../../utils/table_utils';
 import { useGetData } from '../../hooks/useSWR';
-import DataFetching from '../../components/ui/DataFetching';
-import FetchError from '../../components/ui/FetchError';
-import NoItems from '../../components/ui/NoItems';
+import Loading from '../../components/ui/Loading';
+import Error from '../../components/ui/Error';
+import EmptyList from '../../components/ui/EmptyList';
 
 const ContractList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -104,9 +104,9 @@ const ContractList = () => {
 
       <div className="">
         {error ? (
-          <FetchError />
+          <Error />
         ) : isLoading ? (
-          <DataFetching />
+          <Loading />
         ) : (
           <div className="border border-slate-200 rounded-xl">
             <div className="flex flex-wrap justify-between items-center m-4">
@@ -136,7 +136,7 @@ const ContractList = () => {
               </div>
             </div>
             {filteredContractList?.length === 0 ? (
-              <NoItems />
+              <EmptyList />
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full">

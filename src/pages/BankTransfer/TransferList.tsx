@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Transfer } from '../../models';
 import { useGetData } from '../../hooks/useSWR';
-import DataFetching from '../../components/ui/DataFetching';
-import FetchError from '../../components/ui/FetchError';
-import NoItems from '../../components/ui/NoItems';
+import Loading from '../../components/ui/Loading';
+import Error from '../../components/ui/Error';
+import EmptyList from '../../components/ui/EmptyList';
 import { capitalize } from '../../utils/table_utils';
 
 const TransferList = () => {
@@ -21,9 +21,9 @@ const TransferList = () => {
   return (
     <div className="table-container">
       {error ? (
-        <FetchError />
+        <Error />
       ) : isLoading ? (
-        <DataFetching />
+        <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-3">
@@ -31,7 +31,7 @@ const TransferList = () => {
           </div>
 
           {transferList.length === 0 ? (
-            <NoItems />
+            <EmptyList />
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
