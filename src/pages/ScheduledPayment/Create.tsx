@@ -93,7 +93,7 @@ const Create = () => {
               checked={inputFormType === 'one'}
               onChange={() => setInputFormType('one')}
             />
-            <label htmlFor="topupFor" className="cursor-pointer">
+            <label htmlFor="oneInput" className="cursor-pointer">
               Single Schedule
             </label>
           </button>
@@ -110,7 +110,7 @@ const Create = () => {
               checked={inputFormType === 'multiple'}
               onChange={() => setInputFormType('multiple')}
             />
-            <label htmlFor="forOther" className="cursor-pointer">
+            <label htmlFor="multipleInput" className="cursor-pointer">
               Multiple Schedules
             </label>
           </button>

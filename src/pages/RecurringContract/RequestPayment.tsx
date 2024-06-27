@@ -86,7 +86,7 @@ const RequestPayment = () => {
               checked={inputFormType === 'one'}
               onChange={() => setInputFormType('one')}
             />
-            <label htmlFor="topupFor" className="cursor-pointer">
+            <label htmlFor="oneInput" className="cursor-pointer">
               Single Payment
             </label>
           </button>
@@ -103,7 +103,7 @@ const RequestPayment = () => {
               checked={inputFormType === 'multiple'}
               onChange={() => setInputFormType('multiple')}
             />
-            <label htmlFor="forOther" className="cursor-pointer">
+            <label htmlFor="multipleInput" className="cursor-pointer">
               Multiple Payments
             </label>
           </button>
