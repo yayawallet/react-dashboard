@@ -26,11 +26,7 @@ authAxios.interceptors.request.use(
 authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.log('Axios request failed');
-    console.log(error);
-
     if (error.response && error.response.status === 401) {
-      console.log('Unauthorized request failed');
       localStorage.removeItem('user');
       Cookies.remove('access_token');
       Cookies.remove('refresh_token');
