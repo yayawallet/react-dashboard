@@ -8,17 +8,24 @@ import { useParams } from 'react-router-dom';
 
 const BulkImportReportDetails = () => {
   const [copiedID, setCopiedID] = useState('');
+  const [copiedErrorMsg, setCopiedErrorMsg] = useState('');
 
   const { id } = useParams();
 
   const { error, isLoading, data: reportDetails } = useGetData(`/report/details/${id}}`);
-  console.log(reportDetails);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedID(id);
 
     setTimeout(() => setCopiedID(''), 1000);
+  };
+
+  const copyErrorMessage = (err_msg: string) => {
+    navigator.clipboard.writeText(err_msg);
+    setCopiedErrorMsg(err_msg);
+
+    setTimeout(() => setCopiedErrorMsg(''), 1000);
   };
 
   return (
@@ -67,8 +74,18 @@ const BulkImportReportDetails = () => {
                         </span>
                       </td>
                       <td className="border-b border-slate-200 p-3">{list.row_number}</td>
-                      <td className="border-b border-slate-200 p-3">
-                        {list.error_message.substring(0, 80) + '...'}
+                      <td
+                        title={list.error_message}
+                        className="relative border-b border-slate-200 p-3 cursor-pointer"
+                        onClick={() => copyErrorMessage(list.error_message)}
+                      >
+                        {list.error_message.substring(0, 80)}
+                        {list.error_message.length > 80 ? '...' : ''}
+                        <span
+                          className={`${copiedErrorMsg === list.error_message ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                        >
+                          Error Message Copied
+                        </span>
                       </td>
                     </tr>
                   ))}
