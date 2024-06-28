@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Pagination from '../../components/Pagination';
-import Pagination2 from '../../components/Pagination2';
 import SearchBar from '../../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
@@ -18,7 +17,8 @@ const TransactionList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedID, setCopiedID] = useState('');
 
-  const { data: ownAccount } = useGetData('/user/profile');
+  const { data: ownProfile } = useGetData('/user/profile');
+  const ownAccount = ownProfile?.account;
 
   const {
     error,
@@ -39,7 +39,7 @@ const TransactionList = () => {
   }, [transactionData]);
 
   useEffect(() => {
-    if (searchResult && searchQuery) {
+    if (searchResult) {
       setTransactionList(searchResult.data);
     }
   }, [searchResult]);
@@ -152,7 +152,7 @@ const TransactionList = () => {
                         <td className="border-b border-slate-200 p-3">
                           {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
                         </td>
-                        <td className="border-b border-slate-200 p-3">
+                        <td className="border-b border-slate-200 p-3 text-gray-500">
                           {formatDate(t?.created_at_time)}
                         </td>
                       </tr>
@@ -162,11 +162,11 @@ const TransactionList = () => {
               </div>
               {pageCount > 1 && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-slate-50 rounded-t rounded-xl">
-                  <p className="text-slate-700">
+                  <p className="text-[15px] text-slate-700">
                     Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
                     {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
                   </p>
-                  <Pagination2
+                  <Pagination
                     page={currentPage}
                     pageCount={pageCount}
                     isLoading={isLoading}

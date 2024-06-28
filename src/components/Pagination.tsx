@@ -7,7 +7,7 @@ interface Props {
 
 const Pagination = ({ page, pageCount, isLoading, onPageChange }: Props) => {
   return (
-    <div className="my-4 flxe text-center">
+    <div className="my-4 flxe text-[15px] text-center">
       <button
         disabled={page === 1}
         className="inline-block text-gray-900 border border-slate-300 py-1 px-3 hover:bg-violet-50 disabled:opacity-50 rounded-tl rounded-bl"
