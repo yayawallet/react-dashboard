@@ -10,6 +10,11 @@
   outline-color: #8d66cc;
 }
 
+body {
+  letter-spacing: 0.2px;
+  line-height: 20px;
+}
+
 .sidebar-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
