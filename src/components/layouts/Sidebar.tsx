@@ -52,7 +52,7 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform lg:translate-x-0 leading-6 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
         <div className="h-full relative pb-3 overflow-y-scroll sidebar-scrollbar loverflow-y-auto bg-gray-50">

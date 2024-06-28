@@ -5,7 +5,7 @@ import Loading from './ui/Loading';
 import Error from './ui/Error';
 import EmptyList from './ui/EmptyList';
 import { Link } from 'react-router-dom';
-import { dateFormatter } from '../utils/table_utils';
+import { formatDate } from '../utils/table_utils';
 
 interface Props {
   documentType: string;
@@ -45,19 +45,19 @@ const BulkImportReport = ({ documentType }: Props) => {
               <table className="w-full">
                 <thead className="">
                   <tr className="bg-violet-500 text-gray-50">
-                    <th className="text-left px-4 py-2 font-medium">ID</th>
-                    <th className="text-left px-4 py-2 font-medium">Detail</th>
-                    <th className="text-left px-4 py-2 font-medium">Succeed</th>
-                    <th className="text-left px-4 py-2 font-medium">Failed</th>
-                    <th className="text-left px-4 py-2 font-medium">Remark</th>
-                    <th className="text-left px-4 py-2 font-medium">File Name</th>
-                    <th className="text-left px-4 py-2 font-medium">Upload Date</th>
+                    <th className="text-left px-4 py-3 font-medium">ID</th>
+                    <th className="text-left px-4 py-3 font-medium">Detail</th>
+                    <th className="text-left px-4 py-3 font-medium">Succeed</th>
+                    <th className="text-left px-4 py-3 font-medium">Failed</th>
+                    <th className="text-left px-4 py-3 font-medium">Remark</th>
+                    <th className="text-left px-4 py-3 font-medium">File Name</th>
+                    <th className="text-left px-4 py-3 font-medium">Upload Date</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {reportList.map((list: ReportType) => (
-                    <tr key={list.uuid} className="hover:bg-gray-100 text-nowrap">
+                    <tr key={list.uuid} className="hover:bg-slate-100 text-nowrap">
                       <td
                         title={list.uuid}
                         className="relative border-b border-slate-200 p-3 cursor-pointer"
@@ -73,21 +73,21 @@ const BulkImportReport = ({ documentType }: Props) => {
                       <td className="relative border-b border-slate-200 p-3">
                         <button
                           type="button"
-                          className="py-0.5 px-3 text-sm focus:outline-none bg-white rounded border border-gray-200 hover:bg-gray-100 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+                          className="pt-1 pb-1.5 px-3 focus:outline-none bg-white rounded border border-violet-200 hover:bg-slate-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-slate-200"
                         >
                           <Link to={list.uuid}>Detail</Link>
                         </button>
                       </td>
-                      <td className="text-green-600 font-semibold border-b border-slate-200 p-3">
-                        {list?.successful_count || '~'}
+                      <td className="text-green-600 font-semibold border-b border-slate-200 p-3 pl-6">
+                        {list?.successful_count || '0'}
                       </td>
-                      <td className="text-red-600 font-semibold border-b border-slate-200 p-3">
-                        {list?.failed_count || '~'}
+                      <td className="text-red-600 font-semibold border-b border-slate-200 p-3 pl-6">
+                        {list?.failed_count || '0'}
                       </td>
                       <td className="border-b border-slate-200 p-3">{list?.remark}</td>
                       <td className="border-b border-slate-200 p-3">{list?.file_name}</td>
                       <td className="border-b border-slate-200 p-3">
-                        {dateFormatter(list?.created_at)}
+                        {formatDate(list?.created_at)}
                       </td>
                     </tr>
                   ))}

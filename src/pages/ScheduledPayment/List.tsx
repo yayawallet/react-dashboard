@@ -4,7 +4,7 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
-import { capitalize, dateFormatter } from '../../utils/table_utils';
+import { capitalize, formatDate } from '../../utils/table_utils';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
@@ -84,18 +84,19 @@ const List = () => {
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className="text-left px-4 py-2 font-medium">ID</th>
-                    <th className="text-left px-4 py-2 font-medium">Receiver</th>
-                    <th className="text-left px-4 py-2 font-medium">Amount</th>
-                    <th className="text-left px-4 py-2 font-medium">Recurring</th>
-                    <th className="text-left px-4 py-2 font-medium">Next Run-time</th>
-                    <th className="text-left px-4 py-2 font-medium">Action</th>
+                    <th className="text-left px-4 py-3 font-medium">ID</th>
+                    <th className="text-left px-4 py-3 font-medium">Receiver Name</th>
+                    <th className="text-left px-4 py-3 font-medium">Receiver Account</th>
+                    <th className="text-left px-4 py-3 font-medium">Amount</th>
+                    <th className="text-left px-4 py-3 font-medium">Recurring</th>
+                    <th className="text-left px-4 py-3 font-medium">Next Run-time</th>
+                    <th className="text-left px-4 py-3 font-medium">Action</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {scheduledPaymentList.map((item: ScheduledPayment) => (
-                    <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
+                    <tr key={item.id} className="hover:bg-slate-100 text-nowrap">
                       <td
                         title={item.id}
                         className="relative border-b border-slate-200 p-3 cursor-pointer"
@@ -111,21 +112,20 @@ const List = () => {
 
                       <td className="border-b border-slate-200 p-3">
                         {capitalize(item.receiver.name).split(' ').slice(0, 2).join(' ')}
-                        <br />
-                        <span className="text-gray-500 text-xs block" style={{ marginTop: '-3px' }}>
-                          {'@' + item.receiver.account}
-                        </span>
                       </td>
                       <td className="border-b border-slate-200 p-3">
-                        {item.amount.toFixed(2)} ETB
+                        <span className="text-gray-500">@{item.receiver.account}</span>
+                      </td>
+                      <td className="border-b border-slate-200 p-3">
+                        {item.amount.toFixed(2)} <span className="text-gray-500 text-sm">ETB</span>
                       </td>
                       <td className="border-b border-slate-200 p-3">{item.recurring_type}</td>
                       <td className="border-b border-slate-200 p-3">
-                        {dateFormatter(item.next_run_time)}
+                        {formatDate(item.next_run_time)}
                       </td>
                       <td className="border-b border-slate-200 p-3">
                         <button
-                          className="text-sm bg-red-600 text-white pt-0.5 pb-1 px-2 rounded"
+                          className="bg-red-600 text-white pt-0.5 pb-1 px-2 rounded hover:bg-red-700"
                           onClick={() => {
                             setSelectedSchedule(item);
                             setOpenModal(true);

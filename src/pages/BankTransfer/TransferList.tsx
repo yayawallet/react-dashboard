@@ -37,12 +37,12 @@ const TransferList = () => {
               <table className="w-full">
                 <thead>
                   <tr>
-                    <th className="text-left px-4 py-2 font-medium">ID</th>
-                    <th className="text-left px-4 py-2 font-medium">Sender</th>
-                    <th className="text-left px-4 py-2 font-medium">Amount</th>
-                    <th className="text-left px-4 py-2 font-medium">Receiver</th>
-                    <th className="text-left px-4 py-2 font-medium">Institution</th>
-                    <th className="text-left px-4 py-2 font-medium">Ref code</th>
+                    <th className="text-left px-4 py-3 font-medium">ID</th>
+                    <th className="text-left px-4 py-3 font-medium">Sender</th>
+                    <th className="text-left px-4 py-3 font-medium">Amount</th>
+                    <th className="text-left px-4 py-3 font-medium">Receiver</th>
+                    <th className="text-left px-4 py-3 font-medium">Institution</th>
+                    <th className="text-left px-4 py-3 font-medium">Ref code</th>
                   </tr>
                 </thead>
 
@@ -50,7 +50,7 @@ const TransferList = () => {
                   {transferList?.map((t: Transfer) => (
                     <tr
                       key={t?.id}
-                      className="hover:bg-gray-100"
+                      className="hover:bg-slate-100"
                       onClick={() => navigator.clipboard.writeText(t?.id)}
                     >
                       <td
@@ -82,7 +82,8 @@ const TransferList = () => {
                             &#8722;&nbsp;
                           </span>
                         )}
-                        {t?.amount}&nbsp;{t?.currency}
+                        {t?.amount.toFixed(2)}&nbsp;
+                        <span className="text-gray-500 text-sm">{t?.currency}</span>
                       </td>
                       <td className="border-b border-slate-200 p-3">
                         {capitalize(t?.payment_method.full_name).split(' ').slice(0, 2).join(' ')}

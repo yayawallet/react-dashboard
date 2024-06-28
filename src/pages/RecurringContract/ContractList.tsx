@@ -10,6 +10,7 @@ import { useGetData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
+import { GoDotFill } from 'react-icons/go';
 
 const ContractList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -142,12 +143,13 @@ const ContractList = () => {
                 <table className="w-full">
                   <thead>
                     <tr>
-                      <th className="text-left px-4 py-2 font-medium">ID</th>
-                      <th className="text-left px-4 py-2 font-medium">Customer Name</th>
-                      <th className="text-left px-4 py-2 font-medium">Contract Number</th>
-                      <th className="text-left px-4 py-2 font-medium">Service Type</th>
-                      <th className="text-left px-4 py-2 font-medium">Status</th>
-                      <th className="text-left px-4 py-2 font-medium">Action</th>
+                      <th className="text-left px-4 py-3 font-medium">ID</th>
+                      <th className="text-left px-4 py-3 font-medium">Customer Name</th>
+                      <th className="text-left px-4 py-3 font-medium">Customer Account</th>
+                      <th className="text-left px-4 py-3 font-medium">Contract Number</th>
+                      <th className="text-left px-4 py-3 font-medium">Status</th>
+                      <th className="text-left px-4 py-3 font-medium">Service Type</th>
+                      <th className="text-left px-4 py-3 font-medium">Action</th>
                     </tr>
                   </thead>
 
@@ -169,21 +171,24 @@ const ContractList = () => {
 
                         <td className="border-b border-slate-200 p-3">
                           {capitalize(item.customer.name).split(' ').slice(0, 2).join(' ')}
-                          <br />
-                          <span
-                            className="text-gray-500 text-xs block"
-                            style={{ marginTop: '-3px' }}
-                          >
-                            {'@' + item.customer.account}
-                          </span>
+                        </td>
+                        <td className="border-b border-slate-200 p-3">
+                          <span className="text-gray-500">@{item.customer.account}</span>
                         </td>
 
                         <td className="border-b border-slate-200 p-3">{item.contract_number}</td>
+                        <td className="border-b border-slate-200 p-3">
+                          <span
+                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${item.status === 'pending' ? 'orange' : item.status === 'approved' ? 'green' : 'gray'}-500`}
+                          >
+                            <GoDotFill />
+                          </span>
+                          {capitalize(item.status)}
+                        </td>
                         <td className="border-b border-slate-200 p-3">{item.service_type}</td>
-                        <td className="border-b border-slate-200 p-3">{item.status}</td>
                         <td className="border-b border-slate-200 p-3">
                           <button
-                            className="text-sm bg-red-600 text-white pt-0.5 pb-1 px-2 rounded"
+                            className="bg-red-600 text-white pt-1 pb-1.5 px-3 rounded hover:bg-red-700"
                             onClick={() => {
                               setSelectedContract(item);
                               setOpenModal(true);

@@ -88,7 +88,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
             }}
           >
             <span className="pr-1">{amount}</span>
-            <span className="text-sm text-gray-400">(ETB)</span>
+            <span className="text-sm text-gray-500">(ETB)</span>
           </div>
         ))}
       </div>
