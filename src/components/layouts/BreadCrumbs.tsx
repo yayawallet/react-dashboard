@@ -12,7 +12,7 @@ const BreadCrumbs = () => {
     )
     .flat();
 
-  sidebarPaths.push('profile');
+  sidebarPaths.push('profile', 'bulkimport'); //paths with no title
 
   const crumbs = paths.every((path) => sidebarPaths.includes(path))
     ? paths
