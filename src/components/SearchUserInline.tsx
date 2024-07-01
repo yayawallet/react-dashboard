@@ -44,7 +44,7 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
   }, [query]);
 
   return (
-    <div className="relative z-0 w-full mb-10 group">
+    <div className="relative z-0 w-full group">
       <div className="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 py-2 outline-none">
         {usersList?.slice(0, 5).map((user) => (
           <div
