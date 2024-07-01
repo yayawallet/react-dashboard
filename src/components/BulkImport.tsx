@@ -2,11 +2,13 @@ import { ReactNode } from 'react';
 import { authAxios } from '../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { BsDownload } from 'react-icons/bs';
 
 interface Props {
   isLoading: boolean;
   instruction?: string | ReactNode;
   apiEndpoint: string;
+  templateFile: string;
   onLoading: (value: boolean) => void;
   onError: (value: string) => void;
   onSuccess: (value: string) => void;
@@ -16,6 +18,7 @@ const BulkImport = ({
   isLoading,
   instruction,
   apiEndpoint,
+  templateFile,
   onLoading,
   onError,
   onSuccess,
@@ -68,12 +71,15 @@ const BulkImport = ({
             <span className="font-semibold"> xlsx, xls, csv, tsv</span>
           </li>
           {instruction && <li>{instruction}</li>}
-          <button
-            disabled={isLoading}
-            className="mt-2 text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center"
-          >
-            Download sample file
-          </button>
+          <li>
+            <a
+              href={templateFile}
+              download={`downloaded_${templateFile.split('_').slice(-3).join('_')}`}
+              className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
+            >
+              Download template file <BsDownload />
+            </a>
+          </li>
         </p>
       </div>
 

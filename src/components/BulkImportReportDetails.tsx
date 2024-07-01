@@ -8,7 +8,8 @@ import { useParams } from 'react-router-dom';
 
 const BulkImportReportDetails = () => {
   const [copiedID, setCopiedID] = useState('');
-  const [copiedErrorMsg, setCopiedErrorMsg] = useState('');
+  const [, setCopiedErrorMsg] = useState('');
+  const [selectedID, setSelectedID] = useState('');
 
   const { id } = useParams();
 
@@ -21,11 +22,15 @@ const BulkImportReportDetails = () => {
     setTimeout(() => setCopiedID(''), 1000);
   };
 
-  const copyErrorMessage = (err_msg: string) => {
+  const copyErrorMessage = (err_msg: string, id: string) => {
     navigator.clipboard.writeText(err_msg);
     setCopiedErrorMsg(err_msg);
+    setSelectedID(id);
 
-    setTimeout(() => setCopiedErrorMsg(''), 1000);
+    setTimeout(() => {
+      setCopiedErrorMsg('');
+      setSelectedID('');
+    }, 1000);
   };
 
   return (
@@ -77,12 +82,12 @@ const BulkImportReportDetails = () => {
                       <td
                         title={list.error_message}
                         className="relative border-b border-slate-200 p-3 cursor-pointer"
-                        onClick={() => copyErrorMessage(list.error_message)}
+                        onClick={() => copyErrorMessage(list.error_message, list.uuid)}
                       >
                         {list.error_message.substring(0, 80)}
                         {list.error_message.length > 80 ? '...' : ''}
                         <span
-                          className={`${copiedErrorMsg === list.error_message ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                          className={`${selectedID === list.uuid ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                         >
                           Error Message Copied
                         </span>

@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import createContractTemplate from '../../assets/bulk-import-templates/create_contract_template.xlsx';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
@@ -220,6 +221,7 @@ const CreateContract = () => {
         <BulkImport
           isLoading={isLoading}
           apiEndpoint="recurring-contract/bulk-import-contract"
+          templateFile={createContractTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import InlineNotification from '../../components/InlineNotification';
+import createRequestPaymentTemplate from '../../assets/bulk-import-templates/create_request_payment_template.xlsx';
 
 const RequestPayment = () => {
   const [requestPaymentID, setRequestPaymentID] = useState('');
@@ -235,6 +236,7 @@ const RequestPayment = () => {
         <BulkImport
           isLoading={isLoading}
           apiEndpoint="recurring-contract/bulk-import-recurring-payment-request"
+          templateFile={createRequestPaymentTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

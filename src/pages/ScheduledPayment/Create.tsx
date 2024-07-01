@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import createSchedulePaymentTemplate from '../../assets/bulk-import-templates/create_scheduled_payment_template.xlsx';
 
 const Create = () => {
   const [scheduledPaymentID, setScheduledPaymentID] = useState('');
@@ -253,6 +254,7 @@ const Create = () => {
         <BulkImport
           isLoading={isLoading}
           apiEndpoint="scheduled-payment/bulk-import"
+          templateFile={createSchedulePaymentTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
