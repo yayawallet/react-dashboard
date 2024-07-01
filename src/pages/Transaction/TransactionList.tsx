@@ -120,13 +120,6 @@ const TransactionList = () => {
                         </td>
                         <td className="border-b border-slate-200 p-3">
                           {capitalize(t?.sender.name).split(' ').slice(0, 2).join(' ')}
-                          {/* <br />
-                          <span
-                            className="text-gray-500 text-xs block"
-                            style={{ marginTop: '-3px' }}
-                          >
-                            {'@' + t?.sender.account}
-                          </span> */}
                         </td>
                         <td className="border-b border-slate-200 p-3">
                           {ownAccount === t?.receiver.account ? (
@@ -142,13 +135,6 @@ const TransactionList = () => {
                         </td>
                         <td className="border-b border-slate-200 p-3">
                           {capitalize(t?.receiver.name).split(' ').slice(0, 2).join(' ')}
-                          {/* <br />
-                          <span
-                            className="text-gray-500 text-xs block"
-                            style={{ marginTop: '-3px' }}
-                          >
-                            {'@' + t?.receiver.account}
-                          </span> */}
                         </td>
                         <td className="border-b border-slate-200 p-3">
                           {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
@@ -163,16 +149,18 @@ const TransactionList = () => {
               </div>
               {pageCount > 1 && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-slate-50 rounded-t rounded-xl">
-                  <p className="text-[15px] text-slate-700">
+                  <p className="text-[15px] text-slate-700 py-4">
                     Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
                     {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
                   </p>
-                  <Pagination
-                    page={currentPage}
-                    pageCount={pageCount}
-                    isLoading={isLoading}
-                    onPageChange={handlePageChange}
-                  />
+                  <div className={`${searchQuery ? 'hidden' : ''}`}>
+                    <Pagination
+                      page={currentPage}
+                      pageCount={pageCount}
+                      isLoading={isLoading}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
                 </div>
               )}
             </>
