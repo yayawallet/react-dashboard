@@ -62,8 +62,8 @@ const BulkImport = ({
   });
 
   return (
-    <div className="">
-      <div className="mt-5 p-10">
+    <div className="w-[var(--form-width)] mx-auto border rounded-b-xl mb-20">
+      <div className="mt-5 p-8">
         <p className="text-gray-800">
           <span className="font-semibold">Instruction: </span>
           <li>
@@ -83,54 +83,53 @@ const BulkImport = ({
         </p>
       </div>
 
-      <form className="max-w-lg ml-10" onSubmit={formik.handleSubmit}>
-        <div className="grid md:grid-cols-5 md:gap-10">
-          <div className="relative z-0 w-full mb-10 group col-span-3">
-            <input
-              type="file"
-              name="excel_file"
-              id="excel_file"
-              accept=".xlsx, .xls, .csv, .tsv"
-              placeholder="Upload Excel file"
-              className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
-              disabled={isLoading}
-              onChange={(e) =>
-                formik.setFieldValue('excel_file', e.target.files && e.target.files[0])
-              }
-            />
-            <span className="text-sm text-red-600">{formik.errors.excel_file}</span>
-          </div>
+      <form className="p-8 pt-4" onSubmit={formik.handleSubmit}>
+        <div className="mb-6">
+          <label htmlFor="excel_file" className="block mb-2 text-sm font-medium text-gray-900">
+            Upload file
+          </label>
+          <input
+            aria-describedby="excel_file_input"
+            name="excel_file"
+            id="excel_file"
+            accept=".xlsx, .xls, .csv, .tsv"
+            type="file"
+            disabled={isLoading}
+            className="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            onChange={(e) =>
+              formik.setFieldValue('excel_file', e.target.files && e.target.files[0])
+            }
+          />
 
-          <div className="relative z-0 w-full mb-10 group col-span-2">
-            <input
-              type="text"
-              id="remark"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.remark}
-            />
-            <label
-              htmlFor="remark"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Remark
-            </label>
+          <span className="text-sm text-red-600">{formik.errors.excel_file}</span>
+        </div>
 
-            <span className="text-xs text-red-600">
-              {formik.touched.remark && formik.errors.remark}
-            </span>
-          </div>
+        <div className="mb-6">
+          <label htmlFor="remark" className="block mb-2 text-sm font-medium text-gray-900">
+            Remark
+          </label>
+          <input
+            type="text"
+            id="remark"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Remark"
+            autoComplete="off"
+            onChange={formik.handleChange}
+            value={formik.values.remark}
+          />
+          <span className="text-sm text-red-600">
+            {formik.touched.remark && formik.errors.remark}
+          </span>
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-800"
         >
-          {isLoading ? 'Please wait...' : 'Upload File'}
+          <span className="text-[15px]" style={{ letterSpacing: '0.5px' }}>
+            {isLoading ? 'Please wait...' : 'Upload File'}
+          </span>
         </button>
       </form>
     </div>
