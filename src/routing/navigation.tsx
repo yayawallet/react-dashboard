@@ -8,6 +8,12 @@ import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
 
+import Index from '../pages/BillPayment/Index';
+import CreateBill from '../pages/BillPayment/CreateBill';
+import BillList from '../pages/BillPayment/BillList';
+import UpdateBill from '../pages/BillPayment/UpdateBill';
+import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
+
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/Create';
 import ListScheduled from '../pages/ScheduledPayment/List';
@@ -25,6 +31,8 @@ import CreateTransfer from '../pages/BankTransfer/SendMoney';
 import TransferList from '../pages/BankTransfer/TransferList';
 import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
 import TransferFee from '../pages/BankTransfer/TransferFee';
+
+import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
 import Support from '../pages/Support';
 import Guide from '../pages/Guide';
@@ -49,7 +57,7 @@ import { MdOutlinePayments } from 'react-icons/md';
 import { RiBankFill } from 'react-icons/ri';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
-import BulkImportReportDetails from '../components/BulkImportReportDetails';
+import { FaMoneyBillTrendUp } from 'react-icons/fa6';
 
 export const sidebarNavs = [
   {
@@ -92,6 +100,39 @@ export const sidebarNavs = [
     icon: <IoQrCode />,
     element: <GenerateQRCode />,
     accessRoles: ['admin', 'clerk'],
+  },
+  {
+    title: 'Bill Payment',
+    path: 'bill',
+    icon: <FaMoneyBillTrendUp />,
+    element: <Index />,
+    accessRoles: ['admin', 'clerk'],
+    children: [
+      {
+        title: 'Create Bill',
+        path: 'create',
+        element: <CreateBill />,
+        accessRoles: ['admin'],
+      },
+      {
+        title: 'Bill Payment List',
+        path: 'list',
+        element: <BillList />,
+        accessRoles: ['admin', 'clerk'],
+      },
+      {
+        title: 'Update Bill',
+        path: 'update',
+        element: <UpdateBill />,
+        accessRoles: ['admin'],
+      },
+      {
+        title: 'Check Bulk Status',
+        path: 'bulkimport/list',
+        element: <CheckBulkBillStatus />,
+        accessRoles: ['admin', 'clerk'],
+      },
+    ],
   },
   {
     title: 'Scheduled Payment',
