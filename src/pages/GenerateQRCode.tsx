@@ -11,13 +11,13 @@ const GenerateQRCode = () => {
   const [paymentLinkCopied, setPaymentLinkCopied] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const copyPaymentLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const copyPaymentLink = (e: React.MouseEvent<HTMLButtonElement>) => {
     navigator.clipboard.writeText(QRCode?.payment_link || '');
     setPaymentLinkCopied(true);
 
     setTimeout(() => {
       setPaymentLinkCopied(false);
-      e.currentTarget.blur();
+      (e.target as HTMLButtonElement).blur();
     }, 2000);
   };
 
@@ -56,24 +56,23 @@ const GenerateQRCode = () => {
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 ">Generate QR Code</h1>
-      <p className="pl-2 mb-10 text-gray-600">Receive payments by sharing your QR Code.</p>
+      <h1 className="text-2xl font-semibold p-2 mb-10">Generate QR Code</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {QRCode && (
-        <div className="inline-flex flex-col rounded-lg ml-10 -mt-10 mb-8">
-          <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60" />
+        <div className="inline-flex flex-col rounded-lg md:ml-10 -mt-10">
+          <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60 md:h-80 lg:h-96" />
           <p className="text-sm">
-            Payment Link:{' '}
+            <span className="font-semibold">Payment Link:</span>{' '}
             <span className="px-1 pb-0.5 text-white bg-violet-600 rounded">
               {QRCode.payment_link}
             </span>
             <button
               onClick={(e) => copyPaymentLink(e)}
-              className="w-14 ml-2 px-1 pb-0.5 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
+              className="ml-2 px-1.5 mt-2 pb-0.5 text-violet-900 bg-violet-50 hover:bg-violet-200 border-2 border-violet-600 rounded focus:ring-2 focus:outline-none focus:ring-violet-300"
             >
-              {paymentLinkCopied ? 'copied' : 'copy'}
+              {paymentLinkCopied ? 'copied!' : 'copy'}
             </button>
           </p>
         </div>
