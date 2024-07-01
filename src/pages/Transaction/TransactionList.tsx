@@ -41,6 +41,7 @@ const TransactionList = () => {
   useEffect(() => {
     if (searchResult) {
       setTransactionList(searchResult.data);
+      setPageCount(searchResult.lastPage);
     }
   }, [searchResult]);
 
