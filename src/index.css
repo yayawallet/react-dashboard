@@ -4,6 +4,7 @@
 
 :root {
   --header-height: 64px;
+  --form-width: 840px;
 }
 
 * {
