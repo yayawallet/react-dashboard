@@ -37,6 +37,25 @@ const CreateBill = () => {
       email: '',
     },
 
+    validate: (values) => {
+      interface Errors {
+        fwd_institution?: string;
+        fwd_account_number?: string;
+      }
+
+      const errors: Errors = {};
+
+      if (values.fwd_institution && !values.fwd_account_number) {
+        errors.fwd_account_number = 'Account number is required';
+      }
+
+      if (values.fwd_account_number && !values.fwd_institution) {
+        errors.fwd_institution = 'Fwd institution is required';
+      }
+
+      return errors;
+    },
+
     validationSchema: Yup.object({
       customer_yaya_account: Yup.string(),
       amount: Yup.number().required('Amount is required'),
@@ -134,7 +153,7 @@ const CreateBill = () => {
           className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 mb-6 md:grid-cols-5">
+          <div className="grid gap-6 mb-68 md:grid-cols-5">
             <div className="col-span-3">
               <label
                 htmlFor="customer_yaya_account"
@@ -161,28 +180,6 @@ const CreateBill = () => {
 
             <div className="col-span-2">
               <label
-                htmlFor="amount"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Amount
-              </label>
-              <input
-                type="number"
-                id="amount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Amount"
-                onChange={formik.handleChange}
-                value={formik.values.amount}
-              />
-              <span className="text-sm text-red-600">
-                {formik.touched.amount && formik.errors.amount}
-              </span>
-            </div>
-          </div>
-
-          <div className="grid gap-6 mb-6 md:grid-cols-3">
-            <div>
-              <label
                 htmlFor="customer_id"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
@@ -198,6 +195,28 @@ const CreateBill = () => {
               />
               <span className="text-sm text-red-600">
                 {formik.touched.customer_id && formik.errors.customer_id}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid gap-6 mb-6 md:grid-cols-3">
+            <div>
+              <label
+                htmlFor="amount"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Amount
+              </label>
+              <input
+                type="number"
+                id="amount"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Amount"
+                onChange={formik.handleChange}
+                value={formik.values.amount}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.amount && formik.errors.amount}
               </span>
             </div>
 
@@ -308,7 +327,11 @@ const CreateBill = () => {
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Forward institution
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
+                <span
+                  className={`font-normal text-gray-400 ${formik.values.fwd_account_number ? 'hidden' : ''}`}
+                >
+                  &nbsp;(optional)
+                </span>
               </label>
               <input
                 type="text"
@@ -329,7 +352,11 @@ const CreateBill = () => {
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
                 Forward account number
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
+                <span
+                  className={`font-normal text-gray-400 ${formik.values.fwd_institution ? 'hidden' : ''}`}
+                >
+                  &nbsp;(optional)
+                </span>
               </label>
               <input
                 type="text"
