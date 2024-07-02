@@ -83,7 +83,7 @@ const BulkImport = ({
         </p>
       </div>
 
-      <form className="p-8 pt-4" onSubmit={formik.handleSubmit}>
+      <form className="p-8 pt-4 w-[var(--form-width-small)]" onSubmit={formik.handleSubmit}>
         <div className="mb-6">
           <label htmlFor="excel_file" className="block mb-2 text-sm font-medium text-gray-900">
             Upload file
@@ -95,7 +95,7 @@ const BulkImport = ({
             accept=".xlsx, .xls, .csv, .tsv"
             type="file"
             disabled={isLoading}
-            className="block w-full p-2.5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
             onChange={(e) =>
               formik.setFieldValue('excel_file', e.target.files && e.target.files[0])
             }
@@ -125,9 +125,9 @@ const BulkImport = ({
         <button
           type="submit"
           disabled={isLoading}
-          className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-800"
+          className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
         >
-          <span className="text-[15px]" style={{ letterSpacing: '0.5px' }}>
+          <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
             {isLoading ? 'Please wait...' : 'Upload File'}
           </span>
         </button>
