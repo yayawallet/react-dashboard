@@ -5,15 +5,12 @@ import * as Yup from 'yup';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
-import useAccessToken from '../../hooks/useAccessToken';
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState('');
   const [transaction, setTransaction] = useState<Transaction>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const { accessToken } = useAccessToken();
 
   const formik = useFormik({
     initialValues: {
@@ -122,40 +119,41 @@ const GetTransactionByID = () => {
         </div>
       )}
 
-      <form
-        className="max-w-lg ml-10 mt-16 shadow shadow-slate-300 px-10 py-6 rounded-lg"
-        onSubmit={formik.handleSubmit}
-      >
-        <div className="relative z-0 w-full mb-10 mt-10 group">
-          <input
-            type="Text"
-            id="transactionID"
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-            disabled={isLoading}
-            onChange={formik.handleChange}
-            value={formik.values.transactionID}
-          />
-          <label
-            htmlFor="transactionID"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Transaction ID
-          </label>
-
-          <span className="text-xs text-red-600">
-            {formik.touched.transactionID && formik.errors.transactionID}
-          </span>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+      <div className="flex justify-center lg:mr-32 mt-6">
+        <form
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          onSubmit={formik.handleSubmit}
         >
-          {isLoading ? 'Verifying...' : 'Verify'}
-        </button>
-      </form>
+          <div className="mb-6">
+            <label htmlFor="transactionID" className="block mb-2 text-sm font-medium text-gray-900">
+              Transaction ID
+            </label>
+            <input
+              type="text"
+              id="transactionID"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="transaction_id"
+              autoComplete="off"
+              disabled={isLoading}
+              onChange={formik.handleChange}
+              value={formik.values.transactionID}
+            />
+            <span className="text-sm text-red-600">
+              {formik.touched.transactionID && formik.errors.transactionID}
+            </span>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+          >
+            <span style={{ letterSpacing: '0.3px' }}>
+              {isLoading ? 'Please wait...' : 'Send Money'}
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
