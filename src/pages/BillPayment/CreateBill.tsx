@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import InstitutionLIst from '../../components/InstitutionLIst';
 
 const CreateBill = () => {
   const [contractID, setContractID] = useState('');
@@ -57,8 +58,8 @@ const CreateBill = () => {
     },
 
     validationSchema: Yup.object({
-      customer_yaya_account: Yup.string(),
-      amount: Yup.number().required('Amount is required'),
+      customer_yaya_account: Yup.string().max(12, 'Must be 12 characters'),
+      amount: Yup.number().required('Amount is required').min(1, 'Amount cannot be less than 1.00'),
       start_at: Yup.date(),
       due_at: Yup.date().required('Due date is required'),
       customer_id: Yup.string().required('Customer ID is required'),
@@ -157,7 +158,7 @@ const CreateBill = () => {
             <div className="col-span-3">
               <label
                 htmlFor="customer_yaya_account"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Customer yaya account
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
@@ -165,31 +166,34 @@ const CreateBill = () => {
               <input
                 type="text"
                 id="customer_yaya_account"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="customer_yaya_account"
+                autoComplete="off"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.customer_yaya_account}
               />
 
               <SearchUserInline
                 query={formik.values.customer_yaya_account}
-                onSelecteUser={(value) => setSelectedUser(value)}
+                onSelecteUser={(value) => {
+                  setSelectedUser(value);
+                  formik.setFieldValue('customer_yaya_account', value);
+                }}
                 onUserNotFound={(value) => setUserNotFound(value)}
               />
             </div>
 
             <div className="col-span-2">
-              <label
-                htmlFor="customer_id"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="customer_id" className="block mb-2 text-sm font-medium text-gray-900">
                 Customer ID
               </label>
               <input
                 type="text"
                 id="customer_id"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="customer_id"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.customer_id}
               />
@@ -201,17 +205,16 @@ const CreateBill = () => {
 
           <div className="grid gap-6 mb-6 md:grid-cols-3">
             <div>
-              <label
-                htmlFor="amount"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                 Amount
               </label>
               <input
                 type="number"
                 id="amount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Amount"
+                autoComplete="off"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.amount}
               />
@@ -221,17 +224,15 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="start_at"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="start_at" className="block mb-2 text-sm font-medium text-gray-900">
                 Start date
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="datetime-local"
                 id="start_at"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.start_at}
               />
@@ -241,16 +242,14 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="due_at"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="due_at" className="block mb-2 text-sm font-medium text-gray-900">
                 Due date
               </label>
               <input
                 type="datetime-local"
                 id="due_at"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.due_at}
               />
@@ -260,17 +259,15 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="bill_id"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="bill_id" className="block mb-2 text-sm font-medium text-gray-900">
                 Bill ID
               </label>
               <input
                 type="text"
                 id="bill_id"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="bill_id"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.bill_id}
               />
@@ -280,18 +277,16 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="bill_code"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="bill_code" className="block mb-2 text-sm font-medium text-gray-900">
                 Bill code
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
                 id="bill_code"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="bill_code"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.bill_code}
               />
@@ -301,18 +296,16 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="bill_season"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="bill_season" className="block mb-2 text-sm font-medium text-gray-900">
                 Bill season
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
                 id="bill_season"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="bill_season"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.bill_season}
               />
@@ -324,7 +317,7 @@ const CreateBill = () => {
             <div>
               <label
                 htmlFor="fwd_institution"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Forward institution
                 <span
@@ -333,14 +326,11 @@ const CreateBill = () => {
                   &nbsp;(optional)
                 </span>
               </label>
-              <input
-                type="text"
-                id="fwd_institution"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="fwd_institution"
-                onChange={formik.handleChange}
-                value={formik.values.fwd_institution}
+
+              <InstitutionLIst
+                onSelect={(value) => formik.setFieldValue('fwd_institution', value)}
               />
+
               <span className="text-sm text-red-600">
                 {formik.touched.fwd_institution && formik.errors.fwd_institution}
               </span>
@@ -349,7 +339,7 @@ const CreateBill = () => {
             <div>
               <label
                 htmlFor="fwd_account_number"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Forward account number
                 <span
@@ -361,8 +351,9 @@ const CreateBill = () => {
               <input
                 type="text"
                 id="fwd_account_number"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="fwd_account_number"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.fwd_account_number}
               />
@@ -372,18 +363,17 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="description"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900">
                 Description
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
                 id="description"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="description"
+                autoComplete="off"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.description}
               />
@@ -395,19 +385,17 @@ const CreateBill = () => {
 
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
-              <label
-                htmlFor="phone"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
                 Phone number
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
                 id="phone"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="phone"
                 autoComplete="tel"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.phone}
               />
@@ -417,19 +405,17 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
+              <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
                 Email
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
                 id="email"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="email"
                 autoComplete="email"
+                disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
@@ -442,9 +428,9 @@ const CreateBill = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center dark:bg-violet-600 dark:hover:bg-violet-700 dark:focus:ring-violet-800"
+            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
-            <span className="text-[15px]" style={{ letterSpacing: '0.5px' }}>
+            <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
               {isLoading ? 'Please wait...' : 'Create Bill'}
             </span>
           </button>
