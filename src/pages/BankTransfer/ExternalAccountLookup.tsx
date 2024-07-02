@@ -1,27 +1,19 @@
-import { useEffect, useState } from 'react';
-import { authAxios } from '../../api/axios';
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Institution, EXternalAccount } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
-import useAccessToken from '../../hooks/useAccessToken';
+import { usePostData } from '../../hooks/useSWR';
+import { authAxios } from '../../api/axios';
 
 const ExternalAccountLookup = () => {
-  const [financialInstitutionList, setFinancialInstitutionList] = useState<Institution[]>([]);
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
-  const { accessToken } = useAccessToken();
-
-  useEffect(() => {
-    authAxios
-      .post('/financial-institution/list', {
-        country: 'Ethiopia',
-      })
-      .then((res) => setFinancialInstitutionList(res.data))
-      .catch((error) => setErrorMessage(error.response?.data.error || error.message));
-  }, []);
+  const { data: institutionList } = usePostData('/financial-institution/list', {
+    country: 'Ethiopia',
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -41,10 +33,8 @@ const ExternalAccountLookup = () => {
       setErrorMessage('');
       setExternalAccount(undefined);
 
-      axios
-        .post(`${import.meta.env.VITE_BASE_URL}/transfer/lookup-external`, values, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
+      authAxios
+        .post(`/transfer/lookup-external`, values)
         .then((res) => {
           setExternalAccount(res.data);
           setLoading(false);
@@ -114,16 +104,22 @@ const ExternalAccountLookup = () => {
           <div className="relative z-0 w-full mb-10 group">
             <select
               id="institution_code"
-              className="w-full bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 outline-none"
+              className="w-full bg-gray-50 border-2 border-gray-300 rounded-lg focus:ring-4 ring-gray-200 p-2.5 outline-none sidebar-scrollbar"
               onChange={formik.handleChange}
               value={formik.values.institution_code}
             >
-              <option label="Choose Institution code"></option>
-              {financialInstitutionList?.map((list) => (
-                <option key={list.code} value={list.code}>
+              <option
+                label="Choose Institution"
+                disabled
+                className="text-lg font-semibold"
+              ></option>
+              <option disabled className="text-[6px]"></option>
+              {institutionList?.map((list: Institution) => (
+                <option key={list.code} value={list.code} className="bg-slate-100 text-gray-800">
                   {`${list.code} - ${list.name}`}
                 </option>
               ))}
+              <option disabled></option>
             </select>
             <span className="text-xs text-red-600">
               {formik.touched.institution_code && formik.errors.institution_code}

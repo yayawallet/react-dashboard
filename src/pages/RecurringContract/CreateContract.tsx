@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import createContractTemplate from '../../assets/bulk-import-templates/create_contract_template.xlsx';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
@@ -88,7 +89,7 @@ const CreateContract = () => {
               checked={inputFormType === 'one'}
               onChange={() => setInputFormType('one')}
             />
-            <label htmlFor="topupFor" className="cursor-pointer">
+            <label htmlFor="oneInput" className="cursor-pointer">
               Single Contract
             </label>
           </button>
@@ -105,7 +106,7 @@ const CreateContract = () => {
               checked={inputFormType === 'multiple'}
               onChange={() => setInputFormType('multiple')}
             />
-            <label htmlFor="forOther" className="cursor-pointer">
+            <label htmlFor="multipleInput" className="cursor-pointer">
               Multiple Contracts
             </label>
           </button>
@@ -220,6 +221,7 @@ const CreateContract = () => {
         <BulkImport
           isLoading={isLoading}
           apiEndpoint="recurring-contract/bulk-import-contract"
+          templateFile={createContractTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

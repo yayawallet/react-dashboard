@@ -12,6 +12,8 @@ const BreadCrumbs = () => {
     )
     .flat();
 
+  sidebarPaths.push('profile');
+
   const crumbs = paths.every((path) => sidebarPaths.includes(path))
     ? paths
     : [...paths.filter((path) => sidebarPaths.includes(path)), 'not-found'];

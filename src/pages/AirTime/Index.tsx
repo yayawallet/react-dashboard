@@ -9,8 +9,8 @@ const AirTime = () => {
   const [selectedCategory, setSelectedCategory] = useState('airtime');
   const [errorMessage, setErrorMessage] = useState<string | boolean>(true);
 
-  const result = useGetData('/user/profile');
-  const ownPhoneNumber = result.data ? result.data.phone : '';
+  const { data: ownProfile } = useGetData('/user/profile');
+  const ownPhoneNumber = ownProfile ? ownProfile.phone : '';
 
   useEffect(() => {
     if (topupFor === 'self') {

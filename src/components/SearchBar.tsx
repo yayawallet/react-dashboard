@@ -7,18 +7,19 @@ const SearchBar = ({ onSearch, placeholder }: Props) => {
   return (
     <div className="">
       <form className="max-w-lg" onSubmit={(e) => e.preventDefault()}>
-        <div className="relative max-w-80">
+        <div className="relative max-w-100">
           <input
             type="search"
             id="search-dropdown"
             autoComplete="off"
-            className="block p-2.5 w-full z-20 text-gray-900 bg-gray-50 rounded-lg border-e-gray-200 border-s-2 border border-gray-300 focus:ring-1 ring-violet-200 focus:border-violet-200 outline-none"
-            placeholder={placeholder || 'Sender, Receiver, Cause, ID...'}
+            className="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded border-e-gray-200 border-s-2 border border-gray-300 focus:ring-2 ring-gray-200 outline-none"
+            placeholder={placeholder || 'ID, Sender, Receiver, Reason'}
             onChange={(e) => onSearch(e.currentTarget.value)}
           />
           <button
             type="submit"
-            className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-violet-500 rounded-e-lg border border-violet-500 hover:bg-violet-600 focus:ring-4 focus:outline-none focus:ring-violet-300"
+            aria-label="search"
+            className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-violet-500 rounded-e border border-violet-500 hover:bg-violet-600 focus:ring-4 focus:outline-none focus:ring-violet-300"
           >
             <svg
               className="w-4 h-4"

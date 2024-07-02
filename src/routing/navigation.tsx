@@ -21,7 +21,7 @@ import ReportContract from '../pages/RecurringContract/ReportContract';
 import ReportRequestPayment from '../pages/RecurringContract/ReportRequestPayment';
 
 import Transfer from '../pages/BankTransfer/Index';
-import CreateTransfer from '../pages/BankTransfer/CreateTransfer';
+import CreateTransfer from '../pages/BankTransfer/SendMoney';
 import TransferList from '../pages/BankTransfer/TransferList';
 import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
 import TransferFee from '../pages/BankTransfer/TransferFee';
@@ -49,6 +49,7 @@ import { MdOutlinePayments } from 'react-icons/md';
 import { RiBankFill } from 'react-icons/ri';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
+import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
 export const sidebarNavs = [
   {
@@ -166,8 +167,8 @@ export const sidebarNavs = [
     accessRoles: ['admin', 'clerk'],
     children: [
       {
-        title: 'Transfer Money',
-        path: 'create',
+        title: 'Send Money',
+        path: 'send',
         element: <CreateTransfer />,
         accessRoles: ['admin'],
       },
@@ -178,8 +179,8 @@ export const sidebarNavs = [
         accessRoles: ['admin', 'clerk'],
       },
       {
-        title: 'Check Fee',
-        path: 'check-fee',
+        title: 'Transfer Fee',
+        path: 'transfer-fee',
         element: <TransferFee />,
         accessRoles: ['admin', 'clerk'],
       },
@@ -213,6 +214,12 @@ export const privateNavs = [
     element: <Layout />,
     children: [
       ...sidebarNavs,
+      { path: 'scheduled-payment/report/:id', element: <BulkImportReportDetails /> },
+      { path: 'recurring-contract/report/:id', element: <BulkImportReportDetails /> },
+      {
+        path: 'recurring-contract/request-payment/report/:id',
+        element: <BulkImportReportDetails />,
+      },
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
       { path: 'me', element: <AboutMe /> },

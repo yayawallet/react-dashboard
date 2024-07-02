@@ -52,21 +52,21 @@ const Sidebar = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform  lg:translate-x-0 ${isSidebarOpen ? '' : '-translate-x-full'}`}
+        className={`fixed top-0 left-0 z-40 w-[300px] h-screen transition-transform lg:translate-x-0 leading-6 ${isSidebarOpen ? '' : '-translate-x-full'}`}
         aria-label="Sidebar"
       >
-        <div className="h-full pb-3 overflow-y-scroll loverflow-y-auto bg-gray-50">
-          <Link
-            to="/"
-            className="flex items-center h-16 ps-2.5 pt-2 pb-1 shadow-sm sticky top-0 bg-gray-50 z-10"
-          >
-            <img src={yayawalletLogo} className="h-12" alt="YaYaWallet Logo" />
-          </Link>
-
-          <div className="px-3 pt-5 relative">
+        <div className="h-full relative bg-gray-50">
+          <div className="flex justify-between items-center shadow-sm sticky top-0 z-10 bg-gray-50">
+            <Link
+              to="/"
+              aria-label="home page"
+              className="flex items-center h-header ps-2.5 pt-2 pb-1"
+            >
+              <img src={yayawalletLogo} className="h-full" alt="YaYaWallet Logo" />
+            </Link>
             <button
               type="button"
-              className="lg:hidden flex text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 absolute top-3 end-2 items-center justify-center"
+              className="lg:hidden flex text-gray-400 bg-gray-100 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 mr-2 items-center justify-center"
               onClick={() => setSidebarOpen(false)}
             >
               <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
@@ -79,10 +79,13 @@ const Sidebar = () => {
                 />
               </svg>
             </button>
+          </div>
+
+          <div className="px-3 pt-5 pb-24 h-full relative overflow-y-scroll sidebar-scrollbar">
             <ul className="space-y-2 mb-20 font-medium">
               <li>
                 <div className="flex justify-center p-2">
-                  <Link to="/profile">
+                  <Link to="/profile" aria-label="profile">
                     <img
                       src={profile?.photo_url || avater}
                       alt=""
@@ -93,6 +96,7 @@ const Sidebar = () => {
 
                 <Link
                   to="/profile"
+                  aria-label="profile"
                   className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">

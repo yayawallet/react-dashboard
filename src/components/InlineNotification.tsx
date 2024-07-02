@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 interface Props {
   type: 'success' | 'error';
   customType?: string;
@@ -5,8 +7,14 @@ interface Props {
 }
 
 const InlineNotification = ({ type, customType, info }: Props) => {
+  const [hide, setHide] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setHide(true), 10000);
+  }, []);
+
   return (
-    <div>
+    <div className={`${hide ? 'hidden' : ''}`}>
       <div
         className={`flex items-center p-4 mb-10 text-sm rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
         role="alert"

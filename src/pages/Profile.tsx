@@ -13,16 +13,16 @@ const Profile = () => {
             <p className="mt-1 max-w-2xl text-sm text-gray-500">{'@' + profile?.account}</p>
           </div>
 
-          <div className="">
+          <dl className="">
             <dt className="text-sm font-medium text-gray-500 px-3 py-1">Status</dt>
             <dd
-              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === 'ACTIVE' ? 'bg-green-500 text-slate-100' : 'bg-gray-100'}`}
+              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === 'ACTIVE' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}
             >
               {profile
                 ? `${profile?.status?.charAt(0)}${profile?.status?.slice(1).toLowerCase()}`
                 : '- - -'}
             </dd>
-          </div>
+          </dl>
         </div>
         <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
           <dl className="sm:divide-y sm:divide-gray-200">

@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import InlineNotification from '../../components/InlineNotification';
+import createRequestPaymentTemplate from '../../assets/bulk-import-templates/create_request_payment_template.xlsx';
 
 const RequestPayment = () => {
   const [requestPaymentID, setRequestPaymentID] = useState('');
@@ -28,7 +29,7 @@ const RequestPayment = () => {
 
     validationSchema: Yup.object({
       contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      amount: Yup.number().required('Required'),
+      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
       cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       notification_url: Yup.string().max(50, 'Must be 50 characters or less').url('Invalid url'),
       meta_data: Yup.object().json().typeError('Meta-data must be JSON format'),
@@ -86,7 +87,7 @@ const RequestPayment = () => {
               checked={inputFormType === 'one'}
               onChange={() => setInputFormType('one')}
             />
-            <label htmlFor="topupFor" className="cursor-pointer">
+            <label htmlFor="oneInput" className="cursor-pointer">
               Single Payment
             </label>
           </button>
@@ -103,7 +104,7 @@ const RequestPayment = () => {
               checked={inputFormType === 'multiple'}
               onChange={() => setInputFormType('multiple')}
             />
-            <label htmlFor="forOther" className="cursor-pointer">
+            <label htmlFor="multipleInput" className="cursor-pointer">
               Multiple Payments
             </label>
           </button>
@@ -174,7 +175,7 @@ const RequestPayment = () => {
                 htmlFor="cause"
                 className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
               >
-                Cause
+                Reason
               </label>
 
               <span className="text-xs text-red-600">
@@ -235,6 +236,7 @@ const RequestPayment = () => {
         <BulkImport
           isLoading={isLoading}
           apiEndpoint="recurring-contract/bulk-import-recurring-payment-request"
+          templateFile={createRequestPaymentTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

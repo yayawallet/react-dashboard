@@ -4,13 +4,16 @@ import { authAxios } from '../api/axios';
 export const useGetData = (path: string) => {
   const fetcher = () => authAxios.get(path).then((res) => res.data);
 
-  return useSWR(path, fetcher);
+  const options = { revalidateOnFocus: false, revalidateIfStale: false };
+
+  return useSWR(path, fetcher, options);
 };
 
 export const usePostData = (key: string | any[], body: object) => {
-  const path = key.length ? key[0] : key;
-
+  const path = Array.isArray(key) ? key[0] : key;
   const fetcher = () => authAxios.post(path, body).then((res) => res.data);
 
-  return useSWR(key, fetcher);
+  const options = { revalidateOnFocus: false, revalidateIfStale: false };
+
+  return useSWR(key, fetcher, options);
 };
