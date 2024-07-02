@@ -22,4 +22,3 @@ jobs:
           context: .
           push: true
           tags: yayawallet/react-dashboard:latest
-          Platforms: linux/amd64, linux/arm64
