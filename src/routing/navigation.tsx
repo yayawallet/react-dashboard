@@ -15,7 +15,7 @@ import UpdateBill from '../pages/BillPayment/UpdateBill';
 import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
-import CreateScheduled from '../pages/ScheduledPayment/Create';
+import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
 import ListScheduled from '../pages/ScheduledPayment/List';
 import ReportSchedule from '../pages/ScheduledPayment/Report';
 

@@ -14,6 +14,8 @@ const SearchUserInline = ({ query, onSelecteUser }: Props) => {
   const [userNotFound, setUserNotFound] = useState(false);
 
   useEffect(() => {
+    if (query.length === 12) return; // username is 12 characters long
+
     if (query.length < 3) {
       setUsersList([]);
       return;
