@@ -6,10 +6,9 @@ import { User } from '../models';
 interface Props {
   query: string;
   onSelecteUser: (user: string) => void;
-  onUserNotFound: (bol: boolean) => void;
 }
 
-const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
+const SearchUserInline = ({ query, onSelecteUser }: Props) => {
   const [usersList, setUsersList] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState('');
   const [userNotFound, setUserNotFound] = useState(false);
@@ -23,8 +22,6 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
     setUserNotFound(false);
     setSelectedUser('');
 
-    onUserNotFound(false);
-
     authAxios
       .post('/user/search', {
         query: query,
@@ -34,12 +31,10 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
 
         if (res.data.length === 0) {
           setUserNotFound(true);
-          onUserNotFound(true);
         }
       })
       .catch(() => {
         setUserNotFound(true);
-        onUserNotFound(true);
       });
   }, [query]);
 
@@ -67,7 +62,7 @@ const SearchUserInline = ({ query, onSelecteUser, onUserNotFound }: Props) => {
           </div>
         ))}
 
-        {userNotFound && <span className="block text-sm pl-4">No users found.</span>}
+        {userNotFound && <span className="block text-red-600 pt-0.5 pl-3">No users found</span>}
       </div>
     </div>
   );
