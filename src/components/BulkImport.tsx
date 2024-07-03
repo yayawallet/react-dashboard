@@ -74,7 +74,7 @@ const BulkImport = ({
           <li>
             <a
               href={templateFile}
-              download={`downloaded_${templateFile.split('_').slice(-3).join('_')}`}
+              download={`downloaded_${templateFile.split('_').slice(-2).join('_')}`}
               className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
             >
               Download template file <BsDownload />

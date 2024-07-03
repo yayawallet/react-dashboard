@@ -6,13 +6,13 @@ import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
 import InstitutionLIst from '../../components/InstitutionLIst';
+import createBillTemplate from '../../assets/bulk-import-templates/create_bill_template.xlsx';
 
 const CreateBill = () => {
-  const [contractID, setContractID] = useState('');
+  const [billPaymentID, setBillPaymentID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('one'); // one or multiple
 
@@ -24,13 +24,13 @@ const CreateBill = () => {
     initialValues: {
       client_yaya_account: 'tewobstatewo',
       customer_yaya_account: '',
-      amount: '',
       customer_id: '',
-      start_at: '',
-      due_at: '',
       bill_id: '',
       bill_code: '',
       bill_season: '',
+      amount: '',
+      start_at: '',
+      due_at: '',
       fwd_institution: '',
       fwd_account_number: '',
       description: '',
@@ -61,7 +61,11 @@ const CreateBill = () => {
       customer_yaya_account: Yup.string().max(12, 'Must be 12 characters'),
       amount: Yup.number().required('Amount is required').min(1, 'Amount cannot be less than 1.00'),
       start_at: Yup.date(),
-      due_at: Yup.date().required('Due date is required'),
+      due_at: Yup.date()
+        .required('Due date is required')
+        .test('due_at', 'Due date must be in the future', (value) => {
+          return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
+        }),
       customer_id: Yup.string().required('Customer ID is required'),
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
@@ -77,23 +81,29 @@ const CreateBill = () => {
       setLoading(true);
 
       // Clear existing values
-      setContractID('');
+      setBillPaymentID('');
       setSuccessMessage('');
       setErrorMessage('');
 
-      values.customer_yaya_account = selectedUser;
       authAxios
-        .post('/bill/create', values)
+        .post('/bill/create', {
+          ...values,
+          customer_yaya_account: selectedUser,
+          start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
+          due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
+        })
         .then((res) => {
-          setContractID(res.data.contract_id);
-          setLoading(false);
+          setBillPaymentID(res.data.id);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.message || error.message), setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.error || error.response?.data?.message || error.message
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 
@@ -103,15 +113,22 @@ const CreateBill = () => {
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {(contractID || successMessage) && (
+      {billPaymentID && (
         <InlineNotification
           type="success"
-          customType="Uploaded"
-          info={`${successMessage ? successMessage : `Contract ID: ${contractID}`}`}
+          info={`${successMessage ? successMessage : `Bill Payment ID: ${billPaymentID}`}`}
         />
       )}
 
-      <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50">
+      {successMessage && (
+        <InlineNotification
+          type="success"
+          customType="Uploaded"
+          info={`${successMessage ? successMessage : `Bill Payment ID: ${billPaymentID}`}`}
+        />
+      )}
+
+      <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <div className="flex gap-x-4 my-2 justify-end">
           <button
             className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
@@ -154,7 +171,7 @@ const CreateBill = () => {
           className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 mb-68 md:grid-cols-5">
+          <div className="grid gap-6 mb-4 md:grid-cols-5">
             <div className="col-span-3">
               <label
                 htmlFor="customer_yaya_account"
@@ -176,11 +193,7 @@ const CreateBill = () => {
 
               <SearchUserInline
                 query={formik.values.customer_yaya_account}
-                onSelecteUser={(value) => {
-                  setSelectedUser(value);
-                  formik.setFieldValue('customer_yaya_account', value);
-                }}
-                onUserNotFound={(value) => setUserNotFound(value)}
+                onSelecteUser={(value) => setSelectedUser(value)}
               />
             </div>
 
@@ -203,7 +216,7 @@ const CreateBill = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 mb-6 md:grid-cols-3">
+          <div className="grid gap-6 mb-8 md:grid-cols-3">
             <div>
               <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                 Amount
@@ -230,11 +243,12 @@ const CreateBill = () => {
               </label>
               <input
                 type="datetime-local"
+                name="start_at"
                 id="start_at"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 disabled={isLoading}
-                onChange={formik.handleChange}
                 value={formik.values.start_at}
+                onChange={formik.handleChange}
               />
               <span className="text-sm text-red-600">
                 {formik.touched.start_at && formik.errors.start_at}
@@ -247,11 +261,12 @@ const CreateBill = () => {
               </label>
               <input
                 type="datetime-local"
+                name="due_at"
                 id="due_at"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 disabled={isLoading}
-                onChange={formik.handleChange}
                 value={formik.values.due_at}
+                onChange={formik.handleChange}
               />
               <span className="text-sm text-red-600">
                 {formik.touched.due_at && formik.errors.due_at}
@@ -315,10 +330,7 @@ const CreateBill = () => {
             </div>
 
             <div>
-              <label
-                htmlFor="fwd_institution"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
+              <label htmlFor="institution" className="block mb-2 text-sm font-medium text-gray-900">
                 Forward institution
                 <span
                   className={`font-normal text-gray-400 ${formik.values.fwd_account_number ? 'hidden' : ''}`}
@@ -438,8 +450,8 @@ const CreateBill = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/bulk-import-contract"
-          templateFile={'CreateBillTemplate'}
+          apiEndpoint="bill/bulk-import"
+          templateFile={createBillTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}

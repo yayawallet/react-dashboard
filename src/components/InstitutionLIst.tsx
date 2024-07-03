@@ -13,7 +13,7 @@ const InstitutionLIst = ({ onSelect }: Props) => {
   return (
     <div className="relative">
       <select
-        id="institution_code"
+        id="institution"
         className="w-full py-2.5 px-6 b-0 rounded focus:ring-4j ring-gray-200 outline-none transition sidebar-scrollbar"
         style={{ color: '#444', background: '#eee', appearance: 'none' }}
         onChange={(e) => onSelect(e.target.value)}

@@ -10,13 +10,13 @@ const InlineNotification = ({ type, customType, info }: Props) => {
   const [hide, setHide] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setHide(true), 1000000);
+    setTimeout(() => setHide(true), 60000); // one minute
   }, []);
 
   return (
     <div className={`${hide ? 'hidden' : ''}`}>
       <div
-        className={`flex items-center p-4 text-sm rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
+        className={`flex items-center p-4 transition text-[15px] rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
         role="alert"
       >
         <svg className="flex-shrink-0 inline w-4 h-4 me-3" fill="currentColor" viewBox="0 0 20 20">
@@ -25,7 +25,7 @@ const InlineNotification = ({ type, customType, info }: Props) => {
         <span className="sr-only">Info</span>
         <div>
           <span className="font-medium mr-2">
-            {customType ? customType : type === 'success' ? 'Success:' : 'Error:'}
+            {customType ? customType : type === 'success' ? 'Success -' : 'Error -'}
           </span>
           {info}
         </div>
