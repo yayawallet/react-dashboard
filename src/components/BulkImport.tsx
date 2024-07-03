@@ -62,8 +62,8 @@ const BulkImport = ({
   });
 
   return (
-    <div className="w-[var(--form-width)] mx-auto border rounded-b-xl mb-20">
-      <div className="mt-5 p-8">
+    <div className="max-w-[var(--form-width)] mx-auto border rounded-b-xl mb-20">
+      <div className="p-8 pt-6">
         <p className="text-gray-800">
           <span className="font-semibold">Instruction: </span>
           <li>

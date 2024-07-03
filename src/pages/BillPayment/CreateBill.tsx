@@ -14,7 +14,7 @@ const CreateBill = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
-  const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+  const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -131,16 +131,16 @@ const CreateBill = () => {
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <div className="flex gap-x-4 my-2 justify-end">
           <button
-            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
-            onClick={() => setInputFormType('one')}
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'single' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('single')}
           >
             <input
               id="oneInput"
               type="radio"
               name="input-type"
               className="w-4 h-4 cursor-pointer"
-              checked={inputFormType === 'one'}
-              onChange={() => setInputFormType('one')}
+              checked={inputFormType === 'single'}
+              onChange={() => setInputFormType('single')}
             />
             <label htmlFor="oneInput" className="cursor-pointer">
               Single Contract
@@ -166,7 +166,7 @@ const CreateBill = () => {
         </div>
       </div>
 
-      {inputFormType === 'one' ? (
+      {inputFormType === 'single' ? (
         <form
           className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
           onSubmit={formik.handleSubmit}
@@ -193,7 +193,10 @@ const CreateBill = () => {
 
               <SearchUserInline
                 query={formik.values.customer_yaya_account}
-                onSelecteUser={(value) => setSelectedUser(value)}
+                onSelecteUser={(value) => {
+                  setSelectedUser(value);
+                  formik.setFieldValue('customer_yaya_account', value);
+                }}
               />
             </div>
 

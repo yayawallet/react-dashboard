@@ -9,7 +9,6 @@ const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
 
   const formik = useFormik({
@@ -32,9 +31,8 @@ const CreateTransaction = () => {
       setErrorMessage('');
       setTransactionID('');
 
-      values.receiver = selectedUser;
       authAxios
-        .post('/transaction/create', values)
+        .post('/transaction/create', { ...values, receiver: selectedUser })
         .then((res) => {
           setTransactionID(res.data.transaction_id);
           setLoading(false);
@@ -58,13 +56,13 @@ const CreateTransaction = () => {
         <InlineNotification type="success" info={`Transaction ID: ${transactionID}`} />
       )}
 
-      <div className="flex justify-center lg:mr-40 mt-6">
+      <div className="flex justify-center lg:mr-32 mt-6">
         <form
-          className="max-w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 mb-68 md:grid-cols-5">
-            <div className="col-span-3">
+          <div className="grid gap-6 md:grid-cols-5">
+            <div className="md:col-span-3">
               <label htmlFor="receiver" className="block mb-2 text-sm font-medium text-gray-900">
                 Receiver
               </label>
@@ -88,11 +86,10 @@ const CreateTransaction = () => {
                   setSelectedUser(value);
                   formik.setFieldValue('receiver', value);
                 }}
-                onUserNotFound={(value) => setUserNotFound(value)}
               />
             </div>
 
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                 Amount
               </label>
@@ -133,7 +130,7 @@ const CreateTransaction = () => {
 
           <button
             type="submit"
-            disabled={userNotFound || !selectedUser || isLoading}
+            disabled={!selectedUser || isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span style={{ letterSpacing: '0.3px' }}>

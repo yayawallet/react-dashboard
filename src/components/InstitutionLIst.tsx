@@ -18,7 +18,7 @@ const InstitutionLIst = ({ onSelect }: Props) => {
         style={{ color: '#444', background: '#eee', appearance: 'none' }}
         onChange={(e) => onSelect(e.target.value)}
       >
-        <option label="Choose Institution" className="text-lg font-semibold"></option>
+        <option label="Choose Institution" className="text-[16px] font-semibold"></option>
         {institutionList?.map((list: Institution) => (
           <option key={list.code} value={list.code} className="text-[16px]">
             {list.name}
