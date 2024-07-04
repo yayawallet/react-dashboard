@@ -38,7 +38,7 @@ const InlineNotification = ({ type, customType, info }: Props) => {
 
         <button
           type="button"
-          className={`flex text-${type === 'success' ? 'blue' : 'red'}-600 hover:bg-${type === 'success' ? 'blue' : 'red'}-100 hover:text-${type === 'success' ? 'blue' : 'red'}-900 rounded-lg text-sm w-8 h-8 mr-2 items-center justify-center`}
+          className={`flex ${type === 'success' ? 'text-blue-600 hover:text-blue-900 hover:bg-blue-100' : 'text-red-600 hover:text-red-900 hover:bg-red-100'} rounded-lg text-sm w-8 h-8 mr-2 items-center justify-center`}
           onClick={() => setHide(true)}
         >
           <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
