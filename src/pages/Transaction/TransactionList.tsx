@@ -111,7 +111,7 @@ const TransactionList = () => {
                         <td className="relative border-b border-slate-200 p-3">
                           <button
                             type="button"
-                            className="py-0.5 px-4 text text-violet-900 focus:outline-none bg-white rounded border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
+                            className="pt-0.5 pb-1 px-3 text text-violet-900 focus:outline-none bg-white rounded border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                           >
                             <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
                               Print
