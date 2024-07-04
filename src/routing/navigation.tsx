@@ -10,7 +10,7 @@ import GenerateQRCode from '../pages/GenerateQRCode';
 
 import Index from '../pages/BillPayment/Index';
 import CreateBill from '../pages/BillPayment/CreateBill';
-import BillList from '../pages/BillPayment/BillList';
+import BillList from '../pages/BillPayment/ListBill';
 import UpdateBill from '../pages/BillPayment/UpdateBill';
 import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
 
@@ -115,7 +115,7 @@ export const sidebarNavs = [
         accessRoles: ['admin'],
       },
       {
-        title: 'Bill Payment List',
+        title: 'List Bills',
         path: 'list',
         element: <BillList />,
         accessRoles: ['admin', 'clerk'],
