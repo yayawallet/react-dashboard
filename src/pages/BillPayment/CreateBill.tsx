@@ -73,8 +73,11 @@ const CreateBill = () => {
       fwd_institution: Yup.string(),
       fwd_account_number: Yup.string(),
       description: Yup.string(),
-      phone: Yup.string(),
-      email: Yup.string(),
+      phone: Yup.string().matches(
+        /(^\+?251\d{9}$)|(^09\d{8}$|^9\d{8}$)/, // Ethiopian phone number
+        'Phone number is not valid'
+      ),
+      email: Yup.string().email('Invalid email address'),
     }),
 
     onSubmit: (values) => {
