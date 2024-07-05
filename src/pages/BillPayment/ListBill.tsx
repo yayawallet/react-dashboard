@@ -1,49 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Pagination from '../../components/Pagination';
 import SearchBar from '../../components/SearchBar';
-import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
-import { Transaction } from '../../models';
-import { useGetData, usePostData } from '../../hooks/useSWR';
+import { BillListType } from '../../models';
+import { usePostData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
+import { GoDotFill } from 'react-icons/go';
 
-const TransactionList = () => {
-  const [transactionList, setTransactionList] = useState<Transaction[]>([]);
+const ListBill = () => {
   const [prevList, setPrevList] = useState(false);
-  const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedID, setCopiedID] = useState('');
 
-  const { data: ownProfile } = useGetData('/user/profile');
-  const ownAccount = ownProfile?.account;
-
   const {
     error,
     isLoading,
-    data: transactionData,
-  } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
-
-  const { data: searchResult } = usePostData(['/transaction/search', searchQuery], {
-    query: searchQuery,
-  });
-
-  useEffect(() => {
-    if (transactionData) {
-      setTransactionList(transactionData.data);
-      setPageCount(transactionData.lastPage);
-      setPrevList(true);
-    }
-  }, [transactionData]);
-
-  useEffect(() => {
-    if (searchResult) {
-      setTransactionList(searchResult.data);
-      setPageCount(searchResult.lastPage);
-    }
-  }, [searchResult]);
+    data: { data: billList, lastPage: pageCount } = {},
+  } = usePostData('/bill/list', {});
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -75,7 +51,7 @@ const TransactionList = () => {
             </div>
           </div>
 
-          {transactionList?.length === 0 ? (
+          {billList?.length === 0 ? (
             <EmptyList />
           ) : (
             <>
@@ -84,28 +60,29 @@ const TransactionList = () => {
                   <thead>
                     <tr>
                       <th className="text-left px-4 py-3 font-medium">ID</th>
-                      <th className="text-left px-4 py-3 font-medium">Invoice</th>
-                      <th className="text-left px-4 py-3 font-medium">Sender</th>
+                      <th className="text-left px-4 py-3 font-medium">Detail</th>
+                      <th className="text-left px-4 py-3 font-medium">Client YaYa Account</th>
+                      <th className="text-left px-4 py-3 font-medium">Customer ID</th>
+                      <th className="text-left px-4 py-3 font-medium">Bill ID</th>
                       <th className="text-left px-4 py-3 font-medium">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium">Receiver</th>
-                      <th className="text-left px-4 py-3 font-medium">Reason</th>
-                      <th className="text-left px-4 py-3 font-medium">Date</th>
+                      <th className="text-left px-4 py-3 font-medium">Status</th>
+                      <th className="text-left px-4 py-3 font-medium">Due Date</th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    {transactionList.map((t) => (
-                      <tr key={t?.id} className="hover:bg-slate-100 text-nowrap">
+                    {billList?.map((t: BillListType) => (
+                      <tr key={t.id} className="hover:bg-slate-100 text-nowrap">
                         <td
-                          title={t?.id}
+                          title={t.id}
                           className="relative border-b border-slate-200 p-3 cursor-pointer"
-                          onClick={() => copyTransactionID(t?.id)}
+                          onClick={() => copyTransactionID(t.id)}
                         >
-                          {`${t?.id.slice(0, 6)}...${t?.id.slice(-2)}`}
+                          {`${t.id.slice(0, 6)}...${t.id.slice(-2)}`}
                           <span
-                            className={`${copiedID === t?.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                            className={`${copiedID === t.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                           >
-                            Transaction ID Copied
+                            ID Copied
                           </span>
                         </td>
                         <td className="relative border-b border-slate-200 p-3">
@@ -113,34 +90,43 @@ const TransactionList = () => {
                             type="button"
                             className="pt-0.5 pb-1 px-3 text text-violet-900 focus:outline-none bg-white rounded border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
                           >
-                            <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
-                              Print
-                            </a>
+                            Detail
                           </button>
                         </td>
+
                         <td className="border-b border-slate-200 p-3">
-                          {capitalize(t?.sender.name).split(' ').slice(0, 2).join(' ')}
-                        </td>
-                        <td className="border-b border-slate-200 p-3">
-                          {ownAccount === t?.receiver.account ? (
-                            <span className="inline-block font-semibold text-green-600">
-                              &#43;&nbsp;
-                            </span>
+                          {t.customer_yaya_account ? (
+                            capitalize(t.customer_yaya_account?.name)
+                              .split(' ')
+                              .slice(0, 2)
+                              .join(' ')
                           ) : (
-                            <span className="inline-block font-semibold text-red-600">
-                              &#8722;&nbsp;
-                            </span>
+                            <span className="text-gray-500">unavailable</span>
                           )}
-                          {t?.amount.toFixed(2)} <span className="text-gray-500 text-sm">ETB</span>
                         </td>
+
                         <td className="border-b border-slate-200 p-3">
-                          {capitalize(t?.receiver.name).split(' ').slice(0, 2).join(' ')}
+                          {capitalize(t.customer_id)}
                         </td>
+
+                        <td className="border-b border-slate-200 p-3">{capitalize(t.bill_id)}</td>
+
                         <td className="border-b border-slate-200 p-3">
-                          {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
+                          <span
+                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.status == 'PAID' ? 'green' : 'orange'}-500`}
+                          >
+                            <GoDotFill />
+                          </span>
+                          {capitalize(t.status)}
                         </td>
+
+                        <td className="border-b border-slate-200 p-3">
+                          {t.amount?.toFixed(2)}{' '}
+                          <span className="text-gray-500 text-sm">{t.currency}</span>
+                        </td>
+
                         <td className="border-b border-slate-200 p-3 text-gray-500">
-                          {formatDate(t?.created_at_time)}
+                          {formatDate(t.due_at).split('-')[0]}
                         </td>
                       </tr>
                     ))}
@@ -171,4 +157,4 @@ const TransactionList = () => {
   );
 };
 
-export default TransactionList;
+export default ListBill;

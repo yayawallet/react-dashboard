@@ -4,14 +4,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import InlineNotification from '../../components/InlineNotification';
-import createRequestPaymentTemplate from '../../assets/bulk-import-templates/create_request_payment_template.xlsx';
+import createRequestPaymentTemplate from '../../assets/bulk-import-templates/create_request-payment_template.xlsx';
 
 const RequestPayment = () => {
   const [requestPaymentID, setRequestPaymentID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [inputFormType, setInputFormType] = useState('one'); // one or multiple
+  const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -24,7 +24,6 @@ const RequestPayment = () => {
       currency: 'ETB',
       cause: '',
       notification_url: '',
-      meta_data: '',
     },
 
     validationSchema: Yup.object({
@@ -32,7 +31,6 @@ const RequestPayment = () => {
       amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
       cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       notification_url: Yup.string().max(50, 'Must be 50 characters or less').url('Invalid url'),
-      meta_data: Yup.object().json().typeError('Meta-data must be JSON format'),
     }),
 
     onSubmit: (values) => {
@@ -42,19 +40,22 @@ const RequestPayment = () => {
       setRequestPaymentID('');
       setSuccessMessage('');
       setErrorMessage('');
-      values.meta_data = JSON.parse(values.meta_data);
 
       authAxios
         .post('/recurring-contract/request-payment', values)
         .then((res) => {
           setRequestPaymentID(res.data.payment_request_id);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
+          setErrorMessage(
+            error.response.data?.message || error.response.data?.error || error.message
+          );
+        })
+        .finally(() => {
+          setLoading(false);
         });
     },
   });
@@ -65,7 +66,14 @@ const RequestPayment = () => {
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {(requestPaymentID || successMessage) && (
+      {requestPaymentID && (
+        <InlineNotification
+          type="success"
+          info={`${successMessage ? successMessage : `Payment ID: ${requestPaymentID}`}`}
+        />
+      )}
+
+      {successMessage && (
         <InlineNotification
           type="success"
           customType="Uploaded"
@@ -73,22 +81,22 @@ const RequestPayment = () => {
         />
       )}
 
-      <div className="border-2 rounded-lg p-2 px-5">
+      <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <div className="flex gap-x-4 my-2 justify-end">
           <button
-            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'one' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
-            onClick={() => setInputFormType('one')}
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'single' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
+            onClick={() => setInputFormType('single')}
           >
             <input
               id="oneInput"
               type="radio"
               name="input-type"
               className="w-4 h-4 cursor-pointer"
-              checked={inputFormType === 'one'}
-              onChange={() => setInputFormType('one')}
+              checked={inputFormType === 'single'}
+              onChange={() => setInputFormType('single')}
             />
             <label htmlFor="oneInput" className="cursor-pointer">
-              Single Payment
+              Single Contract
             </label>
           </button>
 
@@ -105,133 +113,111 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('multiple')}
             />
             <label htmlFor="multipleInput" className="cursor-pointer">
-              Multiple Payments
+              Multiple Contracts
             </label>
           </button>
         </div>
       </div>
 
-      {inputFormType === 'one' ? (
-        <form className="max-w-lg ml-10 mt-16" onSubmit={formik.handleSubmit}>
-          <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="Text"
-              id="contract_number"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.contract_number}
-            />
-            <label
-              htmlFor="contract_number"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Contract Number
-            </label>
+      {inputFormType === 'single' ? (
+        <div className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20">
+          <form className="max-w-[var(--form-width-small)] mx-auto" onSubmit={formik.handleSubmit}>
+            <div className="grid gap-6 mb-6 md:grid-cols-5">
+              <div className="md:col-span-3">
+                <label
+                  htmlFor="contract_number"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Contract number
+                </label>
+                <input
+                  type="text"
+                  id="contract_number"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="contract_number"
+                  disabled={isLoading}
+                  onChange={formik.handleChange}
+                  value={formik.values.contract_number}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.contract_number && formik.errors.contract_number}
+                </span>
+              </div>
 
-            <span className="text-xs text-red-600">
-              {formik.touched.contract_number && formik.errors.contract_number}
-            </span>
-          </div>
-
-          <div className="grid md:grid-cols-2 md:gap-6">
-            <div className="relative z-0 w-full mb-10 group">
-              <input
-                type="number"
-                id="amount"
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                autoComplete="off"
-                disabled={isLoading}
-                onChange={formik.handleChange}
-                value={formik.values.amount}
-              />
-              <label
-                htmlFor="amount"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Amount
-              </label>
-
-              <span className="text-xs text-red-600">
-                {formik.touched.amount && formik.errors.amount}
-              </span>
+              <div className="md:col-span-2">
+                <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
+                  Amount
+                </label>
+                <input
+                  type="text"
+                  id="amount"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="amount"
+                  disabled={isLoading}
+                  autoComplete="off"
+                  onChange={formik.handleChange}
+                  value={formik.values.amount}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.amount && formik.errors.amount}
+                </span>
+              </div>
             </div>
 
-            <div className="relative z-0 w-full mb-10 group">
-              <input
-                type="text"
-                id="cause"
-                className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                placeholder=" "
-                autoComplete="off"
-                disabled={isLoading}
-                onChange={formik.handleChange}
-                value={formik.values.cause}
-              />
-              <label
-                htmlFor="cause"
-                className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-              >
-                Reason
-              </label>
+            <div className="grid gap-6 mb-6 md:grid-cols-5">
+              <div className="md:col-span-3">
+                <label htmlFor="cause" className="block mb-2 text-sm font-medium text-gray-900">
+                  Reason
+                </label>
+                <input
+                  type="text"
+                  id="cause"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="cause"
+                  autoComplete="off"
+                  disabled={isLoading}
+                  onChange={formik.handleChange}
+                  value={formik.values.cause}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.cause && formik.errors.cause}
+                </span>
+              </div>
 
-              <span className="text-xs text-red-600">
-                {formik.touched.cause && formik.errors.cause}
-              </span>
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="notification_url"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Notification URL
+                  <span className="font-normal text-gray-400">&nbsp;(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  id="notification_url"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="notification_url"
+                  disabled={isLoading}
+                  onChange={formik.handleChange}
+                  value={formik.values.notification_url}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.notification_url && formik.errors.notification_url}
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="Text"
-              id="notification_url"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              autoComplete="off"
+            <button
+              type="submit"
               disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.notification_url}
-            />
-            <label
-              htmlFor="notification_url"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
             >
-              Notification URL
-            </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.notification_url && formik.errors.notification_url}
-            </span>
-          </div>
-
-          <div className="relative z-0 w-full mb-10 group">
-            <textarea
-              rows={3}
-              name="meta_data"
-              id="meta_data"
-              placeholder="Any meta_data in JSON Format"
-              className="w-full px-2 py-1 border-2 rounded border-gray-300 focus:border-blue-600 outline-none"
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.meta_data}
-            ></textarea>
-            <span className="text-xs text-red-600">
-              {formik.touched.meta_data && formik.errors.meta_data}
-            </span>
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-          >
-            {isLoading ? 'Please wait...' : 'Create Contract'}
-          </button>
-        </form>
+              <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
+                {isLoading ? 'Please wait...' : 'Create Bill'}
+              </span>
+            </button>
+          </form>
+        </div>
       ) : (
         <BulkImport
           isLoading={isLoading}
@@ -240,14 +226,6 @@ const RequestPayment = () => {
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
-          instruction={
-            <>
-              Your file must have the following columns:{' '}
-              <span className="font-semibold">contract_number, amount, cause</span> &{' '}
-              <span className="font-semibold">notification_url</span> (optional),{' '}
-              <span className="font-semibold">meta_data</span> (optional)
-            </>
-          }
         />
       )}
     </div>

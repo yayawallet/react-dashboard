@@ -198,3 +198,62 @@ export interface ReportDetailType {
   error_message: string;
   created_at: Date;
 }
+
+export interface BillListType {
+  id: string;
+  client_yaya_account: {
+    name: string;
+    account: string;
+  };
+  customer_yaya_account: {
+    name: string;
+    account: string;
+  };
+  amount: number;
+  paid: number;
+  forwarded: number;
+  phone: string;
+  currency: string;
+  customer_id: string;
+  bill_id: string;
+  bill_code: string;
+  bill_season: string;
+  description: string;
+  fwd_institution: {
+    institution_id: string;
+    code: string;
+    name: string;
+  };
+  fwd_account_number: string | null;
+  start_at: Date;
+  due_at: Date;
+  email: string;
+  status: string;
+  amount_due: number;
+}
+
+export interface BillDetailType {
+  id: string;
+  client_yaya_account: {
+    name: string;
+    account: string;
+  };
+  currency: string;
+  customer_id: string;
+  bill_id: string;
+  bill_code: string;
+  bill_season: string;
+  description: string;
+  fwd_institution: {
+    institution_id: string;
+    code: string;
+    name: string;
+  };
+  fwd_account_number: string | null;
+  start_at: Date;
+  due_at: Date;
+  due_at_time: Date;
+  amount_due: number;
+  service_charge: number;
+  total_due: number;
+}

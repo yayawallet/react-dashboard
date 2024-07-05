@@ -179,7 +179,7 @@ const ContractList = () => {
                         <td className="border-b border-slate-200 p-3">{item.contract_number}</td>
                         <td className="border-b border-slate-200 p-3">
                           <span
-                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${item.status === 'pending' ? 'orange' : item.status === 'approved' ? 'green' : 'gray'}-500`}
+                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] ${item.status === 'pending' ? 'text-orange-500' : item.status === 'approved' ? 'text-green-500' : 'text-gray-500'}`}
                           >
                             <GoDotFill />
                           </span>

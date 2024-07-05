@@ -1,19 +1,15 @@
 import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Institution, EXternalAccount } from '../../models';
+import { EXternalAccount } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
-import { usePostData } from '../../hooks/useSWR';
 import { authAxios } from '../../api/axios';
+import InstitutionLIst from '../../components/InstitutionLIst';
 
 const ExternalAccountLookup = () => {
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -52,9 +48,7 @@ const ExternalAccountLookup = () => {
   return (
     <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-10">External Account Lookup</h1>
-
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
-
       {externalAccount && (
         <div className="bg-white overflow-hidden shadow rounded-lg border mb-10">
           <div className="flex flex-wrap justify-between px-4 py-5 sm:px-6">
@@ -96,67 +90,50 @@ const ExternalAccountLookup = () => {
         </div>
       )}
 
-      <form
-        className="max-w-lg ml-10 mt-16 shadow shadow-gray-300 px-10 py-6 rounded-lg"
-        onSubmit={formik.handleSubmit}
-      >
-        <div className="grid md:grid-cols-2 md:gap-6 mt-10">
-          <div className="relative z-0 w-full mb-10 group">
-            <select
-              id="institution_code"
-              className="w-full bg-gray-50 border-2 border-gray-300 rounded-lg focus:ring-4 ring-gray-200 p-2.5 outline-none sidebar-scrollbar"
-              onChange={formik.handleChange}
-              value={formik.values.institution_code}
-            >
-              <option
-                label="Choose Institution"
-                disabled
-                className="text-lg font-semibold"
-              ></option>
-              <option disabled className="text-[6px]"></option>
-              {institutionList?.map((list: Institution) => (
-                <option key={list.code} value={list.code} className="bg-slate-100 text-gray-800">
-                  {`${list.code} - ${list.name}`}
-                </option>
-              ))}
-              <option disabled></option>
-            </select>
-            <span className="text-xs text-red-600">
-              {formik.touched.institution_code && formik.errors.institution_code}
-            </span>
-          </div>
-
-          <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="string"
-              id="account_number"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.account_number}
-            />
-            <label
-              htmlFor="account_number"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Account Number
-            </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.account_number && formik.errors.account_number}
-            </span>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+      <div className="flex justify-center lg:mr-32 mt-6">
+        <form
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          onSubmit={formik.handleSubmit}
         >
-          {isLoading ? 'Please wait...' : 'Lookup Account'}
-        </button>
-      </form>
+          <div className="grid md:grid-cols-2 md:gap-6 mb-6">
+            <div>
+              <InstitutionLIst
+                onSelect={(value) => formik.setFieldValue('institution_code', value)}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.institution_code && formik.errors.institution_code}
+              </span>
+            </div>
+
+            <div>
+              <input
+                type="text"
+                id="account_number"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="account_number"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.account_number}
+              />
+
+              <span className="text-sm text-red-600">
+                {formik.touched.account_number && formik.errors.account_number}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+          >
+            <span style={{ letterSpacing: '0.3px' }}>
+              {isLoading ? 'Please wait...' : 'Lookup'}
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

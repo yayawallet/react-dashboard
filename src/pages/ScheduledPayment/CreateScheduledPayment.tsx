@@ -5,14 +5,14 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
-import createContractTemplate from '../../assets/bulk-import-templates/create_contract_template.xlsx';
+import createSchedulePaymentTemplate from '../../assets/bulk-import-templates/create_scheduled-payment_template.xlsx';
+import SelectElement from '../../components/SelectElement';
 
-const CreateContract = () => {
-  const [contractID, setContractID] = useState('');
+const Create = () => {
+  const [scheduledPaymentID, setScheduledPaymentID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
@@ -22,59 +22,68 @@ const CreateContract = () => {
 
   const formik = useFormik({
     initialValues: {
-      contract_number: '',
-      service_type: '',
-      customer_account_name: '',
+      account_number: '',
+      amount: '',
+      reason: '',
+      recurring: '',
+      start_at: '',
     },
 
     validationSchema: Yup.object({
-      contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      service_type: Yup.string().max(128, 'Must be less than 128 characters').required('Required'),
-      customer_account_name: Yup.string().max(12, 'Must be 12 characters').required('Required'),
+      account_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
+      reason: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      recurring: Yup.string().required('Select recurring type'),
+      start_at: Yup.date()
+        .required('Select start date & time')
+        .test('startDate', 'start time must be in the future', (value) => {
+          return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
+        }),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
 
       // Clear existing values
-      setContractID('');
+      setScheduledPaymentID('');
       setSuccessMessage('');
       setErrorMessage('');
 
-      values.customer_account_name = selectedUser;
       authAxios
-        .post('/recurring-contract/create', values)
+        .post('/scheduled-payment/create', {
+          ...values,
+          account_number: selectedUser,
+          start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
+        })
         .then((res) => {
-          setContractID(res.data.contract_id);
-          setLoading(false);
+          setScheduledPaymentID(res.data.id);
 
           // clear input fields
           formik.resetForm();
         })
-        .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
+        .catch((error) =>
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          )
+        )
+        .finally(() => {
+          setLoading(false);
+          setSelectedUser('');
         });
     },
   });
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Recurring Contract</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Schedule Payments</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {contractID && (
-        <InlineNotification
-          type="success"
-          info={`${successMessage ? successMessage : `Contract ID: ${contractID}`}`}
-        />
-      )}
-
-      {successMessage && (
+      {(scheduledPaymentID || successMessage) && (
         <InlineNotification
           type="success"
           customType="Uploaded"
-          info={`${successMessage ? successMessage : `Contract ID: ${contractID}`}`}
+          info={`${successMessage ? successMessage : `Scheduled Payment ID: ${scheduledPaymentID}`}`}
         />
       )}
 
@@ -119,76 +128,98 @@ const CreateContract = () => {
       {inputFormType === 'single' ? (
         <div className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20">
           <form className="max-w-[var(--form-width-small)] mx-auto" onSubmit={formik.handleSubmit}>
-            <div className="grid gap-6 mb-6 md:grid-cols-2">
-              <div>
+            <div className="grid gap-6 md:grid-cols-2">
+              <div className="mb-2">
                 <label
-                  htmlFor="contract_number"
+                  htmlFor="account_number"
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
-                  Contract number
+                  Account number
                 </label>
                 <input
                   type="text"
-                  id="contract_number"
+                  id="account_number"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="contract_number"
-                  autoComplete="contract_number"
+                  placeholder="account_number"
+                  autoComplete="off"
                   disabled={isLoading}
                   onChange={formik.handleChange}
-                  value={formik.values.contract_number}
+                  value={formik.values.account_number}
                 />
-                <span className="text-sm text-red-600">
-                  {formik.touched.contract_number && formik.errors.contract_number}
-                </span>
-              </div>
 
-              <div>
-                <label
-                  htmlFor="service_type"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Service type
+                <SearchUserInline
+                  query={formik.values.account_number}
+                  onSelecteUser={(value) => {
+                    setSelectedUser(value);
+                    formik.setFieldValue('account_number', value);
+                  }}
+                />
+              </div>
+              <div className="mb-6">
+                <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
+                  Amount
                 </label>
                 <input
-                  type="text"
-                  id="service_type"
+                  type="number"
+                  id="amount"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="service_type"
+                  placeholder="Amount"
+                  autoComplete="off"
                   disabled={isLoading}
                   onChange={formik.handleChange}
-                  value={formik.values.service_type}
+                  value={formik.values.amount}
                 />
                 <span className="text-sm text-red-600">
-                  {formik.touched.service_type && formik.errors.service_type}
+                  {formik.touched.amount && formik.errors.amount}
                 </span>
               </div>
             </div>
 
-            <div className="">
-              <label
-                htmlFor="customer_account_name"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Customer YaYa account
+            <div className="grid gap-6 mb-6 md:grid-cols-2">
+              <div>
+                <SelectElement
+                  title="Recurring type"
+                  options={['once', 'daily', 'weekly', 'monthly']}
+                  onSelect={(value) => formik.setFieldValue('recurring', value)}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.recurring && formik.errors.recurring}
+                </span>
+              </div>
+
+              <div>
+                <input
+                  type="datetime-local"
+                  name="start_at"
+                  id="start_at"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  disabled={isLoading}
+                  value={formik.values.start_at}
+                  onChange={formik.handleChange}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.start_at && formik.errors.start_at}
+                </span>
+              </div>
+            </div>
+
+            <div className="my-6 md:mt-0">
+              <label htmlFor="reason" className="block mb-2 text-sm font-medium text-gray-900">
+                Reason
               </label>
               <input
                 type="text"
-                id="customer_account_name"
+                id="reason"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="customer_account_name"
+                placeholder="reason"
                 autoComplete="off"
                 disabled={isLoading}
                 onChange={formik.handleChange}
-                value={formik.values.customer_account_name}
+                value={formik.values.reason}
               />
-
-              <SearchUserInline
-                query={formik.values.customer_account_name}
-                onSelecteUser={(value) => {
-                  setSelectedUser(value);
-                  formik.setFieldValue('customer_account_name', value);
-                }}
-              />
+              <span className="text-sm text-red-600">
+                {formik.touched.reason && formik.errors.reason}
+              </span>
             </div>
 
             <button
@@ -205,8 +236,8 @@ const CreateContract = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/bulk-import-contract"
-          templateFile={createContractTemplate}
+          apiEndpoint="scheduled-payment/bulk-import"
+          templateFile={createSchedulePaymentTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
@@ -216,4 +247,4 @@ const CreateContract = () => {
   );
 };
 
-export default CreateContract;
+export default Create;

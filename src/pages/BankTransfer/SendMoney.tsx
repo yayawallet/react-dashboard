@@ -3,17 +3,12 @@ import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
-import { usePostData } from '../../hooks/useSWR';
-import { Institution } from '../../models';
+import InstitutionLIst from '../../components/InstitutionLIst';
 
 const CreateTransfer = () => {
   const [transferID, setTransferID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
-  });
 
   const formik = useFormik({
     initialValues: {
@@ -21,13 +16,15 @@ const CreateTransfer = () => {
       account_number: '',
       amount: '',
       sender_note: '',
+      ref_code: '',
     },
 
     validationSchema: Yup.object({
       institution_code: Yup.string().required('Select Institution'),
       account_number: Yup.string().required('Required').max(30, 'Must be less than 30 characters'),
       amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
-      sender_note: Yup.string().required('Required').max(50, 'Must be 50 characters or less'),
+      sender_note: Yup.string().required('Required').max(128, 'Must be 128 characters or less'),
+      ref_code: Yup.string(),
     }),
 
     onSubmit: (values) => {
@@ -40,7 +37,7 @@ const CreateTransfer = () => {
       authAxios
         .post('/transfer/send', values)
         .then((res) => {
-          setTransferID(res.data.transfer_id);
+          setTransferID(res.data.id);
           setLoading(false);
 
           // clear input fields
@@ -55,122 +52,116 @@ const CreateTransfer = () => {
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Make Transaction</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-10">Transfer Money</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {transferID && <InlineNotification type="success" info={`Transaction ID: ${transferID}`} />}
+      {transferID && <InlineNotification type="success" info={`Transfer ID: ${transferID}`} />}
 
-      <form
-        className="max-w-xl ml-10 mt-16 shadow shadow-gray-300 px-10 py-6 rounded-lg"
-        onSubmit={formik.handleSubmit}
-      >
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-10">
-            <select
-              id="institution_code"
-              className="w-full bg-gray-50 border-2 border-gray-300 rounded-lg focus:ring-4 ring-gray-200 p-2.5 outline-none sidebar-scrollbar"
-              onChange={formik.handleChange}
-              value={formik.values.institution_code}
-            >
-              <option
-                label="Choose Institution"
-                disabled
-                className="text-lg font-semibold"
-              ></option>
-              <option disabled className="text-[6px]"></option>
-              {institutionList?.map((list: Institution) => (
-                <option key={list.code} value={list.code} className="bg-slate-100 text-gray-800">
-                  {`${list.code} - ${list.name}`}
-                </option>
-              ))}
-              <option disabled></option>
-            </select>
-            <span className="text-xs text-red-600">
-              {formik.touched.institution_code && formik.errors.institution_code}
-            </span>
+      <div className="flex justify-center lg:mr-32 mt-6">
+        <form
+          className="max-w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          onSubmit={formik.handleSubmit}
+        >
+          <div className="grid md:grid-cols-2 md:gap-6 mb-6">
+            <div>
+              <InstitutionLIst
+                onSelect={(value) => formik.setFieldValue('institution_code', value)}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.institution_code && formik.errors.institution_code}
+              </span>
+            </div>
+
+            <div>
+              <input
+                type="text"
+                id="account_number"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Account Number"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.account_number}
+              />
+
+              <span className="text-sm text-red-600">
+                {formik.touched.account_number && formik.errors.account_number}
+              </span>
+            </div>
           </div>
 
-          <div className="relative z-0 w-full mb-10">
-            <input
-              type="Text"
-              id="account_number"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.account_number}
-            />
-            <label
-              htmlFor="account_number"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Account Number
+          <div className="grid gap-6 md:grid-cols-5 mb-6">
+            <div className="col-span-2">
+              <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
+                Amount
+              </label>
+              <input
+                type="number"
+                id="amount"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="amount"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.amount}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.amount && formik.errors.amount}
+              </span>
+            </div>
+
+            <div className="col-span-3">
+              <label htmlFor="sender_note" className="block mb-2 text-sm font-medium text-gray-900">
+                Reason
+              </label>
+              <input
+                type="text"
+                id="sender_note"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="reason"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.sender_note}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.sender_note && formik.errors.sender_note}
+              </span>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="ref_code" className="block mb-2 text-sm font-medium text-gray-900">
+              Reference code
+              <span className="font-normal text-gray-400">&nbsp;(optional)</span>
             </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.account_number && formik.errors.account_number}
-            </span>
-          </div>
-        </div>
-
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-10">
-            <input
-              type="number"
-              id="amount"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.amount}
-            />
-            <label
-              htmlFor="amount"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Amount
-            </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.amount && formik.errors.amount}
-            </span>
-          </div>
-
-          <div className="relative z-0 w-full mb-10">
             <input
               type="text"
-              id="sender_note"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
+              id="ref_code"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="reason"
               autoComplete="off"
               disabled={isLoading}
               onChange={formik.handleChange}
-              value={formik.values.sender_note}
+              value={formik.values.ref_code}
             />
-            <label
-              htmlFor="sender_note"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Reason
-            </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.sender_note && formik.errors.sender_note}
+            <span className="text-sm text-red-600">
+              {formik.touched.ref_code && formik.errors.ref_code}
             </span>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
-        >
-          {isLoading ? 'Sending...' : 'Send Money'}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+          >
+            <span style={{ letterSpacing: '0.3px' }}>
+              {isLoading ? 'Please wait...' : 'Send Money'}
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

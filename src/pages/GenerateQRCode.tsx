@@ -78,66 +78,62 @@ const GenerateQRCode = () => {
         </div>
       )}
 
-      <form
-        className="max-w-lg ml-10 mt-16 shadow shadow-gray-300 px-10 py-6 rounded-lg"
-        onSubmit={formik.handleSubmit}
-      >
-        <div className="grid md:grid-cols-2 md:gap-6 mt-10">
-          <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="number"
-              id="amount"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              disabled={isLoading}
-              autoComplete="off"
-              onChange={formik.handleChange}
-              value={formik.values.amount}
-            />
-            <label
-              htmlFor="amount"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Amount
-            </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.amount && formik.errors.amount}
-            </span>
-          </div>
-
-          <div className="relative z-0 w-full mb-10 group">
-            <input
-              type="text"
-              id="cause"
-              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              disabled={isLoading}
-              autoComplete="off"
-              onChange={formik.handleChange}
-              value={formik.values.cause}
-            />
-            <label
-              htmlFor="cause"
-              className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-2 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-            >
-              Reason
-            </label>
-
-            <span className="text-xs text-red-600">
-              {formik.touched.cause && formik.errors.cause}
-            </span>
-          </div>
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+      <div className="flex justify-center lg:mr-40 mt-6">
+        <form
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          onSubmit={formik.handleSubmit}
         >
-          {isLoading ? 'Generating...' : 'Generate QR'}
-        </button>
-      </form>
+          <div className="grid gap-6 md:grid-cols-5 mb-6">
+            <div className="md:col-span-2">
+              <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
+                Amount
+              </label>
+              <input
+                type="number"
+                id="amount"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="amount"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.amount}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.amount && formik.errors.amount}
+              </span>
+            </div>
+
+            <div className="md:col-span-3">
+              <label htmlFor="cause" className="block mb-2 text-sm font-medium text-gray-900">
+                Reason
+              </label>
+              <input
+                type="text"
+                id="cause"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="reason"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.cause}
+              />
+              <span className="text-sm text-red-600">
+                {formik.touched.cause && formik.errors.cause}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+          >
+            <span style={{ letterSpacing: '0.3px' }}>
+              {isLoading ? 'Please wait...' : 'Send Money'}
+            </span>
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

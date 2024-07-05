@@ -4,10 +4,28 @@
 
 :root {
   --header-height: 64px;
+  --form-width: 840px;
+  --form-width-small: 640px;
 }
 
 * {
   outline-color: #8d66cc;
+}
+
+input[type='file'] {
+  font-size: 15px;
+  color: #555;
+  cursor: pointer;
+}
+
+::-webkit-file-upload-button {
+  font-size: 15px;
+  color: #555;
+  padding: 8px 10px;
+  border: 0;
+  border-right: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 body {
@@ -80,4 +98,29 @@ input[type='radio'] {
 button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.custom-select-arrow::before,
+.custom-select-arrow::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-select-arrow::before {
+  border-left: 0.4rem solid transparent;
+  border-right: 0.4rem solid transparent;
+  border-bottom: 0.4rem solid #666;
+  top: 42%;
+}
+
+.custom-select-arrow::after {
+  border-left: 0.4rem solid transparent;
+  border-right: 0.4rem solid transparent;
+  border-top: 0.4rem solid #666;
+  top: 64%;
 }
