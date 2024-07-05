@@ -46,7 +46,7 @@ const CheckBulkBillStatus = () => {
                       records
                     </th>
                     <th className="text-left px-4 py-3 font-medium text-sm">
-                      Imported
+                      Succeed
                       <br />
                       records
                     </th>
