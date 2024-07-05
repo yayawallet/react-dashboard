@@ -8,12 +8,15 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
+import Pagination2 from '../../components/Pagination2';
 
 const ListBill = () => {
   const [prevList, setPrevList] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedID, setCopiedID] = useState('');
+  const [filterByStatus, setFilterByStatus] = useState('');
+  const [filteredBillList, setFilteredBillList] = useState<BillListType[]>([]);
 
   const {
     error,
@@ -36,6 +39,16 @@ const ListBill = () => {
     setSearchQuery(query);
   };
 
+  const handleFilterBill = (status: string) => {
+    setFilterByStatus((prev) => (prev === status ? '' : status));
+
+    setFilteredBillList(
+      billList?.filter((item: BillListType) =>
+        status ? item.status === status.toUpperCase() : true
+      )
+    );
+  };
+
   return (
     <div className="table-container">
       {error ? (
@@ -45,13 +58,28 @@ const ListBill = () => {
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4">
-            <h3 className="text-lg font-medium">Transactions</h3>
+            <div className="">
+              Filter by:
+              <span
+                className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'paid' ? 'bg-violet-600 text-white' : ''}`}
+                onClick={() => handleFilterBill('paid')}
+              >
+                Paid
+              </span>
+              <span
+                className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}
+                onClick={() => handleFilterBill('pending')}
+              >
+                Pending
+              </span>
+            </div>
+
             <div className="w-64">
               <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
             </div>
           </div>
 
-          {billList?.length === 0 ? (
+          {filteredBillList.length === 0 && billList?.length === 0 ? (
             <EmptyList />
           ) : (
             <>
@@ -60,7 +88,7 @@ const ListBill = () => {
                   <thead>
                     <tr>
                       <th className="text-left px-4 py-3 font-medium">ID</th>
-                      <th className="text-left px-4 py-3 font-medium">Detail</th>
+                      <th className="text-left px-4 py-3 font-medium"></th>
                       <th className="text-left px-4 py-3 font-medium">Client YaYa Account</th>
                       <th className="text-left px-4 py-3 font-medium">Customer ID</th>
                       <th className="text-left px-4 py-3 font-medium">Bill ID</th>
@@ -71,7 +99,7 @@ const ListBill = () => {
                   </thead>
 
                   <tbody>
-                    {billList?.map((t: BillListType) => (
+                    {(filterByStatus ? filteredBillList : billList)?.map((t: BillListType) => (
                       <tr key={t.id} className="hover:bg-slate-100 text-nowrap">
                         <td
                           title={t.id}
@@ -134,14 +162,14 @@ const ListBill = () => {
                 </table>
               </div>
               {pageCount > 1 && (
-                <div className="flex flex-wrap justify-between items-center px-5 bg-slate-50 rounded-t rounded-xl">
+                <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
                   <p className="text-[15px] text-slate-700 py-4">
                     Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
                     {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
                   </p>
                   <div className={`${searchQuery ? 'hidden' : ''}`}>
                     <Pagination
-                      page={currentPage}
+                      currentPage={currentPage}
                       pageCount={pageCount}
                       isLoading={isLoading}
                       onPageChange={handlePageChange}
