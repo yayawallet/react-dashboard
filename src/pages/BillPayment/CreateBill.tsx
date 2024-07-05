@@ -456,7 +456,7 @@ const CreateBill = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="bill/bulk-import"
+          apiEndpoint="bulkimport/bills"
           templateFile={createBillTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
