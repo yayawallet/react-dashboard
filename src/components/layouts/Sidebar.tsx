@@ -7,6 +7,7 @@ import { useGetData } from '../../hooks/useSWR';
 import SidebarItem from './SidebarItem';
 import { sidebarNavs } from '../../routing/navigation';
 import { useAuth } from '../../auth/AuthProvider';
+import { capitalize } from '../../utils/table_utils';
 
 const Sidebar = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -97,12 +98,15 @@ const Sidebar = () => {
                 <Link
                   to="/profile"
                   aria-label="profile"
-                  className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100"
+                  className="flex items-center p-2 text-[17px] text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   <span className="flex-1 ms-3">
-                    {profile?.name.split(' ').slice(0, 2).join(' ') || <span>&nbsp;</span>}
+                    {capitalize(profile?.name || '')
+                      .split(' ')
+                      .slice(0, 2)
+                      .join(' ') || <span>&nbsp;</span>}
                   </span>
-                  <span className="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full">
+                  <span className="inline-flex items-center justify-center border px-2 leading-5 ms-3 text-[13px] font-medium text-gray-800 bg-gray-100 rounded">
                     {profile?.type.replace(/([a-zA-Z])(\d)/g, '$1 $2') || 'LEVEL -'}
                   </span>
                 </Link>
