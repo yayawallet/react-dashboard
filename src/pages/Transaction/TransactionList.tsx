@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Pagination from '../../components/Pagination';
+// import Pagination2 from '../../components/Pagination2';
 import SearchBar from '../../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
@@ -14,7 +15,7 @@ const TransactionList = () => {
   const [prevList, setPrevList] = useState(false);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
 
   const { data: ownProfile } = useGetData('/user/profile');
@@ -39,7 +40,7 @@ const TransactionList = () => {
   }, [transactionData]);
 
   useEffect(() => {
-    if (searchResult) {
+    if (searchResult && searchQuery !== null) {
       setTransactionList(searchResult.data);
       setPageCount(searchResult.lastPage);
     }
@@ -148,14 +149,14 @@ const TransactionList = () => {
                 </table>
               </div>
               {pageCount > 1 && (
-                <div className="flex flex-wrap justify-between items-center px-5 bg-slate-50 rounded-t rounded-xl">
+                <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
                   <p className="text-[15px] text-slate-700 py-4">
                     Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
                     {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
                   </p>
                   <div className={`${searchQuery ? 'hidden' : ''}`}>
                     <Pagination
-                      page={currentPage}
+                      currentPage={currentPage}
                       pageCount={pageCount}
                       isLoading={isLoading}
                       onPageChange={handlePageChange}
