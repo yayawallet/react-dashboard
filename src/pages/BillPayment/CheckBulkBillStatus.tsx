@@ -7,9 +7,11 @@ import EmptyList from '../../components/ui/EmptyList';
 import { Link } from 'react-router-dom';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
+import BulkBillDetail from './BulkBillDetail';
 
 const CheckBulkBillStatus = () => {
   const [copiedID, setCopiedID] = useState('');
+  const [failedRecords, setFailedRecords] = useState([]);
 
   const { isLoading, error, data: bulkImportList } = useGetData('/bulkimport/list');
 
@@ -35,6 +37,7 @@ const CheckBulkBillStatus = () => {
             <EmptyList />
           ) : (
             <div className="overflow-auto">
+              <BulkBillDetail failed={failedRecords} />
               <table className="w-full">
                 <thead className="">
                   <tr className="bg-violet-500 text-gray-50">
