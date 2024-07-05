@@ -257,3 +257,13 @@ export interface BillDetailType {
   service_charge: number;
   total_due: number;
 }
+
+export interface BulkBillStatus {
+  id: string;
+  submitted_records: number;
+  imported_records: number;
+  failed: Object[];
+  failed_records: number;
+  status: string;
+  createdAt: Date;
+}
