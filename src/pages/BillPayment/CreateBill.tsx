@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
-import InstitutionLIst from '../../components/InstitutionLIst';
 import createBillTemplate from '../../assets/bulk-import-templates/create_bill_template.xlsx';
 
 const CreateBill = () => {
@@ -13,8 +12,7 @@ const CreateBill = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [selectedUser1, setSelectedUser1] = useState('');
-  const [selectedUser2, setSelectedUser2] = useState('');
+  const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
@@ -23,7 +21,7 @@ const CreateBill = () => {
 
   const formik = useFormik({
     initialValues: {
-      client_yaya_account: '',
+      client_yaya_account: 'tewobstatewo',
       customer_yaya_account: '',
       customer_id: '',
       bill_id: '',
@@ -54,7 +52,7 @@ const CreateBill = () => {
       cluster: Yup.string(),
       description: Yup.string(),
       phone: Yup.string().matches(
-        /(^\+?251\d{9}$)|(^09\d{8}$|^9\d{8}$)/, // Ethiopian phone number
+        /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
         'Phone number is not valid'
       ),
       email: Yup.string().email('Invalid email address'),
@@ -71,8 +69,7 @@ const CreateBill = () => {
       authAxios
         .post('/bill/create', {
           ...values,
-          client_yaya_account: selectedUser1,
-          customer_yaya_account: selectedUser2,
+          customer_yaya_account: selectedUser,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
           due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
         })
@@ -155,35 +152,8 @@ const CreateBill = () => {
           className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 mb-4 md:grid-cols-3">
-            <div>
-              <label
-                htmlFor="client_yaya_account"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Client yaya account
-              </label>
-              <input
-                type="text"
-                id="client_yaya_account"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="client_yaya_account"
-                autoComplete="off"
-                disabled={isLoading}
-                onChange={formik.handleChange}
-                value={formik.values.client_yaya_account}
-              />
-
-              <SearchUserInline
-                query={formik.values.client_yaya_account}
-                onSelecteUser={(value) => {
-                  setSelectedUser1(value);
-                  formik.setFieldValue('client_yaya_account', value);
-                }}
-              />
-            </div>
-
-            <div>
+          <div className="grid gap-6 mb-4 md:grid-cols-5">
+            <div className="md:col-span-3">
               <label
                 htmlFor="customer_yaya_account"
                 className="block mb-2 text-sm font-medium text-gray-900"
@@ -205,13 +175,13 @@ const CreateBill = () => {
               <SearchUserInline
                 query={formik.values.customer_yaya_account}
                 onSelecteUser={(value) => {
-                  setSelectedUser2(value);
+                  setSelectedUser(value);
                   formik.setFieldValue('customer_yaya_account', value);
                 }}
               />
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <label htmlFor="customer_id" className="block mb-2 text-sm font-medium text-gray-900">
                 Customer ID
               </label>
