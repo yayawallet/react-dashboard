@@ -4,14 +4,13 @@ import { BulkBillStatus } from '../../models';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
-import { Link } from 'react-router-dom';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import BulkBillDetail from './BulkBillDetail';
 
 const CheckBulkBillStatus = () => {
   const [copiedID, setCopiedID] = useState('');
-  const [failedRecords, setFailedRecords] = useState([]);
+  const [failedRecords, setFailedRecords] = useState<Object[]>([]);
 
   const { isLoading, error, data: bulkImportList } = useGetData('/bulkimport/list');
 
@@ -37,7 +36,10 @@ const CheckBulkBillStatus = () => {
             <EmptyList />
           ) : (
             <div className="overflow-auto">
-              <BulkBillDetail failed={failedRecords} />
+              <div className={`${failedRecords.length === 0 ? 'hidden' : ''}`}>
+                <BulkBillDetail failed={failedRecords} onHide={() => setFailedRecords([])} />
+              </div>
+
               <table className="w-full">
                 <thead className="">
                   <tr className="bg-violet-500 text-gray-50">
@@ -81,9 +83,11 @@ const CheckBulkBillStatus = () => {
                       <td className="relative border-b border-slate-200 p-3">
                         <button
                           type="button"
+                          disabled={list.failed.length === 0}
                           className="pt-0.5 pb-1 px-3 focus:outline-none bg-white rounded border border-violet-200 hover:bg-slate-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-slate-200"
+                          onClick={() => setFailedRecords(list.failed)}
                         >
-                          <Link to={list.id}>Detail</Link>
+                          Detail
                         </button>
                       </td>
                       <td className="text-gray-600 font-semibold border-b border-slate-200 p-3 pl-6">

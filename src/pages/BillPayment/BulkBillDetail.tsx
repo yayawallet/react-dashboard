@@ -2,9 +2,10 @@ import EmptyList from '../../components/ui/EmptyList';
 
 interface Props {
   failed: Object[];
+  onHide: () => void;
 }
 
-const BulkBillDetail = ({ failed }: Props) => {
+const BulkBillDetail = ({ failed, onHide }: Props) => {
   return (
     <div className="table-container">
       <div className="border border-slate-200 rounded-xl">

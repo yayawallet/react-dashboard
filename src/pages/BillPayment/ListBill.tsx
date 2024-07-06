@@ -8,7 +8,6 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
-import Pagination2 from '../../components/Pagination2';
 
 const ListBill = () => {
   const [prevList, setPrevList] = useState(false);
@@ -23,6 +22,8 @@ const ListBill = () => {
     isLoading,
     data: { data: billList, lastPage: pageCount } = {},
   } = usePostData('/bill/list', {});
+
+  console.log(billList);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -140,17 +141,17 @@ const ListBill = () => {
                         <td className="border-b border-slate-200 p-3">{capitalize(t.bill_id)}</td>
 
                         <td className="border-b border-slate-200 p-3">
+                          {t.amount?.toFixed(2)}{' '}
+                          <span className="text-gray-500 text-sm">{t.currency}</span>
+                        </td>
+
+                        <td className="border-b border-slate-200 p-3">
                           <span
                             className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.status == 'PAID' ? 'green' : 'orange'}-500`}
                           >
                             <GoDotFill />
                           </span>
                           {capitalize(t.status)}
-                        </td>
-
-                        <td className="border-b border-slate-200 p-3">
-                          {t.amount?.toFixed(2)}{' '}
-                          <span className="text-gray-500 text-sm">{t.currency}</span>
                         </td>
 
                         <td className="border-b border-slate-200 p-3 text-gray-500">
