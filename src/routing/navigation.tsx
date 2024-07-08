@@ -8,11 +8,15 @@ import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
 
-import Index from '../pages/BillPayment/Index';
+import BillPayment from '../pages/BillPayment/Index';
 import CreateBill from '../pages/BillPayment/CreateBill';
 import BillList from '../pages/BillPayment/ListBill';
 import UpdateBill from '../pages/BillPayment/UpdateBill';
 import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
+
+import RegisterUsers from '../pages/RegisterUsers/Index';
+import LevelOneAccounts from '../pages/RegisterUsers/LevelOneAccount';
+import BussinessAccount from '../pages/RegisterUsers/BusinessAccount';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -105,7 +109,7 @@ export const sidebarNavs = [
     title: 'Bill Payment',
     path: 'bill',
     icon: <FaMoneyBillTrendUp />,
-    element: <Index />,
+    element: <BillPayment />,
     accessRoles: ['admin', 'clerk'],
     children: [
       {
@@ -131,6 +135,27 @@ export const sidebarNavs = [
         path: 'bulkimport/list',
         element: <CheckBulkBillStatus />,
         accessRoles: ['admin', 'clerk'],
+      },
+    ],
+  },
+  {
+    title: 'Register Users',
+    path: 'register-user',
+    icon: <FaMoneyBillTrendUp />,
+    element: <RegisterUsers />,
+    accessRoles: ['admin', 'agent'],
+    children: [
+      {
+        title: 'Level One/Two',
+        path: 'level-one',
+        element: <LevelOneAccounts />,
+        accessRoles: ['admin', 'agent'],
+      },
+      {
+        title: 'Business Account',
+        path: 'business',
+        element: <BussinessAccount />,
+        accessRoles: ['admin', 'agent'],
       },
     ],
   },
