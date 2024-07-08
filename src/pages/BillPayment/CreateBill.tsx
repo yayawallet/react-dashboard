@@ -13,7 +13,8 @@ const CreateBill = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedUser1, setSelectedUser1] = useState('');
+  const [selectedUser2, setSelectedUser2] = useState('');
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
   const handleOnLoading = (value: boolean) => setLoading(value);
@@ -22,7 +23,7 @@ const CreateBill = () => {
 
   const formik = useFormik({
     initialValues: {
-      client_yaya_account: 'tewobstatewo',
+      client_yaya_account: '',
       customer_yaya_account: '',
       customer_id: '',
       bill_id: '',
@@ -31,30 +32,10 @@ const CreateBill = () => {
       amount: '',
       start_at: '',
       due_at: '',
-      fwd_institution: '',
-      fwd_account_number: '',
+      cluster: '',
       description: '',
       phone: '',
       email: '',
-    },
-
-    validate: (values) => {
-      interface Errors {
-        fwd_institution?: string;
-        fwd_account_number?: string;
-      }
-
-      const errors: Errors = {};
-
-      if (values.fwd_institution && !values.fwd_account_number) {
-        errors.fwd_account_number = 'Account number is required';
-      }
-
-      if (values.fwd_account_number && !values.fwd_institution) {
-        errors.fwd_institution = 'Fwd institution is required';
-      }
-
-      return errors;
     },
 
     validationSchema: Yup.object({
@@ -70,8 +51,7 @@ const CreateBill = () => {
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
       bill_season: Yup.string(),
-      fwd_institution: Yup.string(),
-      fwd_account_number: Yup.string(),
+      cluster: Yup.string(),
       description: Yup.string(),
       phone: Yup.string().matches(
         /(^\+?251\d{9}$)|(^09\d{8}$|^9\d{8}$)/, // Ethiopian phone number
@@ -91,7 +71,8 @@ const CreateBill = () => {
       authAxios
         .post('/bill/create', {
           ...values,
-          customer_yaya_account: selectedUser,
+          client_yaya_account: selectedUser1,
+          customer_yaya_account: selectedUser2,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
           due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
         })
@@ -146,7 +127,7 @@ const CreateBill = () => {
               onChange={() => setInputFormType('single')}
             />
             <label htmlFor="oneInput" className="cursor-pointer">
-              Single Contract
+              Single Bill
             </label>
           </button>
 
@@ -163,7 +144,7 @@ const CreateBill = () => {
               onChange={() => setInputFormType('multiple')}
             />
             <label htmlFor="multipleInput" className="cursor-pointer">
-              Multiple Contracts
+              Multiple Bills
             </label>
           </button>
         </div>
@@ -174,8 +155,35 @@ const CreateBill = () => {
           className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 mb-4 md:grid-cols-5">
-            <div className="col-span-3">
+          <div className="grid gap-6 mb-4 md:grid-cols-3">
+            <div>
+              <label
+                htmlFor="client_yaya_account"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Client yaya account
+              </label>
+              <input
+                type="text"
+                id="client_yaya_account"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="client_yaya_account"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.client_yaya_account}
+              />
+
+              <SearchUserInline
+                query={formik.values.client_yaya_account}
+                onSelecteUser={(value) => {
+                  setSelectedUser1(value);
+                  formik.setFieldValue('client_yaya_account', value);
+                }}
+              />
+            </div>
+
+            <div>
               <label
                 htmlFor="customer_yaya_account"
                 className="block mb-2 text-sm font-medium text-gray-900"
@@ -197,13 +205,13 @@ const CreateBill = () => {
               <SearchUserInline
                 query={formik.values.customer_yaya_account}
                 onSelecteUser={(value) => {
-                  setSelectedUser(value);
+                  setSelectedUser2(value);
                   formik.setFieldValue('customer_yaya_account', value);
                 }}
               />
             </div>
 
-            <div className="col-span-2">
+            <div>
               <label htmlFor="customer_id" className="block mb-2 text-sm font-medium text-gray-900">
                 Customer ID
               </label>
@@ -222,7 +230,7 @@ const CreateBill = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 mb-8 md:grid-cols-3">
+          <div className="grid gap-8 mb-8 md:grid-cols-3">
             <div>
               <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                 Amount
@@ -334,49 +342,25 @@ const CreateBill = () => {
                 {formik.touched.bill_season && formik.errors.bill_season}
               </span>
             </div>
+          </div>
 
+          <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
-              <label htmlFor="institution" className="block mb-2 text-sm font-medium text-gray-900">
-                Forward institution
-                <span
-                  className={`font-normal text-gray-400 ${formik.values.fwd_account_number ? 'hidden' : ''}`}
-                >
-                  &nbsp;(optional)
-                </span>
-              </label>
-
-              <InstitutionLIst
-                onSelect={(value) => formik.setFieldValue('fwd_institution', value)}
-              />
-
-              <span className="text-sm text-red-600">
-                {formik.touched.fwd_institution && formik.errors.fwd_institution}
-              </span>
-            </div>
-
-            <div>
-              <label
-                htmlFor="fwd_account_number"
-                className="block mb-2 text-sm font-medium text-gray-900"
-              >
-                Forward account number
-                <span
-                  className={`font-normal text-gray-400 ${formik.values.fwd_institution ? 'hidden' : ''}`}
-                >
-                  &nbsp;(optional)
-                </span>
+              <label htmlFor="cluster" className="block mb-2 text-sm font-medium text-gray-900">
+                Cluster
+                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
-                id="fwd_account_number"
+                id="cluster"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="fwd_account_number"
+                placeholder="cluster"
                 disabled={isLoading}
                 onChange={formik.handleChange}
-                value={formik.values.fwd_account_number}
+                value={formik.values.cluster}
               />
               <span className="text-sm text-red-600">
-                {formik.touched.fwd_account_number && formik.errors.fwd_account_number}
+                {formik.touched.cluster && formik.errors.cluster}
               </span>
             </div>
 
@@ -399,9 +383,7 @@ const CreateBill = () => {
                 {formik.touched.description && formik.errors.description}
               </span>
             </div>
-          </div>
 
-          <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
                 Phone number
@@ -456,7 +438,7 @@ const CreateBill = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="bill/bulk-import"
+          apiEndpoint="bulkimport/bills"
           templateFile={createBillTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
