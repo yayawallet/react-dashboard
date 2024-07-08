@@ -62,6 +62,7 @@ import { RiBankFill } from 'react-icons/ri';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
 import { FaMoneyBillTrendUp } from 'react-icons/fa6';
+import { FaUserPlus } from 'react-icons/fa6';
 
 export const sidebarNavs = [
   {
@@ -141,7 +142,7 @@ export const sidebarNavs = [
   {
     title: 'Register Users',
     path: 'register-user',
-    icon: <FaMoneyBillTrendUp />,
+    icon: <FaUserPlus />,
     element: <RegisterUsers />,
     accessRoles: ['admin', 'agent'],
     children: [
