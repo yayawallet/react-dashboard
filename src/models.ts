@@ -219,12 +219,7 @@ export interface BillListType {
   bill_code: string;
   bill_season: string;
   description: string;
-  fwd_institution: {
-    institution_id: string;
-    code: string;
-    name: string;
-  };
-  fwd_account_number: string | null;
+  cluster: string;
   start_at: Date;
   due_at: Date;
   email: string;
@@ -244,15 +239,11 @@ export interface BillDetailType {
   bill_code: string;
   bill_season: string;
   description: string;
-  fwd_institution: {
-    institution_id: string;
-    code: string;
-    name: string;
-  };
-  fwd_account_number: string | null;
+  cluster: string;
   start_at: Date;
   due_at: Date;
   due_at_time: Date;
+  amount: number;
   amount_due: number;
   service_charge: number;
   total_due: number;
