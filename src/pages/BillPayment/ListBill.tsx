@@ -113,7 +113,7 @@ const ListBill = () => {
                   <thead>
                     <tr>
                       <th className="text-left pl-3 py-3 font-medium">ID</th>
-                      <th className="text-left pl-3 py-3 font-medium">Client Account</th>
+                      <th className="text-left pl-3 py-3 font-medium">Customer Account</th>
                       <th className="text-left pl-3 py-3 font-medium">Cluster</th>
                       <th className="text-left pl-3 py-3 font-medium">Customer ID</th>
                       <th className="text-left pl-3 py-3 font-medium">Bill ID</th>
