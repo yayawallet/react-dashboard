@@ -10,6 +10,29 @@ const CreateLevelTwoAccount = () => {
   const [registrationID, setRegistrationID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [phoneNumberLookup, setPhoneNumberLookup] = useState('');
+  const [accountNameLookup, setAccountNameLookup] = useState('');
+
+  const handlePhoneNumberLookup = (number: string) => {
+    if (number.length < 8) return;
+
+    setPhoneNumberLookup('');
+
+    authAxios.post('/user/search', { query: number }).then((res) => {
+      if (res.data.length > 0) setPhoneNumberLookup('Phone number already taken');
+    });
+  };
+
+  const handleAccountNameLookup = (account: string) => {
+    if (account.length !== 12) return;
+
+    setAccountNameLookup('');
+
+    authAxios.post('/user/search', { query: account }).then((res) => {
+      if (res.data.length === 0) setPhoneNumberLookup('Available');
+      else setPhoneNumberLookup('Account name already taken');
+    });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -44,7 +67,7 @@ const CreateLevelTwoAccount = () => {
 
       if (!values.invitation_hash && !values.fin) {
         errors.fin = 'FIN or invitation code is required';
-        errors.invitation_hash = 'invitation code or FIN is required';
+        errors.invitation_hash = 'Invitation code or FIN is required';
       }
 
       if (values.country.toUpperCase() === 'ETHIOPIA' && !values.region)
@@ -67,21 +90,7 @@ const CreateLevelTwoAccount = () => {
           /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
           'Phone number is not valid'
         )
-        .required('phone number is required')
-        .test('checkAvailability', 'already taken', async function (value) {
-          if (value.length > 8) {
-            formik.errors.phone = '';
-
-            try {
-              const res = await authAxios.post('/user/search', { query: value });
-              return res.data.length == 0; // Return true if available, false if taken
-            } catch (error) {
-              return true; // Skip if there's an error
-            }
-          }
-
-          return true; // Skip validation if length is not 12
-        }),
+        .required('phone number is required'),
       date_of_birth: Yup.date()
         .required('date of birth is required')
         .min(new Date('1900-01-01'), 'must be after 1900')
@@ -98,21 +107,7 @@ const CreateLevelTwoAccount = () => {
       account_name: Yup.string()
         .required('account name is required')
         .min(12, 'must be 12 character')
-        .max(12, 'must be 12 character')
-        .test('checkAvailability', 'already taken', async function (value) {
-          if (value.length === 12) {
-            formik.errors.account_name = '';
-
-            try {
-              const res = await authAxios.post('/user/search', { query: value });
-              return res.data.length == 0; // Return true if available, false if taken
-            } catch (error) {
-              return true; // Skip if there's an error
-            }
-          }
-
-          return true; // Skip validation if length is not 12
-        }),
+        .max(12, 'must be 12 character'),
       photo_base64: Yup.string().required('required'),
       id_front_base64: Yup.string().required('required'),
       id_back_base64: Yup.string().required('required'),
@@ -227,11 +222,15 @@ const CreateLevelTwoAccount = () => {
               placeholder="phone"
               autoComplete="new-phone"
               disabled={isLoading}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handlePhoneNumberLookup(e.target.value);
+              }}
               value={formik.values.phone}
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.phone && formik.errors.phone}
+              {!formik.errors.phone && <span className="text-green-600">{phoneNumberLookup}</span>}
             </span>
           </div>
 
@@ -355,11 +354,7 @@ const CreateLevelTwoAccount = () => {
           <div>
             <SelectElement
               title="Region"
-              options={
-                formik.values.country === 'Ethiopia' || formik.values.country == ''
-                  ? EthiopianRegions
-                  : []
-              }
+              options={formik.values.country === 'Ethiopia' ? EthiopianRegions : []}
               onSelect={(value) => formik.setFieldValue('region', value)}
             />
             <span className="pl-2 text-sm text-red-600">
@@ -376,6 +371,7 @@ const CreateLevelTwoAccount = () => {
               disabled={isLoading}
               onChange={formik.handleChange}
               value={formik.values.address}
+              autoComplete="address"
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.address && formik.errors.address}
@@ -393,11 +389,17 @@ const CreateLevelTwoAccount = () => {
               placeholder="account_name"
               disabled={isLoading}
               autoComplete="new-password"
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handleAccountNameLookup(e.target.value);
+              }}
               value={formik.values.account_name}
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.account_name && formik.errors.account_name}
+              {!formik.errors.account_name && (
+                <span className="text-green-600">{accountNameLookup}</span>
+              )}
             </span>
           </div>
 

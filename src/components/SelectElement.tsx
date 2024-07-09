@@ -12,6 +12,7 @@ const SelectElement = ({ title, options, onSelect }: Props) => {
         className="w-full py-2.5 px-6 b-0 rounded focus:ring-4j ring-gray-200 outline-none transition sidebar-scrollbar"
         style={{ color: '#444', background: '#eee', appearance: 'none' }}
         onChange={(e) => onSelect(e.target.value)}
+        autoComplete={title}
       >
         <option label={title} className="text-[16px] font-semibold"></option>
         {options?.map((list, index) => (

@@ -4,11 +4,17 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
-import { BillDetailType } from '../../models';
+import { BillDetailType, BillListType } from '../../models';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 
-const updateBill = () => {
+interface Props {
+  hideFindForm?: boolean;
+  bill?: BillListType;
+  onCloseUpdate?: () => void;
+}
+
+const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
   const [billPaymentID, setBillPaymentID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -55,15 +61,23 @@ const updateBill = () => {
     initialValues: {
       client_yaya_account: 'tewobstatewo',
       customer_yaya_account: '',
-      customer_id: foundBill?.customer_id || '',
-      bill_id: foundBill?.bill_id || '',
-      bill_code: foundBill?.bill_code || '',
-      bill_season: foundBill?.bill_season || '',
-      amount: foundBill?.amount || '',
-      start_at: foundBill?.start_at ? new Date(foundBill.start_at).toISOString().slice(0, 16) : '',
-      due_at: foundBill?.due_at ? new Date(foundBill.due_at).toISOString().slice(0, 16) : '',
-      cluster: foundBill?.cluster || '',
-      description: foundBill?.description || '',
+      customer_id: bill?.customer_id || foundBill?.customer_id || '',
+      bill_id: bill?.bill_id || foundBill?.bill_id || '',
+      bill_code: bill?.bill_code || foundBill?.bill_code || '',
+      bill_season: bill?.bill_season || foundBill?.bill_season || '',
+      amount: bill?.amount || foundBill?.amount || '',
+      start_at: foundBill?.start_at
+        ? new Date(foundBill.start_at).toISOString().slice(0, 16)
+        : bill?.start_at
+          ? new Date(bill.start_at).toISOString().slice(0, 16)
+          : '',
+      due_at: foundBill?.due_at
+        ? new Date(foundBill.due_at).toISOString().slice(0, 16)
+        : bill?.due_at
+          ? new Date(bill.due_at).toISOString().slice(0, 16)
+          : '',
+      cluster: bill?.cluster || foundBill?.cluster || '',
+      description: bill?.description || foundBill?.description || '',
       phone: '',
       email: '',
     },
@@ -156,8 +170,27 @@ const updateBill = () => {
       )}
 
       <div className="max-w-[var(--form-width)] bg-gray-50 border p-8 pt-6 rounded-t-xl mx-auto mt-6">
+        <div className={`${hideFindForm ? '' : 'hidden'} relative`}>
+          <h3 className="text-lg font-semibold text-gray-900">Update Bill</h3>
+          <button
+            type="button"
+            className={`absolute top-5 right-5 flex rounded-lg text-sm w-8 h-8 mr-2 items-center justify-center`}
+            onClick={() => onCloseUpdate && onCloseUpdate()}
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+              />
+            </svg>
+          </button>
+        </div>
+
         <form
-          className="w-[var(--form-width-small)] border-0 rounded-xl"
+          className={`w-[var(--form-width-small)] border-0 rounded-xl ${hideFindForm ? 'hidden' : ''}`}
           onSubmit={formik1.handleSubmit}
         >
           <div className="grid gap-6 md:grid-cols-5">
