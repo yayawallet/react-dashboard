@@ -15,8 +15,8 @@ import UpdateBill from '../pages/BillPayment/UpdateBill';
 import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
 
 import RegisterUsers from '../pages/RegisterUsers/Index';
-import LevelOneAccounts from '../pages/RegisterUsers/LevelOneAccount';
-import BussinessAccount from '../pages/RegisterUsers/BusinessAccount';
+import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount';
+import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -148,14 +148,14 @@ export const sidebarNavs = [
     children: [
       {
         title: 'Level One/Two',
-        path: 'level-one',
-        element: <LevelOneAccounts />,
+        path: 'level-two',
+        element: <CreateLevelTwoAccount />,
         accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Business Account',
         path: 'business',
-        element: <BussinessAccount />,
+        element: <CreateBussinessAccount />,
         accessRoles: ['admin', 'agent'],
       },
     ],
