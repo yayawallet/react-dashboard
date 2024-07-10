@@ -130,7 +130,7 @@ const updateBill = () => {
   });
 
   useEffect(() => {
-    formik1.handleSubmit();
+    if (params_bill_id) formik1.handleSubmit();
   }, [params_bill_id]);
 
   const handleUpdateBill = (confirm: boolean) => {
@@ -163,30 +163,11 @@ const updateBill = () => {
       )}
 
       <div className="max-w-[var(--form-width)] bg-gray-50 border p-8 pt-6 rounded-t-xl mx-auto mt-6">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900">Update Bill</h3>
-          <button
-            type="button"
-            className={`absolute top-5 right-5 flex rounded-lg text-sm w-8 h-8 mr-2 items-center justify-center`}
-          >
-            <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-              />
-            </svg>
-          </button>
-        </div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Update Bill</h3>
 
-        <form
-          className="w-[var(--form-width-small)] border-0 rounded-xl"
-          onSubmit={formik1.handleSubmit}
-        >
-          <div className="grid gap-6 md:grid-cols-5">
-            <div className="md:col-span-4">
+        <form className="w-full border-0 rounded-xl" onSubmit={formik1.handleSubmit}>
+          <div className="grid gap-6 md:grid-cols-4">
+            <div className="md:col-span-3">
               <input
                 type="text"
                 id="bill_id"
@@ -205,7 +186,7 @@ const updateBill = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="text-white self-start bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+              className="text-white md:col-span-1 self-start bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:max-w-full px-5 py-2.5 text-center"
             >
               <span style={{ letterSpacing: '0.3px' }}>
                 {isLoading && !foundBill ? 'Please wait...' : 'Find Bill'}
