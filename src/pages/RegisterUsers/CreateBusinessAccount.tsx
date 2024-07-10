@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
 import { EthiopianRegions } from '../../CONSTANTS';
 import SelectElement from '../../components/SelectElement';
+import { resizeImage } from '../../utils/resizeImage';
 
 const CreateBusinessAccount = () => {
   const [registrationID, setRegistrationID] = useState('');
@@ -12,36 +13,80 @@ const CreateBusinessAccount = () => {
   const [isLoading, setLoading] = useState(false);
   const [phoneNumberLookup, setPhoneNumberLookup] = useState('');
   const [accountNameLookup, setAccountNameLookup] = useState('');
+  const [emailLookup, setEmailLookup] = useState('');
+  const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
 
   const handlePhoneNumberLookup = (number: string) => {
-    if (number.length < 8) return;
+    if (number.length < 9) return;
+
+    if (number.startsWith('0') && number.length < 10) return;
+    if ((number.startsWith('7') || number.startsWith('9')) && number.length < 9) return;
+    if (number.startsWith('+2510') && number.length < 14) return;
+    if (number.startsWith('+251') && number.length < 13) return;
 
     setPhoneNumberLookup('');
 
     authAxios.post('/user/search', { query: number }).then((res) => {
-      if (res.data.length > 0) setPhoneNumberLookup('Phone number already taken');
+      if (res.data.length > 0) setPhoneNumberLookup('User already exists');
     });
   };
 
   const handleAccountNameLookup = (account: string) => {
+    setIsAccountNameAvailable(false);
+
     if (account.length !== 12) return;
 
     setAccountNameLookup('');
 
     authAxios.post('/user/search', { query: account }).then((res) => {
-      if (res.data.length === 0) setPhoneNumberLookup('Available');
-      else setPhoneNumberLookup('Account name already taken');
+      if (res.data.length === 0) setIsAccountNameAvailable(true);
+      else setAccountNameLookup('Account name already taken');
     });
+  };
+
+  const handleEmailLookup = (email: string) => {
+    if (email.length < 6) return;
+
+    setEmailLookup('');
+
+    authAxios.post('/user/search', { query: email }).then((res) => {
+      if (res.data.length > 0) setEmailLookup('User already exists');
+    });
+  };
+
+  const handleImageOnChange = (e: React.ChangeEvent<HTMLInputElement>, field_name: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = (e) => {
+      const target = e.target as FileReader;
+      const base64String = target.result;
+      if (base64String) {
+        if (field_name === 'photo_base64') {
+          // resizeImage(DataURL, maxWidth, maxHeight, callback)
+          resizeImage(base64String, 800, 800, (resizedBase64) => {
+            formik.setFieldValue(field_name, resizedBase64);
+          });
+        } else {
+          formik.setFieldValue(field_name, base64String);
+        }
+      }
+    };
   };
 
   const formik = useFormik({
     initialValues: {
       invitation_hash: '',
       fin: '',
+      tin_number: '',
+      license_number: '',
       name: '',
-      gender: '',
-      email: '',
       phone: '',
+      email: '',
+      gender: '',
       date_of_birth: '',
       region: '',
       country: '',
@@ -52,6 +97,8 @@ const CreateBusinessAccount = () => {
       photo_base64: '',
       id_front_base64: '',
       id_back_base64: '',
+      tin_doc_base64: '',
+      license_doc_base64: '',
     },
 
     validate: (values) => {
@@ -79,16 +126,18 @@ const CreateBusinessAccount = () => {
     validationSchema: Yup.object().shape({
       invitation_has: Yup.string().max(128, 'must be less than 128 characters'),
       fin: Yup.string().min(12, 'must be 12 characters').max(12, 'must be 12 characters'),
+      tin_number: Yup.string().max(128, 'too long').required('TIN number is required'),
+      license_number: Yup.string().max(128, 'too long').required('license number is required'),
       name: Yup.string()
         .required('name is required')
-        .min(4, 'Name too short')
+        .min(4, 'name too short')
         .max(128, 'must be less thatn 128 characters'),
       email: Yup.string().email('Invalid email address').required('email is required'),
       gender: Yup.string().required('required'),
       phone: Yup.string()
         .matches(
           /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
-          'Phone number is not valid'
+          'phone number is not valid'
         )
         .required('phone number is required'),
       date_of_birth: Yup.date()
@@ -96,10 +145,11 @@ const CreateBusinessAccount = () => {
         .min(new Date('1900-01-01'), 'must be after 1900')
         .max(new Date('2014-12-31'), 'must be before 2014'),
       country: Yup.string().required('country is required'),
-      region: Yup.string(),
+      region: Yup.string().required('select your region'),
       address: Yup.string().required('specify your address'),
       password: Yup.string()
-        .min(8, 'password must be at least 8 characters')
+        .min(6, 'password must be at least 6 characters')
+        .max(128, 'Password too long')
         .required('password is Required'),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
@@ -111,22 +161,18 @@ const CreateBusinessAccount = () => {
       photo_base64: Yup.string().required('required'),
       id_front_base64: Yup.string().required('required'),
       id_back_base64: Yup.string().required('required'),
+      tin_doc_base64: Yup.string().required('required'),
+      license_doc_base64: Yup.string().required('required'),
     }),
 
     onSubmit: (values) => {
+      if (phoneNumberLookup || emailLookup || accountNameLookup) return;
+
       setLoading(true);
 
       // Clear existing values
       setRegistrationID('');
       setErrorMessage('');
-
-      // const photoReader = new FileReader();
-      // const idFrontReader = new FileReader();
-      // const idBackReader = new FileReader();
-
-      // photoReader.readAsDataURL(values.photo_base64);
-      // idFrontReader.readAsDataURL(values.id_front_base64);
-      // idBackReader.readAsDataURL(values.id_back_base64);
 
       authAxios
         .post('/user/register', {
@@ -192,7 +238,7 @@ const CreateBusinessAccount = () => {
             </span>
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <label htmlFor="fin" className="block mb-2 text-sm font-medium text-gray-900">
               Fayda Identification Number
             </label>
@@ -208,6 +254,47 @@ const CreateBusinessAccount = () => {
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.fin && formik.errors.fin}
+            </span>
+          </div>
+
+          <div>
+            <label htmlFor="tin_number" className="block mb-2 text-sm font-medium text-gray-900">
+              TIN Number
+            </label>
+            <input
+              type="text"
+              id="tin_number"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="tin_number"
+              disabled={isLoading}
+              autoComplete="off"
+              onChange={formik.handleChange}
+              value={formik.values.tin_number}
+            />
+            <span className="pl-2 text-sm text-red-600">
+              {formik.touched.tin_number && formik.errors.tin_number}
+            </span>
+          </div>
+
+          <div>
+            <label
+              htmlFor="license_number"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              License Number
+            </label>
+            <input
+              type="text"
+              id="license_number"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="license_number"
+              disabled={isLoading}
+              autoComplete="off"
+              onChange={formik.handleChange}
+              value={formik.values.license_number}
+            />
+            <span className="pl-2 text-sm text-red-600">
+              {formik.touched.license_number && formik.errors.license_number}
             </span>
           </div>
 
@@ -230,11 +317,11 @@ const CreateBusinessAccount = () => {
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.phone && formik.errors.phone}
-              {!formik.errors.phone && <span className="text-green-600">{phoneNumberLookup}</span>}
+              {!formik.errors.phone && phoneNumberLookup}
             </span>
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
               Email
             </label>
@@ -245,11 +332,15 @@ const CreateBusinessAccount = () => {
               placeholder="email"
               autoComplete="off"
               disabled={isLoading}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handleEmailLookup(e.target.value);
+              }}
               value={formik.values.email}
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.email && formik.errors.email}
+              {!formik.errors.email && emailLookup}
             </span>
           </div>
         </div>
@@ -397,9 +488,8 @@ const CreateBusinessAccount = () => {
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.account_name && formik.errors.account_name}
-              {!formik.errors.account_name && (
-                <span className="text-green-600">{accountNameLookup}</span>
-              )}
+              {!formik.errors.account_name && accountNameLookup}
+              {isAccountNameAvailable && <span className="text-green-600">Available</span>}
             </span>
           </div>
 
@@ -448,26 +538,23 @@ const CreateBusinessAccount = () => {
         <div className="grid gap-6 mt-10 mb-6 md:grid-cols-3">
           <div>
             <label htmlFor="photo_base64" className="block mb-2 text-sm font-medium text-gray-900">
-              Photo
+              Merchat Photo/Logo
             </label>
             <input
               aria-describedby="photo_base64"
               name="photo_base64"
               id="photo_base64"
-              accept=".jpeg"
+              accept=".jpg, .jpeg"
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) =>
-                formik.setFieldValue('photo_base64', e.target.files && e.target.files[0])
-              }
+              onChange={(e) => handleImageOnChange(e, 'photo_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.photo_base64 && formik.errors.photo_base64}
             </span>
           </div>
-
           <div>
             <label
               htmlFor="id_front_base64"
@@ -479,20 +566,17 @@ const CreateBusinessAccount = () => {
               aria-describedby="id_front_base64"
               name="id_front_base64"
               id="id_front_base64"
-              accept=".jpeg"
+              accept=".jpg, .jpeg"
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) =>
-                formik.setFieldValue('id_front_base64', e.target.files && e.target.files[0])
-              }
+              onChange={(e) => handleImageOnChange(e, 'id_front_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.id_front_base64 && formik.errors.id_front_base64}
             </span>
           </div>
-
           <div>
             <label
               htmlFor="id_back_base64"
@@ -504,24 +588,69 @@ const CreateBusinessAccount = () => {
               aria-describedby="id_back_base64"
               name="id_back_base64"
               id="id_back_base64"
-              accept=".jpeg"
+              accept=".jpg, .jpeg"
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) =>
-                formik.setFieldValue('id_back_base64', e.target.files && e.target.files[0])
-              }
+              onChange={(e) => handleImageOnChange(e, 'id_back_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.id_back_base64 && formik.errors.id_back_base64}
             </span>
           </div>
+
+          <div>
+            <label
+              htmlFor="tin_doc_base64"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              TIN document photo
+            </label>
+            <input
+              aria-describedby="tin_doc_base64"
+              name="tin_doc_base64"
+              id="tin_doc_base64"
+              accept=".jpg, .jpeg"
+              type="file"
+              disabled={isLoading}
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+              onChange={(e) => handleImageOnChange(e, 'tin_doc_base64')}
+            />
+
+            <span className="pl-2 text-sm text-red-600">
+              {formik.touched.tin_doc_base64 && formik.errors.tin_doc_base64}
+            </span>
+          </div>
+
+          <div>
+            <label
+              htmlFor="license_doc_base64"
+              className="block mb-2 text-sm font-medium text-gray-900"
+            >
+              LIcense document photo
+            </label>
+            <input
+              aria-describedby="license_doc_base64"
+              name="license_doc_base64"
+              id="license_doc_base64"
+              accept=".jpg, .jpeg"
+              type="file"
+              disabled={isLoading}
+              className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+              onChange={(e) => handleImageOnChange(e, 'license_doc_base64')}
+            />
+
+            <span className="pl-2 text-sm text-red-600">
+              {formik.touched.license_doc_base64 && formik.errors.license_doc_base64}
+            </span>
+          </div>
         </div>
 
         <button
           type="submit"
-          disabled={isLoading}
+          // @ts-ignore
+          disabled={isLoading || phoneNumberLookup || emailLookup || accountNameLookup}
           className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
         >
           <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>

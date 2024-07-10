@@ -489,7 +489,7 @@ const CreateLevelTwoAccount = () => {
         <div className="grid gap-6 mt-10 mb-6 md:grid-cols-3">
           <div>
             <label htmlFor="photo_base64" className="block mb-2 text-sm font-medium text-gray-900">
-              Photo
+              User Photo
             </label>
             <input
               aria-describedby="photo_base64"
