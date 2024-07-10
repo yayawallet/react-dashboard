@@ -12,26 +12,61 @@ const CreateLevelTwoAccount = () => {
   const [isLoading, setLoading] = useState(false);
   const [phoneNumberLookup, setPhoneNumberLookup] = useState('');
   const [accountNameLookup, setAccountNameLookup] = useState('');
+  const [emailLookup, setEmailLookup] = useState('');
+  const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
 
   const handlePhoneNumberLookup = (number: string) => {
-    if (number.length < 8) return;
+    if (number.length < 9) return;
+
+    if (number.startsWith('0') && number.length < 10) return;
+    if ((number.startsWith('7') || number.startsWith('9')) && number.length < 9) return;
+    if (number.startsWith('+2510') && number.length < 14) return;
+    if (number.startsWith('+251') && number.length < 13) return;
 
     setPhoneNumberLookup('');
 
     authAxios.post('/user/search', { query: number }).then((res) => {
-      if (res.data.length > 0) setPhoneNumberLookup('Phone number already taken');
+      if (res.data.length > 0) setPhoneNumberLookup('User already exists');
     });
   };
 
   const handleAccountNameLookup = (account: string) => {
+    setIsAccountNameAvailable(false);
+
     if (account.length !== 12) return;
 
     setAccountNameLookup('');
 
     authAxios.post('/user/search', { query: account }).then((res) => {
-      if (res.data.length === 0) setPhoneNumberLookup('Available');
-      else setPhoneNumberLookup('Account name already taken');
+      if (res.data.length === 0) setIsAccountNameAvailable(true);
+      else setAccountNameLookup('Account name already taken');
     });
+  };
+
+  const handleEmailLookup = (email: string) => {
+    if (email.length < 6) return;
+
+    setEmailLookup('');
+
+    authAxios.post('/user/search', { query: email }).then((res) => {
+      if (res.data.length > 0) setEmailLookup('User already exists');
+    });
+  };
+
+  const handleFileOnChange = (e: React.ChangeEvent<HTMLInputElement>, field_name: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = (e) => {
+      const target = e.target as FileReader;
+      const base64String = target.result;
+      if (base64String) {
+        formik.setFieldValue(field_name, base64String);
+      }
+    };
   };
 
   const formik = useFormik({
@@ -81,14 +116,14 @@ const CreateLevelTwoAccount = () => {
       fin: Yup.string().min(12, 'must be 12 characters').max(12, 'must be 12 characters'),
       name: Yup.string()
         .required('name is required')
-        .min(4, 'Name too short')
+        .min(4, 'name too short')
         .max(128, 'must be less thatn 128 characters'),
       email: Yup.string().email('Invalid email address').required('email is required'),
       gender: Yup.string().required('required'),
       phone: Yup.string()
         .matches(
           /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
-          'Phone number is not valid'
+          'phone number is not valid'
         )
         .required('phone number is required'),
       date_of_birth: Yup.date()
@@ -96,10 +131,11 @@ const CreateLevelTwoAccount = () => {
         .min(new Date('1900-01-01'), 'must be after 1900')
         .max(new Date('2014-12-31'), 'must be before 2014'),
       country: Yup.string().required('country is required'),
-      region: Yup.string(),
+      region: Yup.string().required('select your region'),
       address: Yup.string().required('specify your address'),
       password: Yup.string()
-        .min(8, 'password must be at least 8 characters')
+        .min(6, 'password must be at least 6 characters')
+        .max(128, 'Password too long')
         .required('password is Required'),
       confirmPassword: Yup.string()
         .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
@@ -114,19 +150,13 @@ const CreateLevelTwoAccount = () => {
     }),
 
     onSubmit: (values) => {
+      if (phoneNumberLookup || emailLookup || accountNameLookup) return;
+
       setLoading(true);
 
       // Clear existing values
       setRegistrationID('');
       setErrorMessage('');
-
-      // const photoReader = new FileReader();
-      // const idFrontReader = new FileReader();
-      // const idBackReader = new FileReader();
-
-      // photoReader.readAsDataURL(values.photo_base64);
-      // idFrontReader.readAsDataURL(values.id_front_base64);
-      // idBackReader.readAsDataURL(values.id_back_base64);
 
       authAxios
         .post('/user/register', {
@@ -230,7 +260,7 @@ const CreateLevelTwoAccount = () => {
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.phone && formik.errors.phone}
-              {!formik.errors.phone && <span className="text-green-600">{phoneNumberLookup}</span>}
+              {!formik.errors.phone && phoneNumberLookup}
             </span>
           </div>
 
@@ -245,11 +275,15 @@ const CreateLevelTwoAccount = () => {
               placeholder="email"
               autoComplete="off"
               disabled={isLoading}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handleEmailLookup(e.target.value);
+              }}
               value={formik.values.email}
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.email && formik.errors.email}
+              {!formik.errors.email && emailLookup}
             </span>
           </div>
         </div>
@@ -397,9 +431,8 @@ const CreateLevelTwoAccount = () => {
             />
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.account_name && formik.errors.account_name}
-              {!formik.errors.account_name && (
-                <span className="text-green-600">{accountNameLookup}</span>
-              )}
+              {!formik.errors.account_name && accountNameLookup}
+              {isAccountNameAvailable && <span className="text-green-600">Available</span>}
             </span>
           </div>
 
@@ -454,13 +487,11 @@ const CreateLevelTwoAccount = () => {
               aria-describedby="photo_base64"
               name="photo_base64"
               id="photo_base64"
-              accept=".jpeg"
+              accept=".jpg, .jpeg"
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) =>
-                formik.setFieldValue('photo_base64', e.target.files && e.target.files[0])
-              }
+              onChange={(e) => handleFileOnChange(e, 'photo_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
@@ -479,13 +510,11 @@ const CreateLevelTwoAccount = () => {
               aria-describedby="id_front_base64"
               name="id_front_base64"
               id="id_front_base64"
-              accept=".jpeg"
+              accept=".jpg, .jpeg"
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) =>
-                formik.setFieldValue('id_front_base64', e.target.files && e.target.files[0])
-              }
+              onChange={(e) => handleFileOnChange(e, 'id_front_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
@@ -504,13 +533,11 @@ const CreateLevelTwoAccount = () => {
               aria-describedby="id_back_base64"
               name="id_back_base64"
               id="id_back_base64"
-              accept=".jpeg"
+              accept=".jpg, .jpeg"
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) =>
-                formik.setFieldValue('id_back_base64', e.target.files && e.target.files[0])
-              }
+              onChange={(e) => handleFileOnChange(e, 'id_back_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
@@ -521,7 +548,8 @@ const CreateLevelTwoAccount = () => {
 
         <button
           type="submit"
-          disabled={isLoading}
+          // @ts-ignore
+          disabled={isLoading || phoneNumberLookup || emailLookup || accountNameLookup}
           className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
         >
           <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>

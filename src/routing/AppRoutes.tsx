@@ -1,5 +1,5 @@
 import { useRoutes } from 'react-router-dom';
-import { publicNavs, privateNavs, sidebarNavs } from './navigation';
+import { publicNavs, privateNavs } from './navigation';
 import { useAuth } from '../auth/AuthProvider';
 
 type NavType = {
