@@ -198,7 +198,7 @@ const CreateLevelTwoAccount = () => {
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">
-          Create Level two User
+          Create Level-two Account
         </h3>
       </div>
 
