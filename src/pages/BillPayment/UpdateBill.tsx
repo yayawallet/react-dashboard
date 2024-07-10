@@ -1,20 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
-import { BillDetailType, BillListType } from '../../models';
+import { BillDetailType } from '../../models';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
+import { useParams } from 'react-router-dom';
 
-interface Props {
-  hideFindForm?: boolean;
-  bill?: BillListType;
-  onCloseUpdate?: () => void;
-}
-
-const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
+const updateBill = () => {
   const [billPaymentID, setBillPaymentID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -23,10 +18,12 @@ const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const { bill_id: params_bill_id } = useParams();
+
   const formik1 = useFormik({
     initialValues: {
       client_yaya_account: 'tewobstatewo',
-      bill_id: '',
+      bill_id: params_bill_id || '',
     },
 
     validationSchema: Yup.object({
@@ -61,23 +58,15 @@ const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
     initialValues: {
       client_yaya_account: 'tewobstatewo',
       customer_yaya_account: '',
-      customer_id: bill?.customer_id || foundBill?.customer_id || '',
-      bill_id: bill?.bill_id || foundBill?.bill_id || '',
-      bill_code: bill?.bill_code || foundBill?.bill_code || '',
-      bill_season: bill?.bill_season || foundBill?.bill_season || '',
-      amount: bill?.amount || foundBill?.amount || '',
-      start_at: foundBill?.start_at
-        ? new Date(foundBill.start_at).toISOString().slice(0, 16)
-        : bill?.start_at
-          ? new Date(bill.start_at).toISOString().slice(0, 16)
-          : '',
-      due_at: foundBill?.due_at
-        ? new Date(foundBill.due_at).toISOString().slice(0, 16)
-        : bill?.due_at
-          ? new Date(bill.due_at).toISOString().slice(0, 16)
-          : '',
-      cluster: bill?.cluster || foundBill?.cluster || '',
-      description: bill?.description || foundBill?.description || '',
+      customer_id: foundBill?.customer_id || '',
+      bill_id: foundBill?.bill_id || '',
+      bill_code: foundBill?.bill_code || '',
+      bill_season: foundBill?.bill_season || '',
+      amount: foundBill?.amount || '',
+      start_at: foundBill?.start_at ? new Date(foundBill.start_at).toISOString().slice(0, 16) : '',
+      due_at: foundBill?.due_at ? new Date(foundBill.due_at).toISOString().slice(0, 16) : '',
+      cluster: foundBill?.cluster || '',
+      description: foundBill?.description || '',
       phone: '',
       email: '',
     },
@@ -140,6 +129,10 @@ const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
     },
   });
 
+  useEffect(() => {
+    formik1.handleSubmit();
+  }, [params_bill_id]);
+
   const handleUpdateBill = (confirm: boolean) => {
     setOpenModal(false);
     if (!confirm) return;
@@ -170,12 +163,11 @@ const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
       )}
 
       <div className="max-w-[var(--form-width)] bg-gray-50 border p-8 pt-6 rounded-t-xl mx-auto mt-6">
-        <div className={`${hideFindForm ? '' : 'hidden'} relative`}>
+        <div>
           <h3 className="text-lg font-semibold text-gray-900">Update Bill</h3>
           <button
             type="button"
             className={`absolute top-5 right-5 flex rounded-lg text-sm w-8 h-8 mr-2 items-center justify-center`}
-            onClick={() => onCloseUpdate && onCloseUpdate()}
           >
             <svg className="w-3 h-3" fill="none" viewBox="0 0 14 14">
               <path
@@ -190,7 +182,7 @@ const updateBill = ({ hideFindForm, bill, onCloseUpdate }: Props) => {
         </div>
 
         <form
-          className={`w-[var(--form-width-small)] border-0 rounded-xl ${hideFindForm ? 'hidden' : ''}`}
+          className="w-[var(--form-width-small)] border-0 rounded-xl"
           onSubmit={formik1.handleSubmit}
         >
           <div className="grid gap-6 md:grid-cols-5">
