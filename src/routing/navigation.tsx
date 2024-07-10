@@ -287,6 +287,7 @@ export const privateNavs = [
         path: 'recurring-contract/request-payment/report/:id',
         element: <BulkImportReportDetails />,
       },
+      { path: 'bill/update/:bill_id', element: <UpdateBill /> },
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
       { path: 'me', element: <AboutMe /> },
