@@ -9,6 +9,7 @@ import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import RefreshButton from '../../components/ui/RefreshButton';
+import { useNavigate } from 'react-router-dom';
 
 const ListBill = () => {
   const [prevList, setPrevList] = useState(false);
@@ -18,6 +19,8 @@ const ListBill = () => {
   const [filterByStatus, setFilterByStatus] = useState('');
   const [filteredBillList, setFilteredBillList] = useState<BillListType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const navigate = useNavigate();
 
   const {
     error,
@@ -98,11 +101,16 @@ const ListBill = () => {
               <div className="overflow-auto relative">
                 <div className={`${isRefreshing ? '' : 'hidden'}`}>
                   <div
-                    className="absolute z-10 bg-gray-400 rounded-full p-1.5"
-                    style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+                    className="absolute z-10 bg-white rounded-full p-2"
+                    style={{
+                      top: '30vh',
+                      left: '50%',
+                      transform: 'translate(-50%)',
+                      boxShadow: '0 0 5px #888',
+                    }}
                   >
                     <span
-                      className="inline-block border-white h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                      className="inline-block border-gray-400 h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                       role="status"
                     ></span>
                   </div>
@@ -125,63 +133,66 @@ const ListBill = () => {
                   </thead>
 
                   <tbody>
-                    {(filterByStatus ? filteredBillList : billList)?.map((t: BillListType) => (
-                      <tr key={t.id} className="hover:bg-slate-100 text-nowrap">
+                    {(filterByStatus ? filteredBillList : billList)?.map((bill: BillListType) => (
+                      <tr key={bill.id} className="hover:bg-slate-100 text-nowrap">
                         <td
-                          title={t.id}
+                          title={bill.id}
                           className="relative border-b border-slate-200 pl-3 py-3 cursor-pointer"
-                          onClick={() => copyTransactionID(t.id)}
+                          onClick={() => copyTransactionID(bill.id)}
                         >
-                          {`${t.id.slice(0, 6)}...${t.id.slice(-2)}`}
+                          {`${bill.id.slice(0, 6)}...${bill.id.slice(-2)}`}
                           <span
-                            className={`${copiedID === t.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                            className={`${copiedID === bill.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                           >
                             ID Copied
                           </span>
                         </td>
 
                         <td className="border-b border-slate-200 pl-3 py-3">
-                          {t.customer_yaya_account ? (
-                            t.customer_yaya_account?.account
+                          {bill.customer_yaya_account ? (
+                            bill.customer_yaya_account?.account
                           ) : (
                             <span className="text-gray-500">unavailable</span>
                           )}
                         </td>
 
                         <td className="border-b border-slate-200 pl-3 py-3">
-                          {t.cluster ? (
-                            capitalize(t.cluster)
+                          {bill.cluster ? (
+                            capitalize(bill.cluster)
                           ) : (
                             <span className="text-gray-500">unavailable</span>
                           )}
                         </td>
 
-                        <td className="border-b border-slate-200 pl-3 py-3">{t.customer_id}</td>
+                        <td className="border-b border-slate-200 pl-3 py-3">{bill.customer_id}</td>
 
-                        <td className="border-b border-slate-200 pl-3 py-3">{t.bill_id}</td>
+                        <td className="border-b border-slate-200 pl-3 py-3">{bill.bill_id}</td>
 
                         <td className="border-b border-slate-200 pl-3 py-3">
-                          {t.amount?.toFixed(2)}{' '}
-                          <span className="text-gray-500 text-sm">{t.currency}</span>
+                          {bill.amount?.toFixed(2)}{' '}
+                          <span className="text-gray-500 text-sm">{bill.currency}</span>
                         </td>
 
                         <td className="border-b border-slate-200 pl-3 py-3">
                           <span
-                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.status == 'PAID' ? 'green' : 'orange'}-500`}
+                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${bill.status == 'PAID' ? 'green' : 'orange'}-500`}
                           >
                             <GoDotFill />
                           </span>
-                          {capitalize(t.status)}
+                          {capitalize(bill.status)}
                         </td>
 
                         <td className="border-b border-slate-200 pl-3 py-3 text-gray-500">
-                          {formatDate(t.due_at).split('-')[0]}
+                          {formatDate(bill.due_at).split('-')[0]}
                         </td>
 
                         <td className="relative border-b border-slate-200 pl-3 py-3">
                           <button
                             type="button"
                             className="pt-0.5 pb-1 px-3 focus:outline-none text-black bg-yellow-400 rounded hover:bg-yellow-500 focus:z-10 focus:ring-4 focus:ring-yellow-200"
+                            onClick={() => {
+                              navigate('/bill/update/' + bill.bill_id);
+                            }}
                           >
                             Update
                           </button>
