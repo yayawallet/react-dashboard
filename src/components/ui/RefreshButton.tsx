@@ -1,22 +1,8 @@
-import { useRef } from 'react';
-
 const RefreshButton = () => {
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-
-  const handleClick = () => {
-    (buttonRef?.current as HTMLButtonElement).focus();
-
-    setTimeout(() => {
-      (buttonRef?.current as HTMLElement).blur();
-    }, 10);
-  };
-
   return (
     <button
       type="button"
-      ref={buttonRef}
       className="btn flex gap-x-1 items-center border text-gray-600 px-2 py-1 rounded hover:bg-gray-100 focus:ring-4 focus:ring-gray-100"
-      onClick={handleClick}
     >
       <svg
         stroke="currentColor"
