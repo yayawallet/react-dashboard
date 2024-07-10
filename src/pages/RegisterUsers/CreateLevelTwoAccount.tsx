@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
 import { EthiopianRegions } from '../../CONSTANTS';
 import SelectElement from '../../components/SelectElement';
+import { resizeImage } from '../../utils/resizeImage';
 
 const CreateLevelTwoAccount = () => {
   const [registrationID, setRegistrationID] = useState('');
@@ -53,7 +54,7 @@ const CreateLevelTwoAccount = () => {
     });
   };
 
-  const handleFileOnChange = (e: React.ChangeEvent<HTMLInputElement>, field_name: string) => {
+  const handleImageOnChange = (e: React.ChangeEvent<HTMLInputElement>, field_name: string) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -64,7 +65,14 @@ const CreateLevelTwoAccount = () => {
       const target = e.target as FileReader;
       const base64String = target.result;
       if (base64String) {
-        formik.setFieldValue(field_name, base64String);
+        if (field_name === 'photo_base64') {
+          // resizeImage(DataURL, maxWidth, maxHeight, callback)
+          resizeImage(base64String, 800, 800, (resizedBase64) => {
+            formik.setFieldValue(field_name, resizedBase64);
+          });
+        } else {
+          formik.setFieldValue(field_name, base64String);
+        }
       }
     };
   };
@@ -491,7 +499,7 @@ const CreateLevelTwoAccount = () => {
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) => handleFileOnChange(e, 'photo_base64')}
+              onChange={(e) => handleImageOnChange(e, 'photo_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
@@ -514,7 +522,7 @@ const CreateLevelTwoAccount = () => {
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) => handleFileOnChange(e, 'id_front_base64')}
+              onChange={(e) => handleImageOnChange(e, 'id_front_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
@@ -537,7 +545,7 @@ const CreateLevelTwoAccount = () => {
               type="file"
               disabled={isLoading}
               className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-              onChange={(e) => handleFileOnChange(e, 'id_back_base64')}
+              onChange={(e) => handleImageOnChange(e, 'id_back_base64')}
             />
 
             <span className="pl-2 text-sm text-red-600">
