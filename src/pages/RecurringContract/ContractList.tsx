@@ -11,6 +11,7 @@ import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { GoDotFill } from 'react-icons/go';
+import RefreshButton from '../../components/ui/RefreshButton';
 
 const ContractList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -22,8 +23,9 @@ const ContractList = () => {
   const [filterByStatus, setFilterByStatus] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredContractList, setFilteredContractList] = useState<recurringContract[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { error, isLoading, data: contractList } = useGetData('/recurring-contract/list');
+  const { error, isLoading, data: contractList, mutate } = useGetData('/recurring-contract/list');
 
   useEffect(() => {
     if (searchQuery) {
@@ -84,6 +86,12 @@ const ContractList = () => {
     );
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await mutate();
+    setIsRefreshing(false);
+  };
+
   return (
     <div className="table-container">
       <ConfirmationModal
@@ -135,72 +143,96 @@ const ContractList = () => {
                   placeholder="ID, Service Type, Customer Name, ..."
                 />
               </div>
+
+              <div onClick={handleRefresh}>
+                <RefreshButton />
+              </div>
             </div>
             {filteredContractList?.length === 0 ? (
               <EmptyList />
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr>
-                      <th className="text-left px-4 py-3 font-medium">ID</th>
-                      <th className="text-left px-4 py-3 font-medium">Customer Name</th>
-                      <th className="text-left px-4 py-3 font-medium">Customer Account</th>
-                      <th className="text-left px-4 py-3 font-medium">Contract Number</th>
-                      <th className="text-left px-4 py-3 font-medium">Status</th>
-                      <th className="text-left px-4 py-3 font-medium">Service Type</th>
-                      <th className="text-left px-4 py-3 font-medium">Action</th>
-                    </tr>
-                  </thead>
+              <div className="relative">
+                <div className={`${isRefreshing ? '' : 'hidden'}`}>
+                  <div
+                    className="absolute z-10 bg-white rounded-full p-1.5"
+                    style={{
+                      top: '30vh',
+                      left: '50%',
+                      transform: 'translate(-50%)',
+                      boxShadow: '0 0 5px #888',
+                    }}
+                  >
+                    <span
+                      className="inline-block border-gray-400 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                      role="status"
+                    ></span>
+                  </div>
+                  <div className="absolute z-20 h-full w-full"></div>
+                </div>
 
-                  <tbody>
-                    {filteredContractList?.map((item) => (
-                      <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
-                        <td
-                          title={item.id}
-                          className="relative border-b border-slate-200 p-3 cursor-pointer"
-                          onClick={() => copySchedulePaymentId(item.id)}
-                        >
-                          {`${item.id.slice(0, 6)}...${item.id.slice(-2)}`}
-                          <span
-                            className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
-                          >
-                            ID Copied
-                          </span>
-                        </td>
-
-                        <td className="border-b border-slate-200 p-3">
-                          {capitalize(item.customer.name).split(' ').slice(0, 2).join(' ')}
-                        </td>
-                        <td className="border-b border-slate-200 p-3">
-                          <span className="text-gray-500">@{item.customer.account}</span>
-                        </td>
-
-                        <td className="border-b border-slate-200 p-3">{item.contract_number}</td>
-                        <td className="border-b border-slate-200 p-3">
-                          <span
-                            className={`inline-block align-middle pb-0.5 pr-1 text-[16px] ${item.status === 'pending' ? 'text-orange-500' : item.status === 'approved' ? 'text-green-500' : 'text-gray-500'}`}
-                          >
-                            <GoDotFill />
-                          </span>
-                          {capitalize(item.status)}
-                        </td>
-                        <td className="border-b border-slate-200 p-3">{item.service_type}</td>
-                        <td className="border-b border-slate-200 p-3">
-                          <button
-                            className="bg-red-600 text-white pt-1 pb-1.5 px-3 rounded hover:bg-red-700"
-                            onClick={() => {
-                              setSelectedContract(item);
-                              setOpenModal(true);
-                            }}
-                          >
-                            Deactivate
-                          </button>
-                        </td>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr>
+                        <th className="text-left px-4 py-3 font-medium">ID</th>
+                        <th className="text-left px-4 py-3 font-medium">Customer Name</th>
+                        <th className="text-left px-4 py-3 font-medium">Customer Account</th>
+                        <th className="text-left px-4 py-3 font-medium">Contract Number</th>
+                        <th className="text-left px-4 py-3 font-medium">Status</th>
+                        <th className="text-left px-4 py-3 font-medium">Service Type</th>
+                        <th className="text-left px-4 py-3 font-medium">Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+
+                    <tbody>
+                      {filteredContractList?.map((item) => (
+                        <tr key={item.id} className="hover:bg-gray-100 text-nowrap">
+                          <td
+                            title={item.id}
+                            className="relative border-b border-slate-200 p-3 cursor-pointer"
+                            onClick={() => copySchedulePaymentId(item.id)}
+                          >
+                            {`${item.id.slice(0, 6)}...${item.id.slice(-2)}`}
+                            <span
+                              className={`${copiedID === item.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
+                            >
+                              ID Copied
+                            </span>
+                          </td>
+
+                          <td className="border-b border-slate-200 p-3">
+                            {capitalize(item.customer.name).split(' ').slice(0, 2).join(' ')}
+                          </td>
+                          <td className="border-b border-slate-200 p-3">
+                            <span className="text-gray-500">@{item.customer.account}</span>
+                          </td>
+
+                          <td className="border-b border-slate-200 p-3">{item.contract_number}</td>
+                          <td className="border-b border-slate-200 p-3">
+                            <span
+                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] ${item.status === 'pending' ? 'text-orange-500' : item.status === 'approved' ? 'text-green-500' : 'text-gray-500'}`}
+                            >
+                              <GoDotFill />
+                            </span>
+                            {capitalize(item.status)}
+                          </td>
+                          <td className="border-b border-slate-200 p-3">{item.service_type}</td>
+                          <td className="border-b border-slate-200 p-3">
+                            <button
+                              className="bg-red-600 text-white pt-1 pb-1.5 px-3 rounded hover:bg-red-700"
+                              onClick={() => {
+                                setSelectedContract(item);
+                                setOpenModal(true);
+                              }}
+                            >
+                              Deactivate
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </div>
