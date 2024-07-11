@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Pagination from '../../components/Pagination';
-import SearchBar from '../../components/SearchBar';
 import { BillListType } from '../../models';
 import { usePostData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
@@ -13,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ListBill = () => {
   const [prevList, setPrevList] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [filterByStatus, setFilterByStatus] = useState('');
@@ -38,10 +36,6 @@ const ListBill = () => {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
-
-  const handleSearchTransaction = (query: string) => {
-    setSearchQuery(query);
   };
 
   const handleFilterBill = (status: string) => {
@@ -85,10 +79,6 @@ const ListBill = () => {
               </button>
             </div>
 
-            <div className="w-64">
-              <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
-            </div>
-
             <div onClick={handleRefresh}>
               <RefreshButton />
             </div>
@@ -97,26 +87,26 @@ const ListBill = () => {
           {filteredBillList.length === 0 && billList?.length === 0 ? (
             <EmptyList />
           ) : (
-            <>
-              <div className="overflow-auto relative">
-                <div className={`${isRefreshing ? '' : 'hidden'}`}>
-                  <div
-                    className="absolute z-10 bg-white rounded-full p-2"
-                    style={{
-                      top: '30vh',
-                      left: '50%',
-                      transform: 'translate(-50%)',
-                      boxShadow: '0 0 5px #888',
-                    }}
-                  >
-                    <span
-                      className="inline-block border-gray-400 h-10 w-10 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                      role="status"
-                    ></span>
-                  </div>
-                  <div className="absolute z-20 h-full w-full"></div>
+            <div className="relative">
+              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+                <div
+                  className="absolute z-10 bg-white rounded-full p-1.5"
+                  style={{
+                    top: '30vh',
+                    left: '50%',
+                    transform: 'translate(-50%)',
+                    boxShadow: '0 0 5px #888',
+                  }}
+                >
+                  <span
+                    className="inline-block border-gray-400 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  ></span>
                 </div>
+                <div className="absolute z-20 h-full w-full"></div>
+              </div>
 
+              <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr>
@@ -208,17 +198,15 @@ const ListBill = () => {
                     Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
                     {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
                   </p>
-                  <div className={`${searchQuery ? 'hidden' : ''}`}>
-                    <Pagination
-                      currentPage={currentPage}
-                      pageCount={pageCount}
-                      isLoading={isLoading}
-                      onPageChange={handlePageChange}
-                    />
-                  </div>
+                  <Pagination
+                    currentPage={currentPage}
+                    pageCount={pageCount}
+                    isLoading={isLoading}
+                    onPageChange={handlePageChange}
+                  />
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       )}
