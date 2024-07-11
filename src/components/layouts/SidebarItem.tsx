@@ -13,9 +13,10 @@ type MenuTypes = {
 
 interface Props {
   menu: MenuTypes;
+  onCloseSidebar: () => void;
 }
 
-const SidebarItem = ({ menu }: Props) => {
+const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathName = useLocation().pathname;
 
@@ -46,7 +47,7 @@ const SidebarItem = ({ menu }: Props) => {
           className={`px-2 rounded ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-gray-100' : 'hidden'}`}
         >
           {menu.children.map((item, index) => (
-            <li key={index}>
+            <li key={index} onClick={() => onCloseSidebar()}>
               <NavLink
                 to={`${menu.path}/${item.path}`}
                 className={({ isActive }) =>

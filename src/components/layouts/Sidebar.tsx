@@ -113,7 +113,7 @@ const Sidebar = () => {
               </li>
 
               {sidebarMenus.map((menu, index) => (
-                <SidebarItem key={index} menu={menu} />
+                <SidebarItem key={index} menu={menu} onCloseSidebar={() => setSidebarOpen(false)} />
               ))}
             </ul>
           </div>
