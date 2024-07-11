@@ -1,5 +1,6 @@
 import { usePostData } from '../hooks/useSWR';
 import { Institution } from '../models';
+import { RiBankFill } from 'react-icons/ri';
 
 interface Props {
   onSelect: (value: string) => void;
@@ -12,9 +13,16 @@ const InstitutionLIst = ({ onSelect }: Props) => {
 
   return (
     <div className="relative">
+      <span
+        className="absolute top-0 left-0 flex  justify-center items-center h-full w-8 rounded-r text-gray-700 text-lg"
+        style={{ pointerEvents: 'none' }}
+      >
+        <RiBankFill />
+      </span>
+
       <select
         id="institution"
-        className="w-full py-2.5 px-6 b-0 rounded focus:ring-4j ring-gray-200 outline-none transition sidebar-scrollbar"
+        className="w-full py-2.5 px-6 pl-8 b-0 rounded focus:ring-4j ring-gray-200 outline-none transition sidebar-scrollbar"
         style={{ color: '#444', background: '#eee', appearance: 'none' }}
         onChange={(e) => onSelect(e.target.value)}
       >
