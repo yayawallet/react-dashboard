@@ -8,11 +8,15 @@ import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
 
-import Index from '../pages/BillPayment/Index';
+import BillPayment from '../pages/BillPayment/Index';
 import CreateBill from '../pages/BillPayment/CreateBill';
 import BillList from '../pages/BillPayment/ListBill';
 import UpdateBill from '../pages/BillPayment/UpdateBill';
 import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
+
+import RegisterUsers from '../pages/RegisterUsers/Index';
+import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount';
+import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -58,6 +62,7 @@ import { RiBankFill } from 'react-icons/ri';
 import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
 import { FaMoneyBillTrendUp } from 'react-icons/fa6';
+import { FaUserPlus } from 'react-icons/fa6';
 
 export const sidebarNavs = [
   {
@@ -65,32 +70,32 @@ export const sidebarNavs = [
     path: 'airtime',
     icon: <MdSendToMobile />,
     element: <AirTime />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
   },
   {
     title: 'Transaction',
     path: 'transaction',
     icon: <BiTransferAlt />,
     element: <Transaction />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
     children: [
       {
         title: 'Create Transaction',
         path: 'create',
         element: <CreateTransaction />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Transaction List',
         path: 'list',
         element: <TransactionList />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Verify Transaction',
         path: 'verify-id',
         element: <VerifyTransactionByID />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
   },
@@ -99,38 +104,59 @@ export const sidebarNavs = [
     path: 'qr-code',
     icon: <IoQrCode />,
     element: <GenerateQRCode />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
   },
   {
     title: 'Bill Payment',
     path: 'bill',
     icon: <FaMoneyBillTrendUp />,
-    element: <Index />,
-    accessRoles: ['admin', 'clerk'],
+    element: <BillPayment />,
+    accessRoles: ['admin', 'agent', 'clerk'],
     children: [
       {
         title: 'Create Bill',
         path: 'create',
         element: <CreateBill />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'List Bills',
         path: 'list',
         element: <BillList />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Update Bill',
         path: 'update',
         element: <UpdateBill />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Check Bulk Status',
         path: 'bulkimport/list',
         element: <CheckBulkBillStatus />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
+      },
+    ],
+  },
+  {
+    title: 'Register Users',
+    path: 'register-user',
+    icon: <FaUserPlus />,
+    element: <RegisterUsers />,
+    accessRoles: ['agent'],
+    children: [
+      {
+        title: 'Level Two',
+        path: 'level-two',
+        element: <CreateLevelTwoAccount />,
+        accessRoles: ['agent'],
+      },
+      {
+        title: 'Business Account',
+        path: 'business',
+        element: <CreateBussinessAccount />,
+        accessRoles: ['agent'],
       },
     ],
   },
@@ -139,25 +165,25 @@ export const sidebarNavs = [
     path: 'scheduled-payment',
     icon: <RiCalendarScheduleLine />,
     element: <ScheduledPayment />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
     children: [
       {
         title: 'Create Schedule',
         path: 'create',
         element: <CreateScheduled />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Scheduled List',
         path: 'list',
         element: <ListScheduled />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Scheduled Report',
         path: 'report',
         element: <ReportSchedule />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
   },
@@ -166,37 +192,37 @@ export const sidebarNavs = [
     path: 'recurring-contract',
     icon: <MdOutlinePayments />,
     element: <RecurringContract />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
     children: [
       {
         title: 'Create Contract',
         path: 'create',
         element: <CreateContract />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Contract List',
         path: 'list',
         element: <ContractList />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Contract Report',
         path: 'report',
         element: <ReportContract />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Request Payment',
         path: 'request-payment',
         element: <RequestPayment />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Request Payments Report',
         path: 'request-payment/report',
         element: <ReportRequestPayment />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
   },
@@ -205,31 +231,31 @@ export const sidebarNavs = [
     path: 'transfer',
     icon: <RiBankFill />,
     element: <Transfer />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
     children: [
       {
         title: 'Send Money',
         path: 'send',
         element: <CreateTransfer />,
-        accessRoles: ['admin'],
+        accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Transfer List',
         path: 'list',
         element: <TransferList />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Transfer Fee',
         path: 'transfer-fee',
         element: <TransferFee />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Account Lookup',
         path: 'account-lookup',
         element: <ExternalAccountLookup />,
-        accessRoles: ['admin', 'clerk'],
+        accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
   },
@@ -238,14 +264,14 @@ export const sidebarNavs = [
     path: 'guide',
     element: <Guide />,
     icon: <MdOutlineContactSupport />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
   },
   {
     title: 'Support',
     path: 'support',
     element: <Support />,
     icon: <HiOutlineSupport />,
-    accessRoles: ['admin', 'clerk'],
+    accessRoles: ['admin', 'agent', 'clerk'],
   },
 ];
 
@@ -261,6 +287,7 @@ export const privateNavs = [
         path: 'recurring-contract/request-payment/report/:id',
         element: <BulkImportReportDetails />,
       },
+      { path: 'bill/update/:bill_id', element: <UpdateBill /> },
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
       { path: 'me', element: <AboutMe /> },

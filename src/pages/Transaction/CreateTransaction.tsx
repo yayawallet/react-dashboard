@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
+import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
@@ -35,14 +36,16 @@ const CreateTransaction = () => {
         .post('/transaction/create', { ...values, receiver: selectedUser })
         .then((res) => {
           setTransactionID(res.data.transaction_id);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 
@@ -66,10 +69,15 @@ const CreateTransaction = () => {
               <label htmlFor="receiver" className="block mb-2 text-sm font-medium text-gray-900">
                 Receiver
               </label>
+
+              <div className="relative">
+                <InputUserIconPlaceholder />
+              </div>
+
               <input
                 type="text"
                 id="receiver"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="receiver"
                 autoComplete="off"
                 disabled={isLoading}

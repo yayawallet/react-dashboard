@@ -33,12 +33,13 @@ const TransferFee = () => {
         .post(`/transfer/fee`, values)
         .then((res) => {
           setTransferFee(res.data);
-          setLoading(false);
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message);
-          setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 

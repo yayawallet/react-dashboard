@@ -38,15 +38,16 @@ const CreateTransfer = () => {
         .post('/transfer/send', values)
         .then((res) => {
           setTransferID(res.data.id);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message);
-          setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 

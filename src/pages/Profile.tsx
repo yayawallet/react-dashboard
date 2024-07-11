@@ -3,6 +3,7 @@ import { useGetData } from '../hooks/useSWR';
 
 const Profile = () => {
   const { data: profile } = useGetData('/user/profile');
+  const { data: balance } = useGetData('/user/balance');
 
   return (
     <div className="page-container">
@@ -11,12 +12,18 @@ const Profile = () => {
           <div className="">
             <h3 className="text-lg leading-6 font-medium text-gray-900">{profile?.name}</h3>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">{'@' + profile?.account}</p>
+
+            <h4 className="mt-8 text-lg">
+              Balance: {balance ? Number(balance)?.toFixed(2) : ' ~ '}
+              &nbsp;
+              <span className="text-gray-500">ETB</span>
+            </h4>
           </div>
 
           <dl className="">
             <dt className="text-sm font-medium text-gray-500 px-3 py-1">Status</dt>
             <dd
-              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-2 font-medium rounded ${profile?.status === 'ACTIVE' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}
+              className={`flex items-center justify-center mt-1 text-sm px-3 py-1 text-gray-800 sm:mt-0 sm:col-span-3 font-medium rounded ${profile?.status === 'ACTIVE' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}
             >
               {profile
                 ? `${profile?.status?.charAt(0)}${profile?.status?.slice(1).toLowerCase()}`
@@ -24,57 +31,51 @@ const Profile = () => {
             </dd>
           </dl>
         </div>
-        <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-          <dl className="sm:divide-y sm:divide-gray-200">
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Username</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile?.account}
-              </dd>
+        <div className="border-t border-l border-r rounded-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px] mx-auto">
+          <dl className="sm:divide-y sm:divide-gray-200 text-[15px]">
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Username</dt>
+              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.account}</dd>
             </div>
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Email address</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{profile?.email}</dd>
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Email address</dt>
+              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.email}</dd>
             </div>
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Phone number</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Phone number</dt>
+              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
                 {profile && `(${profile?.country?.phone_code}) ${profile?.phone}`}
               </dd>
             </div>
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Address</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile?.location}
-              </dd>
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Address</dt>
+              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.location}</dd>
             </div>
 
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Guardians</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Guardians</dt>
+              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
                 {profile?.guardians.join(', ')}
               </dd>
             </div>
 
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Reputation</dt>
-              <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                {profile?.reputation}
-              </dd>
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Reputation</dt>
+              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.reputation}</dd>
             </div>
 
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Balance Limit</dt>
-              <dd className="mt-1 text-sm text-gray-900 font-medium sm:mt-0 sm:col-span-2">
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Balance Limit</dt>
+              <dd className="mt-1 text-gray-900 font-medium sm:mt-0 sm:col-span-3">
                 {profile && profile.type === 'BUSINESS'
                   ? 'Unlimited'
                   : profile?.currency + ' ' + profile?.balance_limit?.toLocaleString()}
               </dd>
             </div>
 
-            <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-500">Daily transaction limit</dt>
-              <dd className="mt-1 text-sm text-gray-900 font-medium sm:mt-0 sm:col-span-2">
+            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+              <dt className="font-medium text-gray-500">Daily transaction limit</dt>
+              <dd className="mt-1 text-gray-900 font-medium sm:mt-0 sm:col-span-3">
                 {profile && profile.type === 'BUSINESS'
                   ? 'Unlimited'
                   : profile?.currency + ' ' + profile?.daily_transaction_limit?.toLocaleString()}

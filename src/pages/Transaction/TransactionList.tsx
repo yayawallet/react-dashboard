@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Pagination from '../../components/Pagination';
-// import Pagination2 from '../../components/Pagination2';
 import SearchBar from '../../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { Transaction } from '../../models';
@@ -9,6 +8,7 @@ import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
+import RefreshButton from '../../components/ui/RefreshButton';
 
 const TransactionList = () => {
   const [transactionList, setTransactionList] = useState<Transaction[]>([]);
@@ -17,6 +17,7 @@ const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const { data: ownProfile } = useGetData('/user/profile');
   const ownAccount = ownProfile?.account;
@@ -25,6 +26,7 @@ const TransactionList = () => {
     error,
     isLoading,
     data: transactionData,
+    mutate,
   } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
 
   const { data: searchResult } = usePostData(['/transaction/search', searchQuery], {
@@ -61,6 +63,12 @@ const TransactionList = () => {
     setSearchQuery(query);
   };
 
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await mutate();
+    setIsRefreshing(false);
+  };
+
   return (
     <div className="table-container">
       {error ? (
@@ -71,16 +79,39 @@ const TransactionList = () => {
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4">
             <h3 className="text-lg font-medium">Transactions</h3>
+
             <div className="w-64">
               <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+            </div>
+
+            <div onClick={handleRefresh}>
+              <RefreshButton />
             </div>
           </div>
 
           {transactionList?.length === 0 ? (
             <EmptyList />
           ) : (
-            <>
-              <div className="overflow-auto">
+            <div className="relative">
+              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+                <div
+                  className="absolute z-10 bg-white rounded-full p-1.5"
+                  style={{
+                    top: '30vh',
+                    left: '50%',
+                    transform: 'translate(-50%)',
+                    boxShadow: '0 0 5px #888',
+                  }}
+                >
+                  <span
+                    className="inline-block border-gray-400 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  ></span>
+                </div>
+                <div className="absolute z-20 h-full w-full"></div>
+              </div>
+
+              <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr>
@@ -164,7 +195,7 @@ const TransactionList = () => {
                   </div>
                 </div>
               )}
-            </>
+            </div>
           )}
         </div>
       )}

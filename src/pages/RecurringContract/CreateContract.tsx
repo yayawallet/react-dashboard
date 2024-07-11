@@ -6,6 +6,7 @@ import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
 import createContractTemplate from '../../assets/bulk-import-templates/create_contract_template.xlsx';
+import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
 
 const CreateContract = () => {
   const [contractID, setContractID] = useState('');
@@ -46,13 +47,22 @@ const CreateContract = () => {
         .post('/recurring-contract/create', values)
         .then((res) => {
           setContractID(res.data.contract_id);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
+        })
+        .finally(() => {
+          setLoading(false);
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
         });
     },
   });
@@ -171,10 +181,15 @@ const CreateContract = () => {
               >
                 Customer YaYa account
               </label>
+
+              <div className="relative">
+                <InputUserIconPlaceholder />
+              </div>
+
               <input
                 type="text"
                 id="customer_account_name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="customer_account_name"
                 autoComplete="off"
                 disabled={isLoading}

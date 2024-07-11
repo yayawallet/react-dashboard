@@ -16,7 +16,16 @@ const BreadCrumbs = () => {
 
   const crumbs = paths.every((path) => sidebarPaths.includes(path))
     ? paths
-    : [...paths.filter((path) => sidebarPaths.includes(path)), 'not-found'];
+    : location.pathname.startsWith('/bill/update/') && paths[3] === undefined
+      ? paths
+      : location.pathname.startsWith('/scheduled-payment/report/') && paths[3] === undefined
+        ? ['scheduled-payment', 'report', 'details']
+        : location.pathname.startsWith('/recurring-contract/report/') && paths[3] === undefined
+          ? ['recurring-contract', 'report', 'details']
+          : location.pathname.startsWith('/recurring-contract/request-payment/report/') &&
+              paths[4] === undefined
+            ? ['recurring-contract', 'request-payment', 'report', 'details']
+            : [...paths.filter((path) => sidebarPaths.includes(path)), 'not-found'];
 
   return (
     <ol className="flex items-center whitespace-nowrap">
