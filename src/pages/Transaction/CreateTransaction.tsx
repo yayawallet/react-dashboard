@@ -36,14 +36,16 @@ const CreateTransaction = () => {
         .post('/transaction/create', { ...values, receiver: selectedUser })
         .then((res) => {
           setTransactionID(res.data.transaction_id);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 

@@ -52,7 +52,9 @@ const CreateContract = () => {
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message);
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
         })
         .finally(() => {
           setLoading(false);

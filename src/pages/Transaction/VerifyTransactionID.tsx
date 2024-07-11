@@ -34,15 +34,16 @@ const GetTransactionByID = () => {
         .get(`/transaction/find/${values.transactionID}`)
         .then((res) => {
           setTransaction(res.data);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || 'Invalid transaction ID');
-          setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || 'Invalid transaction ID'
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 

@@ -43,14 +43,16 @@ const GenerateQRCode = () => {
         .post('/transaction/qr-generate', values)
         .then((res) => {
           setQRCode(res.data);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
-        });
+          setErrorMessage(
+            error.response?.data?.message || error.response?.data?.error || error.message
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 
