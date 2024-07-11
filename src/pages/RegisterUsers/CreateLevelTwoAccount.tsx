@@ -3,9 +3,9 @@ import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
-import { EthiopianRegions } from '../../CONSTANTS';
 import SelectElement from '../../components/SelectElement';
 import { resizeImage } from '../../utils/resizeImage';
+import { useGetData } from '../../hooks/useSWR';
 
 const CreateLevelTwoAccount = () => {
   const [registrationID, setRegistrationID] = useState('');
@@ -15,6 +15,8 @@ const CreateLevelTwoAccount = () => {
   const [accountNameLookup, setAccountNameLookup] = useState('');
   const [emailLookup, setEmailLookup] = useState('');
   const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
+
+  const { data: regionsList } = useGetData('/lookup/region');
 
   const handlePhoneNumberLookup = (number: string) => {
     if (number.length < 9) return;
@@ -182,7 +184,13 @@ const CreateLevelTwoAccount = () => {
             error.response?.data?.error || error.response?.data?.message || error.message
           );
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        });
     },
   });
 
@@ -193,7 +201,7 @@ const CreateLevelTwoAccount = () => {
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {registrationID && (
-        <InlineNotification type="success" info={`your yaya account number is ${registrationID}`} />
+        <InlineNotification type="success" info={`account name: ${registrationID}`} />
       )}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
@@ -385,7 +393,7 @@ const CreateLevelTwoAccount = () => {
           <div>
             <SelectElement
               title="Country"
-              options={['Ethiopia']}
+              options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
               onSelect={(value) => formik.setFieldValue('country', value)}
             />
             <span className="pl-2 text-sm text-red-600">
@@ -396,7 +404,11 @@ const CreateLevelTwoAccount = () => {
           <div>
             <SelectElement
               title="Region"
-              options={formik.values.country === 'Ethiopia' ? EthiopianRegions : []}
+              options={
+                regionsList
+                  ? Object.entries(regionsList).map(([code, value]) => ({ code, value }))
+                  : []
+              }
               onSelect={(value) => formik.setFieldValue('region', value)}
             />
             <span className="pl-2 text-sm text-red-600">

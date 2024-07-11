@@ -3,9 +3,10 @@ import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
-import { EthiopianRegions } from '../../CONSTANTS';
 import SelectElement from '../../components/SelectElement';
 import { resizeImage } from '../../utils/resizeImage';
+import { IoMdBusiness } from 'react-icons/io';
+import { useGetData } from '../../hooks/useSWR';
 
 const CreateBusinessAccount = () => {
   const [registrationID, setRegistrationID] = useState('');
@@ -15,6 +16,9 @@ const CreateBusinessAccount = () => {
   const [accountNameLookup, setAccountNameLookup] = useState('');
   const [emailLookup, setEmailLookup] = useState('');
   const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
+
+  const { data: regionsList } = useGetData('/lookup/region');
+  const { data: businessCategoryList } = useGetData('/lookup/business-categories');
 
   const handlePhoneNumberLookup = (number: string) => {
     if (number.length < 9) return;
@@ -99,6 +103,7 @@ const CreateBusinessAccount = () => {
       id_back_base64: '',
       tin_doc_base64: '',
       license_doc_base64: '',
+      business_category: '',
     },
 
     validate: (values) => {
@@ -163,6 +168,7 @@ const CreateBusinessAccount = () => {
       id_back_base64: Yup.string().required('required'),
       tin_doc_base64: Yup.string().required('required'),
       license_doc_base64: Yup.string().required('required'),
+      business_category: Yup.string().required('specify your business type'),
     }),
 
     onSubmit: (values) => {
@@ -190,7 +196,13 @@ const CreateBusinessAccount = () => {
             error.response?.data?.error || error.response?.data?.message || error.message
           );
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        });
     },
   });
 
@@ -201,7 +213,7 @@ const CreateBusinessAccount = () => {
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {registrationID && (
-        <InlineNotification type="success" info={`your yaya account number is ${registrationID}`} />
+        <InlineNotification type="success" info={`account name: ${registrationID}`} />
       )}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
@@ -372,11 +384,11 @@ const CreateBusinessAccount = () => {
                 <input
                   id="male"
                   type="radio"
-                  value="male"
+                  value="MALE"
                   name="gender"
                   className="w-4 h-4 cursor-pointer"
                   onChange={formik.handleChange}
-                  checked={formik.values.gender === 'male'}
+                  checked={formik.values.gender === 'MALE'}
                 />
                 <label
                   htmlFor="male"
@@ -389,11 +401,11 @@ const CreateBusinessAccount = () => {
                 <input
                   id="female"
                   type="radio"
-                  value="female"
+                  value="FEMALE"
                   name="gender"
                   className="w-4 h-4 cursor-pointer"
                   onChange={formik.handleChange}
-                  checked={formik.values.gender === 'female'}
+                  checked={formik.values.gender === 'FEMALE'}
                 />
                 <label
                   htmlFor="female"
@@ -434,7 +446,7 @@ const CreateBusinessAccount = () => {
           <div>
             <SelectElement
               title="Country"
-              options={['Ethiopia']}
+              options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
               onSelect={(value) => formik.setFieldValue('country', value)}
             />
             <span className="pl-2 text-sm text-red-600">
@@ -445,7 +457,11 @@ const CreateBusinessAccount = () => {
           <div>
             <SelectElement
               title="Region"
-              options={formik.values.country === 'Ethiopia' ? EthiopianRegions : []}
+              options={
+                regionsList
+                  ? Object.entries(regionsList).map(([code, value]) => ({ code, value }))
+                  : []
+              }
               onSelect={(value) => formik.setFieldValue('region', value)}
             />
             <span className="pl-2 text-sm text-red-600">
@@ -643,6 +659,28 @@ const CreateBusinessAccount = () => {
 
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.license_doc_base64 && formik.errors.license_doc_base64}
+            </span>
+          </div>
+
+          <div className="relative">
+            <label htmlFor="Business Type" className="block mb-2 text-sm font-medium text-gray-900">
+              &nbsp;
+            </label>
+
+            <span
+              className="absolute top-1 left-0 flex z-10 justify-center items-center h-full w-8 rounded-r text-gray-700 text-lg"
+              style={{ pointerEvents: 'none' }}
+            >
+              <IoMdBusiness />
+            </span>
+
+            <SelectElement
+              title="Business Type"
+              options={businessCategoryList}
+              onSelect={(value) => formik.setFieldValue('business_category', value)}
+            />
+            <span className="pl-2 text-sm text-red-600">
+              {formik.touched.business_category && formik.errors.business_category}
             </span>
           </div>
         </div>
