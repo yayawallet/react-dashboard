@@ -3,6 +3,7 @@ import { useGetData } from '../hooks/useSWR';
 
 const Profile = () => {
   const { data: profile } = useGetData('/user/profile');
+  const { data: balance } = useGetData('/user/balance');
 
   return (
     <div className="page-container">
@@ -11,6 +12,12 @@ const Profile = () => {
           <div className="">
             <h3 className="text-lg leading-6 font-medium text-gray-900">{profile?.name}</h3>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">{'@' + profile?.account}</p>
+
+            <h4 className="mt-8 text-lg">
+              Balance: {balance ? Number(balance)?.toFixed(2) : ' ~ '}
+              &nbsp;
+              <span className="text-gray-500">ETB</span>
+            </h4>
           </div>
 
           <dl className="">
