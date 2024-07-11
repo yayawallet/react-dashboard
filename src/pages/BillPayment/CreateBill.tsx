@@ -6,6 +6,7 @@ import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
 import createBillTemplate from '../../assets/bulk-import-templates/create_bill_template.xlsx';
+import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
 
 const CreateBill = () => {
   const [billPaymentID, setBillPaymentID] = useState('');
@@ -161,10 +162,15 @@ const CreateBill = () => {
                 Customer yaya account
                 <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
+
+              <div className="relative">
+                <InputUserIconPlaceholder />
+              </div>
+
               <input
                 type="text"
                 id="customer_yaya_account"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="customer_yaya_account"
                 autoComplete="off"
                 disabled={isLoading}
