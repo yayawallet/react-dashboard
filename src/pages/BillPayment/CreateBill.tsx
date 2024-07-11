@@ -7,6 +7,7 @@ import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
 import createBillTemplate from '../../assets/bulk-import-templates/create_bill_template.xlsx';
 import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
+import { useGetData } from '../../hooks/useSWR';
 
 const CreateBill = () => {
   const [billPaymentID, setBillPaymentID] = useState('');
@@ -16,13 +17,15 @@ const CreateBill = () => {
   const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
+  const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
+
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
   const handleOnSuccess = (value: string) => setSuccessMessage(value);
 
   const formik = useFormik({
     initialValues: {
-      client_yaya_account: 'tewobstatewo',
+      client_yaya_account: ownAccount || '',
       customer_yaya_account: '',
       customer_id: '',
       bill_id: '',
@@ -36,6 +39,8 @@ const CreateBill = () => {
       phone: '',
       email: '',
     },
+
+    enableReinitialize: true,
 
     validationSchema: Yup.object({
       customer_yaya_account: Yup.string().max(12, 'Must be 12 characters'),
