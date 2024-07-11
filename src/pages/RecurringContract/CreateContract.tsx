@@ -47,13 +47,20 @@ const CreateContract = () => {
         .post('/recurring-contract/create', values)
         .then((res) => {
           setContractID(res.data.contract_id);
-          setLoading(false);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
-          setErrorMessage(error.response?.data.error || error.message), setLoading(false);
+          setErrorMessage(error.response?.data.error || error.message);
+        })
+        .finally(() => {
+          setLoading(false);
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
         });
     },
   });

@@ -70,6 +70,11 @@ const Create = () => {
         .finally(() => {
           setLoading(false);
           setSelectedUser('');
+
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
         });
     },
   });
@@ -185,7 +190,12 @@ const Create = () => {
               <div>
                 <SelectElement
                   title="Recurring type"
-                  options={['once', 'daily', 'weekly', 'monthly']}
+                  options={[
+                    { code: 'once', value: 'Once' },
+                    { code: 'daily', value: 'Daily' },
+                    { code: 'weekly', value: 'Weekly' },
+                    { code: 'monthly', value: 'Monthly' },
+                  ]}
                   onSelect={(value) => formik.setFieldValue('recurring', value)}
                 />
                 <span className="text-sm text-red-600">

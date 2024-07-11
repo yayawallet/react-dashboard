@@ -90,7 +90,13 @@ const CreateBill = () => {
             error.response?.data?.error || error.response?.data?.message || error.message
           );
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        });
     },
   });
 
