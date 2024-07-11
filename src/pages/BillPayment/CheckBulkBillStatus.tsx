@@ -6,11 +6,9 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
-import BulkBillDetail from './BulkBillDetail';
 
 const CheckBulkBillStatus = () => {
   const [copiedID, setCopiedID] = useState('');
-  const [failedRecords, setFailedRecords] = useState<Object[]>([]);
 
   const { isLoading, error, data: bulkImportList } = useGetData('/bulkimport/list');
 
@@ -36,15 +34,10 @@ const CheckBulkBillStatus = () => {
             <EmptyList />
           ) : (
             <div className="overflow-auto">
-              <div className={`${failedRecords.length === 0 ? 'hidden' : ''}`}>
-                <BulkBillDetail failed={failedRecords} onHide={() => setFailedRecords([])} />
-              </div>
-
               <table className="w-full">
                 <thead className="">
                   <tr className="bg-violet-500 text-gray-50">
                     <th className="text-left px-4 py-3 font-medium">ID</th>
-                    <th className="text-left px-4 py-3 font-medium"></th>
                     <th className="text-left px-4 py-3 font-medium text-sm">
                       Submited
                       <br />
@@ -73,23 +66,14 @@ const CheckBulkBillStatus = () => {
                         className="relative border-b border-slate-200 p-3 cursor-pointer"
                         onClick={() => copyTransactionID(list.id)}
                       >
-                        {`${list.id.slice(0, 6)}...${list.id.slice(-2)}`}
+                        {`${list.id.slice(0, 16)}...${list.id.slice(-4)}`}
                         <span
                           className={`${copiedID === list.id ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                         >
                           ID Copied
                         </span>
                       </td>
-                      <td className="relative border-b border-slate-200 p-3">
-                        <button
-                          type="button"
-                          disabled={list.failed.length === 0}
-                          className="pt-0.5 pb-1 px-3 focus:outline-none bg-white rounded border border-violet-200 hover:bg-slate-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-slate-200"
-                          onClick={() => setFailedRecords(list.failed)}
-                        >
-                          Detail
-                        </button>
-                      </td>
+
                       <td className="text-gray-600 font-semibold border-b border-slate-200 p-3 pl-6">
                         {list.submitted_records}
                       </td>
