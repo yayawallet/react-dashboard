@@ -8,6 +8,7 @@ import { BillDetailType } from '../../models';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import { useParams } from 'react-router-dom';
+import { useGetData } from '../../hooks/useSWR';
 
 const updateBill = () => {
   const [billPaymentID, setBillPaymentID] = useState('');
@@ -17,6 +18,8 @@ const updateBill = () => {
   const [foundBill, setFoundBill] = useState<BillDetailType | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
   const { bill_id: params_bill_id } = useParams();
 
@@ -56,7 +59,7 @@ const updateBill = () => {
 
   const formik = useFormik({
     initialValues: {
-      client_yaya_account: 'tewobstatewo',
+      client_yaya_account: ownAccount || '',
       customer_yaya_account: '',
       customer_id: foundBill?.customer_id || '',
       bill_id: foundBill?.bill_id || '',
