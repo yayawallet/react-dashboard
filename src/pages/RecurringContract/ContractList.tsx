@@ -51,7 +51,7 @@ const ContractList = () => {
       .get(`/recurring-contract/deactivate/${selectedContract?.id}`)
       .then(() => {
         setSuccessMessage('Contract Deactivated Successfully');
-        // setContractList((prev) => prev.filter((l) => l.id != selectedContract?.id));
+        mutate();
         setIsProcessing(false);
         setOpenInfoCard(true);
       })
