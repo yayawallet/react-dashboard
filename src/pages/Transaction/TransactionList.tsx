@@ -64,8 +64,6 @@ const TransactionList = () => {
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4">
-            <h3 className="text-lg font-medium">Transactions</h3>
-
             <div className="w-64">
               <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
             </div>

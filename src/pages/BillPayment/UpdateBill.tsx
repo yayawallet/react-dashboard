@@ -201,7 +201,6 @@ const updateBill = () => {
 
       <form
         className={`${foundBill ? '' : 'hidden'} max-w-[var(--form-width)] border border-t-0 p-8 pt-6 rounded-b-xl mx-auto mb-20`}
-        // onSubmit={formik.handleSubmit}
         onSubmit={(e) => {
           e.preventDefault();
           setOpenModal(true);
