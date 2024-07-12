@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { authAxios } from '../api/axios';
 import avater from '../assets/avater.svg';
 import { User } from '../models';
+import { useGetData } from '../hooks/useSWR';
 
 interface Props {
   query: string;
@@ -13,6 +14,8 @@ const SearchUserInline = ({ query, onSelecteUser }: Props) => {
   const [selectedUser, setSelectedUser] = useState('');
   const [userNotFound, setUserNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
   useEffect(() => {
     if (query.length === 12) return; // username is 12 characters long
@@ -33,7 +36,7 @@ const SearchUserInline = ({ query, onSelecteUser }: Props) => {
         query: query,
       })
       .then((res) => {
-        setUsersList(res.data.slice(0, 5));
+        setUsersList(res.data.slice(0, 5).filter((user: User) => user.account !== ownAccount));
 
         if (res.data.length === 0) {
           setUserNotFound(true);
