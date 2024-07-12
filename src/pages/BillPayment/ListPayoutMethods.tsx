@@ -7,22 +7,24 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
+import { authAxios } from '../../api/axios';
+import ConfirmationModal from '../../components/modals/ConfirmationModal';
+import ProcessingModal from '../../components/modals/ProcessingModal';
 
 const ListPayoutMethods = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [selectedID, setSelectedID] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const {
     error,
     isLoading,
     mutate,
     data: { data: payoutMethodsList, lastPage: pageCount, total: totalPayoutMethods } = {},
-  } = usePostData(
-    `/payout-method/list
-?p=${currentPage}`,
-    { client_yaya_account: 'tewobstatewo' }
-  );
+  } = usePostData(`/payout-method/list?p=${currentPage}`, { client_yaya_account: 'tewobstatewo' });
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -35,6 +37,18 @@ const ListPayoutMethods = () => {
     setCurrentPage(page);
   };
 
+  const handleDeletePayout = async (confirm: boolean) => {
+    setOpenModal(false);
+    if (!confirm) return;
+
+    setIsProcessing(true);
+
+    await authAxios
+      .delete(`/payout-method/delete/${selectedID}`)
+      .then(() => mutate())
+      .finally(() => setIsProcessing(false));
+  };
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await mutate();
@@ -43,6 +57,13 @@ const ListPayoutMethods = () => {
 
   return (
     <div className="table-container">
+      <ConfirmationModal
+        header="Are you sure you want to delete?"
+        openModal={openModal}
+        onConfirm={handleDeletePayout}
+      />
+      <ProcessingModal isProcessing={isProcessing} />
+
       {error ? (
         <Error />
       ) : isLoading && currentPage === 1 ? (
@@ -133,6 +154,10 @@ const ListPayoutMethods = () => {
                           <button
                             type="button"
                             className="pt-0.5 pb-1 px-3 focus:outline-none text-white bg-red-500 rounded hover:bg-red-600 focus:z-10 focus:ring-4 focus:ring-red-200"
+                            onClick={() => {
+                              setSelectedID(payout.id);
+                              setOpenModal(true);
+                            }}
                           >
                             Delete
                           </button>
