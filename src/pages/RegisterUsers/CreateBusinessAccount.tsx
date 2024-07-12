@@ -181,7 +181,7 @@ const CreateBusinessAccount = () => {
       setErrorMessage('');
 
       authAxios
-        .post('/user/register', {
+        .post('/user/register-business', {
           ...values,
           date_of_birth: new Date(values.date_of_birth).getTime(),
         })
