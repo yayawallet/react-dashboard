@@ -24,7 +24,7 @@ const ListPayoutMethods = () => {
     isLoading,
     mutate,
     data: { data: payoutMethodsList, lastPage: pageCount, total: totalPayoutMethods } = {},
-  } = usePostData(`/payout-method/list?p=${currentPage}`, { client_yaya_account: 'tewobstatewo' });
+  } = usePostData(`/payout-method/list?p=${currentPage}`, {});
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
