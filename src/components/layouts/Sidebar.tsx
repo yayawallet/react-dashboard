@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { UserProfile } from '../../models';
 import yayawalletLogo from '../../assets/yayawallet-brand.svg';
 import avater from '../../assets/avater.svg';
 import { useGetData } from '../../hooks/useSWR';

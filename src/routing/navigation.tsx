@@ -141,13 +141,13 @@ export const sidebarNavs = [
       },
       {
         title: 'Create Payout Method',
-        path: 'payout-method/createt',
+        path: 'payout-methods/create',
         element: <CreatePayoutMethod />,
         accessRoles: ['admin', 'agent'],
       },
       {
         title: 'List Payout Methods',
-        path: 'payout-method/list',
+        path: 'payout-methods',
         element: <ListPayoutMethods />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },

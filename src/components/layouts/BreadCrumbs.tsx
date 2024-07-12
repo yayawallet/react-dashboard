@@ -8,9 +8,7 @@ const BreadCrumbs = () => {
 
   const sidebarPaths = sidebarNavs
     .map((nav) =>
-      nav.children
-        ? [nav.path, ...nav.children.map((subNav) => subNav.path.split('/'))].flat()
-        : nav.path
+      nav.children ? [nav.path, ...nav.children.map((subNav) => subNav.path)] : nav.path
     )
     .flat();
 
