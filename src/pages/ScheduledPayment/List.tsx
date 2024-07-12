@@ -37,7 +37,7 @@ const List = () => {
       .get(`/scheduled-payment/archive/${selectedSchedule?.id}`)
       .then(() => {
         setSuccessMessage('Scheduled Payment Deleted Successfully');
-        // setScheduledPaymentList((prev) => prev.filter((l) => l.id != selectedSchedule?.id));
+        mutate();
         setIsProcessing(false);
         setOpenInfoCard(true);
       })

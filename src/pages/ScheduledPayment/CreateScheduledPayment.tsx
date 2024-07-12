@@ -172,6 +172,7 @@ const Create = () => {
                 </label>
                 <input
                   type="number"
+                  step="any"
                   id="amount"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="Amount"
@@ -244,7 +245,7 @@ const Create = () => {
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-                {isLoading ? 'Please wait...' : 'Create Bill'}
+                {isLoading ? 'Please wait...' : 'Schedule Payment'}
               </span>
             </button>
           </form>

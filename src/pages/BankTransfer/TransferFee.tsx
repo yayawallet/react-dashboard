@@ -50,8 +50,8 @@ const TransferFee = () => {
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {transferFee && (
-        <div className="sm:ml-10 md:ml-20 lg:ml-28 mb-10">
-          <p className="text-lg">
+        <div className="max-w-[var(--form-width-small)] mx-auto sm:ml-10 md:ml-20 lg:ml-28">
+          <p className="text-lg text-center md:mr-20">
             Transfer Fee is
             <span className="text-2xl px-2">{transferFee.fee.toFixed(2)}</span>
             <span className="text-xl text-gray-400 font-light">{transferFee.currency}</span>
@@ -61,11 +61,11 @@ const TransferFee = () => {
 
       <div className="flex justify-center lg:mr-32 mt-6">
         <form
-          className="max-w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
           <div className="grid md:grid-cols-5 md:gap-6 mb-6">
-            <div className="col-span-3">
+            <div className="md:col-span-3 mb-6">
               <InstitutionLIst
                 onSelect={(value) => formik.setFieldValue('institution_code', value)}
               />
@@ -74,9 +74,10 @@ const TransferFee = () => {
               </span>
             </div>
 
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <input
                 type="number"
+                step="any"
                 id="amount"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="Amount"

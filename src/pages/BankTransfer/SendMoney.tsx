@@ -61,7 +61,7 @@ const CreateTransfer = () => {
 
       <div className="flex justify-center lg:mr-32 mt-6">
         <form
-          className="max-w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
           <div className="grid md:grid-cols-2 md:gap-6 mb-6">
@@ -99,6 +99,7 @@ const CreateTransfer = () => {
               </label>
               <input
                 type="number"
+                step="any"
                 id="amount"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="amount"

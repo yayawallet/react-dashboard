@@ -4,14 +4,18 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import InlineNotification from '../../components/InlineNotification';
-import createRequestPaymentTemplate from '../../assets/bulk-import-templates/create_request-payment_template.xlsx';
+import createPayoutTemplate from '../../assets/bulk-import-templates/create_payout_template.xlsx';
+import { useGetData } from '../../hooks/useSWR';
+import InstitutionLIst from '../../components/InstitutionLIst';
 
-const RequestPayment = () => {
-  const [requestPaymentID, setRequestPaymentID] = useState('');
+const CreatePayoutMethod = () => {
+  const [payoutMethodID, setPayoutMethodID] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
+
+  const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
@@ -19,66 +23,68 @@ const RequestPayment = () => {
 
   const formik = useFormik({
     initialValues: {
-      contract_number: '',
-      amount: '',
-      currency: 'ETB',
-      cause: '',
-      notification_url: '',
+      client_yaya_account: ownAccount || '',
+      cluster: '',
+      bill_code: '',
+      institution: '',
+      account_number: '',
     },
 
+    enableReinitialize: true,
+
     validationSchema: Yup.object({
-      contract_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
-      cause: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
-      notification_url: Yup.string().max(50, 'Must be 50 characters or less').url('Invalid url'),
+      cluster: Yup.string().required('cluster is required'),
+      bill_code: Yup.string().required('bill_code is required'),
+      institution: Yup.string().required('institution is required'),
+      account_number: Yup.string().required('account_number is required'),
     }),
 
     onSubmit: (values) => {
       setLoading(true);
 
       // Clear existing values
-      setRequestPaymentID('');
+      setPayoutMethodID('');
       setSuccessMessage('');
       setErrorMessage('');
 
       authAxios
-        .post('/recurring-contract/request-payment', values)
+        .post('/payout-method/create', values)
         .then((res) => {
-          setRequestPaymentID(res.data.payment_request_id);
+          setPayoutMethodID(res.data.id);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
           setErrorMessage(
-            error.response.data?.message || error.response.data?.error || error.message
+            error.response?.data?.error || error.response?.data?.message || error.message
           );
         })
         .finally(() => {
           setLoading(false);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
         });
     },
   });
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Request Payment</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Create Payout Method</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {requestPaymentID && (
+      {payoutMethodID && (
         <InlineNotification
           type="success"
-          info={`${successMessage ? successMessage : `Payment ID: ${requestPaymentID}`}`}
+          info={`${successMessage ? successMessage : `ID: ${payoutMethodID}`}`}
         />
       )}
 
       {successMessage && (
-        <InlineNotification
-          type="success"
-          customType="Uploaded"
-          info={`${successMessage ? successMessage : `Payment ID: ${requestPaymentID}`}`}
-        />
+        <InlineNotification type="success" customType="Uploaded" info={successMessage} />
       )}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
@@ -96,7 +102,7 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('single')}
             />
             <label htmlFor="oneInput" className="cursor-pointer">
-              Single Contract
+              Single Payout
             </label>
           </button>
 
@@ -113,7 +119,7 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('multiple')}
             />
             <label htmlFor="multipleInput" className="cursor-pointer">
-              Multiple Contracts
+              Multiple Payouts
             </label>
           </button>
         </div>
@@ -122,88 +128,66 @@ const RequestPayment = () => {
       {inputFormType === 'single' ? (
         <div className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20">
           <form className="max-w-[var(--form-width-small)] mx-auto" onSubmit={formik.handleSubmit}>
-            <div className="grid gap-6 mb-6 md:grid-cols-5">
-              <div className="md:col-span-3">
-                <label
-                  htmlFor="contract_number"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Contract number
+            <div className="grid gap-8 mb-8 md:grid-cols-2">
+              <div>
+                <label htmlFor="cluster" className="block mb-2 text-sm font-medium text-gray-900">
+                  Cluster
                 </label>
                 <input
                   type="text"
-                  id="contract_number"
+                  id="cluster"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="contract_number"
+                  placeholder="cluster"
                   disabled={isLoading}
                   onChange={formik.handleChange}
-                  value={formik.values.contract_number}
+                  value={formik.values.cluster}
                 />
                 <span className="text-sm text-red-600">
-                  {formik.touched.contract_number && formik.errors.contract_number}
+                  {formik.touched.cluster && formik.errors.cluster}
                 </span>
               </div>
 
-              <div className="md:col-span-2">
-                <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
-                  Amount
+              <div>
+                <label htmlFor="bill_code" className="block mb-2 text-sm font-medium text-gray-900">
+                  Bill code
                 </label>
                 <input
-                  type="number"
-                  step="any"
-                  id="amount"
+                  type="text"
+                  id="bill_code"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="amount"
+                  placeholder="bill_code"
                   disabled={isLoading}
-                  autoComplete="off"
                   onChange={formik.handleChange}
-                  value={formik.values.amount}
+                  value={formik.values.bill_code}
                 />
                 <span className="text-sm text-red-600">
-                  {formik.touched.amount && formik.errors.amount}
+                  {formik.touched.bill_code && formik.errors.bill_code}
                 </span>
               </div>
             </div>
 
-            <div className="grid gap-6 mb-6 md:grid-cols-5">
-              <div className="md:col-span-3">
-                <label htmlFor="cause" className="block mb-2 text-sm font-medium text-gray-900">
-                  Reason
-                </label>
-                <input
-                  type="text"
-                  id="cause"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="cause"
-                  autoComplete="off"
-                  disabled={isLoading}
-                  onChange={formik.handleChange}
-                  value={formik.values.cause}
-                />
+            <div className="grid gap-6 mb-6 md:grid-cols-2">
+              <div>
+                <InstitutionLIst onSelect={(value) => formik.setFieldValue('institution', value)} />
                 <span className="text-sm text-red-600">
-                  {formik.touched.cause && formik.errors.cause}
+                  {formik.touched.institution && formik.errors.institution}
                 </span>
               </div>
 
-              <div className="md:col-span-2">
-                <label
-                  htmlFor="notification_url"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Notification URL
-                  <span className="font-normal text-gray-400">&nbsp;(optional)</span>
-                </label>
+              <div>
                 <input
                   type="text"
-                  id="notification_url"
+                  id="account_number"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="notification_url"
+                  placeholder="Account Number"
+                  autoComplete="off"
                   disabled={isLoading}
                   onChange={formik.handleChange}
-                  value={formik.values.notification_url}
+                  value={formik.values.account_number}
                 />
+
                 <span className="text-sm text-red-600">
-                  {formik.touched.notification_url && formik.errors.notification_url}
+                  {formik.touched.account_number && formik.errors.account_number}
                 </span>
               </div>
             </div>
@@ -214,7 +198,7 @@ const RequestPayment = () => {
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-                {isLoading ? 'Please wait...' : 'Request Payment'}
+                {isLoading ? 'Please wait...' : 'Create Payout'}
               </span>
             </button>
           </form>
@@ -222,8 +206,8 @@ const RequestPayment = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="recurring-contract/bulk-import-recurring-payment-request"
-          templateFile={createRequestPaymentTemplate}
+          apiEndpoint="bulkimport/bills"
+          templateFile={createPayoutTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
@@ -233,4 +217,4 @@ const RequestPayment = () => {
   );
 };
 
-export default RequestPayment;
+export default CreatePayoutMethod;

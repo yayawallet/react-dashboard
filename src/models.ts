@@ -66,7 +66,7 @@ export interface Transfer {
   };
 }
 
-export interface Transaction {
+export interface TransactionType {
   id: string;
   sender: {
     name: string;
@@ -256,5 +256,22 @@ export interface BulkBillStatus {
   failed: Object[];
   failed_records: number;
   status: string;
+  createdAt: Date;
+}
+
+export interface PayoutMethodType {
+  id: string;
+  client_yaya_account: {
+    name: string;
+    account: string;
+  };
+  cluster: string;
+  bill_code: string;
+  institution: {
+    institution_id: string;
+    code: string;
+    name: string;
+  };
+  account_number: string;
   createdAt: Date;
 }

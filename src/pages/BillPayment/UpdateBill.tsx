@@ -201,7 +201,6 @@ const updateBill = () => {
 
       <form
         className={`${foundBill ? '' : 'hidden'} max-w-[var(--form-width)] border border-t-0 p-8 pt-6 rounded-b-xl mx-auto mb-20`}
-        // onSubmit={formik.handleSubmit}
         onSubmit={(e) => {
           e.preventDefault();
           setOpenModal(true);
@@ -262,6 +261,7 @@ const updateBill = () => {
             </label>
             <input
               type="number"
+              step="any"
               id="amount"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Amount"

@@ -101,6 +101,8 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
           </div>
           <input
             type="number"
+            min="5"
+            step="1"
             id="amount"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-12 p-2.5 outline-none"
             placeholder="Enter Amount"
@@ -111,7 +113,9 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
               setSelectedAmount(Number(e.currentTarget.value));
               Number(e.currentTarget.value) < 5
                 ? setErrorMessge('Amount cannot be less than 5')
-                : setErrorMessge('');
+                : Number(e.currentTarget.value) > Math.floor(Number(e.currentTarget.value))
+                  ? setErrorMessge('Invalid amount')
+                  : setErrorMessge('');
             }}
           />
         </div>

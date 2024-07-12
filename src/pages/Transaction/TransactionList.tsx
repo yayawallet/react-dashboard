@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Pagination from '../../components/Pagination';
 import SearchBar from '../../components/SearchBar';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
-import { Transaction } from '../../models';
+import { TransactionType } from '../../models';
 import { useGetData, usePostData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
@@ -11,9 +11,6 @@ import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
 
 const TransactionList = () => {
-  const [transactionList, setTransactionList] = useState<Transaction[]>([]);
-  const [prevList, setPrevList] = useState(false);
-  const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
@@ -25,28 +22,17 @@ const TransactionList = () => {
   const {
     error,
     isLoading,
-    data: transactionData,
+    data: { data: transactionList, lastPage: pageCount, total: totalTransactions } = {},
     mutate,
   } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
 
-  const { data: searchResult } = usePostData(['/transaction/search', searchQuery], {
+  const {
+    error: searchError,
+    isLoading: isSearching,
+    data: { data: searchResult, total: totalSearchResult } = {},
+  } = usePostData(['/transaction/search', searchQuery], {
     query: searchQuery,
   });
-
-  useEffect(() => {
-    if (transactionData) {
-      setTransactionList(transactionData.data);
-      setPageCount(transactionData.lastPage);
-      setPrevList(true);
-    }
-  }, [transactionData]);
-
-  useEffect(() => {
-    if (searchResult && searchQuery !== null) {
-      setTransactionList(searchResult.data);
-      setPageCount(searchResult.lastPage);
-    }
-  }, [searchResult]);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -71,15 +57,13 @@ const TransactionList = () => {
 
   return (
     <div className="table-container">
-      {error ? (
+      {error || searchError ? (
         <Error />
-      ) : isLoading && !prevList ? (
+      ) : isLoading && currentPage === 1 ? (
         <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4">
-            <h3 className="text-lg font-medium">Transactions</h3>
-
             <div className="w-64">
               <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
             </div>
@@ -89,7 +73,7 @@ const TransactionList = () => {
             </div>
           </div>
 
-          {transactionList?.length === 0 ? (
+          {(searchQuery && searchResult?.length === 0) || transactionList?.length === 0 ? (
             <EmptyList />
           ) : (
             <div className="relative">
@@ -126,7 +110,7 @@ const TransactionList = () => {
                   </thead>
 
                   <tbody>
-                    {transactionList.map((t) => (
+                    {(searchQuery ? searchResult : transactionList).map((t: TransactionType) => (
                       <tr key={t?.id} className="hover:bg-slate-100 text-nowrap">
                         <td
                           title={t?.id}
@@ -182,8 +166,24 @@ const TransactionList = () => {
               {pageCount > 1 && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
                   <p className="text-[15px] text-slate-700 py-4">
-                    Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                    {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
+                    {searchQuery ? (
+                      <span>
+                        Search Result{' '}
+                        <span className="font-semibold">
+                          {isSearching ? '...' : totalSearchResult}
+                        </span>
+                      </span>
+                    ) : (
+                      <span>
+                        Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
+                        {isLoading
+                          ? '...'
+                          : currentPage === pageCount
+                            ? totalTransactions
+                            : currentPage * 15}{' '}
+                        of {totalTransactions} entries
+                      </span>
+                    )}
                   </p>
                   <div className={`${searchQuery ? 'hidden' : ''}`}>
                     <Pagination
