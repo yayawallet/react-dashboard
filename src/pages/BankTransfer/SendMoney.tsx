@@ -61,7 +61,7 @@ const CreateTransfer = () => {
 
       <div className="flex justify-center lg:mr-32 mt-6">
         <form
-          className="max-w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
+          className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
           <div className="grid md:grid-cols-2 md:gap-6 mb-6">
