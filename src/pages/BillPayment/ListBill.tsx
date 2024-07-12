@@ -21,7 +21,7 @@ const ListBill = () => {
     error,
     isLoading,
     mutate,
-    data: { data: billList, lastPage: pageCount } = {},
+    data: { data: billList, lastPage: pageCount, total: totalBills } = {},
   } = usePostData(`/bill/list?p=${currentPage}`, {});
 
   const copyTransactionID = (id: string) => {
@@ -168,8 +168,17 @@ const ListBill = () => {
               {pageCount > 1 && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
                   <p className="text-[15px] text-slate-700 py-4">
-                    Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                    {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
+                    {
+                      <span>
+                        Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
+                        {isLoading
+                          ? '...'
+                          : currentPage === pageCount
+                            ? totalBills
+                            : currentPage * 15}{' '}
+                        of {totalBills} entries
+                      </span>
+                    }
                   </p>
                   <Pagination
                     currentPage={currentPage}

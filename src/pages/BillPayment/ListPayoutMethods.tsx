@@ -17,7 +17,7 @@ const ListPayoutMethods = () => {
     error,
     isLoading,
     mutate,
-    data: { data: payoutMethodsList, lastPage: pageCount } = {},
+    data: { data: payoutMethodsList, lastPage: pageCount, total: totalPayoutMethods } = {},
   } = usePostData(
     `/payout-method/list
 ?p=${currentPage}`,
@@ -145,8 +145,15 @@ const ListPayoutMethods = () => {
               {pageCount > 1 && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
                   <p className="text-[15px] text-slate-700 py-4">
-                    Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                    {isLoading ? '...' : currentPage * 15} of {pageCount * 15} entries
+                    <span>
+                      Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
+                      {isLoading
+                        ? '...'
+                        : currentPage === pageCount
+                          ? totalPayoutMethods
+                          : currentPage * 15}{' '}
+                      of {totalPayoutMethods} entries
+                    </span>
                   </p>
                   <Pagination
                     currentPage={currentPage}

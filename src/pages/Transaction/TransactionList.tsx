@@ -22,7 +22,7 @@ const TransactionList = () => {
   const {
     error,
     isLoading,
-    data: { data: transactionList, lastPage: pageCount, total: totalTransaction } = {},
+    data: { data: transactionList, lastPage: pageCount, total: totalTransactions } = {},
     mutate,
   } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
 
@@ -181,9 +181,9 @@ const TransactionList = () => {
                         {isLoading
                           ? '...'
                           : currentPage === pageCount
-                            ? totalTransaction
+                            ? totalTransactions
                             : currentPage * 15}{' '}
-                        of {totalTransaction} entries
+                        of {totalTransactions} entries
                       </span>
                     )}
                   </p>
