@@ -103,7 +103,7 @@ const CreateBusinessAccount = () => {
       id_back_base64: '',
       tin_doc_base64: '',
       license_doc_base64: '',
-      business_category: '',
+      mcc: '',
     },
 
     validate: (values) => {
@@ -168,7 +168,7 @@ const CreateBusinessAccount = () => {
       id_back_base64: Yup.string().required('required'),
       tin_doc_base64: Yup.string().required('required'),
       license_doc_base64: Yup.string().required('required'),
-      business_category: Yup.string().required('specify your business type'),
+      mcc: Yup.string().required('specify your business type'),
     }),
 
     onSubmit: (values) => {
@@ -677,10 +677,10 @@ const CreateBusinessAccount = () => {
             <SelectElement
               title="Business Type"
               options={businessCategoryList}
-              onSelect={(value) => formik.setFieldValue('business_category', value)}
+              onSelect={(value) => formik.setFieldValue('mcc', value)}
             />
             <span className="pl-2 text-sm text-red-600">
-              {formik.touched.business_category && formik.errors.business_category}
+              {formik.touched.mcc && formik.errors.mcc}
             </span>
           </div>
         </div>
