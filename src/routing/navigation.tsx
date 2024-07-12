@@ -13,6 +13,8 @@ import CreateBill from '../pages/BillPayment/CreateBill';
 import BillList from '../pages/BillPayment/ListBill';
 import UpdateBill from '../pages/BillPayment/UpdateBill';
 import CheckBulkBillStatus from '../pages/BillPayment/CheckBulkBillStatus';
+import CreatePayoutMethod from '../pages/BillPayment/CreatePayoutMethod';
+import ListPayoutMethods from '../pages/BillPayment/ListPayoutMethods';
 
 import RegisterUsers from '../pages/RegisterUsers/Index';
 import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount';
@@ -135,6 +137,18 @@ export const sidebarNavs = [
         title: 'Check Bulk Status',
         path: 'bulkimport/list',
         element: <CheckBulkBillStatus />,
+        accessRoles: ['admin', 'agent', 'clerk'],
+      },
+      {
+        title: 'Create Payout Method',
+        path: 'payout-method/createt',
+        element: <CreatePayoutMethod />,
+        accessRoles: ['admin', 'agent'],
+      },
+      {
+        title: 'List Payout Methods',
+        path: 'payout-method/list',
+        element: <ListPayoutMethods />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
