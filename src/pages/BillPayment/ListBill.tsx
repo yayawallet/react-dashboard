@@ -11,11 +11,8 @@ import RefreshButton from '../../components/ui/RefreshButton';
 import { useNavigate } from 'react-router-dom';
 
 const ListBill = () => {
-  const [prevList, setPrevList] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
-  const [filterByStatus, setFilterByStatus] = useState('');
-  const [filteredBillList, setFilteredBillList] = useState<BillListType[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const navigate = useNavigate();
@@ -38,16 +35,6 @@ const ListBill = () => {
     setCurrentPage(page);
   };
 
-  const handleFilterBill = (status: string) => {
-    setFilterByStatus((prev) => (prev === status ? '' : status));
-
-    setFilteredBillList(
-      billList?.filter((item: BillListType) =>
-        status ? item.status === status.toUpperCase() : true
-      )
-    );
-  };
-
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await mutate();
@@ -58,33 +45,19 @@ const ListBill = () => {
     <div className="table-container">
       {error ? (
         <Error />
-      ) : isLoading && !prevList ? (
+      ) : isLoading && currentPage === 1 ? (
         <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4 text-[15px]">
-            <div>
-              Filter by:
-              <button
-                className={`mx-3 border bg-gray-50 text-gray-600 px-4 py-1 rounded cursor-pointer ${filterByStatus === 'paid' ? 'bg-violet-600 border-violet-600 text-white' : ''}`}
-                onClick={() => handleFilterBill('paid')}
-              >
-                Paid
-              </button>
-              <button
-                className={`border bg-gray-50 text-gray-600 px-4 py-1 rounded cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 border-violet-600 text-white' : ''}`}
-                onClick={() => handleFilterBill('pending')}
-              >
-                Pending
-              </button>
-            </div>
+            <h3 className="text-lg font-medium">Bill List</h3>
 
             <div onClick={handleRefresh}>
               <RefreshButton />
             </div>
           </div>
 
-          {filteredBillList.length === 0 && billList?.length === 0 ? (
+          {billList?.length === 0 ? (
             <EmptyList />
           ) : (
             <div className="relative">
@@ -123,7 +96,7 @@ const ListBill = () => {
                   </thead>
 
                   <tbody>
-                    {(filterByStatus ? filteredBillList : billList)?.map((bill: BillListType) => (
+                    {billList?.map((bill: BillListType) => (
                       <tr key={bill.id} className="hover:bg-slate-100 text-nowrap">
                         <td
                           title={bill.id}
