@@ -112,7 +112,7 @@ const TransactionList = () => {
                   </thead>
 
                   <tbody>
-                    {(searchQuery ? searchResult : transactionList)?.map((t: TransactionType) => (
+                    {(searchQuery ? searchResult : transactionList).map((t: TransactionType) => (
                       <tr key={t?.id} className="hover:bg-slate-100 text-nowrap">
                         <td
                           title={t?.id}
