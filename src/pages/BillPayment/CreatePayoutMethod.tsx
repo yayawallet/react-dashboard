@@ -72,7 +72,7 @@ const CreatePayoutMethod = () => {
 
   return (
     <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Create Payout Method</h1>
+      <h1 className="text-2xl font-semibold p-2 mb-5">Create Payout Methods</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
@@ -206,7 +206,7 @@ const CreatePayoutMethod = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="bulkimport/bills"
+          apiEndpoint="billbulkimport/payout-methods"
           templateFile={createPayoutTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
