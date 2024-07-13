@@ -168,8 +168,7 @@ const ListBill = () => {
                             >
                               <GoDotFill />
                             </span>
-                            {/* {capitalize(bill.status)} */}
-                            {bill.status}
+                            {capitalize(bill.status || 'pending')}
                           </td>
 
                           <td className="border-b border-slate-200 pl-3 py-3 text-gray-500">
@@ -179,7 +178,7 @@ const ListBill = () => {
                           <td className="relative border-b border-slate-200 pl-3 py-3">
                             <button
                               type="button"
-                              className="pt-0.5 pb-1 px-3 focus:outline-none text-black bg-yellow-400 rounded hover:bg-yellow-500 focus:z-10 focus:ring-4 focus:ring-yellow-200"
+                              className="pt-0.5 pb-1 px-3 focus:outline-none text-black bg-yellow-400 rounded hover:bg-yellow-500 focus:z-10 focus:ring-4 focus:ring-yellow-300"
                               onClick={() => {
                                 navigate('/bill/update/' + bill.bill_id);
                               }}

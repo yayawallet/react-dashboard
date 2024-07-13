@@ -85,7 +85,7 @@ const CheckBulkBillStatus = () => {
                         records
                       </th>
                       <th className="text-left px-4 py-3 font-medium">Status</th>
-                      <th className="text-left px-4 py-3 font-medium">Date</th>
+                      <th className="text-left px-4 py-3 font-medium">Created At</th>
                     </tr>
                   </thead>
 
