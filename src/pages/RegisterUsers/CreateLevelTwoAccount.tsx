@@ -201,7 +201,11 @@ const CreateLevelTwoAccount = () => {
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {registrationID && (
-        <InlineNotification type="success" info={`account name: ${registrationID}`} />
+        <InlineNotification
+          type="success"
+          customType="Account created successfully"
+          info={`account name: ${registrationID}`}
+        />
       )}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
