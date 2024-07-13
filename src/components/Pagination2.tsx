@@ -3,32 +3,63 @@ import { useState } from 'react';
 interface Props {
   currentPage: number;
   pageCount: number;
-  isLoading: boolean;
   onPageChange: (newPage: number) => void;
 }
 
-const Pagination2 = ({ currentPage, pageCount, isLoading, onPageChange }: Props) => {
-  const [startAt, setStartAt] = useState(0);
-  const [temp, setTemp] = useState(0);
+const Pagination2 = ({ currentPage, pageCount, onPageChange }: Props) => {
+  const [left, setLeft] = useState(2);
+  const [middle, setMiddle] = useState(3);
+  const [right, setRight] = useState(4);
 
-  const handlePrevPage = () => {
-    onPageChange(currentPage - 1);
-    if (currentPage) {
-      console.log('woow');
-      setStartAt((prev) => prev - 1);
+  const handlePageClick = (pageNumber: number) => {
+    onPageChange(pageNumber);
+
+    if (pageCount < 5) {
+      return;
     }
-  };
 
-  const handleNextPage = () => {
-    onPageChange(currentPage + 1);
-    if (currentPage === startAt + 3 && currentPage < pageCount - 10) setStartAt((prev) => prev + 1);
+    if (pageNumber === 1 || pageNumber === 2) {
+      setLeft(2);
+      setMiddle(3);
+      setRight(4);
+
+      return;
+    }
+
+    if (pageNumber === pageCount || pageNumber === pageCount - 1) {
+      setLeft(pageCount - 3);
+      setMiddle(pageCount - 2);
+      setRight(pageCount - 1);
+
+      return;
+    }
+
+    if (pageNumber > 2) {
+      setLeft(pageNumber - 1);
+      setMiddle(pageNumber);
+      setRight(pageNumber + 1);
+
+      return;
+    }
+
+    if (pageNumber <= pageCount - 2) {
+      setLeft(pageNumber - 1);
+      setMiddle(pageNumber);
+      setRight(pageNumber + 1);
+
+      return;
+    }
   };
 
   return (
     <div className="my-4 flxe text-center text-slate-600">
       <ul className="flex items-center">
-        <li className={`pr-2 text-[15px]`} onClick={handlePrevPage}>
-          <button disabled={currentPage === 1} className="flex items-center">
+        <li className={`pr-2 text-[15px]`}>
+          <button
+            className="flex items-center disabled:cursor-auto"
+            disabled={currentPage <= 1}
+            onClick={() => handlePageClick(currentPage - 1)}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="icon"
@@ -49,41 +80,65 @@ const Pagination2 = ({ currentPage, pageCount, isLoading, onPageChange }: Props)
         </li>
 
         <button
-          onClick={() => onPageChange(1)}
-          className={`${pageCount > 1 ? '' : 'hidden'} ${currentPage === 1 ? 'bg-blue-600 text-white' : ''} flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer`}
+          className={`
+            ${pageCount < 1 ? 'hidden' : ''}
+            ${currentPage === 1 ? 'bg-blue-600 text-white' : ''}
+            flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer
+          `}
+          onClick={() => handlePageClick(1)}
         >
           {1}
         </button>
+
         <button
-          onClick={() => onPageChange(currentPage - 1)}
-          className={`${pageCount > 1 ? '' : 'hidden'} ${currentPage === startAt + 2 ? 'bg-blue-600 text-white' : ''} flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer`}
+          className={`
+            ${pageCount < 2 ? 'hidden' : ''}
+            ${currentPage === left ? 'bg-blue-600 text-white' : ''}
+            flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer
+          `}
+          onClick={() => handlePageClick(left)}
         >
-          {currentPage < 3 ? 2 : temp > pageCount - 2 ? pageCount - 2 : 2}
+          {left}
         </button>
+
         <button
-          onClick={() => onPageChange(currentPage)}
-          className={`${pageCount > 2 ? '' : 'hidden'} ${currentPage === startAt + 3 ? 'bg-blue-600 text-white' : ''} flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer`}
+          className={`
+            ${pageCount < 3 ? 'hidden' : ''}
+            ${currentPage === middle ? 'bg-blue-600 text-white' : ''}
+            flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer
+          `}
+          onClick={() => handlePageClick(middle)}
         >
-          {temp ? temp : 3}
+          {middle}
         </button>
+
         <button
-          onClick={() => onPageChange(currentPage + 1)}
-          className={`${pageCount > 3 ? '' : 'hidden'} ${currentPage === startAt + 4 ? 'bg-blue-600 text-white' : ''} flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer`}
+          className={`
+            ${pageCount < 4 ? 'hidden' : ''}
+            ${currentPage === right ? 'bg-blue-600 text-white' : ''}
+            flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer
+          `}
+          onClick={() => handlePageClick(right)}
         >
-          {temp ? temp + 1 : 4}
+          {right}
         </button>
+
         <button
-          onClick={() => onPageChange(pageCount)}
-          className={`${pageCount > 4 ? '' : 'hidden'} ${currentPage === pageCount ? 'bg-blue-600 text-white' : ''} flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer`}
+          className={`
+            ${pageCount < 5 ? 'hidden' : ''}
+            ${currentPage === pageCount ? 'bg-blue-600 text-white' : ''}
+            flex justify-center items-center h-[28px] w-[28px] rounded cursor-pointer
+          `}
+          onClick={() => handlePageClick(pageCount)}
         >
           {pageCount}
         </button>
 
         <li className="pl-2 text-[15px] cursor-pointer">
           <button
+            className="flex items-center disabled:cursor-default"
             disabled={currentPage >= pageCount}
-            className="flex items-center"
-            onClick={handleNextPage}
+            onClick={() => handlePageClick(currentPage + 1)}
           >
             <span>next</span>
             <svg
