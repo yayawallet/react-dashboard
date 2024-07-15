@@ -3,12 +3,12 @@ import { useFormik } from 'formik';
 import { authAxios } from '../../api/axios';
 import * as Yup from 'yup';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
-import { Transaction } from '../../models';
+import { TransactionType } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
 
 const GetTransactionByID = () => {
   const [ownAccount, setOwnAccount] = useState('');
-  const [transaction, setTransaction] = useState<Transaction>();
+  const [transaction, setTransaction] = useState<TransactionType>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
 
@@ -150,7 +150,7 @@ const GetTransactionByID = () => {
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? 'Please wait...' : 'Send Money'}
+              {isLoading ? 'Please wait...' : 'Verify ID'}
             </span>
           </button>
         </form>

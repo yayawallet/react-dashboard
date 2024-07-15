@@ -34,57 +34,63 @@ const Profile = () => {
           </dl>
         </div>
 
-        <div className="border-t border-r rounded-l-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px]">
-          <dl className="sm:divide-y sm:divide-gray-200 text-[15px]">
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Username</dt>
-              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.account}</dd>
-            </div>
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Email address</dt>
-              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.email}</dd>
-            </div>
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Phone number</dt>
-              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
-                {profile && `(${profile?.country?.phone_code}) ${profile?.phone}`}
-              </dd>
-            </div>
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Address</dt>
-              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.location}</dd>
-            </div>
+        <div className="flex">
+          <div className="border-t border-r rounded-l-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px]">
+            <dl className="sm:divide-y sm:divide-gray-200 text-[15px]">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Username</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.account}</dd>
+              </div>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Email address</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.email}</dd>
+              </div>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Phone number</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
+                  {profile && `(${profile?.country?.phone_code}) ${profile?.phone}`}
+                </dd>
+              </div>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Address</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.location}</dd>
+              </div>
 
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Guardians</dt>
-              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
-                {profile?.guardians.join(', ')}
-              </dd>
-            </div>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Guardians</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
+                  {profile?.guardians.join(', ')}
+                </dd>
+              </div>
 
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Reputation</dt>
-              <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.reputation}</dd>
-            </div>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Reputation</dt>
+                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">{profile?.reputation}</dd>
+              </div>
 
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Balance Limit</dt>
-              <dd className="mt-1 text-gray-900 font-medium sm:mt-0 sm:col-span-3">
-                {profile && profile.type === 'BUSINESS'
-                  ? 'Unlimited'
-                  : profile?.currency + ' ' + profile?.balance_limit?.toLocaleString()}
-              </dd>
-            </div>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Balance Limit</dt>
+                <dd className="mt-1 text-gray-900 font-medium sm:mt-0 sm:col-span-3">
+                  {profile && profile.type === 'BUSINESS'
+                    ? 'Unlimited'
+                    : profile?.currency + ' ' + profile?.balance_limit?.toLocaleString()}
+                </dd>
+              </div>
 
-            <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
-              <dt className="font-medium text-gray-500">Daily transaction limit</dt>
-              <dd className="mt-1 text-gray-900 font-medium sm:mt-0 sm:col-span-3">
-                {profile && profile.type === 'BUSINESS'
-                  ? 'Unlimited'
-                  : profile?.currency + ' ' + profile?.daily_transaction_limit?.toLocaleString()}
-              </dd>
-            </div>
-          </dl>
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Daily transaction limit</dt>
+                <dd className="mt-1 text-gray-900 font-medium sm:mt-0 sm:col-span-3">
+                  {profile && profile.type === 'BUSINESS'
+                    ? 'Unlimited'
+                    : profile?.currency + ' ' + profile?.daily_transaction_limit?.toLocaleString()}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="">
+            <img src={profile?.photo_url} height={'50%'} alt="" />
+          </div>
         </div>
       </div>
     </div>
