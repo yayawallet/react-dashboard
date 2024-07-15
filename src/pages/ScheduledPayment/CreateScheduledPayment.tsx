@@ -108,7 +108,7 @@ const Create = () => {
               onChange={() => setInputFormType('single')}
             />
             <label htmlFor="oneInput" className="cursor-pointer">
-              Single Contract
+              Single Schedule
             </label>
           </button>
 
@@ -125,7 +125,7 @@ const Create = () => {
               onChange={() => setInputFormType('multiple')}
             />
             <label htmlFor="multipleInput" className="cursor-pointer">
-              Multiple Contracts
+              Multiple Schedules
             </label>
           </button>
         </div>

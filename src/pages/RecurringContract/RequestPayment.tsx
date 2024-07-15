@@ -96,7 +96,7 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('single')}
             />
             <label htmlFor="oneInput" className="cursor-pointer">
-              Single Contract
+              Single Request
             </label>
           </button>
 
@@ -113,7 +113,7 @@ const RequestPayment = () => {
               onChange={() => setInputFormType('multiple')}
             />
             <label htmlFor="multipleInput" className="cursor-pointer">
-              Multiple Contracts
+              Multiple Requests
             </label>
           </button>
         </div>
