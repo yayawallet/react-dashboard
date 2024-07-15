@@ -1,5 +1,4 @@
 import { useGetData } from '../hooks/useSWR';
-// import { UserProfile } from '../models';
 
 const Profile = () => {
   const { data: profile } = useGetData('/user/profile');
@@ -8,9 +7,12 @@ const Profile = () => {
   return (
     <div className="page-container">
       <div className="bg-white overflow-hidden shadow rounded-lg border">
-        <div className="flex flex-wrap justify-between px-4 py-5 sm:px-6">
+        <div className="flex flex-wrap justify-between px-4 py-5 sm:px-6 border-b">
           <div className="">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">{profile?.name}</h3>
+            <h3 className="text-lg leading-6 font-medium text-gray-900">
+              {profile?.name}
+              {profile.is_agent ? <span className="text-gray-500 font-normal"> (Agent)</span> : ''}
+            </h3>
             <p className="mt-1 max-w-2xl text-sm text-gray-500">{'@' + profile?.account}</p>
 
             <h4 className="mt-8 text-lg">
@@ -31,7 +33,8 @@ const Profile = () => {
             </dd>
           </dl>
         </div>
-        <div className="border-t border-l border-r rounded-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px] mx-auto">
+
+        <div className="border-t border-r rounded-l-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px]">
           <dl className="sm:divide-y sm:divide-gray-200 text-[15px]">
             <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
               <dt className="font-medium text-gray-500">Username</dt>

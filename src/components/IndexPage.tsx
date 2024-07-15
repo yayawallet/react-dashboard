@@ -34,7 +34,7 @@ const IndexPage = ({ parentPath }: Props) => {
             </ul>
           </div>
 
-          <div className="w-72 border bg-gray-50 py-4 px-8 rounded-xl">
+          <div className="w-72 border bg-gray-50 py-2 px-8 rounded-lg">
             <img src={yayaBrank} alt="" />
           </div>
         </div>
