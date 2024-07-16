@@ -13,7 +13,6 @@ const CreateContract = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [userNotFound, setUserNotFound] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 

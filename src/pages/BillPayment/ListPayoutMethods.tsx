@@ -183,7 +183,6 @@ const ListPayoutMethods = () => {
                   <Pagination
                     currentPage={currentPage}
                     pageCount={pageCount}
-                    isLoading={isLoading}
                     onPageChange={handlePageChange}
                   />
                 </div>

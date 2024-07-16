@@ -25,7 +25,7 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
       <NavLink
         to={menu.path}
         className={({ isActive }) =>
-          `flex items-center p-2 text-gray-900 rounded-lg ${isActive ? 'bg-gray-200' : ''}`
+          `flex items-center p-2 text-gray-900 ${isActive ? 'bg-gray-200' : ''} ${isOpen ? 'rounded-t-lg' : 'rounded-lg'}`
         }
         onClick={() =>
           pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true)

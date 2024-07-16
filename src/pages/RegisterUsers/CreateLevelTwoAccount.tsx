@@ -115,6 +115,10 @@ const CreateLevelTwoAccount = () => {
         errors.invitation_hash = 'Invitation code or FIN is required';
       }
 
+      if (values.fin.length > 0 && values.fin.length !== 12 && values.fin.length !== 16) {
+        errors.fin = 'Must be 12 or 16 characters';
+      }
+
       if (values.country.toUpperCase() === 'ETHIOPIA' && !values.region)
         errors.region = 'select your region';
 
@@ -123,7 +127,7 @@ const CreateLevelTwoAccount = () => {
 
     validationSchema: Yup.object().shape({
       invitation_has: Yup.string().max(128, 'must be less than 128 characters'),
-      fin: Yup.string().min(12, 'must be 12 characters').max(12, 'must be 12 characters'),
+      fin: Yup.string(),
       name: Yup.string()
         .required('name is required')
         .min(4, 'name too short')
@@ -250,7 +254,7 @@ const CreateLevelTwoAccount = () => {
               type="text"
               id="fin"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="fin"
+              placeholder="FIN or FCN"
               disabled={isLoading}
               autoComplete="off"
               onChange={formik.handleChange}
