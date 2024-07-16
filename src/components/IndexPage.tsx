@@ -14,7 +14,7 @@ const IndexPage = ({ parentPath }: Props) => {
   return (
     <>
       {outlet || (
-        <div className="page-container mt-20 flex flex-wrap gap-x-20 items-center justify-center">
+        <div className="page-container mt-20 flex flex-wrap gap-10 items-center justify-center">
           <div className="flex flex-col items-center py-8 px-10 border rounded-lg">
             <h2 className="text-2xl font-semibold">
               {parentPath.replace('-', ' ').replace(/\b\w{1}/g, (match) => match.toUpperCase())}{' '}
@@ -24,9 +24,9 @@ const IndexPage = ({ parentPath }: Props) => {
               {menus?.map((menu) => (
                 <li
                   key={menu.path}
-                  className="border border-blue-100 text-center p-2 rounded text-blue-700 hover:bg-slate-50"
+                  className="border border-blue-100 text-center rounded text-blue-700 hover:bg-slate-50"
                 >
-                  <Link to={menu.path} className="p-6">
+                  <Link to={menu.path} className="inline-block py-2 px-6 w-full">
                     {menu.title}
                   </Link>
                 </li>
@@ -34,7 +34,7 @@ const IndexPage = ({ parentPath }: Props) => {
             </ul>
           </div>
 
-          <div className="w-72 border bg-gray-50 py-2 px-8 rounded-lg">
+          <div className="w-64 border bg-gray-50 py-2 px-8 rounded-lg">
             <img src={yayaBrank} alt="" />
           </div>
         </div>
