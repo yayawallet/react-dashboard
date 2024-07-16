@@ -46,6 +46,7 @@ const updateBill = () => {
           setFoundBill(res.data);
 
           // clear input fields
+          formik1.setFieldValue('bill_id', '');
           formik1.resetForm();
         })
         .catch((error) => {
@@ -188,7 +189,7 @@ const updateBill = () => {
 
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !formik1.values.bill_id}
               className="text-white md:col-span-1 self-start bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:max-w-full px-5 py-2.5 text-center"
             >
               <span style={{ letterSpacing: '0.3px' }}>
