@@ -22,7 +22,7 @@ const InstitutionLIst = ({ onSelect }: Props) => {
 
       <select
         id="institution"
-        className="w-full py-2.5 px-6 pl-8 b-0 rounded focus:ring-4 ring-gray-200 outline-none transition sidebar-scrollbar"
+        className="w-full py-2.5 px-6 pl-8 b-0 rounded focus:ring-1 ring-gray-200 outline-none transition sidebar-scrollbar"
         style={{ color: '#444', background: '#eee', appearance: 'none' }}
         onChange={(e) => onSelect(e.target.value)}
       >
