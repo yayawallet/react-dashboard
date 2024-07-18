@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import BulkImport from '../../components/BulkImport';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
-import createBillTemplate from '../../assets/bulk-import-templates/create_bill_template.xlsx';
+import createBillTemplate from '../../assets/bulk-import-templates/create_create-bill_template.xlsx';
 import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
 import { useGetData } from '../../hooks/useSWR';
 
