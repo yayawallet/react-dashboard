@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useState } from 'react';
 
 type RegistrationContextType = {
+  accountType: string;
   status: string;
   errorMessage: string;
   successMessage: string;
@@ -10,6 +11,7 @@ type RegistrationContextType = {
 };
 
 const defaultRegistrationValue: RegistrationContextType = {
+  accountType: '',
   status: '',
   errorMessage: '',
   successMessage: '',
@@ -21,6 +23,7 @@ const defaultRegistrationValue: RegistrationContextType = {
 export const RegistrationContext = createContext<RegistrationContextType>(defaultRegistrationValue);
 
 const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [accountType, setAccountType] = useState('');
   const [status, setStatus] = useState(''); // level-two or business
   const [errorMessage, setErrorMessage] = useState('There is no error');
   const [successMessage, setSuccessMessage] = useState('');
@@ -32,6 +35,7 @@ const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   return (
     <RegistrationContext.Provider
       value={{
+        accountType,
         status,
         errorMessage,
         successMessage,
