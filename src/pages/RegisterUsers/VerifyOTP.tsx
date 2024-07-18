@@ -2,10 +2,10 @@ import { useEffect, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
-import LevelTwoForm from './LevelTwoForm';
 import { authAxios } from '../../api/axios';
 import { formatTime } from '../../utils/formatTime';
 import { RegistrationContext } from './Index';
+import AccountType from './AccountType';
 
 interface Props {
   otp: string;
@@ -87,7 +87,7 @@ const VerifyOTP = ({ otp }: Props) => {
     onSubmit: () => {},
   });
 
-  if (otpVerified) return <LevelTwoForm />;
+  if (otpVerified) return <AccountType />;
 
   return (
     <div>
