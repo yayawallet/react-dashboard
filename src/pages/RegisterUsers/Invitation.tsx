@@ -1,15 +1,24 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
+import InlineNotification from '../../components/InlineNotification';
+import VerifyOTP from './VerifyOTP';
+import { RegistrationContext } from './Index';
 
 const Invitation = () => {
-  const [invitationID, setInvitationID] = useState('');
+  // @ts-ignore
+  const { store, setStore } = useContext(RegistrationContext);
+
+  const [otp, setOTP] = useState('');
+  const [OTPSent, setOTPSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [phoneNumberLookup, setPhoneNumberLookup] = useState('');
+  const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
 
   const handlePhoneNumberLookup = (number: string) => {
+    setIsNewUser(null);
+
     if (number.length < 9) return;
 
     if (number.startsWith('0') && number.length < 10) return;
@@ -17,10 +26,9 @@ const Invitation = () => {
     if (number.startsWith('+2510') && number.length < 14) return;
     if (number.startsWith('+251') && number.length < 13) return;
 
-    setPhoneNumberLookup('');
-
     authAxios.post('/user/search', { query: number }).then((res) => {
-      if (res.data.length > 0) setPhoneNumberLookup('User already exists');
+      if (res.data.length > 0) setIsNewUser(false);
+      else setIsNewUser(true);
     });
   };
 
@@ -41,10 +49,105 @@ const Invitation = () => {
       amount: Yup.number().min(0, 'cannot be less than 0'),
     }),
 
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      if (!isNewUser) return;
+
+      setLoading(true);
+
+      // Clear existing values
+      setOTPSent(false);
+      setErrorMessage('');
+
+      authAxios
+        .post('/invitation/create', values)
+        .then((res) => {
+          setOTP('123456');
+
+          authAxios
+            .post('/invitation/otp', {
+              phone: values.phone,
+              country: values.country,
+              invite_hash: res.data.invite_hash,
+            })
+            .then(() => {
+              setOTPSent(true);
+              setLoading(false);
+              setStore({
+                ...store,
+                phone: values.phone,
+                country: values.country,
+                invite_hash: res.data.invite_hash,
+              });
+            })
+            .catch((error) =>
+              setErrorMessage(
+                error.response?.data?.error || error.response?.data?.message || error.message
+              )
+            );
+        })
+        .catch((error) => {
+          setErrorMessage(
+            error.response?.data?.error || error.response?.data?.message || error.message
+          );
+          setLoading(false);
+        });
+    },
   });
 
-  return <div>Invitation</div>;
+  if (OTPSent) return <VerifyOTP otp={otp} />;
+
+  return (
+    <div>
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
+
+      <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
+        <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Invite User</h3>
+      </div>
+
+      <form
+        className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
+        onSubmit={formik.handleSubmit}
+        autoComplete="off"
+      >
+        <div className="grid gap-6 mb-4 md:grid-cols-5">
+          <div className="md:col-span-2">
+            <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
+              Phone
+            </label>
+            <input
+              type="number"
+              autoFocus
+              id="phone"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="phone number"
+              autoComplete="new-phone"
+              disabled={isLoading}
+              onChange={(e) => {
+                formik.handleChange(e);
+                handlePhoneNumberLookup(e.target.value);
+              }}
+              value={formik.values.phone}
+            />
+            <span className="pl-2 text-sm text-red-600">
+              {formik.touched.phone && formik.errors.phone}
+              {!formik.errors.phone && (isNewUser === false ? 'User already exists' : '')}
+            </span>
+          </div>
+
+          <button
+            type="submit"
+            // @ts-ignore
+            disabled={!isNewUser}
+            className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+          >
+            <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
+              {isLoading ? 'Please wait...' : 'Invite User'}
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default Invitation;
