@@ -14,6 +14,7 @@ const Invitation = () => {
   const [OTPSent, setOTPSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [isCheckingPhone, setIsCheckingPhone] = useState(false);
   const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
 
   const handlePhoneNumberLookup = (number: string) => {
@@ -26,10 +27,15 @@ const Invitation = () => {
     if (number.startsWith('+2510') && number.length < 14) return;
     if (number.startsWith('+251') && number.length < 13) return;
 
-    authAxios.post('/user/search', { query: number }).then((res) => {
-      if (res.data.length > 0) setIsNewUser(false);
-      else setIsNewUser(true);
-    });
+    setIsCheckingPhone(true);
+
+    authAxios
+      .post('/user/search', { query: number })
+      .then((res) => {
+        if (res.data.length > 0) setIsNewUser(false);
+        else setIsNewUser(true);
+      })
+      .finally(() => setIsCheckingPhone(false));
   };
 
   const formik = useFormik({
@@ -131,6 +137,15 @@ const Invitation = () => {
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.phone && formik.errors.phone}
               {!formik.errors.phone && (isNewUser === false ? 'User already exists' : '')}
+              {isCheckingPhone && (
+                <>
+                  <span className="text-gray-700">Checking </span>
+                  <span
+                    className="inline-block border-gray-500 h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                    role="status"
+                  ></span>
+                </>
+              )}
             </span>
           </div>
 
