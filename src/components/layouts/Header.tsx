@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <div className="h-header shadow-sm">
       <header className="relative flex justify-between px-4 md:px-8 h-full">
-        <div className="self-end ms-10 pb-1 hidden sm:block">
+        <div className="self-end ms-10 lg:ms-0 pb-1 hidden sm:block">
           <BreadCrumbs />
         </div>
 

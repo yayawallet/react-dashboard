@@ -54,6 +54,7 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
                 className={({ isActive }) =>
                   `flex items-center p-2 text-gray-600 rounded-lg ${isActive ? 'text-gray-900' : ''}`
                 }
+                onClick={onCloseSidebar}
               >
                 <span className="flex-1 ms-6">{item.title}</span>
               </NavLink>
