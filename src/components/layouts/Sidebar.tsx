@@ -36,7 +36,7 @@ const Sidebar = () => {
     <>
       <button
         type="button"
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        className="absolute top-6 left-0 z-10 inline-flex items-center px-2 py-1 mt-2 ms-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
         onClick={openSidebarMenu}
       >
         <svg
@@ -61,6 +61,7 @@ const Sidebar = () => {
               to="/"
               aria-label="home page"
               className="flex items-center h-header ps-2.5 pt-2 pb-1"
+              onClick={() => setSidebarOpen(false)}
             >
               <img src={yayawalletLogo} className="h-full" alt="YaYaWallet Logo" />
             </Link>
@@ -85,7 +86,7 @@ const Sidebar = () => {
             <ul className="space-y-2 mb-20 font-medium">
               <li>
                 <div className="flex justify-center p-2">
-                  <Link to="/profile" aria-label="profile">
+                  <Link to="/profile" aria-label="profile" onClick={() => setSidebarOpen(false)}>
                     <img
                       src={profile?.photo_url || avater}
                       alt=""
@@ -98,6 +99,7 @@ const Sidebar = () => {
                   to="/profile"
                   aria-label="profile"
                   className="flex items-center p-2 text-[17px] text-gray-900 rounded-lg hover:bg-gray-100"
+                  onClick={() => setSidebarOpen(false)}
                 >
                   <span className="flex-1 ms-3">
                     {capitalize(profile?.name || '')
@@ -105,7 +107,7 @@ const Sidebar = () => {
                       .slice(0, 2)
                       .join(' ') || <span>&nbsp;</span>}
                   </span>
-                  <span className="inline-flex items-center justify-center border px-2 leading-5 ms-3 text-[13px] font-medium text-gray-800 bg-gray-100 rounded">
+                  <span className="inline-flex items-center justify-center border px-2.5 py-0.5 leading-5 ms-3 text-[14px] font-medium text-gray-800 bg-gray-100 rounded">
                     {profile?.type.replace(/([a-zA-Z])(\d)/g, '$1 $2') || 'LEVEL -'}
                   </span>
                 </Link>
