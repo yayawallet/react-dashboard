@@ -105,7 +105,7 @@ const TransactionList = () => {
                       <th className="text-left px-4 py-3 font-medium">Amount</th>
                       <th className="text-left px-4 py-3 font-medium">Receiver</th>
                       <th className="text-left px-4 py-3 font-medium">Reason</th>
-                      <th className="text-left px-4 py-3 font-medium">Date</th>
+                      <th className="text-left px-4 py-3 font-medium">Created At</th>
                     </tr>
                   </thead>
 
@@ -155,7 +155,7 @@ const TransactionList = () => {
                         <td className="border-b border-slate-200 p-3">
                           {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
                         </td>
-                        <td className="border-b border-slate-200 p-3 text-gray-500">
+                        <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(t?.created_at_time)}
                         </td>
                       </tr>

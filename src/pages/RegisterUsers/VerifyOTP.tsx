@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useContext } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -7,56 +8,17 @@ import { formatTime } from '../../utils/formatTime';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
 
-interface Props {
-  otp: string;
-}
-
-const VerifyOTP = ({ otp }: Props) => {
+const VerifyOTP = () => {
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
+  const navigate = useNavigate();
 
-  const [otpVerified, setOTPVerified] = useState(false);
-  const [newOTP, setNewOTP] = useState(false);
-  const [otpExpiresIn, setOTPExpiresIn] = useState(10);
+  const [isOTPVerified, setOTPVerified] = useState(false);
+  const [otpExpiresIn, setOTPExpiresIn] = useState(
+    store?.registrationMethod == 'invitation' ? 120 : 300
+  );
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  const handleOTPChange = (value: string) => {
-    if (value.length === 6)
-      if (value == otp) {
-        setOTPVerified(true);
-        setErrorMessage('');
-      } else {
-        setErrorMessage('Invalid OTP');
-        setNewOTP(false);
-      }
-  };
-
-  const getNewOTP = () => {
-    setLoading(true);
-    setNewOTP(false);
-    setErrorMessage('');
-
-    authAxios
-      .post('/invitation/otp', {
-        phone: store.phone,
-        country: store.country,
-        invite_hash: store.invite_hash,
-      })
-      .then(() => {
-        setNewOTP(true);
-      })
-      .catch((error) =>
-        setErrorMessage(
-          error.response?.data?.error || error.response?.data?.message || error.message
-        )
-      )
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => {
-    if (newOTP) setOTPExpiresIn(10);
-  }, [newOTP]);
 
   useEffect(() => {
     if (otpExpiresIn > 0) {
@@ -65,11 +27,7 @@ const VerifyOTP = ({ otp }: Props) => {
       }, 1000);
 
       return () => clearInterval(timerId);
-    } else {
-      setNewOTP(false);
-      setErrorMessage('OTP Expired');
-      formik.resetForm();
-    }
+    } else navigate('/register-user', { replace: true });
   }, [otpExpiresIn]);
 
   const formik = useFormik({
@@ -78,28 +36,49 @@ const VerifyOTP = ({ otp }: Props) => {
     },
 
     validationSchema: Yup.object().shape({
-      otp: Yup.number()
-        .min(6, 'Must be 6 digit')
-        .max(6, 'Must be 6 digit')
-        .required('Enter the OTP sent'),
+      otp: Yup.string()
+        .min(6, 'Must be 6 digit number')
+        .max(6, 'Must be 6 digit number')
+        .required('Enter the OTP sent to your phone'),
     }),
 
-    onSubmit: () => {},
+    onSubmit: (values) => {
+      setErrorMessage('');
+
+      if (store.registrationMethod == 'invitation') {
+        if (store.otp?.toString() == values.otp?.toString()) setOTPVerified(true);
+        else setErrorMessage('Invalid OTP');
+      } else if (store.registrationMethod == 'national-id') {
+        setLoading(true);
+        authAxios
+          .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transactionId}/${values.otp}`)
+          .then((res) => {
+            setOTPVerified(true);
+            setStore({
+              ...store,
+              name: res.data.name_eng,
+              date_of_birth: res.data.dob,
+              gender: res.data.gender,
+              phone: res.data.phone,
+              email: res.data.email,
+              address: res.data.address_eng?.split(',').slice(0, 2).join(','),
+              fin: res.data.fin,
+              photo: res.data.photo,
+            });
+          })
+          .catch(() => setErrorMessage('Invalid OTP'))
+          .finally(() => setLoading(false));
+      } else {
+        setErrorMessage('Something went wrong');
+      }
+    },
   });
 
-  if (otpVerified) return <AccountType />;
+  if (isOTPVerified) return <AccountType />;
 
   return (
     <div>
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
-
-      {newOTP && (
-        <InlineNotification
-          type="success"
-          customType="OTP is sent"
-          info={`An OPT is sent to ${store.phone}`}
-        />
-      )}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Verify OTP</h3>
@@ -111,7 +90,7 @@ const VerifyOTP = ({ otp }: Props) => {
         autoComplete="off"
       >
         <div className="grid gap-6 mb-4 md:grid-cols-5 items-center">
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 relative">
             <label htmlFor="otp" className="block mb-2 text-sm font-medium text-gray-900">
               Enter 6 digit OTP
             </label>
@@ -121,33 +100,26 @@ const VerifyOTP = ({ otp }: Props) => {
               id="otp"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Enter OTP sent to your phone"
-              autoComplete="new-otp"
-              disabled={isLoading || otpExpiresIn == 0}
-              onChange={(e) => {
-                formik.handleChange(e);
-                handleOTPChange(e.currentTarget.value);
-              }}
+              autoComplete="off"
+              disabled={isLoading}
+              onChange={formik.handleChange}
               value={formik.values.otp}
             />
+            <span className="absolute top-10 right-4 text-sm text-gray-700">
+              {formatTime(otpExpiresIn)}
+            </span>
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.otp && formik.errors.otp}
             </span>
           </div>
 
           <button
-            type="button"
-            disabled={isLoading || otpExpiresIn > 0}
-            onClick={getNewOTP}
-            className="text-gray-700 mt-1.5 border border-gray-300 font-medium rounded-lg px-5 py-2.5 text-center disabled:cursor-auto"
+            type="submit"
+            disabled={isLoading}
+            className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? (
-                '...'
-              ) : otpExpiresIn === 0 ? (
-                'Get OTP'
-              ) : (
-                <span className="text-black">{formatTime(otpExpiresIn)} sec</span>
-              )}
+              {isLoading ? 'Please wait...' : 'Verify OTP'}
             </span>
           </button>
         </div>
