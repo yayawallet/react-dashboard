@@ -12,7 +12,7 @@ const BreadCrumbs = () => {
     )
     .flat();
 
-  sidebarPaths.push('profile', 'bulkimport'); //paths with no title
+  sidebarPaths.push('profile', 'bulkimport', 'level-two', 'business'); //paths with no title && 2nd grand children
 
   const crumbs = paths.every((path) => sidebarPaths.includes(path))
     ? paths

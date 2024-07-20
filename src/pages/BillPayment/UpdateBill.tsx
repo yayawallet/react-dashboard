@@ -25,7 +25,7 @@ const updateBill = () => {
 
   const formik1 = useFormik({
     initialValues: {
-      client_yaya_account: 'tewobstatewo',
+      client_yaya_account: ownAccount,
       bill_id: params_bill_id || '',
     },
 
@@ -39,6 +39,8 @@ const updateBill = () => {
       // Clear existing values
       setErrorMessage('');
       setBillPaymentID('');
+
+      setFoundBill(null);
 
       authAxios
         .post('/bill/find', values)

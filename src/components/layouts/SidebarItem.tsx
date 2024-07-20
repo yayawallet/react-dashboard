@@ -27,9 +27,10 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
         className={({ isActive }) =>
           `flex items-center p-2 text-gray-900 ${isActive ? 'bg-gray-200' : ''} ${isOpen ? 'rounded-t-lg' : 'rounded-lg'}`
         }
-        onClick={() =>
-          pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true)
-        }
+        onClick={() => {
+          pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true);
+          onCloseSidebar();
+        }}
       >
         <span className="text-xl">{menu.icon}</span>
         <span className="flex-1 ms-3">{menu.title}</span>
@@ -47,12 +48,13 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
           className={`px-2 rounded ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-gray-100' : 'hidden'}`}
         >
           {menu.children.map((item, index) => (
-            <li key={index} onClick={() => onCloseSidebar()}>
+            <li key={index}>
               <NavLink
                 to={`${menu.path}/${item.path}`}
                 className={({ isActive }) =>
                   `flex items-center p-2 text-gray-600 rounded-lg ${isActive ? 'text-gray-900' : ''}`
                 }
+                onClick={onCloseSidebar}
               >
                 <span className="flex-1 ms-6">{item.title}</span>
               </NavLink>

@@ -65,7 +65,7 @@ const TransferFee = () => {
           onSubmit={formik.handleSubmit}
         >
           <div className="grid md:grid-cols-5 md:gap-6 mb-6">
-            <div className="md:col-span-3 mb-6">
+            <div className="md:col-span-3">
               <InstitutionLIst
                 onSelect={(value) => formik.setFieldValue('institution_code', value)}
               />

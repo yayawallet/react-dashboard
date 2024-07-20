@@ -146,7 +146,7 @@ const ListPayoutMethods = () => {
                           {payout.account_number}
                         </td>
 
-                        <td className="border-b border-slate-200 p-3 text-gray-500">
+                        <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(payout?.createdAt)}
                         </td>
 

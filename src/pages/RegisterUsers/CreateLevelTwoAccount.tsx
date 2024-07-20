@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -199,8 +199,8 @@ const CreateLevelTwoAccount = () => {
   });
 
   return (
-    <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Register Users</h1>
+    <div className="page-containerr">
+      {/* <h1 className="text-2xl font-semibold p-2 mb-5">Register Users</h1> */}
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 

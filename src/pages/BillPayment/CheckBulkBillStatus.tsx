@@ -122,7 +122,7 @@ const CheckBulkBillStatus = () => {
                           </span>
                           {capitalize(list.status)}
                         </td>
-                        <td className="border-b border-slate-200 p-3">
+                        <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(list.createdAt)}
                         </td>
                       </tr>

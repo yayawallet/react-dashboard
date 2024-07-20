@@ -19,6 +19,8 @@ import ListPayoutMethods from '../pages/BillPayment/ListPayoutMethods';
 import RegisterUsers from '../pages/RegisterUsers/Index';
 import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount';
 import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
+import Invitation from '../pages/RegisterUsers/Invitation';
+import NationalID from '../pages/RegisterUsers/NationalID';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -161,16 +163,44 @@ export const sidebarNavs = [
     accessRoles: ['agent'],
     children: [
       {
-        title: 'Level Two',
-        path: 'level-two',
-        element: <CreateLevelTwoAccount />,
+        title: 'Invitation',
+        path: 'invitation',
+        element: <Invitation />,
         accessRoles: ['agent'],
+        children: [
+          {
+            title: 'Level Two',
+            path: 'level-two',
+            element: <CreateLevelTwoAccount />,
+            accessRoles: ['agent'],
+          },
+          {
+            title: 'Level Two',
+            path: 'business',
+            element: <CreateBussinessAccount />,
+            accessRoles: ['agent'],
+          },
+        ],
       },
       {
-        title: 'Business Account',
-        path: 'business',
-        element: <CreateBussinessAccount />,
+        title: 'National ID',
+        path: 'national-id',
+        element: <NationalID />,
         accessRoles: ['agent'],
+        children: [
+          {
+            title: 'Level Two',
+            path: 'level-two',
+            element: <CreateLevelTwoAccount />,
+            accessRoles: ['agent'],
+          },
+          {
+            title: 'Business',
+            path: 'business',
+            element: <CreateBussinessAccount />,
+            accessRoles: ['agent'],
+          },
+        ],
       },
     ],
   },

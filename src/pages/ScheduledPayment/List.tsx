@@ -156,7 +156,7 @@ const List = () => {
                           <span className="text-gray-500 text-sm">ETB</span>
                         </td>
                         <td className="border-b border-slate-200 p-3">{item.recurring_type}</td>
-                        <td className="border-b border-slate-200 p-3">
+                        <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(item.next_run_time)}
                         </td>
                         <td className="border-b border-slate-200 p-3">

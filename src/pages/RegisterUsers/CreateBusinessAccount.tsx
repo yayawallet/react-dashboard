@@ -207,8 +207,8 @@ const CreateBusinessAccount = () => {
   });
 
   return (
-    <div className="page-container">
-      <h1 className="text-2xl font-semibold p-2 mb-5">Register Users</h1>
+    <div className="page-containerr">
+      {/* <h1 className="text-2xl font-semibold p-2 mb-5">Register Users</h1> */}
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 

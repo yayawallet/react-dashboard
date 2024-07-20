@@ -95,7 +95,7 @@ const ExternalAccountLookup = () => {
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid md:grid-cols-2 md:gap-6 mb-6">
+          <div className="grid gap-6 md:grid-cols-2 mb-6">
             <div>
               <InstitutionLIst
                 onSelect={(value) => formik.setFieldValue('institution_code', value)}

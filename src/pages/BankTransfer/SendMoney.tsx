@@ -64,7 +64,7 @@ const CreateTransfer = () => {
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid md:grid-cols-2 md:gap-6 mb-6">
+          <div className="grid gap-6 md:grid-cols-2 mb-6">
             <div>
               <InstitutionLIst
                 onSelect={(value) => formik.setFieldValue('institution_code', value)}
@@ -92,8 +92,8 @@ const CreateTransfer = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-5 mb-6">
-            <div className="col-span-2">
+          <div className="grid gap-6 md:grid-cols-2 mb-6">
+            <div>
               <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                 Amount
               </label>
@@ -113,7 +113,7 @@ const CreateTransfer = () => {
               </span>
             </div>
 
-            <div className="col-span-3">
+            <div>
               <label htmlFor="sender_note" className="block mb-2 text-sm font-medium text-gray-900">
                 Reason
               </label>

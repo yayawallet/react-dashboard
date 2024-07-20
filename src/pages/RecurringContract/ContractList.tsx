@@ -118,7 +118,7 @@ const ContractList = () => {
           <Loading />
         ) : (
           <div className="border border-slate-200 rounded-xl">
-            <div className="flex flex-wrap justify-between items-center m-4">
+            <div className="flex gap-4 flex-wrap justify-between items-center m-4">
               <div className="">
                 Filter by:
                 <span

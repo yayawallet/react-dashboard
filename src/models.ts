@@ -64,6 +64,7 @@ export interface Transfer {
     name: string;
     account: string;
   };
+  created_at_time: Date;
 }
 
 export interface TransactionType {

@@ -8,8 +8,8 @@ const Header = () => {
 
   return (
     <div className="h-header shadow-sm">
-      <header className="flex justify-between px-4 md:px-8 h-full">
-        <div className="self-end pb-1">
+      <header className="relative flex justify-between px-4 md:px-8 h-full">
+        <div className="self-end ms-10 lg:ms-0 pb-1 hidden sm:block">
           <BreadCrumbs />
         </div>
 
@@ -20,10 +20,10 @@ const Header = () => {
             className="h-full p-3 cursor-pointer"
             onClick={() => setOpen(!open)}
           />
-        </div>
 
-        <div className={`${open ? '' : 'hidden'}`}>
-          <UserSettings />
+          <div className={`${open ? '' : 'hidden'}`}>
+            <UserSettings />
+          </div>
         </div>
       </header>
     </div>
