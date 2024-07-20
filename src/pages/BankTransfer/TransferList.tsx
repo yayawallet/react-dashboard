@@ -4,7 +4,7 @@ import { useGetData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
-import { capitalize } from '../../utils/table_utils';
+import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
 
 const TransferList = () => {
@@ -74,6 +74,7 @@ const TransferList = () => {
                       <th className="text-left px-4 py-3 font-medium">Receiver</th>
                       <th className="text-left px-4 py-3 font-medium">Institution</th>
                       <th className="text-left px-4 py-3 font-medium">Ref code</th>
+                      <th className="text-left px-4 py-3 font-medium">Created At</th>
                     </tr>
                   </thead>
 
@@ -133,6 +134,9 @@ const TransferList = () => {
                           {t?.payment_method.institution.name}
                         </td>
                         <td className="border-b border-slate-200 p-3">{t?.ref_code}</td>
+                        <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
+                          {formatDate(t?.created_at_time)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
