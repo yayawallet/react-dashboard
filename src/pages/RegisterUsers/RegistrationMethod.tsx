@@ -1,34 +1,37 @@
+import { useOutlet, Link } from 'react-router-dom';
 import faydaLogo from '../../assets/fayda-logo.png';
 
-interface Props {
-  onSelectRegistrationMethod: (value: string) => void;
-}
+const RegistrationMethod = () => {
+  const outlet = useOutlet();
 
-const RegistrationMethod = ({ onSelectRegistrationMethod }: Props) => {
   return (
-    <>
-      <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
-        <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Create New Account</h3>
-      </div>
+    <div>
+      {outlet || (
+        <div>
+          <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
+            <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">
+              Create New Account
+            </h3>
+          </div>
 
-      <div className="flex flex-col gap-y-10 justify-center gap-x-20 max-w-[var(--form-width)] border p-8 rounded-b-xl mx-auto mb-20">
-        <div className="flex flex-col gap-y-4 items-center">
-          <button
-            className="h-12 text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-full w-full sm:w-[280px] px-5 py-2.5 text-centerm"
-            onClick={() => onSelectRegistrationMethod('invitation')}
-          >
-            Invitation
-          </button>
+          <div className="flex flex-col gap-y-10 justify-center gap-x-20 max-w-[var(--form-width)] border p-8 rounded-b-xl mx-auto mb-20">
+            <div className="flex flex-col gap-y-4 items-center justify-center">
+              <Link to="invitation" className="w-full text-center">
+                <button className="h-12 text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-full w-full sm:w-[280px] px-5 py-2.5 text-centerm">
+                  Invitation
+                </button>
+              </Link>
 
-          <button
-            className="p-0 text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-full w-full sm:w-[280px] text-center"
-            onClick={() => onSelectRegistrationMethod('national-id')}
-          >
-            <img src={faydaLogo} className="inline-block h-12" alt="National ID" />
-          </button>
+              <Link to="national-id" className="w-full text-center">
+                <button className="p-0 text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-full w-full sm:w-[280px] text-center">
+                  <img src={faydaLogo} className="inline-block h-12" alt="National ID" />
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

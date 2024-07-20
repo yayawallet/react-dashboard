@@ -11,13 +11,13 @@ const AccountType = () => {
             <h2 className="text-2xl font-semibold">Select Account Type</h2>
             <ul className="flex flex-col flex-wrap justify-center gap-5 mt-10">
               <li className="border border-blue-100 text-center rounded text-blue-700 hover:bg-slate-50">
-                <Link to="/register-user/level-two" className="inline-block py-2 px-6 w-full">
+                <Link to="level-two" className="inline-block py-2 px-6 w-full">
                   Level-two Account
                 </Link>
               </li>
 
               <li className="border border-blue-100 text-center rounded text-blue-700 hover:bg-slate-50">
-                <Link to="/register-user/business" className="inline-block py-2 px-6 w-full">
+                <Link to="business" className="inline-block py-2 px-6 w-full">
                   Business Account
                 </Link>
               </li>

@@ -10,7 +10,6 @@ const Invitation = () => {
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
-  const [otp, setOTP] = useState('');
   const [OTPSent, setOTPSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
@@ -67,8 +66,6 @@ const Invitation = () => {
       authAxios
         .post('/invitation/create', values)
         .then((res) => {
-          setOTP('123456');
-
           authAxios
             .post('/invitation/otp', {
               phone: values.phone,
@@ -83,6 +80,8 @@ const Invitation = () => {
                 phone: values.phone,
                 country: values.country,
                 invite_hash: res.data.invite_hash,
+                otp: res.data.otp,
+                registrationMethod: 'invitation',
               });
             })
             .catch((error) =>
@@ -100,14 +99,14 @@ const Invitation = () => {
     },
   });
 
-  if (OTPSent) return <VerifyOTP otp={otp} />;
+  if (OTPSent) return <VerifyOTP />;
 
   return (
     <div>
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
-        <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Invite User</h3>
+        <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Invite a User</h3>
       </div>
 
       <form
@@ -115,7 +114,7 @@ const Invitation = () => {
         onSubmit={formik.handleSubmit}
         autoComplete="off"
       >
-        <div className="grid gap-6 mb-4 md:grid-cols-5">
+        <div className="grid gap-x-6 mb-4 md:grid-cols-5">
           <div className="md:col-span-2">
             <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
               Phone
@@ -126,7 +125,7 @@ const Invitation = () => {
               id="phone"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="phone number"
-              autoComplete="new-phone"
+              autoComplete="off"
               disabled={isLoading}
               onChange={(e) => {
                 formik.handleChange(e);
@@ -137,7 +136,7 @@ const Invitation = () => {
             <span className="pl-2 text-sm text-red-600">
               {formik.touched.phone && formik.errors.phone}
               {!formik.errors.phone && (isNewUser === false ? 'User already exists' : '')}
-              {isCheckingPhone && (
+              {!formik.errors.phone && isCheckingPhone && (
                 <>
                   <span className="text-gray-700">Checking </span>
                   <span
@@ -151,8 +150,7 @@ const Invitation = () => {
 
           <button
             type="submit"
-            // @ts-ignore
-            disabled={!isNewUser}
+            disabled={isLoading}
             className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
