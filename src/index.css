@@ -106,10 +106,6 @@ button[disabled] {
   cursor: not-allowed;
 }
 
-button {
-  transition: all 150ms;
-}
-
 .custom-select-arrow::before,
 .custom-select-arrow::after {
   content: '';

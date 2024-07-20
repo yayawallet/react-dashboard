@@ -118,7 +118,7 @@ const BulkImportReport = ({ documentType }: Props) => {
                         </td>
                         <td className="border-b border-slate-200 p-3">{list?.remark}</td>
                         <td className="border-b border-slate-200 p-3">{list?.file_name}</td>
-                        <td className="border-b border-slate-200 p-3">
+                        <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(list?.created_at)}
                         </td>
                       </tr>

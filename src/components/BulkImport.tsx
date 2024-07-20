@@ -83,7 +83,7 @@ const BulkImport = ({
         </p>
       </div>
 
-      <form className="p-8 pt-4 w-[var(--form-width-small)]" onSubmit={formik.handleSubmit}>
+      <form className="p-8 pt-4 max-w-[var(--form-width-small)]" onSubmit={formik.handleSubmit}>
         <div className="mb-6">
           <label htmlFor="excel_file" className="block mb-2 text-sm font-medium text-gray-900">
             Upload file
