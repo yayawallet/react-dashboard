@@ -42,7 +42,7 @@ const ListBill = () => {
     setCurrentPage(page);
   };
 
-  const handleSearchTransaction = (bill_id: string) => {
+  const handleSearchBill = (bill_id: string) => {
     setIsSearching(true);
     setSearchBillID(bill_id);
 
@@ -71,7 +71,7 @@ const ListBill = () => {
             <div className="w-64">
               <SearchBar
                 placeholder="Search by Bill ID"
-                onSearch={(bill_id) => handleSearchTransaction(bill_id)}
+                onSearch={(bill_id) => handleSearchBill(bill_id)}
               />
             </div>
 
@@ -121,7 +121,10 @@ const ListBill = () => {
                   <tbody>
                     {(searchBillID && !isSearching ? [foundBill] : billList)?.map(
                       (bill: BillListType) => (
-                        <tr key={bill.id} className="hover:bg-slate-100 text-nowrap">
+                        <tr
+                          key={bill.id}
+                          className={`text-nowrap ${new Date(bill.due_at) < new Date() ? 'bg-red-100 hover:bg-red-100' : 'hover:bg-slate-100'}`}
+                        >
                           <td
                             title={bill.id}
                             className="relative border-b border-slate-200 pl-3 py-3 cursor-pointer"
@@ -171,14 +174,16 @@ const ListBill = () => {
                             {capitalize(bill.status || 'pending')}
                           </td>
 
-                          <td className="border-b border-slate-200 pl-3 py-3 text-gray-500">
+                          <td className="border-b border-slate-200 pl-3 py-3 text-gray-500 tracking-normal">
                             {formatDate(bill.due_at).split('-')[0]}
                           </td>
 
                           <td className="relative border-b border-slate-200 pl-3 py-3">
                             <button
                               type="button"
-                              disabled={bill.status === 'PAID'}
+                              disabled={
+                                bill.status === 'PAID' || new Date(bill.due_at) < new Date()
+                              }
                               className="pt-0.5 pb-1 px-3 focus:outline-none text-black bg-yellow-400 rounded hover:bg-yellow-500 focus:z-10 focus:ring-4 focus:ring-yellow-300"
                               onClick={() => {
                                 navigate('/bill/update/' + bill.bill_id);
