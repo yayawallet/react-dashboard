@@ -152,8 +152,9 @@ const TransactionList = () => {
                         <td className="border-b border-slate-200 p-3">
                           {capitalize(t?.receiver.name).split(' ').slice(0, 2).join(' ')}
                         </td>
-                        <td className="border-b border-slate-200 p-3">
-                          {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
+                        <td className="border-b border-slate-200 p-3 text-wrap">
+                          {t?.cause}
+                          {/* {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`} */}
                         </td>
                         <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(t?.created_at_time)}
