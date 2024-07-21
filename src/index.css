@@ -106,6 +106,13 @@ button[disabled] {
   cursor: not-allowed;
 }
 
+.activeSubmenuItem::before {
+  content: '\25CF';
+  display: block;
+  margin-right: -12px;
+  margin-left: 4px;
+}
+
 .custom-select-arrow::before,
 .custom-select-arrow::after {
   content: '';
