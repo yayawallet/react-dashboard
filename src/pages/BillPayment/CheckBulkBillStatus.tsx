@@ -17,7 +17,7 @@ const CheckBulkBillStatus = () => {
   const {
     isLoading,
     error,
-    data: { data: bulkImportList, lastPage: pageCount, total: totalList } = {},
+    data: { data: bulkImportList, lastPage: pageCount, total: totalList, perPage } = {},
     mutate,
     isValidating,
   } = useGetData(`/bulkimport/list?p=${currentPage}`);
@@ -144,20 +144,14 @@ const CheckBulkBillStatus = () => {
               </div>
 
               {pageCount > 1 && (
-                <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
-                  <p className="text-[15px] text-slate-700 py-4">
-                    <span>
-                      Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                      {isLoading ? '...' : currentPage === pageCount ? totalList : currentPage * 15}{' '}
-                      of {totalList} entries
-                    </span>
-                  </p>
-                  <Pagination
-                    currentPage={currentPage}
-                    pageCount={pageCount}
-                    onPageChange={handlePageChange}
-                  />
-                </div>
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  total={totalList}
+                  perPage={perPage}
+                  isLoading={isLoading}
+                  onPageChange={handlePageChange}
+                />
               )}
             </div>
           )}
