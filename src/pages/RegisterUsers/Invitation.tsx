@@ -74,7 +74,6 @@ const Invitation = () => {
             })
             .then(() => {
               setOTPSent(true);
-              setLoading(false);
               setStore({
                 ...store,
                 phone: values.phone,
@@ -88,7 +87,8 @@ const Invitation = () => {
               setErrorMessage(
                 error.response?.data?.error || error.response?.data?.message || error.message
               )
-            );
+            )
+            .finally(() => setLoading(false));
         })
         .catch((error) => {
           setErrorMessage(
