@@ -9,12 +9,14 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import { useParams } from 'react-router-dom';
 import { useGetData } from '../../hooks/useSWR';
+import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
 
-const updateBill = () => {
+const UpdateBill = () => {
   const [billPaymentID, setBillPaymentID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
+  const [selectedClient, setSelectedClient] = useState('');
   const [foundBill, setFoundBill] = useState<BillDetailType | null>(null);
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -23,13 +25,20 @@ const updateBill = () => {
 
   const { bill_id: params_bill_id } = useParams();
 
+  useEffect(() => {
+    setSelectedClient(ownAccount);
+  }, [ownAccount]);
+
   const formik1 = useFormik({
     initialValues: {
-      client_yaya_account: ownAccount,
+      client_yaya_account: ownAccount || '',
       bill_id: params_bill_id || '',
     },
 
+    enableReinitialize: true,
+
     validationSchema: Yup.object({
+      client_yaya_account: Yup.string().required(),
       bill_id: Yup.string().required('Enter Bill ID of the bill you want to update'),
     }),
 
@@ -43,12 +52,11 @@ const updateBill = () => {
       setFoundBill(null);
 
       authAxios
-        .post('/bill/find', values)
+        .post('/bill/find', { ...values, client_yaya_account: selectedClient })
         .then((res) => {
           setFoundBill(res.data);
 
           // clear input fields
-          formik1.setFieldValue('bill_id', '');
           formik1.resetForm();
         })
         .catch((error) => {
@@ -62,7 +70,7 @@ const updateBill = () => {
 
   const formik = useFormik({
     initialValues: {
-      client_yaya_account: ownAccount || '',
+      client_yaya_account: foundBill?.client_yaya_account || '',
       customer_yaya_account: '',
       customer_id: foundBill?.customer_id || '',
       bill_id: foundBill?.bill_id || '',
@@ -80,7 +88,7 @@ const updateBill = () => {
     enableReinitialize: true,
 
     validationSchema: Yup.object({
-      customer_yaya_account: Yup.string().max(12, 'Must be 12 characters'),
+      customer_yaya_account: Yup.string(),
       amount: Yup.number().required('Amount is required').min(1, 'Amount cannot be less than 1.00'),
       start_at: Yup.date(),
       due_at: Yup.date()
@@ -172,8 +180,38 @@ const updateBill = () => {
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Update Bill</h3>
 
         <form className="w-full border-0 rounded-xl" onSubmit={formik1.handleSubmit}>
-          <div className="grid gap-6 md:grid-cols-4">
-            <div className="md:col-span-3">
+          <div className="grid gap-6 md:grid-cols-3 mb-6">
+            <div>
+              <div className="relative">
+                <InputUserIconPlaceholder />
+              </div>
+
+              <input
+                type="text"
+                id="client_yaya_account"
+                className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="client_yaya_account"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={(e) => {
+                  formik1.handleChange(e);
+                  setSelectedClient('');
+                }}
+                value={formik1.values.client_yaya_account}
+              />
+
+              <SearchUserInline
+                query={formik1.values.client_yaya_account}
+                includeSelf={true}
+                accountType="BUSINESS"
+                onSelecteUser={(value) => {
+                  setSelectedClient(value);
+                  formik1.setFieldValue('client_yaya_account', value);
+                }}
+              />
+            </div>
+
+            <div>
               <input
                 type="text"
                 id="bill_id"
@@ -188,17 +226,17 @@ const updateBill = () => {
                 {formik1.touched.bill_id && formik1.errors.bill_id}
               </span>
             </div>
-
-            <button
-              type="submit"
-              disabled={isLoading || !formik1.values.bill_id}
-              className="text-white md:col-span-1 self-start bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:max-w-full px-5 py-2.5 text-center"
-            >
-              <span style={{ letterSpacing: '0.3px' }}>
-                {isLoading && !foundBill ? 'Please wait...' : 'Find Bill'}
-              </span>
-            </button>
           </div>
+
+          <button
+            type="submit"
+            disabled={isLoading || !formik1.values.bill_id || !selectedClient}
+            className="text-white md:col-span-1 self-start bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+          >
+            <span style={{ letterSpacing: '0.3px' }}>
+              {isLoading && !foundBill ? 'Please wait...' : 'Find Bill'}
+            </span>
+          </button>
         </form>
       </div>
 
@@ -218,10 +256,15 @@ const updateBill = () => {
               Customer yaya account
               <span className="font-normal text-gray-400">&nbsp;(optional)</span>
             </label>
+
+            <div className="relative">
+              <InputUserIconPlaceholder />
+            </div>
+
             <input
               type="text"
               id="customer_yaya_account"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="customer_yaya_account"
               autoComplete="off"
               disabled={isLoading}
@@ -468,4 +511,4 @@ const updateBill = () => {
   );
 };
 
-export default updateBill;
+export default UpdateBill;

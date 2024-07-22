@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -14,7 +14,8 @@ const CreateBill = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [selectedUser, setSelectedUser] = useState('');
+  const [selectedCustomer, setSelectedCustomer] = useState('');
+  const [selectedClient, setSelectedClient] = useState('');
   const [inputFormType, setInputFormType] = useState('single'); // single or multiple
 
   const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
@@ -22,6 +23,10 @@ const CreateBill = () => {
   const handleOnLoading = (value: boolean) => setLoading(value);
   const handleOnError = (value: string) => setErrorMessage(value);
   const handleOnSuccess = (value: string) => setSuccessMessage(value);
+
+  useEffect(() => {
+    setSelectedClient(ownAccount);
+  }, [ownAccount]);
 
   const formik = useFormik({
     initialValues: {
@@ -43,7 +48,8 @@ const CreateBill = () => {
     enableReinitialize: true,
 
     validationSchema: Yup.object({
-      customer_yaya_account: Yup.string().max(12, 'Must be 12 characters'),
+      client_yaya_account: Yup.string().required('Required'),
+      customer_yaya_account: Yup.string(),
       amount: Yup.number().required('Amount is required').min(1, 'Amount cannot be less than 1.00'),
       start_at: Yup.date(),
       due_at: Yup.date()
@@ -75,7 +81,8 @@ const CreateBill = () => {
       authAxios
         .post('/bill/create', {
           ...values,
-          customer_yaya_account: selectedUser,
+          client_yaya_account: selectedClient,
+          customer_yaya_account: selectedCustomer,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
           due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
         })
@@ -164,8 +171,45 @@ const CreateBill = () => {
           className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 mb-4 md:grid-cols-5">
-            <div className="md:col-span-3">
+          <div className="grid gap-6 mb-6 md:grid-cols-3">
+            <div>
+              <label
+                htmlFor="client_yaya_account"
+                className="block mb-2 text-sm font-medium text-gray-900"
+              >
+                Client yaya account
+              </label>
+
+              <div className="relative">
+                <InputUserIconPlaceholder />
+              </div>
+
+              <input
+                type="text"
+                id="client_yaya_account"
+                className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="client_yaya_account"
+                autoComplete="off"
+                disabled={isLoading}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setSelectedClient('');
+                }}
+                value={formik.values.client_yaya_account}
+              />
+
+              <SearchUserInline
+                query={formik.values.client_yaya_account}
+                includeSelf={true}
+                accountType="BUSINESS"
+                onSelecteUser={(value) => {
+                  setSelectedClient(value);
+                  formik.setFieldValue('client_yaya_account', value);
+                }}
+              />
+            </div>
+
+            <div>
               <label
                 htmlFor="customer_yaya_account"
                 className="block mb-2 text-sm font-medium text-gray-900"
@@ -185,20 +229,23 @@ const CreateBill = () => {
                 placeholder="customer_yaya_account"
                 autoComplete="off"
                 disabled={isLoading}
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setSelectedCustomer('');
+                }}
                 value={formik.values.customer_yaya_account}
               />
 
               <SearchUserInline
                 query={formik.values.customer_yaya_account}
                 onSelecteUser={(value) => {
-                  setSelectedUser(value);
+                  setSelectedCustomer(value);
                   formik.setFieldValue('customer_yaya_account', value);
                 }}
               />
             </div>
 
-            <div className="md:col-span-2">
+            <div>
               <label htmlFor="customer_id" className="block mb-2 text-sm font-medium text-gray-900">
                 Customer ID
               </label>
@@ -415,7 +462,7 @@ const CreateBill = () => {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !selectedClient}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
