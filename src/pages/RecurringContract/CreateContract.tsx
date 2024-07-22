@@ -173,7 +173,7 @@ const CreateContract = () => {
               </div>
             </div>
 
-            <div className="">
+            <div className="mb-6">
               <label
                 htmlFor="customer_account_name"
                 className="block mb-2 text-sm font-medium text-gray-900"

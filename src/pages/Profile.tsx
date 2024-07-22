@@ -35,7 +35,7 @@ const Profile = () => {
         </div>
 
         <div className="flex flex-wrap xl:flex-nowrap">
-          <div className="border-t border-r rounded-l-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px]">
+          <div className="border-t border-r border-b xl:border-b-0 rounded-l-lg border-gray-200 px-4 py-5 sm:p-0 max-w-[800px]">
             <dl className="sm:divide-y sm:divide-gray-200 text-[15px]">
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
                 <dt className="font-medium text-gray-500">Username</dt>

@@ -1,7 +1,7 @@
 import BulkImportReport from '../../components/BulkImportReport';
 
-const Report = () => {
+const ScheduledReport = () => {
   return <BulkImportReport documentType="SCHEDULED" />;
 };
 
-export default Report;
+export default ScheduledReport;

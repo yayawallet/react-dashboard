@@ -134,8 +134,8 @@ const Create = () => {
       {inputFormType === 'single' ? (
         <div className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20">
           <form className="max-w-[var(--form-width-small)] mx-auto" onSubmit={formik.handleSubmit}>
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="mb-2">
+            <div className="grid gap-6 md:grid-cols-2 mb-6">
+              <div>
                 <label
                   htmlFor="account_number"
                   className="block mb-2 text-sm font-medium text-gray-900"
@@ -166,7 +166,7 @@ const Create = () => {
                   }}
                 />
               </div>
-              <div className="mb-6">
+              <div>
                 <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                   Amount
                 </label>

@@ -64,7 +64,7 @@ const CreateTransaction = () => {
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 md:grid-cols-5">
+          <div className="grid gap-6 md:grid-cols-5 mb-6">
             <div className="md:col-span-3">
               <label htmlFor="receiver" className="block mb-2 text-sm font-medium text-gray-900">
                 Receiver

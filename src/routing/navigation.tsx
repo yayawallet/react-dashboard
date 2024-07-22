@@ -24,15 +24,15 @@ import NationalID from '../pages/RegisterUsers/NationalID';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
-import ListScheduled from '../pages/ScheduledPayment/List';
-import ReportSchedule from '../pages/ScheduledPayment/Report';
+import ScheduledList from '../pages/ScheduledPayment/ScheduledList';
+import ScheduleReport from '../pages/ScheduledPayment/ScheduledReport';
 
 import RecurringContract from '../pages/RecurringContract/Index';
 import CreateContract from '../pages/RecurringContract/CreateContract';
 import ContractList from '../pages/RecurringContract/ContractList';
 import RequestPayment from '../pages/RecurringContract/RequestPayment';
-import ReportContract from '../pages/RecurringContract/ReportContract';
-import ReportRequestPayment from '../pages/RecurringContract/ReportRequestPayment';
+import ContractReport from '../pages/RecurringContract/ContractReport';
+import RequestPaymentReport from '../pages/RecurringContract/RequestPaymentReport';
 
 import Transfer from '../pages/BankTransfer/Index';
 import CreateTransfer from '../pages/BankTransfer/SendMoney';
@@ -220,13 +220,13 @@ export const sidebarNavs = [
       {
         title: 'Scheduled List',
         path: 'list',
-        element: <ListScheduled />,
+        element: <ScheduledList />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Scheduled Report',
         path: 'report',
-        element: <ReportSchedule />,
+        element: <ScheduleReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
@@ -253,7 +253,7 @@ export const sidebarNavs = [
       {
         title: 'Contract Report',
         path: 'report',
-        element: <ReportContract />,
+        element: <ContractReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
@@ -265,7 +265,7 @@ export const sidebarNavs = [
       {
         title: 'Request Payments Report',
         path: 'request-payment/report',
-        element: <ReportRequestPayment />,
+        element: <RequestPaymentReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],

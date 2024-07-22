@@ -22,7 +22,7 @@ const TransactionList = () => {
   const {
     error,
     isLoading,
-    data: { data: transactionList, lastPage: pageCount, total: totalTransactions } = {},
+    data: { data: transactionList, lastPage: pageCount, total: totalTransactions, perPage } = {},
     mutate,
   } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
 
@@ -152,8 +152,9 @@ const TransactionList = () => {
                         <td className="border-b border-slate-200 p-3">
                           {capitalize(t?.receiver.name).split(' ').slice(0, 2).join(' ')}
                         </td>
-                        <td className="border-b border-slate-200 p-3">
-                          {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`}
+                        <td className="border-b border-slate-200 p-3 text-wrap">
+                          {t?.cause}
+                          {/* {`${t?.cause.slice(0, 16)}${t?.cause.charAt(17) ? '...' : ''}`} */}
                         </td>
                         <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
                           {formatDate(t?.created_at_time)}
@@ -163,36 +164,23 @@ const TransactionList = () => {
                   </tbody>
                 </table>
               </div>
-              {pageCount > 1 && (
+              {searchQuery && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
-                  <p className="text-[15px] text-slate-700 py-4">
-                    {searchQuery ? (
-                      <span>
-                        Search Result{' '}
-                        <span className="font-semibold">
-                          {isSearching ? '...' : totalSearchResult}
-                        </span>
-                      </span>
-                    ) : (
-                      <span>
-                        Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                        {isLoading
-                          ? '...'
-                          : currentPage === pageCount
-                            ? totalTransactions
-                            : currentPage * 15}{' '}
-                        of {totalTransactions} entries
-                      </span>
-                    )}
+                  <p className="text-[15px] text-slate-700 py-4 font-semibold">
+                    Search Result: {isSearching ? '...' : totalSearchResult}
                   </p>
-                  <div className={`${searchQuery ? 'hidden' : ''}`}>
-                    <Pagination
-                      currentPage={currentPage}
-                      pageCount={pageCount}
-                      onPageChange={handlePageChange}
-                    />
-                  </div>
                 </div>
+              )}
+
+              {pageCount > 1 && !searchQuery && (
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  total={totalTransactions}
+                  perPage={perPage}
+                  isLoading={isLoading}
+                  onPageChange={handlePageChange}
+                />
               )}
             </div>
           )}

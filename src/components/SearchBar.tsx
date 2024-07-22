@@ -1,20 +1,31 @@
 interface Props {
-  onSearch: (query: string) => void;
+  onSearch?: (query: string) => void;
+  onSubmit?: (query: string) => void;
   placeholder?: string;
 }
 
-const SearchBar = ({ onSearch, placeholder }: Props) => {
+const SearchBar = ({ onSearch, onSubmit, placeholder }: Props) => {
+  const handleOnFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const query = e.currentTarget?.search?.value;
+    if (onSubmit) onSubmit(query);
+  };
+
   return (
     <div className="">
-      <form className="max-w-lg" onSubmit={(e) => e.preventDefault()}>
+      <form className="max-w-lg" onSubmit={(e) => handleOnFormSubmit(e)}>
         <div className="relative max-w-100">
           <input
             type="search"
-            id="search-dropdown"
+            name="search"
             autoComplete="off"
             className="block p-2 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded border-e-gray-200 border-s-2 border border-gray-300 focus:ring-2 ring-gray-200 outline-none"
             placeholder={placeholder || 'ID, Sender, Receiver, Reason'}
-            onChange={(e) => onSearch(e.currentTarget.value)}
+            onChange={(e) => {
+              if (onSearch) onSearch(e.currentTarget.value);
+              if (onSubmit && e.currentTarget.value?.length === 0) onSubmit('');
+            }}
           />
           <button
             type="submit"

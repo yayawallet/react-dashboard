@@ -6,8 +6,10 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
+import Pagination from '../../components/Pagination';
 
 const TransferList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -18,7 +20,16 @@ const TransferList = () => {
     setTimeout(() => setCopiedID(''), 1000);
   };
 
-  const { error, isLoading, data: transferList, mutate } = useGetData('/transfer/list');
+  const {
+    error,
+    isLoading,
+    mutate,
+    data: { data: transferList, lastPage: pageCount, total: totalPayoutMethods, perPage } = {},
+  } = useGetData('/transfer/list');
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -142,6 +153,17 @@ const TransferList = () => {
                   </tbody>
                 </table>
               </div>
+
+              {pageCount > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  total={totalPayoutMethods}
+                  perPage={perPage}
+                  isLoading={isLoading}
+                  onPageChange={handlePageChange}
+                />
+              )}
             </div>
           )}
         </div>

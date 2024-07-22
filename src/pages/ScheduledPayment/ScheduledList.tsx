@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { authAxios } from '../../api/axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
-import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import Loading from '../../components/ui/Loading';
@@ -10,21 +9,22 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { useGetData } from '../../hooks/useSWR';
 import RefreshButton from '../../components/ui/RefreshButton';
+import Pagination from '../../components/Pagination';
 
-const List = () => {
+const ScheduledList = () => {
   const [copiedID, setCopiedID] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduledPayment>();
-  const [openInfoCard, setOpenInfoCard] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const {
     error,
     isLoading,
-    data: scheduledPaymentList,
+    data: { data: scheduledPaymentList, lastPage: pageCount, total: totalScheduled, perPage } = {},
     mutate,
+    isValidating,
   } = useGetData('/scheduled-payment/list');
 
   const handleOnConfirm = (confirm: boolean) => {
@@ -32,28 +32,21 @@ const List = () => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    setSuccessMessage('');
     authAxios
       .get(`/scheduled-payment/archive/${selectedSchedule?.id}`)
-      .then(() => {
-        setSuccessMessage('Scheduled Payment Deleted Successfully');
-        mutate();
-        setIsProcessing(false);
-        setOpenInfoCard(true);
-      })
-      .catch(() => {
-        setIsProcessing(false);
-        setOpenInfoCard(true);
-      });
+      .then(() => mutate())
+      .finally(() => setIsProcessing(false));
   };
-
-  const handleCloseInfoCard = () => setOpenInfoCard(false);
 
   const copySchedulePaymentId = (id: string) => {
     navigator.clipboard.writeText(id);
     setCopiedID(id);
 
     setTimeout(() => setCopiedID(''), 1000);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const handleRefresh = async () => {
@@ -75,11 +68,6 @@ const List = () => {
         onConfirm={handleOnConfirm}
       />
       <ProcessingModal isProcessing={isProcessing} />
-      <ResultModal
-        openModal={openInfoCard}
-        onCloseModal={handleCloseInfoCard}
-        successMessage={successMessage}
-      />
 
       {error ? (
         <Error />
@@ -97,7 +85,7 @@ const List = () => {
             <EmptyList />
           ) : (
             <div className="relative">
-              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+              <div className={`${isRefreshing || isValidating ? '' : 'hidden'}`}>
                 <div
                   className="absolute z-10 bg-white rounded-full p-1.5"
                   style={{
@@ -161,7 +149,8 @@ const List = () => {
                         </td>
                         <td className="border-b border-slate-200 p-3">
                           <button
-                            className="bg-red-600 text-white pt-0.5 pb-1 px-2 rounded hover:bg-red-700"
+                            type="button"
+                            className="pt-0.5 pb-1 px-3 focus:outline-none text-white bg-red-500 rounded hover:bg-red-600 focus:z-10 focus:ring-4 focus:ring-red-200"
                             onClick={() => {
                               setSelectedSchedule(item);
                               setOpenModal(true);
@@ -175,6 +164,17 @@ const List = () => {
                   </tbody>
                 </table>
               </div>
+
+              {pageCount > 1 && (
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  total={totalScheduled}
+                  perPage={perPage}
+                  isLoading={isLoading}
+                  onPageChange={handlePageChange}
+                />
+              )}
             </div>
           )}
         </div>
@@ -183,4 +183,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default ScheduledList;

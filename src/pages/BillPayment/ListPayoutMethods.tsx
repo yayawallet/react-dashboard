@@ -23,7 +23,8 @@ const ListPayoutMethods = () => {
     error,
     isLoading,
     mutate,
-    data: { data: payoutMethodsList, lastPage: pageCount, total: totalPayoutMethods } = {},
+    isValidating,
+    data: { data: payoutMethodsList, lastPage: pageCount, total: totalPayoutMethods, perPage } = {},
   } = usePostData(`/payout-method/list?p=${currentPage}`, {});
 
   const copyTransactionID = (id: string) => {
@@ -82,7 +83,7 @@ const ListPayoutMethods = () => {
             <EmptyList />
           ) : (
             <div className="relative">
-              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+              <div className={`${isRefreshing || isValidating ? '' : 'hidden'}`}>
                 <div
                   className="absolute z-10 bg-white rounded-full p-1.5"
                   style={{
@@ -167,25 +168,16 @@ const ListPayoutMethods = () => {
                   </tbody>
                 </table>
               </div>
+
               {pageCount > 1 && (
-                <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
-                  <p className="text-[15px] text-slate-700 py-4">
-                    <span>
-                      Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                      {isLoading
-                        ? '...'
-                        : currentPage === pageCount
-                          ? totalPayoutMethods
-                          : currentPage * 15}{' '}
-                      of {totalPayoutMethods} entries
-                    </span>
-                  </p>
-                  <Pagination
-                    currentPage={currentPage}
-                    pageCount={pageCount}
-                    onPageChange={handlePageChange}
-                  />
-                </div>
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  total={totalPayoutMethods}
+                  perPage={perPage}
+                  isLoading={isLoading}
+                  onPageChange={handlePageChange}
+                />
               )}
             </div>
           )}

@@ -1,7 +1,7 @@
 import BulkImportReport from '../../components/BulkImportReport';
 
-const ReportContract = () => {
+const ContractReport = () => {
   return <BulkImportReport documentType="CONTRACT" />;
 };
 
-export default ReportContract;
+export default ContractReport;
