@@ -23,6 +23,7 @@ const ListPayoutMethods = () => {
     error,
     isLoading,
     mutate,
+    isValidating,
     data: { data: payoutMethodsList, lastPage: pageCount, total: totalPayoutMethods } = {},
   } = usePostData(`/payout-method/list?p=${currentPage}`, {});
 
@@ -82,7 +83,7 @@ const ListPayoutMethods = () => {
             <EmptyList />
           ) : (
             <div className="relative">
-              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+              <div className={`${isRefreshing || isValidating ? '' : 'hidden'}`}>
                 <div
                   className="absolute z-10 bg-white rounded-full p-1.5"
                   style={{
