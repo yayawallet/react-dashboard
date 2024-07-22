@@ -25,7 +25,7 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
       <NavLink
         to={menu.path}
         className={({ isActive }) =>
-          `flex items-center p-2 text-gray-800 hover:bg-white ${isActive ? 'bg-white shadow' : ''} ${isOpen && menu.children?.length ? 'rounded-t-lg' : 'rounded-lg'}`
+          `flex items-center p-2 text-gray-800 hover:bg-white border ${isActive ? 'bg-white' : 'border-transparent'} ${isActive && isOpen ? 'shadow border-transparent border-t-gray-200' : ''} ${isOpen && menu.children?.length ? 'rounded-t-lg' : 'rounded-lg'}`
         }
         onClick={() => {
           pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true);
@@ -45,7 +45,7 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
 
       {menu.children && (
         <ul
-          className={`px-4 pb-3 rounded-b ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-white shadow' : 'hidden'}`}
+          className={`px-4 pt-2 pb-3 rounded-b ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-white shadow' : 'hidden'}`}
         >
           {menu.children.map((item, index) => (
             <li key={index}>
