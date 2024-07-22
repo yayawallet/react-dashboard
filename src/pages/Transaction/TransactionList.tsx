@@ -22,7 +22,7 @@ const TransactionList = () => {
   const {
     error,
     isLoading,
-    data: { data: transactionList, lastPage: pageCount, total: totalTransactions } = {},
+    data: { data: transactionList, lastPage: pageCount, total: totalTransactions, perPage } = {},
     mutate,
   } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
 
@@ -164,36 +164,23 @@ const TransactionList = () => {
                   </tbody>
                 </table>
               </div>
-              {pageCount > 1 && (
+              {searchQuery && (
                 <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
-                  <p className="text-[15px] text-slate-700 py-4">
-                    {searchQuery ? (
-                      <span>
-                        Search Result{' '}
-                        <span className="font-semibold">
-                          {isSearching ? '...' : totalSearchResult}
-                        </span>
-                      </span>
-                    ) : (
-                      <span>
-                        Showing {isLoading ? '...' : (currentPage - 1) * 15 + 1} to{' '}
-                        {isLoading
-                          ? '...'
-                          : currentPage === pageCount
-                            ? totalTransactions
-                            : currentPage * 15}{' '}
-                        of {totalTransactions} entries
-                      </span>
-                    )}
+                  <p className="text-[15px] text-slate-700 py-4 font-semibold">
+                    Search Result: {isSearching ? '...' : totalSearchResult}
                   </p>
-                  <div className={`${searchQuery ? 'hidden' : ''}`}>
-                    <Pagination
-                      currentPage={currentPage}
-                      pageCount={pageCount}
-                      onPageChange={handlePageChange}
-                    />
-                  </div>
                 </div>
+              )}
+
+              {pageCount > 1 && !searchQuery && (
+                <Pagination
+                  currentPage={currentPage}
+                  pageCount={pageCount}
+                  total={totalTransactions}
+                  perPage={perPage}
+                  isLoading={isLoading}
+                  onPageChange={handlePageChange}
+                />
               )}
             </div>
           )}
