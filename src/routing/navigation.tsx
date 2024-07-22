@@ -21,6 +21,8 @@ import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount'
 import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
 import Invitation from '../pages/RegisterUsers/Invitation';
 import NationalID from '../pages/RegisterUsers/NationalID';
+import CreateLevelTwo from '../pages/RegisterUsers/CreateLevelTwo';
+import CreateBusiness from '../pages/RegisterUsers/CreateBusiness';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -162,6 +164,19 @@ export const sidebarNavs = [
     element: <RegisterUsers />,
     accessRoles: ['agent'],
     children: [
+      {
+        title: 'Level Two',
+        path: 'leveltwo',
+        element: <CreateLevelTwo />,
+        accessRoles: ['agent'],
+      },
+      {
+        title: 'Business',
+        path: 'business',
+        element: <CreateBusiness />,
+        accessRoles: ['agent'],
+      },
+      ,
       {
         title: 'Invitation',
         path: 'invitation',
