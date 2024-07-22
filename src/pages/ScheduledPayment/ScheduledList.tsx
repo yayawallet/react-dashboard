@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { authAxios } from '../../api/axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
-import ResultModal from '../../components/modals/ResultModal';
 import { ScheduledPayment } from '../../models';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import Loading from '../../components/ui/Loading';
@@ -12,13 +11,12 @@ import { useGetData } from '../../hooks/useSWR';
 import RefreshButton from '../../components/ui/RefreshButton';
 import Pagination from '../../components/Pagination';
 
-const List = () => {
+const ScheduledList = () => {
   const [copiedID, setCopiedID] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSchedule, setSelectedSchedule] = useState<ScheduledPayment>();
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const {
@@ -34,13 +32,9 @@ const List = () => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    setSuccessMessage('');
     authAxios
       .get(`/scheduled-payment/archive/${selectedSchedule?.id}`)
-      .then(() => {
-        setSuccessMessage('Scheduled Payment Deleted Successfully');
-        mutate();
-      })
+      .then(() => mutate())
       .finally(() => setIsProcessing(false));
   };
 
@@ -199,4 +193,4 @@ const List = () => {
   );
 };
 
-export default List;
+export default ScheduledList;
