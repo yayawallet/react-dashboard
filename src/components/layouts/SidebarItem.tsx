@@ -45,14 +45,14 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
 
       {menu.children && (
         <ul
-          className={`px-2 rounded-b ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-white shadow' : 'hidden'}`}
+          className={`px-4 pb-3 rounded-b ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-white shadow' : 'hidden'}`}
         >
           {menu.children.map((item, index) => (
             <li key={index}>
               <NavLink
                 to={`${menu.path}/${item.path}`}
                 className={({ isActive }) =>
-                  `flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-50 ${isActive ? 'text-gray-900 shadow activeSubmenuItem' : ''}`
+                  `flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-50 ${isActive ? 'text-gray-900 shadow border-t activeSubmenuItem' : ''}`
                 }
                 onClick={onCloseSidebar}
               >
