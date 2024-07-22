@@ -137,19 +137,19 @@ export const sidebarNavs = [
       },
       {
         title: 'Check Bulk Status',
-        path: 'bulkimport/list',
+        path: 'bulkimport-list',
         element: <CheckBulkBillStatus />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Create Payout Method',
-        path: 'payout-methods/create',
+        path: 'create-payout-methods',
         element: <CreatePayoutMethod />,
         accessRoles: ['admin', 'agent'],
       },
       {
         title: 'List Payout Methods',
-        path: 'payout-methods',
+        path: 'payout-methods-list',
         element: <ListPayoutMethods />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
@@ -264,7 +264,7 @@ export const sidebarNavs = [
       },
       {
         title: 'Request Payments Report',
-        path: 'request-payment/report',
+        path: 'request-payment-report',
         element: <RequestPaymentReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },

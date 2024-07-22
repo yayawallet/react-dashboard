@@ -12,7 +12,7 @@ const BreadCrumbs = () => {
     )
     .flat();
 
-  sidebarPaths.push('profile', 'bulkimport', 'level-two', 'business'); //paths with no title && 2nd grand children
+  sidebarPaths.push('profile', 'level-two', 'business'); //paths with no title && 2nd grand children
 
   const crumbs = paths.every((path) => sidebarPaths.includes(path))
     ? paths
@@ -22,9 +22,9 @@ const BreadCrumbs = () => {
         ? ['scheduled-payment', 'report', 'details']
         : location.pathname.startsWith('/recurring-contract/report/') && paths[3] === undefined
           ? ['recurring-contract', 'report', 'details']
-          : location.pathname.startsWith('/recurring-contract/request-payment/report/') &&
-              paths[4] === undefined
-            ? ['recurring-contract', 'request-payment', 'report', 'details']
+          : location.pathname.startsWith('/recurring-contract/request-payment-report/') &&
+              paths[3] === undefined
+            ? ['recurring-contract', 'request-payment-report', 'details']
             : [...paths.filter((path) => sidebarPaths.includes(path)), 'not-found'];
 
   return (
