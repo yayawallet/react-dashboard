@@ -51,7 +51,7 @@ const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
                 <span className="text-green-500">Successful</span>
               </div>
 
-              <h3 className="mb-3 text-lg font-normal text-gray-800">{successMessage}</h3>
+              <h3 className="pb-1 text-lg text-gray-800">{successMessage}</h3>
               <hr className="mb-2" />
               <button
                 data-modal-hide="popup-modal"

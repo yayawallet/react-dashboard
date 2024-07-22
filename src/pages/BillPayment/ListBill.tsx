@@ -8,9 +8,9 @@ import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import RefreshButton from '../../components/ui/RefreshButton';
-import { useNavigate } from 'react-router-dom';
 import SearchBar from '../../components/SearchBar';
 import { authAxios } from '../../api/axios';
+import UpdateBillModal from './UpdateBillModal';
 
 const ListBill = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,15 +19,16 @@ const ListBill = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchBillID, setSearchBillID] = useState<string | null>(null);
   const [foundBill, setFoundBill] = useState<BillDetailType | null>(null);
+  const [openUpdateModal, setOpenUpdateModal] = useState(false);
+  const [billToUpdate, setBillToUpdate] = useState<BillListType | null>(null);
 
   const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
-
-  const navigate = useNavigate();
 
   const {
     error,
     isLoading,
     mutate,
+    isValidating,
     data: { data: billList, lastPage: pageCount, total: totalBills } = {},
   } = usePostData(`/bill/list?p=${currentPage}`, {});
 
@@ -43,9 +44,10 @@ const ListBill = () => {
   };
 
   const handleSearchBill = (bill_id: string) => {
-    setIsSearching(true);
     setSearchBillID(bill_id);
+    if (!bill_id) return;
 
+    setIsSearching(true);
     authAxios
       .post('/bill/find', { client_yaya_account: ownAccount, bill_id })
       .then((res) => setFoundBill(res.data))
@@ -59,8 +61,25 @@ const ListBill = () => {
     setIsRefreshing(false);
   };
 
+  const handleUpdateBill = (bill: BillListType) => {
+    setOpenUpdateModal(true);
+    setBillToUpdate(bill);
+  };
+
+  const handleOnCloseUpdate = (status: boolean) => {
+    if (status) mutate();
+
+    setOpenUpdateModal(false);
+  };
+
   return (
     <div className="table-container">
+      <UpdateBillModal
+        bill={billToUpdate}
+        openUpdateModal={openUpdateModal}
+        onCancelUpdate={(status) => handleOnCloseUpdate(status)}
+      />
+
       {error ? (
         <Error />
       ) : isLoading && currentPage === 1 ? (
@@ -71,7 +90,7 @@ const ListBill = () => {
             <div className="w-64">
               <SearchBar
                 placeholder="Search by Bill ID"
-                onSearch={(bill_id) => handleSearchBill(bill_id)}
+                onSubmit={(bill_id) => handleSearchBill(bill_id)}
               />
             </div>
 
@@ -84,7 +103,7 @@ const ListBill = () => {
             <EmptyList />
           ) : (
             <div className="relative">
-              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+              <div className={`${isRefreshing || isSearching || isValidating ? '' : 'hidden'}`}>
                 <div
                   className="absolute z-10 bg-white rounded-full p-1.5"
                   style={{
@@ -185,9 +204,7 @@ const ListBill = () => {
                                 bill.status === 'PAID' || new Date(bill.due_at) < new Date()
                               }
                               className="pt-0.5 pb-1 px-3 focus:outline-none text-black bg-yellow-400 rounded hover:bg-yellow-500 focus:z-10 focus:ring-4 focus:ring-yellow-300"
-                              onClick={() => {
-                                navigate('/bill/update/' + bill.bill_id);
-                              }}
+                              onClick={() => handleUpdateBill(bill)}
                             >
                               Update
                             </button>
