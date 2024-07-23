@@ -1,17 +1,29 @@
+import { useEffect } from 'react';
+
 interface Props {
   title?: string;
   options: object[];
+  disabled?: boolean;
+  selected?: string;
   onSelect: (value: string) => void;
 }
 
-const SelectElement = ({ title, options, onSelect }: Props) => {
+const SelectElement = ({ title, options, disabled, selected, onSelect }: Props) => {
   const code = options?.length > 0 ? Object.keys(options[0])[0] : undefined;
   const value = options?.length > 0 ? Object.keys(options[0])[1] : undefined;
+
+  useEffect(() => {
+    if (selected && selected.length > 0) {
+      onSelect(selected);
+    }
+  }, []);
 
   return (
     <div className="relative">
       <select
         id={title}
+        disabled={disabled}
+        value={selected}
         className="w-full py-2.5 px-6 pl-8 b-0 rounded focus:ring-1 ring-gray-200 outline-none transition sidebar-scrollbar"
         style={{ color: '#444', background: '#eee', appearance: 'none' }}
         onChange={(e) => onSelect(e.target.value)}

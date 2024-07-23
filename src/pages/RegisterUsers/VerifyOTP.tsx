@@ -45,13 +45,13 @@ const VerifyOTP = () => {
     onSubmit: (values) => {
       setErrorMessage('');
 
-      if (store.registrationMethod == 'invitation') {
-        if (store.otp?.toString() == values.otp?.toString()) setOTPVerified(true);
+      if (store.registrationMethod === 'invitation') {
+        if (store.otp?.toString() === values.otp?.toString()) setOTPVerified(true);
         else setErrorMessage('Invalid OTP');
-      } else if (store.registrationMethod == 'national-id') {
+      } else if (store.registrationMethod === 'national-id') {
         setLoading(true);
         authAxios
-          .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transactionId}/${values.otp}`)
+          .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transaction_id}/${values.otp}`)
           .then((res) => {
             setOTPVerified(true);
             setStore({
