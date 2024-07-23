@@ -38,7 +38,6 @@ const NationalID = () => {
         .get(`kyc/fayda/request-otp/${values.fin}`)
         .then((res) => {
           setOTPSent(true);
-          setLoading(false);
           setStore({
             ...store,
             fin: res.data.fin,
@@ -46,12 +45,12 @@ const NationalID = () => {
             registrationMethod: 'national-id',
           });
         })
-        .catch((error) => {
+        .catch((error) =>
           setErrorMessage(
             error.response?.data?.error || error.response?.data?.message || error.message
-          );
-          setLoading(false);
-        });
+          )
+        )
+        .finally(() => setLoading(false));
     },
   });
 

@@ -21,6 +21,8 @@ import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount'
 import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
 import Invitation from '../pages/RegisterUsers/Invitation';
 import NationalID from '../pages/RegisterUsers/NationalID';
+import CreateLevelTwo from '../pages/RegisterUsers/CreateLevelTwo';
+import CreateBusiness from '../pages/RegisterUsers/CreateBusiness';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -137,19 +139,19 @@ export const sidebarNavs = [
       },
       {
         title: 'Check Bulk Status',
-        path: 'bulkimport/list',
+        path: 'bulkimport-list',
         element: <CheckBulkBillStatus />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
         title: 'Create Payout Method',
-        path: 'payout-methods/create',
+        path: 'create-payout-methods',
         element: <CreatePayoutMethod />,
         accessRoles: ['admin', 'agent'],
       },
       {
         title: 'List Payout Methods',
-        path: 'payout-methods',
+        path: 'payout-methods-list',
         element: <ListPayoutMethods />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
@@ -162,6 +164,19 @@ export const sidebarNavs = [
     element: <RegisterUsers />,
     accessRoles: ['agent'],
     children: [
+      {
+        title: 'Level Two',
+        path: 'leveltwo',
+        element: <CreateLevelTwo />,
+        accessRoles: ['agent'],
+      },
+      {
+        title: 'Business',
+        path: 'business',
+        element: <CreateBusiness />,
+        accessRoles: ['agent'],
+      },
+      ,
       {
         title: 'Invitation',
         path: 'invitation',
@@ -264,7 +279,7 @@ export const sidebarNavs = [
       },
       {
         title: 'Request Payments Report',
-        path: 'request-payment/report',
+        path: 'request-payment-report',
         element: <RequestPaymentReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
