@@ -16,7 +16,7 @@ const SelectElement = ({ title, options, disabled, selected, onSelect }: Props) 
     if (selected && selected.length > 0) {
       onSelect(selected);
     }
-  }, []);
+  }, [selected]);
 
   return (
     <div className="relative">

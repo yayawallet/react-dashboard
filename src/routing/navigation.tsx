@@ -21,6 +21,7 @@ import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount'
 import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
 import Invitation from '../pages/RegisterUsers/Invitation';
 import NationalID from '../pages/RegisterUsers/NationalID';
+import TestAPI from '../pages/RegisterUsers/TestAPI';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
@@ -162,6 +163,12 @@ export const sidebarNavs = [
     element: <RegisterUsers />,
     accessRoles: ['agent'],
     children: [
+      {
+        title: 'TestAPI',
+        path: 'test-api',
+        element: <TestAPI />,
+        accessRoles: ['agent'],
+      },
       {
         title: 'Invitation',
         path: 'invitation',
