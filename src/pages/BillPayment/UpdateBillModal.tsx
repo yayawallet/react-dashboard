@@ -36,8 +36,8 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       due_at: bill?.due_at ? new Date(bill.due_at).toISOString().slice(0, 16) : '',
       cluster: bill?.cluster || '',
       description: bill?.description || '',
-      phone: '',
-      email: '',
+      phone: bill?.phone || '',
+      email: bill?.email || '',
     },
 
     enableReinitialize: true,
@@ -50,7 +50,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
         .test('due_at', 'Due date must be in the future', (value) => {
           return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
         }),
-      customer_id: Yup.string().required('Customer ID is required'),
+      customer_id: Yup.string(),
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
       bill_season: Yup.string(),
@@ -128,7 +128,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
             <button
               type="button"
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[100px] px-5 py-2.5 text-center"
-              onClick={handleCloseResultModal}
+              onClick={() => onCancelUpdate(false)}
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
                 Cancel
@@ -403,7 +403,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
               <button
                 type="button"
                 className="text-violet-700 border-2 border-violet-700 hover:bg-violet-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm sm:w-[100px] px-5 py-2 text-center"
-                onClick={handleCloseResultModal}
+                onClick={() => onCancelUpdate(false)}
               >
                 <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
                   Cancel

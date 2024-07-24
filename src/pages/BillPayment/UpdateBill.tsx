@@ -96,7 +96,7 @@ const UpdateBill = () => {
         .test('due_at', 'Due date must be in the future', (value) => {
           return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
         }),
-      customer_id: Yup.string().required('Customer ID is required'),
+      customer_id: Yup.string(),
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
       bill_season: Yup.string(),
@@ -137,7 +137,6 @@ const UpdateBill = () => {
         })
         .finally(() => {
           setLoading(false);
-
           setIsProcessing(false);
         });
     },
