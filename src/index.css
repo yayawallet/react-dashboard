@@ -96,13 +96,13 @@ input[type='file'] {
 }
 
 input[readonly] {
-  background-color: #eee;
-  border: #eee;
+  background-color: #f8f8f8;
+  border-color: #e8e8e8;
   outline: none;
 }
 
 button[disabled] {
-  opacity: 0.6;
+  opacity: 0.8;
   cursor: not-allowed;
 }
 

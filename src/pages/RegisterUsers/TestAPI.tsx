@@ -132,7 +132,7 @@ const TestAPI = () => {
         .min(new Date('1900-01-01'), 'Must be after 1900')
         .max(new Date('2014-12-31'), 'Must be before 2014'),
       country: Yup.string().required('Required'),
-      region: Yup.string().required('Select your region'),
+      region: Yup.string().required('Required'),
       address: Yup.string().required('Specify your address'),
       password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
@@ -269,14 +269,17 @@ const TestAPI = () => {
         className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
         onSubmit={formik.handleSubmit}
       >
-        <div className="mt-2 mb-2 max-w-[600px] mx-auto">
+        <div className="relative mt-2 mb-2 max-w-[600px] mx-auto">
           <Stepper totalSteps={totalSteps} currentStep={currentStep} />
         </div>
 
-        <div className={`grid grid-cols-${totalSteps}`}>
+        <div
+          className=""
+          style={{ display: 'grid', gridTemplateColumns: `repeat(${totalSteps}, 1fr)` }}
+        >
           <h2
             className={`mb-10 text-center col-start-${currentStep} font-semibold px-3 pt-0.5 pb-1 bg-violet-500 rounded-lg text-white`}
-            style={{ gridColumn: `${currentStep / totalSteps}` }}
+            style={{ gridColumn: `${currentStep} / ${currentStep + 1}` }}
           >
             {stepTitle}
           </h2>
@@ -285,7 +288,7 @@ const TestAPI = () => {
         <div className={`${currentStep === 1 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
           <div>
             <div>
-              <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-900">
+              <label htmlFor="name" className="block mb-1 pl-1 text-sm font-medium text-gray-900">
                 Full Name
               </label>
               <input
@@ -310,7 +313,7 @@ const TestAPI = () => {
               <div>
                 <label
                   htmlFor="date_of_birth"
-                  className="block mb-1 text-sm font-medium text-gray-900"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
                 >
                   Date of Birth
                 </label>
@@ -378,7 +381,10 @@ const TestAPI = () => {
               </div>
 
               <div className="-mb-5">
-                <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="email"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+                >
                   Email
                 </label>
                 <input
@@ -411,7 +417,10 @@ const TestAPI = () => {
               </div>
 
               <div>
-                <label htmlFor="phone" className="block mb-1 text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="phone"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+                >
                   Phone
                 </label>
                 <input
@@ -431,6 +440,31 @@ const TestAPI = () => {
 
         <div className={`${currentStep === 2 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
           <div>
+            <div>
+              <label
+                htmlFor="account_name"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+              >
+                Address
+              </label>
+
+              <input
+                type="text"
+                readOnly={store.registrationMethod === 'national-id'}
+                id="address"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="address"
+                disabled={isLoading}
+                onChange={formik.handleChange}
+                value={formik.values.address}
+                autoComplete="address"
+                onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
+              />
+              <span className="block mb-5 pl-2 text-sm text-red-600">
+                {formik.touched.address && formik.errors.address}
+              </span>
+            </div>
+
             <div className="grid gap-x-6 md:grid-cols-2 mt-6">
               <div>
                 <SelectElement
@@ -460,31 +494,6 @@ const TestAPI = () => {
                 </span>
               </div>
             </div>
-
-            <div>
-              <label
-                htmlFor="account_name"
-                className="block mb-1 text-sm font-medium text-gray-900"
-              >
-                Address
-              </label>
-
-              <input
-                type="text"
-                readOnly={store.registrationMethod === 'national-id'}
-                id="address"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="address"
-                disabled={isLoading}
-                onChange={formik.handleChange}
-                value={formik.values.address}
-                autoComplete="address"
-                onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
-              />
-              <span className="block mb-5 pl-2 text-sm text-red-600">
-                {formik.touched.address && formik.errors.address}
-              </span>
-            </div>
           </div>
         </div>
 
@@ -493,7 +502,7 @@ const TestAPI = () => {
             <div>
               <label
                 htmlFor="account_name"
-                className="block mb-1 text-sm font-medium text-gray-900"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
               >
                 Account Name
               </label>
@@ -531,7 +540,10 @@ const TestAPI = () => {
 
             <div className="grid gap-x-6 md:grid-cols-2">
               <div>
-                <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="password"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+                >
                   Password
                 </label>
                 <input
@@ -553,7 +565,7 @@ const TestAPI = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block mb-1 text-sm font-medium text-gray-900"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
                 >
                   Confirm Password
                 </label>
@@ -577,96 +589,104 @@ const TestAPI = () => {
         </div>
 
         <div className={`${currentStep === 4 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
-          <div>
-            <div className="grid gap-x-6 md:grid-cols-2">
-              {formik.values.photo_base64 && (
-                <div className="pl-8 mb-2 h-28 self-center md:col-span-2">
-                  <img
-                    src={formik.values.photo_base64}
-                    className="h-full border rounded-full"
-                    alt=""
-                  />
-                </div>
-              )}
+          <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
+            <div>
+              <label
+                htmlFor="photo_base64"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+              >
+                User Photo
+              </label>
+              <input
+                aria-describedby="photo_base64"
+                name="photo_base64"
+                id="photo_base64"
+                accept=".jpg, .jpeg"
+                type="file"
+                disabled={isLoading}
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                onChange={(e) => handleImageOnChange(e, 'photo_base64')}
+              />
 
+              <span className="block mb-2 pl-2 text-sm text-red-600">
+                {formik.touched.photo_base64 && formik.errors.photo_base64}
+              </span>
+            </div>
+
+            <div className="">
+              {formik.values.photo_base64 && (
+                <img
+                  src={formik.values.photo_base64}
+                  className="inline-block max-h-28 rounded-full"
+                  alt="user photo"
+                />
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="id_front_base64"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+              >
+                ID photo front
+              </label>
               <div>
-                <label
-                  htmlFor="photo_base64"
-                  className="block mb-1 text-sm font-medium text-gray-900"
-                >
-                  User Photo
-                </label>
                 <input
-                  aria-describedby="photo_base64"
-                  name="photo_base64"
-                  id="photo_base64"
+                  aria-describedby="id_front_base64"
+                  name="id_front_base64"
+                  id="id_front_base64"
                   accept=".jpg, .jpeg"
                   type="file"
                   disabled={isLoading}
                   className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                  onChange={(e) => handleImageOnChange(e, 'photo_base64')}
+                  onChange={(e) => handleImageOnChange(e, 'id_front_base64')}
                 />
 
-                <span className="block mb-5 pl-2 text-sm text-red-600">
-                  {formik.touched.photo_base64 && formik.errors.photo_base64}
+                <span className="block mb-2 pl-2 text-sm text-red-600">
+                  {formik.touched.id_front_base64 && formik.errors.id_front_base64}
                 </span>
               </div>
             </div>
 
-            <div className="grid gap-x-6 md:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="id_front_base64"
-                  className="block mb-1 text-sm font-medium text-gray-900"
-                >
-                  ID photo front
-                </label>
-                <div>
-                  <input
-                    aria-describedby="id_front_base64"
-                    name="id_front_base64"
-                    id="id_front_base64"
-                    accept=".jpg, .jpeg"
-                    type="file"
-                    disabled={isLoading}
-                    className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                    onChange={(e) => handleImageOnChange(e, 'id_front_base64')}
-                  />
+            <div className="">
+              {formik.values.photo_base64 && (
+                <img src={formik.values.id_front_base64} className="inline-block max-h-28" alt="" />
+              )}
+            </div>
 
-                  <span className="block mb-5 pl-2 text-sm text-red-600">
-                    {formik.touched.id_front_base64 && formik.errors.id_front_base64}
-                  </span>
-                </div>
-              </div>
+            <div>
+              <label
+                htmlFor="id_back_base64"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+              >
+                ID photo back
+              </label>
+              <input
+                aria-describedby="id_back_base64"
+                name="id_back_base64"
+                id="id_back_base64"
+                accept=".jpg, .jpeg"
+                type="file"
+                disabled={isLoading}
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                onChange={(e) => handleImageOnChange(e, 'id_back_base64')}
+              />
 
-              <div>
-                <label
-                  htmlFor="id_back_base64"
-                  className="block mb-1 text-sm font-medium text-gray-900"
-                >
-                  ID photo back
-                </label>
-                <input
-                  aria-describedby="id_back_base64"
-                  name="id_back_base64"
-                  id="id_back_base64"
-                  accept=".jpg, .jpeg"
-                  type="file"
-                  disabled={isLoading}
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                  onChange={(e) => handleImageOnChange(e, 'id_back_base64')}
-                />
+              <span className="block mb-2 pl-2 text-sm text-red-600">
+                {formik.touched.id_back_base64 && formik.errors.id_back_base64}
+              </span>
+            </div>
 
-                <span className="block mb-5 pl-2 text-sm text-red-600">
-                  {formik.touched.id_back_base64 && formik.errors.id_back_base64}
-                </span>
-              </div>
+            <div className="">
+              {formik.values.id_back_base64 && (
+                <img src={formik.values.id_back_base64} className="inline-block max-h-28" alt="" />
+              )}
             </div>
           </div>
         </div>
 
         <div
-          className="flex justify-end gap-4 text-[15px] font-semibold"
+          className="flex justify-center gap-4 text-[15px] font-semibold"
           style={{ letterSpacing: '0.3px' }}
         >
           <button
@@ -674,7 +694,7 @@ const TestAPI = () => {
             className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
-            Back
+            BACK
           </button>
 
           <button
@@ -683,7 +703,7 @@ const TestAPI = () => {
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center"
             onClick={handleClickNext}
           >
-            {currentStep === totalSteps ? (isLoading ? 'Please wait...' : 'Submit') : 'Next'}
+            {currentStep === totalSteps ? (isLoading ? 'SUBMITTING...' : 'SUBMIT') : 'NEXT'}
           </button>
         </div>
       </form>
