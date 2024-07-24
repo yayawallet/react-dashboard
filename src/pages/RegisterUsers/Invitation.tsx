@@ -62,6 +62,7 @@ const Invitation = () => {
       // Clear existing values
       setOTPSent(false);
       setErrorMessage('');
+      setStore({});
 
       authAxios
         .post('/invitation/create', values)

@@ -37,8 +37,7 @@ const VerifyOTP = () => {
 
     validationSchema: Yup.object().shape({
       otp: Yup.string()
-        .min(6, 'Must be 6 digit number')
-        .max(6, 'Must be 6 digit number')
+        .matches(/^[0-9]{6}$/, 'Must be 6 digit number')
         .required('Enter the OTP sent to your phone'),
     }),
 

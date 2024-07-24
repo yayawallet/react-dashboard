@@ -33,6 +33,7 @@ const NationalID = () => {
       // Clear existing values
       setOTPSent(false);
       setErrorMessage('');
+      setStore({});
 
       authAxios
         .get(`kyc/fayda/request-otp/${values.fin}`)

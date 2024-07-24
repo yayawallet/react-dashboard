@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -8,12 +8,14 @@ import { resizeImage } from '../../utils/resizeImage';
 import { useGetData } from '../../hooks/useSWR';
 import Stepper from './Stepper';
 import { RegistrationContext } from './Index';
+import approvedIcon from '../../assets/approve-checked.gif';
+import { Link } from 'react-router-dom';
 
-const CreateLevelTwoAccount = () => {
+const CreateBusinessAccount = () => {
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
-  const [registrationID, setRegistrationID] = useState('');
+  const [registeredAccountName, setRegisteredAccountName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [accountNameLookup, setAccountNameLookup] = useState('');
@@ -21,9 +23,24 @@ const CreateLevelTwoAccount = () => {
   const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [totalSteps, setTotalSteps] = useState(4);
+  const [stepTitle, setStepTitle] = useState('');
   const [isChecking, setChecking] = useState(false);
+  const [userPhoto, setUserPhoto] = useState('');
 
   const { data: regionsList } = useGetData('/lookup/region');
+
+  useEffect(() => {
+    if (currentStep === 1) setStepTitle('Personal Information');
+    if (currentStep === 2) setStepTitle('Address Information');
+    if (currentStep === 3) setStepTitle('Account Information');
+    if (currentStep === 4) setStepTitle('User Documents');
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (store.photo?.length > 0) {
+      formik.setFieldValue('photo_base64', `data:image/jpeg;base64,${store.photo}`);
+    }
+  }, [store.photo]);
 
   const handleAccountNameLookup = (account: string) => {
     setIsAccountNameAvailable(false);
@@ -81,7 +98,7 @@ const CreateLevelTwoAccount = () => {
 
   const formik = useFormik({
     initialValues: {
-      invitation_hash: store.invitation_hash || '',
+      invitation_hash: store.invite_hash || '',
       fin: store.fin || '',
       name: store.name || '',
       gender: store.gender || '',
@@ -116,7 +133,7 @@ const CreateLevelTwoAccount = () => {
         .min(new Date('1900-01-01'), 'Must be after 1900')
         .max(new Date('2014-12-31'), 'Must be before 2014'),
       country: Yup.string().required('Required'),
-      region: Yup.string().required('Select your region'),
+      region: Yup.string().required('Required'),
       address: Yup.string().required('Specify your address'),
       password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
@@ -141,7 +158,7 @@ const CreateLevelTwoAccount = () => {
       setLoading(true);
 
       // Clear existing values
-      setRegistrationID('');
+      setRegisteredAccountName('');
       setErrorMessage('');
 
       authAxios
@@ -150,14 +167,15 @@ const CreateLevelTwoAccount = () => {
           date_of_birth: new Date(values.date_of_birth).getTime(),
         })
         .then((res) => {
-          setRegistrationID(res.data.account);
+          setRegisteredAccountName(res.data.account);
+          setUserPhoto(values.photo_base64);
 
           // clear input fields
           formik.resetForm();
         })
         .catch((error) => {
           setErrorMessage(
-            error.response?.data?.error || error.response?.data?.message || error.message
+            error.response?.data?.error || error.response?.data?.message || 'Registration Failed!!'
           );
         })
         .finally(() => {
@@ -171,7 +189,10 @@ const CreateLevelTwoAccount = () => {
   });
 
   const handleClickNext = () => {
-    if (currentStep === totalSteps) return;
+    if (currentStep === totalSteps) {
+      formik.handleSubmit();
+      return;
+    }
 
     switch (currentStep) {
       case 1:
@@ -227,41 +248,70 @@ const CreateLevelTwoAccount = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
+  if (registeredAccountName) {
+    return (
+      <div className="flex flex-col gap-6 justify-center items-center mt-6 mb-20">
+        <div className="mb-6">
+          <InlineNotification
+            type="success"
+            customType="Account created successfully"
+            info={`account name: ${registeredAccountName}`}
+          />
+        </div>
+        <div className="flex flex-wrap gap-8 mb-6">
+          <div className="">
+            <img src={userPhoto} className="h-28 rounded-full" alt="" />
+            <span className="text-gray-700">@{registeredAccountName}</span>
+          </div>
+
+          <img src={approvedIcon} className="h-28" alt="" />
+        </div>
+
+        <Link to="/register-user">
+          <button
+            type="button"
+            className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            onClick={handleClickBack}
+          >
+            Register another user
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="page-containerr">
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {registrationID && (
-        <div>
-          <InlineNotification
-            type="success"
-            customType="Account created successfully"
-            info={`account name: ${registrationID}`}
-          />
-
-          <button>Register Another User</button>
-        </div>
-      )}
-
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">
-          Create Business Account
+          Create Level-two Account
         </h3>
       </div>
 
       <form
         className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
         onSubmit={formik.handleSubmit}
+        autoComplete="off"
       >
-        <div className="mt-2 mb-10 max-w-[600px] mx-auto">
+        <div className="relative mt-2 mb-2 max-w-[600px] mx-auto">
           <Stepper totalSteps={totalSteps} currentStep={currentStep} />
         </div>
 
+        <div className="md:grid" style={{ gridTemplateColumns: `repeat(${totalSteps}, 1fr)` }}>
+          <h2
+            className={`mb-10 text-center col-start-${currentStep} md:font-semibold px-3 pt-0.5 pb-1 bg-violet-500 rounded-lg text-white`}
+            style={{ gridColumn: `${currentStep} / ${currentStep + 1}` }}
+          >
+            {stepTitle}
+          </h2>
+        </div>
+
         <div className={`${currentStep === 1 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
-          <h2 className="mb-2 text-xl font-semibold text-end">User Information</h2>
           <div>
             <div>
-              <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-900">
+              <label htmlFor="name" className="block mb-1 pl-1 text-sm font-medium text-gray-900">
                 Full Name
               </label>
               <input
@@ -286,7 +336,7 @@ const CreateLevelTwoAccount = () => {
               <div>
                 <label
                   htmlFor="date_of_birth"
-                  className="block mb-1 text-sm font-medium text-gray-900"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
                 >
                   Date of Birth
                 </label>
@@ -314,7 +364,7 @@ const CreateLevelTwoAccount = () => {
                     <input
                       id="male"
                       type="radio"
-                      readOnly={store.registrationMethod === 'national-id'}
+                      disabled={store.registrationMethod === 'national-id'}
                       value="male"
                       name="gender"
                       className="w-4 h-4 cursor-pointer"
@@ -332,7 +382,7 @@ const CreateLevelTwoAccount = () => {
                     <input
                       id="female"
                       type="radio"
-                      readOnly={store.registrationMethod === 'national-id'}
+                      disabled={store.registrationMethod === 'national-id'}
                       value="female"
                       name="gender"
                       className="w-4 h-4 cursor-pointer"
@@ -354,7 +404,10 @@ const CreateLevelTwoAccount = () => {
               </div>
 
               <div className="-mb-5">
-                <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="email"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+                >
                   Email
                 </label>
                 <input
@@ -362,7 +415,7 @@ const CreateLevelTwoAccount = () => {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="email"
-                  autoComplete="off"
+                  autoComplete="new-email"
                   disabled={isLoading}
                   onChange={(e) => {
                     formik.handleChange(e);
@@ -387,7 +440,10 @@ const CreateLevelTwoAccount = () => {
               </div>
 
               <div>
-                <label htmlFor="phone" className="block mb-1 text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="phone"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+                >
                   Phone
                 </label>
                 <input
@@ -406,42 +462,11 @@ const CreateLevelTwoAccount = () => {
         </div>
 
         <div className={`${currentStep === 2 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
-          <h2 className="mb-8 text-xl font-semibold text-end">Address Information</h2>
           <div>
-            <div className="grid gap-x-6 md:grid-cols-2">
-              <div>
-                <SelectElement
-                  title="Country"
-                  options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
-                  disabled={store.registrationMethod === 'national-id'}
-                  selected={store.registrationMethod === 'national-id' ? 'Ethiopia' : ''}
-                  onSelect={(value) => formik.setFieldValue('country', value)}
-                />
-                <span className="block mb-5 pl-2 text-sm text-red-600">
-                  {formik.touched.country && formik.errors.country}
-                </span>
-              </div>
-
-              <div>
-                <SelectElement
-                  title="Region"
-                  options={
-                    regionsList
-                      ? Object.entries(regionsList).map(([code, value]) => ({ code, value }))
-                      : []
-                  }
-                  onSelect={(value) => formik.setFieldValue('region', value)}
-                />
-                <span className="block mb-5 pl-2 text-sm text-red-600">
-                  {formik.touched.region && formik.errors.region}
-                </span>
-              </div>
-            </div>
-
             <div>
               <label
                 htmlFor="account_name"
-                className="block mb-1 text-sm font-medium text-gray-900"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
               >
                 Address
               </label>
@@ -462,16 +487,47 @@ const CreateLevelTwoAccount = () => {
                 {formik.touched.address && formik.errors.address}
               </span>
             </div>
+
+            <div className="grid gap-x-6 md:grid-cols-2 mt-6">
+              <div>
+                <span className="block mb-1 pl-1 text-sm font-medium text-gray-900">Country</span>
+                <SelectElement
+                  title="Country"
+                  options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
+                  disabled={store.registrationMethod === 'national-id'}
+                  selected={store.registrationMethod === 'national-id' ? 'Ethiopia' : ''}
+                  onSelect={(value) => formik.setFieldValue('country', value)}
+                />
+                <span className="block mb-5 pl-2 text-sm text-red-600">
+                  {formik.touched.country && formik.errors.country}
+                </span>
+              </div>
+
+              <div>
+                <span className="block mb-1 pl-1 text-sm font-medium text-gray-900">Region</span>
+                <SelectElement
+                  title="Region"
+                  options={
+                    regionsList
+                      ? Object.entries(regionsList).map(([code, value]) => ({ code, value }))
+                      : []
+                  }
+                  onSelect={(value) => formik.setFieldValue('region', value)}
+                />
+                <span className="block mb-5 pl-2 text-sm text-red-600">
+                  {formik.touched.region && formik.errors.region}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className={`${currentStep === 3 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
-          <h2 className="mb-2 text-xl font-semibold text-end">Account Information</h2>
           <div>
             <div>
               <label
                 htmlFor="account_name"
-                className="block mb-1 text-sm font-medium text-gray-900"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
               >
                 Account Name
               </label>
@@ -481,7 +537,7 @@ const CreateLevelTwoAccount = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="account_name"
                 disabled={isLoading}
-                autoComplete="new-password"
+                autoComplete="new-username"
                 onChange={(e) => {
                   formik.handleChange(e);
                   handleAccountNameLookup(e.target.value);
@@ -489,7 +545,7 @@ const CreateLevelTwoAccount = () => {
                 value={formik.values.account_name}
                 onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
               />
-              {isChecking && (
+              {!formik.errors.account_name && isChecking && (
                 <span className="inline-block mt-1 pl-2 font-semibold text-sm text-gray-800">
                   Checking{' '}
                   <span
@@ -502,14 +558,17 @@ const CreateLevelTwoAccount = () => {
                 {formik.touched.account_name && formik.errors.account_name}
                 {!formik.errors.account_name && accountNameLookup}
                 {!formik.errors.account_name && isAccountNameAvailable && (
-                  <span className="text-green-600">Available</span>
+                  <span className="text-green-600 font-semibold">Available</span>
                 )}
               </span>
             </div>
 
             <div className="grid gap-x-6 md:grid-cols-2">
               <div>
-                <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-900">
+                <label
+                  htmlFor="password"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+                >
                   Password
                 </label>
                 <input
@@ -523,6 +582,7 @@ const CreateLevelTwoAccount = () => {
                   value={formik.values.password}
                   onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
                 />
+
                 <span className="block mb-5 pl-2 text-sm text-red-600">
                   {formik.touched.password && formik.errors.password}
                 </span>
@@ -531,7 +591,7 @@ const CreateLevelTwoAccount = () => {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block mb-1 text-sm font-medium text-gray-900"
+                  className="block mb-1 pl-1 text-sm font-medium text-gray-900"
                 >
                   Confirm Password
                 </label>
@@ -541,7 +601,7 @@ const CreateLevelTwoAccount = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="confirmPassword"
                   disabled={isLoading}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   onChange={formik.handleChange}
                   value={formik.values.confirmPassword}
                   onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
@@ -555,12 +615,11 @@ const CreateLevelTwoAccount = () => {
         </div>
 
         <div className={`${currentStep === 4 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
-          <h2 className="mb-2 text-xl font-semibold text-end">Upload Documents</h2>
-          <div>
+          <div className="grid gap-x-8 gap-y-6 md:grid-cols-2 items-center">
             <div>
               <label
                 htmlFor="photo_base64"
-                className="block mb-1 text-sm font-medium text-gray-900"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
               >
                 User Photo
               </label>
@@ -575,38 +634,60 @@ const CreateLevelTwoAccount = () => {
                 onChange={(e) => handleImageOnChange(e, 'photo_base64')}
               />
 
-              <span className="block mb-5 pl-2 text-sm text-red-600">
+              <span className="block mb-2 pl-2 text-sm text-red-600">
                 {formik.touched.photo_base64 && formik.errors.photo_base64}
               </span>
+            </div>
+
+            <div className="">
+              {formik.values.photo_base64 && (
+                <img
+                  src={formik.values.photo_base64}
+                  className="inline-block max-h-28 rounded-full"
+                  alt="user photo"
+                />
+              )}
             </div>
 
             <div>
               <label
                 htmlFor="id_front_base64"
-                className="block mb-1 text-sm font-medium text-gray-900"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
               >
                 ID photo front
               </label>
-              <input
-                aria-describedby="id_front_base64"
-                name="id_front_base64"
-                id="id_front_base64"
-                accept=".jpg, .jpeg"
-                type="file"
-                disabled={isLoading}
-                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                onChange={(e) => handleImageOnChange(e, 'id_front_base64')}
-              />
+              <div>
+                <input
+                  aria-describedby="id_front_base64"
+                  name="id_front_base64"
+                  id="id_front_base64"
+                  accept=".jpg, .jpeg"
+                  type="file"
+                  disabled={isLoading}
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                  onChange={(e) => handleImageOnChange(e, 'id_front_base64')}
+                />
 
-              <span className="block mb-5 pl-2 text-sm text-red-600">
-                {formik.touched.id_front_base64 && formik.errors.id_front_base64}
-              </span>
+                <span className="block mb-2 pl-2 text-sm text-red-600">
+                  {formik.touched.id_front_base64 && formik.errors.id_front_base64}
+                </span>
+              </div>
+            </div>
+
+            <div className="">
+              {formik.values.photo_base64 && (
+                <img
+                  src={formik.values.id_front_base64}
+                  className="inline-block h-28 w-28 object-cover"
+                  alt=""
+                />
+              )}
             </div>
 
             <div>
               <label
                 htmlFor="id_back_base64"
-                className="block mb-1 text-sm font-medium text-gray-900"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
               >
                 ID photo back
               </label>
@@ -621,32 +702,39 @@ const CreateLevelTwoAccount = () => {
                 onChange={(e) => handleImageOnChange(e, 'id_back_base64')}
               />
 
-              <span className="block mb-5 pl-2 text-sm text-red-600">
+              <span className="block mb-2 pl-2 text-sm text-red-600">
                 {formik.touched.id_back_base64 && formik.errors.id_back_base64}
               </span>
+            </div>
+
+            <div className="">
+              {formik.values.id_back_base64 && (
+                <img
+                  src={formik.values.id_back_base64}
+                  className="inline-block max-h-28 mb-6"
+                  alt=""
+                />
+              )}
             </div>
           </div>
         </div>
 
-        <div
-          className="flex justify-end gap-4 text-[15px] font-semibold"
-          style={{ letterSpacing: '0.3px' }}
-        >
+        <div className="flex justify-center gap-4 text-[16px]" style={{ letterSpacing: '5px' }}>
           <button
             type="button"
             className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
-            Back
+            BACK
           </button>
 
           <button
-            type={currentStep > totalSteps ? 'submit' : 'button'}
+            type={currentStep === totalSteps ? 'button' : 'button'}
             disabled={isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center"
             onClick={handleClickNext}
           >
-            {currentStep === totalSteps ? (isLoading ? 'Please wait...' : 'Submit') : 'Next'}
+            {currentStep === totalSteps ? (isLoading ? 'SUBMITTING...' : 'SUBMIT') : 'NEXT'}
           </button>
         </div>
       </form>
@@ -654,4 +742,4 @@ const CreateLevelTwoAccount = () => {
   );
 };
 
-export default CreateLevelTwoAccount;
+export default CreateBusinessAccount;

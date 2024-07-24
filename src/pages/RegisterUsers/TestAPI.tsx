@@ -8,18 +8,12 @@ import { resizeImage } from '../../utils/resizeImage';
 import { useGetData } from '../../hooks/useSWR';
 import Stepper from './Stepper';
 import { RegistrationContext } from './Index';
+import approvedIcon from '../../assets/approve-checked.gif';
+import { Link } from 'react-router-dom';
 
 const TestAPI = () => {
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
-
-  store.registrationMethod = 'national-id';
-  store.name = 'Surafel Araya';
-  store.fin = '123456789012';
-  store.date_of_birth = 898549200;
-  store.gender = 'male';
-  store.email = 'suraf@gmail.com';
-  store.address = 'Axum, 02';
 
   const [registrationID, setRegistrationID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,6 +25,7 @@ const TestAPI = () => {
   const [totalSteps, setTotalSteps] = useState(4);
   const [stepTitle, setStepTitle] = useState('');
   const [isChecking, setChecking] = useState(false);
+  const [userPhoto, setUserPhoto] = useState('');
 
   const { data: regionsList } = useGetData('/lookup/region');
 
@@ -167,6 +162,7 @@ const TestAPI = () => {
         })
         .then((res) => {
           setRegistrationID(res.data.account);
+          setUserPhoto(values.photo_base64);
 
           // clear input fields
           formik.resetForm();
@@ -187,7 +183,10 @@ const TestAPI = () => {
   });
 
   const handleClickNext = () => {
-    if (currentStep === totalSteps) return;
+    if (currentStep === totalSteps) {
+      formik.handleSubmit();
+      return;
+    }
 
     switch (currentStep) {
       case 1:
@@ -243,21 +242,43 @@ const TestAPI = () => {
     setCurrentStep((prev) => prev - 1);
   };
 
-  return (
-    <div className="page-containerr">
-      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
+  console.log('Photo: ', formik.values.photo_base64);
 
-      {registrationID && (
-        <div>
+  if (registrationID) {
+    return (
+      <div className="flex flex-col gap-6 justify-center items-center mt-6 mb-20">
+        <div className="mb-6">
           <InlineNotification
             type="success"
             customType="Account created successfully"
             info={`account name: ${registrationID}`}
           />
-
-          <button>Register Another User</button>
         </div>
-      )}
+        <div className="flex flex-wrap gap-8 mb-6">
+          <div className="">
+            <img src={userPhoto} className="h-28 rounded-full" alt="" />
+            <span className="text-gray-700">@surafelaraya</span>
+          </div>
+
+          <img src={approvedIcon} className="h-28" alt="" />
+        </div>
+
+        <Link to="/register-user">
+          <button
+            type="button"
+            className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            onClick={handleClickBack}
+          >
+            Register new user
+          </button>
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-containerr">
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">
@@ -268,17 +289,15 @@ const TestAPI = () => {
       <form
         className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
         onSubmit={formik.handleSubmit}
+        autoComplete="off"
       >
         <div className="relative mt-2 mb-2 max-w-[600px] mx-auto">
           <Stepper totalSteps={totalSteps} currentStep={currentStep} />
         </div>
 
-        <div
-          className=""
-          style={{ display: 'grid', gridTemplateColumns: `repeat(${totalSteps}, 1fr)` }}
-        >
+        <div className="md:grid" style={{ gridTemplateColumns: `repeat(${totalSteps}, 1fr)` }}>
           <h2
-            className={`mb-10 text-center col-start-${currentStep} font-semibold px-3 pt-0.5 pb-1 bg-violet-500 rounded-lg text-white`}
+            className={`mb-10 text-center md:font-semibold px-3 pt-0.5 pb-1 bg-violet-500 rounded-lg text-white`}
             style={{ gridColumn: `${currentStep} / ${currentStep + 1}` }}
           >
             {stepTitle}
@@ -392,7 +411,7 @@ const TestAPI = () => {
                   id="email"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="email"
-                  autoComplete="off"
+                  autoComplete="new-email"
                   disabled={isLoading}
                   onChange={(e) => {
                     formik.handleChange(e);
@@ -467,6 +486,7 @@ const TestAPI = () => {
 
             <div className="grid gap-x-6 md:grid-cols-2 mt-6">
               <div>
+                <span className="block mb-1 pl-1 text-sm font-medium text-gray-900">Country</span>
                 <SelectElement
                   title="Country"
                   options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
@@ -480,6 +500,7 @@ const TestAPI = () => {
               </div>
 
               <div>
+                <span className="block mb-1 pl-1 text-sm font-medium text-gray-900">Region</span>
                 <SelectElement
                   title="Region"
                   options={
@@ -512,7 +533,7 @@ const TestAPI = () => {
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="account_name"
                 disabled={isLoading}
-                autoComplete="new-password"
+                autoComplete="new-username"
                 onChange={(e) => {
                   formik.handleChange(e);
                   handleAccountNameLookup(e.target.value);
@@ -533,7 +554,7 @@ const TestAPI = () => {
                 {formik.touched.account_name && formik.errors.account_name}
                 {!formik.errors.account_name && accountNameLookup}
                 {!formik.errors.account_name && isAccountNameAvailable && (
-                  <span className="text-green-600">Available</span>
+                  <span className="text-green-600 font-semibold">Available</span>
                 )}
               </span>
             </div>
@@ -557,6 +578,7 @@ const TestAPI = () => {
                   value={formik.values.password}
                   onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
                 />
+
                 <span className="block mb-5 pl-2 text-sm text-red-600">
                   {formik.touched.password && formik.errors.password}
                 </span>
@@ -575,7 +597,7 @@ const TestAPI = () => {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="confirmPassword"
                   disabled={isLoading}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   onChange={formik.handleChange}
                   value={formik.values.confirmPassword}
                   onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
@@ -589,7 +611,7 @@ const TestAPI = () => {
         </div>
 
         <div className={`${currentStep === 4 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
-          <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
+          <div className="grid gap-x-8 gap-y-6 md:grid-cols-2 items-center">
             <div>
               <label
                 htmlFor="photo_base64"
@@ -617,7 +639,7 @@ const TestAPI = () => {
               {formik.values.photo_base64 && (
                 <img
                   src={formik.values.photo_base64}
-                  className="inline-block max-h-28 rounded-full"
+                  className="inline-block h-28 w-28 border-4 border-violet-500 object-cover rounded-full"
                   alt="user photo"
                 />
               )}
@@ -685,10 +707,7 @@ const TestAPI = () => {
           </div>
         </div>
 
-        <div
-          className="flex justify-center gap-4 text-[15px] font-semibold"
-          style={{ letterSpacing: '0.3px' }}
-        >
+        <div className="flex justify-center gap-4 text-[16px]" style={{ letterSpacing: '5px' }}>
           <button
             type="button"
             className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
@@ -698,7 +717,7 @@ const TestAPI = () => {
           </button>
 
           <button
-            type={currentStep === totalSteps ? 'submit' : 'button'}
+            type={currentStep === totalSteps ? 'button' : 'button'}
             disabled={isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center"
             onClick={handleClickNext}
