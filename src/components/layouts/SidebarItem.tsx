@@ -52,7 +52,7 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
               <NavLink
                 to={`${menu.path}/${item.path}`}
                 className={({ isActive }) =>
-                  `flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-50 ${isActive ? 'text-gray-900 shadow border-t activeSubmenuItem' : ''}`
+                  `flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-50 ${isActive ? 'text-gray-900 shadow activeSubmenuItem' : ''}`
                 }
                 onClick={onCloseSidebar}
               >

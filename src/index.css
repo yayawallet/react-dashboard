@@ -23,7 +23,7 @@
 }
 
 body {
-  letter-spacing: 0.2px;
+  letter-spacing: normal;
   line-height: 20px;
 }
 
@@ -98,7 +98,6 @@ input[type='file'] {
 input[readonly] {
   background-color: #f8f8f8;
   border-color: #e8e8e8;
-  outline: none;
 }
 
 button[disabled] {
