@@ -31,12 +31,16 @@ export default {
       const newUtilities = {
         '.page-container': {
           'max-width': '1536px',
-          padding: '0 1rem',
+          padding: '0 0rem',
+          '@screen sm': {
+            padding: '0 1rem',
+          },
         },
         '.table-container': {
           'max-width': '1536px',
         },
       };
+
       addUtilities(newUtilities, ['responsive', 'hover']);
     },
   ],
