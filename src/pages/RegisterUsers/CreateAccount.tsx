@@ -1,27 +1,290 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
+import SelectElement from '../../components/SelectElement';
+import { resizeImage } from '../../utils/resizeImage';
+import { useGetData } from '../../hooks/useSWR';
+import Stepper from './Stepper';
 import { RegistrationContext } from './Index';
+import approvedIcon from '../../assets/approve-checked.gif';
+import { Link } from 'react-router-dom';
 
-const TestAPI = () => {
+const CreateAccount = () => {
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
   const [registeredAccountName, setRegisteredAccountName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [accountNameLookup, setAccountNameLookup] = useState('');
+  const [emailLookup, setEmailLookup] = useState('');
+  const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [totalSteps, setTotalSteps] = useState(4);
+  const [stepTitle, setStepTitle] = useState('');
   const [isChecking, setChecking] = useState(false);
+  const [userPhoto, setUserPhoto] = useState('');
+
+  const { data: regionsList } = useGetData('/lookup/region');
+
+  useEffect(() => {
+    if (currentStep === 1) setStepTitle('Personal Information');
+    if (currentStep === 2) setStepTitle('Address Information');
+    if (currentStep === 3) setStepTitle('Account Information');
+    if (currentStep === 4) setStepTitle('User Documents');
+  }, [currentStep]);
+
+  useEffect(() => {
+    if (store.photo?.length > 0) {
+      formik.setFieldValue('photo_base64', `data:image/jpeg;base64,${store.photo}`);
+    }
+  }, [store.photo]);
+
+  const handleAccountNameLookup = (account: string) => {
+    setIsAccountNameAvailable(false);
+
+    if (account.length !== 12) return;
+
+    setAccountNameLookup('');
+    setChecking(true);
+
+    authAxios
+      .post('/user/search', { query: account })
+      .then((res) => {
+        if (res.data.length === 0) setIsAccountNameAvailable(true);
+        else setAccountNameLookup('Account name already taken');
+      })
+      .finally(() => setChecking(false));
+  };
+
+  const handleEmailLookup = (email: string) => {
+    if (email.length < 4) return;
+
+    setEmailLookup('');
+    setChecking(true);
+
+    authAxios
+      .post('/user/search', { query: email })
+      .then((res) => {
+        if (res.data.length > 0) setEmailLookup('User already exists');
+      })
+      .finally(() => setChecking(false));
+  };
+
+  const handleImageOnChange = (e: React.ChangeEvent<HTMLInputElement>, field_name: string) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onloadend = (e) => {
+      const target = e.target as FileReader;
+      const base64String = target.result;
+      if (base64String) {
+        if (field_name === 'photo_base64') {
+          // resizeImage(DataURL, maxWidth, maxHeight, callback)
+          resizeImage(base64String, 800, 800, (resizedBase64) => {
+            formik.setFieldValue(field_name, resizedBase64);
+          });
+        } else {
+          formik.setFieldValue(field_name, base64String);
+        }
+      }
+    };
+  };
 
   const formik = useFormik({
-    initialValues: {},
+    initialValues: {
+      invitation_hash: store.invite_hash || '',
+      fin: store.fin || '',
+      name: store.name || '',
+      gender: store.gender || '',
+      email: store.email || '',
+      phone: store.phone || '',
+      date_of_birth: store.date_of_birth
+        ? new Date(store.date_of_birth * 1000).toISOString().slice(0, 10)
+        : '',
+      region: '',
+      country: '',
+      address: store.address || '',
+      password: '',
+      confirmPassword: '',
+      account_name: '',
+      photo_base64: store.photo || '',
+      id_front_base64: '',
+      id_back_base64: '',
+      // only for business account
+      tin_number: store.tin_number || '',
+      license_number: store.lincense_number || '',
+      mic: store.mic || '',
+      tin_doc_base64: store.tin_doc_base64 || '',
+      licese_doc_base64: store.licese_doc_base64 || '',
+    },
 
     enableReinitialize: true,
+    validateOnMount: true,
 
-    validationSchema: Yup.object().shape({}),
+    validationSchema: Yup.object().shape({
+      name: Yup.string()
+        .required('Required')
+        .min(4, 'Name too short')
+        .max(128, 'Must be less thatn 128 characters'),
+      email: Yup.string().email('Invalid email address').required('Email is required'),
+      gender: Yup.string().required('Required'),
+      date_of_birth: Yup.date()
+        .required('Required')
+        .min(new Date('1900-01-01'), 'Must be after 1900')
+        .max(new Date('2014-12-31'), 'Must be before 2014'),
+      country: Yup.string().required('Required'),
+      region: Yup.string().required('Required'),
+      address: Yup.string().required('Specify your address'),
+      password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .max(128, 'Password too long')
+        .required('Password is Required'),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
+        .required('Confirm your password'),
+      account_name: Yup.string()
+        .matches(/^[a-z]/, 'Must start with letter')
+        .matches(/^[a-z0-5]*$/, 'Can only contain characters a-z and 1-5')
+        .matches(/^[a-z0-5]{12}$/, 'Must be 12 character')
+        .required('Account name is required'),
+      photo_base64: Yup.string().required('Required'),
+      id_front_base64: Yup.string().required('Required'),
+      id_back_base64: Yup.string().required('Required'),
+    }),
 
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      if (emailLookup || accountNameLookup) return;
+
+      setLoading(true);
+
+      // Clear existing values
+      setRegisteredAccountName('');
+      setErrorMessage('');
+
+      authAxios
+        .post('/user/register', {
+          ...values,
+          date_of_birth: new Date(values.date_of_birth).getTime(),
+        })
+        .then((res) => {
+          setRegisteredAccountName(res.data.account);
+          setUserPhoto(values.photo_base64);
+
+          // clear input fields
+          formik.resetForm();
+        })
+        .catch((error) => {
+          setErrorMessage(
+            error.response?.data?.error || error.response?.data?.message || 'Registration Failed!!'
+          );
+        })
+        .finally(() => {
+          setLoading(false);
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+          });
+        });
+    },
   });
+
+  const handleClickNext = () => {
+    if (currentStep === totalSteps) {
+      formik.handleSubmit();
+      return;
+    }
+
+    switch (currentStep) {
+      case 1:
+        if (
+          formik.errors.name ||
+          formik.errors.date_of_birth ||
+          formik.errors.gender ||
+          formik.errors.email
+        ) {
+          formik.setTouched({ name: true, date_of_birth: true, gender: true, email: true });
+          return;
+        }
+
+        break;
+
+      case 2:
+        if (formik.errors.country || formik.errors.region || formik.errors.address) {
+          formik.setTouched({ country: true, region: true, address: true });
+          return;
+        }
+
+        break;
+
+      case 3:
+        if (formik.errors.account_name || formik.errors.password || formik.errors.confirmPassword) {
+          formik.setTouched({ account_name: true, password: true, confirmPassword: true });
+          return;
+        }
+
+        break;
+
+      case 4:
+        if (
+          formik.errors.photo_base64 ||
+          formik.errors.id_front_base64 ||
+          formik.errors.id_back_base64
+        ) {
+          formik.setTouched({ photo_base64: true, id_front_base64: true, id_back_base64: true });
+          return;
+        }
+
+        break;
+    }
+
+    if (isChecking) return;
+    if (emailLookup || accountNameLookup) return;
+
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const handleClickBack = () => {
+    if (currentStep === 1) return;
+    setCurrentStep((prev) => prev - 1);
+  };
+
+  if (registeredAccountName) {
+    return (
+      <div className="flex flex-col gap-6 justify-center items-center mt-6 mb-20">
+        <div className="mb-6">
+          <InlineNotification
+            type="success"
+            customType="Account created successfully"
+            info={`account name: ${registeredAccountName}`}
+          />
+        </div>
+        <div className="flex flex-wrap gap-8 mb-6">
+          <div className="">
+            <img src={userPhoto} className="h-28 rounded-full" alt="" />
+            <span className="text-gray-700">@{registeredAccountName}</span>
+          </div>
+
+          <img src={approvedIcon} className="h-28" alt="" />
+        </div>
+
+        <Link to="/register-user">
+          <button
+            type="button"
+            className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            onClick={handleClickBack}
+          >
+            Register another user
+          </button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="page-containerr">
@@ -464,11 +727,20 @@ const TestAPI = () => {
 
         <div className="flex justify-center gap-4 text-[16px]" style={{ letterSpacing: '5px' }}>
           <button
-            type={'button'}
+            type="button"
+            className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            onClick={handleClickBack}
+          >
+            BACK
+          </button>
+
+          <button
+            type="button"
             disabled={isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center"
+            onClick={handleClickNext}
           >
-            {isLoading ? 'Please wait...' : 'NEXT'}
+            {currentStep === totalSteps ? (isLoading ? 'SUBMITTING...' : 'SUBMIT') : 'NEXT'}
           </button>
         </div>
       </form>
@@ -476,4 +748,4 @@ const TestAPI = () => {
   );
 };
 
-export default TestAPI;
+export default CreateAccount;
