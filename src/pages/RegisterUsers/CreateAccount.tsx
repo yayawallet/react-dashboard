@@ -22,7 +22,7 @@ const CreateAccount = () => {
   const [emailLookup, setEmailLookup] = useState('');
   const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [totalSteps, setTotalSteps] = useState(4);
+  const [totalSteps, setTotalSteps] = useState(store.registrationMethod === 'national-id' ? 5 : 4);
   const [stepTitle, setStepTitle] = useState('');
   const [isChecking, setChecking] = useState(false);
   const [userPhoto, setUserPhoto] = useState('');
@@ -105,7 +105,7 @@ const CreateAccount = () => {
       email: store.email || '',
       phone: store.phone || '',
       date_of_birth: store.date_of_birth
-        ? new Date(store.date_of_birth * 1000).toISOString().slice(0, 10)
+        ? new Date((store.date_of_birth + 10800) * 1000).toISOString().slice(0, 10) // 10800 = 3 hours = 60 * 60 * 3
         : '',
       region: '',
       country: '',
@@ -119,7 +119,7 @@ const CreateAccount = () => {
       // only for business account
       tin_number: store.tin_number || '',
       license_number: store.lincense_number || '',
-      mic: store.mic || '',
+      mcc: store.mcc || '',
       tin_doc_base64: store.tin_doc_base64 || '',
       licese_doc_base64: store.licese_doc_base64 || '',
     },
@@ -256,27 +256,29 @@ const CreateAccount = () => {
 
   if (registeredAccountName) {
     return (
-      <div className="flex flex-col gap-6 justify-center items-center mt-6 mb-20">
-        <div className="mb-6">
+      <div className="flex flex-col gap-6 justify-center items-center mb-20">
+        <div className="mb-6 self-stretch">
           <InlineNotification
             type="success"
             customType="Account created successfully"
             info={`account name: ${registeredAccountName}`}
           />
         </div>
-        <div className="flex flex-wrap gap-8 mb-6">
+        <div className="flex flex-wrap justify-center items-center gap-8 mb-6">
           <div className="">
-            <img src={userPhoto} className="h-28 rounded-full" alt="" />
-            <span className="text-gray-700">@{registeredAccountName}</span>
+            <img src={userPhoto} className="h-28 w-28 object-cover rounded-full" alt="" />
+            <span className="bg-violet-500 text-white px-2 pb-0.5 text-sm rounded">
+              {registeredAccountName}
+            </span>
           </div>
 
-          <img src={approvedIcon} className="h-28" alt="" />
+          <img src={approvedIcon} className="h-24" alt="" />
         </div>
 
         <Link to="/register-user">
           <button
             type="button"
-            className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            className={`text-white mr-28 bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
             Register another user
@@ -500,8 +502,8 @@ const CreateAccount = () => {
                 <SelectElement
                   title="Country"
                   options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
-                  disabled={store.registrationMethod === 'national-id'}
-                  selected={store.registrationMethod === 'national-id' ? 'Ethiopia' : ''}
+                  disabled={true}
+                  selected={'Ethiopia'}
                   onSelect={(value) => formik.setFieldValue('country', value)}
                 />
                 <span className="block mb-5 pl-2 text-sm text-red-600">
@@ -649,7 +651,7 @@ const CreateAccount = () => {
               {formik.values.photo_base64 && (
                 <img
                   src={formik.values.photo_base64}
-                  className="inline-block max-h-28 rounded-full"
+                  className="inline-block h-28 w-28 object-cover rounded-full"
                   alt="user photo"
                 />
               )}
@@ -681,7 +683,7 @@ const CreateAccount = () => {
             </div>
 
             <div className="">
-              {formik.values.photo_base64 && (
+              {formik.values.id_front_base64 && (
                 <img
                   src={formik.values.id_front_base64}
                   className="inline-block h-28 w-28 object-cover"

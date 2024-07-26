@@ -29,17 +29,15 @@ const SelectElement = ({ title, options, disabled, selected, onSelect }: Props) 
         onChange={(e) => onSelect(e.target.value)}
         autoComplete={title}
       >
-        <option label={title} className="text-[16px] font-semibold"></option>
+        <option label={title} className="text-[16px] block font-semibold"></option>
         {options?.length > 0 &&
           code &&
           value &&
           options.map((list, index) => (
             // @ts-ignore
             <option key={index} value={list[code]} className="text-[16px]">
-              {
-                // @ts-ignore
-                list[value]
-              }
+              {// @ts-ignore
+              list[value]?.slice(0, 64)}
             </option>
           ))}
       </select>

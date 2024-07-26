@@ -5,6 +5,7 @@ import { authAxios } from '../../api/axios';
 import InlineNotification from '../../components/InlineNotification';
 import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
+import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 
 const NationalID = () => {
   // @ts-ignore
@@ -40,7 +41,6 @@ const NationalID = () => {
         .then((res) => {
           setOTPSent(true);
           setStore({
-            ...store,
             fin: res.data.fin,
             transaction_id: res.data.transaction_id,
             registrationMethod: 'national-id',
@@ -97,7 +97,7 @@ const NationalID = () => {
             className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? 'Please wait...' : 'Get OTP'}
+              {isLoading ? <LoadingSpinnerButton /> : 'Get OTP'}
             </span>
           </button>
         </div>

@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import RegistrationMethod from './RegistrationMethod';
 import yayaBrand from '../../assets/yayawallet-brand.svg';
 

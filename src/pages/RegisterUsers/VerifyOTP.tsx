@@ -7,6 +7,7 @@ import { authAxios } from '../../api/axios';
 import { formatTime } from '../../utils/formatTime';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
+import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 
 const VerifyOTP = () => {
   // @ts-ignore
@@ -27,7 +28,10 @@ const VerifyOTP = () => {
       }, 1000);
 
       return () => clearInterval(timerId);
-    } else navigate('/register-user', { replace: true });
+    } else if (otpExpiresIn === 0) {
+      console.log('OTP Expires in 0 seconds');
+      navigate('/register-user', { replace: true });
+    }
   }, [otpExpiresIn]);
 
   const formik = useFormik({
@@ -41,21 +45,26 @@ const VerifyOTP = () => {
         .required('Enter the OTP sent to your phone'),
     }),
 
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       setErrorMessage('');
       setLoading(true);
 
       if (store.registrationMethod === 'invitation') {
-        await setTimeout(() => {
-          if (store.otp?.toString() === values.otp?.toString()) setOTPVerified(true);
-          else setErrorMessage('Invalid OTP');
-        }, 2000);
+        setTimeout(() => {
+          if (store.otp?.toString() === values.otp?.toString()) {
+            setOTPVerified(true);
+            setOTPExpiresIn(-1);
+          } else {
+            setErrorMessage('Invalid OTP');
+          }
 
-        await setLoading(false);
+          setLoading(false);
+        }, 1000);
       } else if (store.registrationMethod === 'national-id') {
         authAxios
           .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transaction_id}/${values.otp}`)
           .then((res) => {
+            setOTPExpiresIn(-1);
             setOTPVerified(true);
             setStore({
               ...store,
@@ -122,7 +131,7 @@ const VerifyOTP = () => {
             className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? 'Please wait...' : 'Verify OTP'}
+              {isLoading ? <LoadingSpinnerButton /> : 'Verify OTP'}
             </span>
           </button>
         </div>
