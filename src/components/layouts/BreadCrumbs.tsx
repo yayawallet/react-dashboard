@@ -18,8 +18,8 @@ const BreadCrumbs = () => {
     ? paths
     : location.pathname.startsWith('/bill/update/') && paths[3] === undefined
       ? paths
-      : location.pathname.startsWith('/scheduled-payment/report/') && paths[3] === undefined
-        ? ['scheduled-payment', 'report', 'details']
+      : location.pathname.startsWith('/scheduled-payment/bulk-report/') && paths[3] === undefined
+        ? ['scheduled-payment', 'bulk-report', 'details']
         : location.pathname.startsWith('/recurring-contract/report/') && paths[3] === undefined
           ? ['recurring-contract', 'report', 'details']
           : location.pathname.startsWith('/recurring-contract/request-payment-report/') &&

@@ -26,7 +26,7 @@ import TestAPI from '../pages/RegisterUsers/TestAPI';
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
 import ScheduledList from '../pages/ScheduledPayment/ScheduledList';
-import ScheduleReport from '../pages/ScheduledPayment/ScheduledReport';
+import ScheduleReport from '../pages/ScheduledPayment/ScheduledBulkReport';
 
 import RecurringContract from '../pages/RecurringContract/Index';
 import CreateContract from '../pages/RecurringContract/CreateContract';
@@ -231,8 +231,8 @@ export const sidebarNavs = [
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
-        title: 'Scheduled Report',
-        path: 'report',
+        title: 'Bulk Report',
+        path: 'bulk-report',
         element: <ScheduleReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
@@ -332,7 +332,7 @@ export const privateNavs = [
     element: <Layout />,
     children: [
       ...sidebarNavs,
-      { path: 'scheduled-payment/report/:id', element: <BulkImportReportDetails /> },
+      { path: 'scheduled-payment/bulk-report/:id', element: <BulkImportReportDetails /> },
       { path: 'recurring-contract/report/:id', element: <BulkImportReportDetails /> },
       {
         path: 'recurring-contract/request-payment/report/:id',
