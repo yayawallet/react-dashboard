@@ -116,7 +116,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       />
 
       <div
-        className={`${openModal || isProcessing || openInfoCard ? 'bg-black/20' : 'bg-black/80'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full`}
+        className={`${openModal || isProcessing || openInfoCard ? 'bg-black/20' : 'bg-black/60'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full`}
       >
         <div
           className="absolute top-[50%] left-[50%] bg-white rounded-xl"

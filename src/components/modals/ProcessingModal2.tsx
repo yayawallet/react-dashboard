@@ -6,7 +6,7 @@ const ProcessingModal2 = ({ isProcessing }: Props) => {
   return (
     <div
       id="popup-modal"
-      className={`bg-white/50 backdrop-blur-[0.4px] overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${isProcessing ? 'flex' : 'hidden'}`}
+      className={`bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${isProcessing ? 'flex' : 'hidden'}`}
     >
       <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
         <svg className="h-20 w-20 animate-spin stroke-gray-500" viewBox="0 0 256 256">
