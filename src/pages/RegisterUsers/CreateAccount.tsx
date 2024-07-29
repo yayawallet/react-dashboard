@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import { authAxios } from '../../api/axios';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -10,6 +10,8 @@ import Stepper from './Stepper';
 import { RegistrationContext } from './Index';
 import approvedIcon from '../../assets/approve-checked.gif';
 import { Link } from 'react-router-dom';
+import { suggestedUsername } from '../../utils/suggestedUsername';
+import { debounce } from 'lodash';
 
 const CreateAccount = () => {
   // @ts-ignore
@@ -18,11 +20,11 @@ const CreateAccount = () => {
   const [registeredAccountName, setRegisteredAccountName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [accountNameLookup, setAccountNameLookup] = useState('');
+  const [accountnameLookup, setAccountnameLookup] = useState('');
   const [emailLookup, setEmailLookup] = useState('');
   const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [totalSteps, setTotalSteps] = useState(store.registrationMethod === 'national-id' ? 5 : 4);
+  const [totalSteps, setTotalSteps] = useState(store.accountType === 'business' ? 5 : 4);
   const [stepTitle, setStepTitle] = useState('');
   const [isChecking, setChecking] = useState(false);
   const [userPhoto, setUserPhoto] = useState('');
@@ -34,6 +36,7 @@ const CreateAccount = () => {
     if (currentStep === 2) setStepTitle('Address Information');
     if (currentStep === 3) setStepTitle('Account Information');
     if (currentStep === 4) setStepTitle('User Documents');
+    if (currentStep === 5) setStepTitle('Business Documents');
   }, [currentStep]);
 
   useEffect(() => {
@@ -42,35 +45,51 @@ const CreateAccount = () => {
     }
   }, [store.photo]);
 
+  useEffect(() => {
+    if (currentStep !== 2 || formik.values.account_name) return;
+
+    (async () => {
+      const res = await suggestedUsername(formik.values.name);
+      formik.setFieldValue('account_name', res);
+    })();
+  }, [currentStep]);
+
   const handleAccountNameLookup = (account: string) => {
     setIsAccountNameAvailable(false);
 
     if (account.length !== 12) return;
 
-    setAccountNameLookup('');
+    setAccountnameLookup('');
     setChecking(true);
 
     authAxios
       .post('/user/search', { query: account })
       .then((res) => {
         if (res.data.length === 0) setIsAccountNameAvailable(true);
-        else setAccountNameLookup('Account name already taken');
+        else setAccountnameLookup('Account name already taken');
       })
       .finally(() => setChecking(false));
   };
 
+  const debouncedHandleEmailLookup = useCallback(
+    debounce((email) => {
+      setEmailLookup('');
+      setChecking(true);
+
+      authAxios
+        .post('/user/search', { query: email })
+        .then((res) => {
+          if (res.data.length > 0) setEmailLookup('User already exists');
+        })
+        .finally(() => setChecking(false));
+    }, 500),
+    []
+  );
+
   const handleEmailLookup = (email: string) => {
     if (email.length < 4) return;
 
-    setEmailLookup('');
-    setChecking(true);
-
-    authAxios
-      .post('/user/search', { query: email })
-      .then((res) => {
-        if (res.data.length > 0) setEmailLookup('User already exists');
-      })
-      .finally(() => setChecking(false));
+    debouncedHandleEmailLookup(email);
   };
 
   const handleImageOnChange = (e: React.ChangeEvent<HTMLInputElement>, field_name: string) => {
@@ -107,8 +126,8 @@ const CreateAccount = () => {
       date_of_birth: store.date_of_birth
         ? new Date((store.date_of_birth + 10800) * 1000).toISOString().slice(0, 10) // 10800 = 3 hours = 60 * 60 * 3
         : '',
-      region: '',
-      country: '',
+      region: store.region || '',
+      country: 'Ethiopia',
       address: store.address || '',
       password: '',
       confirmPassword: '',
@@ -118,10 +137,10 @@ const CreateAccount = () => {
       id_back_base64: '',
       // only for business account
       tin_number: store.tin_number || '',
-      license_number: store.lincense_number || '',
+      license_number: store.license_number || '',
       mcc: store.mcc || '',
-      tin_doc_base64: store.tin_doc_base64 || '',
-      licese_doc_base64: store.licese_doc_base64 || '',
+      tin_doc_base64: '',
+      license_doc_base64: '',
     },
 
     enableReinitialize: true,
@@ -129,7 +148,9 @@ const CreateAccount = () => {
 
     validationSchema: Yup.object().shape({
       name: Yup.string()
+        .trim()
         .required('Required')
+        .matches(/^[a-z\s]*$/i, 'Invalid Name')
         .min(4, 'Name too short')
         .max(128, 'Must be less thatn 128 characters'),
       email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -151,15 +172,33 @@ const CreateAccount = () => {
       account_name: Yup.string()
         .matches(/^[a-z]/, 'Must start with letter')
         .matches(/^[a-z0-5]*$/, 'Can only contain characters a-z and 1-5')
-        .matches(/^[a-z0-5]{12}$/, 'Must be 12 character')
+        .matches(/^[a-z0-5]{12}$/, 'Must be 12 characters')
         .required('Account name is required'),
       photo_base64: Yup.string().required('Required'),
       id_front_base64: Yup.string().required('Required'),
       id_back_base64: Yup.string().required('Required'),
+      tin_doc_base64: Yup.string().test('is-required', 'Required', function (value) {
+        {
+          const { createError } = this;
+          if (store.accountType === 'business' && !value) {
+            return createError({ message: 'Required' });
+          }
+          return true;
+        }
+      }),
+      license_doc_base64: Yup.string().test('is-required', 'Required', function (value) {
+        {
+          const { createError } = this;
+          if (store.accountType === 'business' && !value) {
+            return createError({ message: 'Required' });
+          }
+          return true;
+        }
+      }),
     }),
 
     onSubmit: (values) => {
-      if (emailLookup || accountNameLookup) return;
+      if (emailLookup || accountnameLookup) return;
 
       setLoading(true);
 
@@ -168,16 +207,19 @@ const CreateAccount = () => {
       setErrorMessage('');
 
       authAxios
-        .post('/user/register', {
-          ...values,
-          date_of_birth: new Date(values.date_of_birth).getTime(),
-        })
+        .post(
+          `${store.accountType === 'business' ? '/user/register-business' : '/user/register'}`,
+          {
+            ...values,
+            date_of_birth: new Date(values.date_of_birth).getTime(),
+          }
+        )
         .then((res) => {
           setRegisteredAccountName(res.data.account);
           setUserPhoto(values.photo_base64);
 
-          // clear input fields
-          formik.resetForm();
+          formik.resetForm(); // clear input fields
+          setStore({}); // clear store values
         })
         .catch((error) => {
           setErrorMessage(
@@ -243,8 +285,7 @@ const CreateAccount = () => {
         break;
     }
 
-    if (isChecking) return;
-    if (emailLookup || accountNameLookup) return;
+    if (isChecking || emailLookup || accountnameLookup) return;
 
     setCurrentStep((prev) => prev + 1);
   };
@@ -265,7 +306,7 @@ const CreateAccount = () => {
           />
         </div>
         <div className="flex flex-wrap justify-center items-center gap-8 mb-6">
-          <div className="">
+          <div className="flex flex-col items-center">
             <img src={userPhoto} className="h-28 w-28 object-cover rounded-full" alt="" />
             <span className="bg-violet-500 text-white px-2 pb-0.5 text-sm rounded">
               {registeredAccountName}
@@ -324,7 +365,9 @@ const CreateAccount = () => {
               </label>
               <input
                 type="text"
-                readOnly={store.registrationMethod === 'national-id'}
+                readOnly={
+                  store.registrationMethod === 'national-id' || store.accountType === 'business'
+                }
                 id="name"
                 autoFocus
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -503,7 +546,7 @@ const CreateAccount = () => {
                   title="Country"
                   options={[{ code: 'Ethiopia', value: 'Ethiopia' }]}
                   disabled={true}
-                  selected={'Ethiopia'}
+                  defaultValue={formik.values.country}
                   onSelect={(value) => formik.setFieldValue('country', value)}
                 />
                 <span className="block mb-5 pl-2 text-sm text-red-600">
@@ -520,7 +563,9 @@ const CreateAccount = () => {
                       ? Object.entries(regionsList).map(([code, value]) => ({ code, value }))
                       : []
                   }
+                  defaultValue={formik.values.region}
                   onSelect={(value) => formik.setFieldValue('region', value)}
+                  disabled={isLoading}
                 />
                 <span className="block mb-5 pl-2 text-sm text-red-600">
                   {formik.touched.region && formik.errors.region}
@@ -562,11 +607,11 @@ const CreateAccount = () => {
                   ></span>
                 </span>
               )}
-              <span className="block mb-5 pl-2 text-sm text-red-600">
-                {formik.touched.account_name && formik.errors.account_name}
-                {!formik.errors.account_name && accountNameLookup}
+              <span className="block mb-5 pl-2 text-sm text-red-600 font-semibold">
+                {formik.errors.account_name}
+                {!formik.errors.account_name && accountnameLookup}
                 {!formik.errors.account_name && isAccountNameAvailable && (
-                  <span className="text-green-600 font-semibold">Available</span>
+                  <span className="text-green-600">Available</span>
                 )}
               </span>
             </div>
@@ -686,7 +731,7 @@ const CreateAccount = () => {
               {formik.values.id_front_base64 && (
                 <img
                   src={formik.values.id_front_base64}
-                  className="inline-block h-28 w-28 object-cover"
+                  className="inline-block h-28 max-w-96 object-cover"
                   alt=""
                 />
               )}
@@ -719,7 +764,79 @@ const CreateAccount = () => {
               {formik.values.id_back_base64 && (
                 <img
                   src={formik.values.id_back_base64}
-                  className="inline-block max-h-28 mb-6"
+                  className="inline-block mb-6 h-28 max-w-96 object-cover"
+                  alt=""
+                />
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className={`${currentStep === 5 ? '' : 'hidden'} max-w-[500px] mx-auto mb-6`}>
+          <div className="grid gap-x-8 gap-y-6 md:grid-cols-2 items-center">
+            <div>
+              <label
+                htmlFor="tin_doc_base64"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+              >
+                TIN Document
+              </label>
+              <div>
+                <input
+                  aria-describedby="tin_doc_base64"
+                  name="tin_doc_base64"
+                  id="tin_doc_base64"
+                  accept=".jpg, .jpeg"
+                  type="file"
+                  disabled={isLoading}
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                  onChange={(e) => handleImageOnChange(e, 'tin_doc_base64')}
+                />
+
+                <span className="block mb-2 pl-2 text-sm text-red-600">
+                  {formik.touched.tin_doc_base64 && formik.errors.tin_doc_base64}
+                </span>
+              </div>
+            </div>
+
+            <div className="">
+              {formik.values.tin_doc_base64 && (
+                <img
+                  src={formik.values.tin_doc_base64}
+                  className="inline-block h-28 max-w-96 object-cover"
+                  alt=""
+                />
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="license_doc_base64"
+                className="block mb-1 pl-1 text-sm font-medium text-gray-900"
+              >
+                License Document
+              </label>
+              <input
+                aria-describedby="license_doc_base64"
+                name="license_doc_base64"
+                id="license_doc_base64"
+                accept=".jpg, .jpeg"
+                type="file"
+                disabled={isLoading}
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                onChange={(e) => handleImageOnChange(e, 'license_doc_base64')}
+              />
+
+              <span className="block mb-2 pl-2 text-sm text-red-600">
+                {formik.touched.license_doc_base64 && formik.errors.license_doc_base64}
+              </span>
+            </div>
+
+            <div className="">
+              {formik.values.license_doc_base64 && (
+                <img
+                  src={formik.values.license_doc_base64}
+                  className="inline-block mb-6 h-28 max-w-96 object-cover"
                   alt=""
                 />
               )}
@@ -730,6 +847,7 @@ const CreateAccount = () => {
         <div className="flex justify-center gap-4 text-[16px]" style={{ letterSpacing: '5px' }}>
           <button
             type="button"
+            disabled={isLoading}
             className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >

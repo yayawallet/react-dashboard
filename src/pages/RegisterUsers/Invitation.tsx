@@ -6,6 +6,7 @@ import InlineNotification from '../../components/InlineNotification';
 import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
 import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
+import AccountType from './AccountType';
 
 const Invitation = () => {
   // @ts-ignore

@@ -12,6 +12,21 @@ import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 import { RiProfileFill } from 'react-icons/ri';
 
 type LincenseType = { tin: 'string'; name: 'string'; license_number: 'string'; sector: 'string' };
+const EthiopianRegions: { [key: string]: string } = {
+  AA: 'Addis Ababa',
+  AF: 'Afar',
+  AM: 'Amhara',
+  BG: 'Benishangul-Gumuz',
+  DD: 'Dire Dawa',
+  GM: 'Gambela',
+  HR: 'Harari',
+  OR: 'Oromia',
+  SD: 'Sidama',
+  SO: 'Somali',
+  SWEP: 'SWEP',
+  SNNP: 'SNNP',
+  TG: 'Tigray',
+};
 
 const CreateBusinessAccount = () => {
   // @ts-ignore
@@ -34,7 +49,7 @@ const CreateBusinessAccount = () => {
       .get(`kyc/etrade/find-by-tin/${formik.values?.tin_number}`)
       .then((res) => {
         if (res.data?.length === 0) {
-          setErrorMessage('No License Is Available!');
+          setErrorMessage('No License Number is Available!');
           setTINValid(false);
 
           return;
@@ -46,14 +61,22 @@ const CreateBusinessAccount = () => {
         }));
 
         setLicenseNumbers(getLinceNumbers);
+
+        if (getLinceNumbers.length === 1) {
+          console.log('Yeah');
+          formik.setFieldValue('license_number', getLinceNumbers[0].code);
+        }
+
+        console.log(res.data);
+
         setLicenseOwner(res.data[0].name);
         setTINValid(true);
       })
       .catch((error) => {
+        setTINValid(false);
         setErrorMessage(
           error.response?.data?.error || error.response?.data?.message || 'Something Went Wrong!'
         );
-        setTINValid(false);
       })
       .finally(() => setLoading(false));
   };
@@ -72,18 +95,36 @@ const CreateBusinessAccount = () => {
     }),
 
     onSubmit: (values) => {
+      setErrorMessage('');
       setLoading(true);
 
-      setTimeout(() => {
-        setBusinessVerfied(true);
-        setStore({
-          ...store,
-          tin_number: values.tin_number,
+      authAxios
+        .post(`/kyc/etrade/find-by-license-number/${values.tin_number}`, {
           license_number: values.license_number,
-          mcc: values.mcc,
-        });
-        setLoading(false);
-      }, 1000);
+        })
+        .then((res) => {
+          console.log(res.data);
+          setBusinessVerfied(true);
+          setStore({
+            ...store,
+            tin_number: values.tin_number,
+            license_number: values.license_number,
+            mcc: values.mcc,
+            name: res.data.AssociateShortInfos[0].ManagerNameEng,
+            photo: res.data.AssociateShortInfos[0].Photo,
+            region: Object.keys(EthiopianRegions).find(
+              (key) => EthiopianRegions[key] === res.data.AddressInfo.Region
+            ),
+            address: `${res.data.AddressInfo.Zone ? res.data.AddressInfo.Zone : ''} ${res.data.AddressInfo.Woreda ? res.data.AddressInfo.Woreda : ''} ${res.data.AddressInfo.Kebele ? res.data.AddressInfo.Kebele : ''}`,
+          });
+        })
+        .catch((error) => {
+          setBusinessVerfied(false);
+          setErrorMessage(
+            error.response?.data?.error || error.response?.data?.message || 'Something Went Wrong!'
+          );
+        })
+        .finally(() => setLoading(false));
     },
   });
 
@@ -104,9 +145,9 @@ const CreateBusinessAccount = () => {
         onSubmit={formik.handleSubmit}
       >
         <div
-          className={`${isTINValid ? 'hidden' : ''} grid gap-6 mb-6 md:grid-cols-2 max-w-[500px] mx-auto items-center`}
+          className={`${isTINValid ? 'hidden' : ''} grid gap-6 mb-6 md:grid-cols-3 max-w-[500px] mx-auto items-center`}
         >
-          <div>
+          <div className="md:col-span-2">
             <label htmlFor="tin_number" className="block mb-2 text-sm font-medium text-gray-900">
               TIN Number
             </label>
@@ -126,11 +167,11 @@ const CreateBusinessAccount = () => {
             </span>
           </div>
 
-          <div className="">
+          <div>
             <button
               type="button"
               disabled={isLoading}
-              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg w-[130px] px-8 py-2.5 text-center"
+              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg max-w-[180px] px-8 py-2.5 text-center"
               onClick={handleGetLicenseNumber}
             >
               {isLoading ? <LoadingSpinnerButton /> : 'NEXT'}
@@ -151,6 +192,7 @@ const CreateBusinessAccount = () => {
                 title="License Number"
                 options={licenseNumbers}
                 onSelect={(value) => formik.setFieldValue('license_number', value)}
+                defaultValue={formik.values.license_number}
               />
               <span className="pl-2 text-sm text-red-600">
                 {formik.touched.license_number && formik.errors.license_number}
