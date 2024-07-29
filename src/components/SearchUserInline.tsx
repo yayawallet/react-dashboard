@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { authAxios } from '../api/axios';
 import avater from '../assets/avater.svg';
 import { User } from '../models';
 import { useGetData } from '../hooks/useSWR';
+import { debounce } from 'lodash';
 
 interface Props {
   query: string;
@@ -19,45 +20,57 @@ const SearchUserInline = ({ query, includeSelf, accountType, onSelecteUser }: Pr
 
   const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
-  useEffect(() => {
-    if (query.length >= 12) return; // username is 12 characters long
+  const debouncedSearch = useRef(
+    debounce((query) => {
+      setUserNotFound(false);
+      setSelectedUser('');
+      setIsLoading(true);
 
+      authAxios
+        .post('/user/search', {
+          query: query,
+        })
+        .then((res) => {
+          let users = res.data;
+
+          if (accountType?.toLocaleUpperCase() === 'BUSINESS') {
+            users = users.filter((user: User) => user.type?.toUpperCase() === 'BUSINESS');
+          }
+
+          if (includeSelf) {
+            setUsersList(users.slice(0, 5));
+          } else {
+            setUsersList(users.slice(0, 5).filter((user: User) => user.account !== ownAccount));
+          }
+
+          if (users?.length === 0) {
+            setUserNotFound(true);
+          }
+        })
+        .catch(() => {
+          setUserNotFound(true);
+        })
+        .finally(() => setIsLoading(false));
+    }, 500)
+  ).current;
+
+  useEffect(() => {
     setUserNotFound(false);
 
     if (query.length < 3) {
       setUsersList([]);
+
       return;
     }
 
-    setUserNotFound(false);
-    setSelectedUser('');
-    setIsLoading(true);
+    if (query === selectedUser) return;
+    if (query.length > 12) return; // username is 12 characters long
 
-    authAxios
-      .post('/user/search', {
-        query: query,
-      })
-      .then((res) => {
-        let users = res.data;
-
-        if (accountType?.toLocaleUpperCase() === 'BUSINESS') {
-          users = users.filter((user: User) => user.type?.toUpperCase() === 'BUSINESS');
-        }
-
-        if (includeSelf) {
-          setUsersList(users.slice(0, 5));
-        } else {
-          setUsersList(users.slice(0, 5).filter((user: User) => user.account !== ownAccount));
-        }
-
-        if (users?.length === 0) {
-          setUserNotFound(true);
-        }
-      })
-      .catch(() => {
-        setUserNotFound(true);
-      })
-      .finally(() => setIsLoading(false));
+    debouncedSearch(query);
+    // Cleanup function to cancel debounce on unmount
+    return () => {
+      debouncedSearch.cancel();
+    };
   }, [query]);
 
   return (
