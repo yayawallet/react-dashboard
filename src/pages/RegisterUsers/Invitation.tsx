@@ -85,7 +85,7 @@ const Invitation = () => {
                 registrationMethod: 'invitation',
               });
 
-              console.log({ otp: res.data.otp });
+              console.log(res.data.otp);
             })
             .catch((error) =>
               setErrorMessage(

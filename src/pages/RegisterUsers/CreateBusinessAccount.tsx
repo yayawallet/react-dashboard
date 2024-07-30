@@ -63,11 +63,8 @@ const CreateBusinessAccount = () => {
         setLicenseNumbers(getLinceNumbers);
 
         if (getLinceNumbers.length === 1) {
-          console.log('Yeah');
           formik.setFieldValue('license_number', getLinceNumbers[0].code);
         }
-
-        console.log(res.data);
 
         setLicenseOwner(res.data[0].name);
         setTINValid(true);
