@@ -103,7 +103,6 @@ const CreateBusinessAccount = () => {
           license_number: values.license_number,
         })
         .then((res) => {
-          console.log(res.data);
           setBusinessVerfied(true);
           setStore({
             ...store,

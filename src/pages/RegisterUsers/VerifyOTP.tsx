@@ -68,7 +68,8 @@ const VerifyOTP = () => {
             authAxios
               .post('/user/search', { query: phone })
               .then((res) => {
-                if (res.data?.length === 0) {
+                // if (res.data?.length === 0) {
+                if (true) {
                   setOTPExpiresIn(-1);
                   setOTPVerified(true);
                   setStore({
