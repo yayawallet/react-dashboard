@@ -63,28 +63,8 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       email: Yup.string().email('Invalid email address'),
     }),
 
-    onSubmit: (values) => {
-      // Clear existing values
-      setSuccessMessage('');
-
-      authAxios
-        .post('/bill/update', {
-          ...values,
-          customer_yaya_account: selectedUser,
-          start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
-          due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
-        })
-        .then(() => {
-          setSuccessMessage('Bill updated successfully');
-          setIsProcessing(false);
-          setOpenInfoCard(true);
-          setUpdateSucceed(true);
-        })
-        .catch(() => {
-          setIsProcessing(false);
-          setOpenInfoCard(true);
-          setUpdateSucceed(false);
-        });
+    onSubmit: () => {
+      setOpenModal(true);
     },
   });
 
@@ -93,7 +73,30 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    formik.handleSubmit();
+
+    // Clear existing values
+    setSuccessMessage('');
+
+    const values = formik.values;
+
+    authAxios
+      .post('/bill/update', {
+        ...values,
+        customer_yaya_account: selectedUser,
+        start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
+        due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
+      })
+      .then(() => {
+        setSuccessMessage('Bill updated successfully');
+        setUpdateSucceed(true);
+      })
+      .catch(() => {
+        setUpdateSucceed(false);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+        setOpenInfoCard(true);
+      });
   };
 
   const handleCloseResultModal = () => {
@@ -138,10 +141,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
 
           <form
             className={`max-w-[var(--form-width)] p-8 pt-6 rounded-b-xl mx-auto`}
-            onSubmit={(e) => {
-              e.preventDefault();
-              setOpenModal(true);
-            }}
+            onSubmit={formik.handleSubmit}
           >
             <div className="grid gap-6 mb-4 md:grid-cols-5">
               <div className="md:col-span-3">
