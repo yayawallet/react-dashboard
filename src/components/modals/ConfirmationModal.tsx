@@ -9,7 +9,7 @@ const ConfirmationModal = ({ header, infoList, openModal, onConfirm }: Props) =>
   return (
     <div
       id="popup-modal"
-      className={`bg-black/80 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${openModal ? 'flex' : 'hidden'}`}
+      className={`bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${openModal ? 'flex' : 'hidden'}`}
     >
       <div className="relative p-4 w-full max-w-xl max-h-full cursor-auto">
         <div className="relative bg-white rounded-lg shadow">

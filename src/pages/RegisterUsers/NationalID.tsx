@@ -5,6 +5,7 @@ import { authAxios } from '../../api/axios';
 import InlineNotification from '../../components/InlineNotification';
 import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
+import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 
 const NationalID = () => {
   // @ts-ignore
@@ -33,13 +34,13 @@ const NationalID = () => {
       // Clear existing values
       setOTPSent(false);
       setErrorMessage('');
+      setStore({});
 
       authAxios
         .get(`kyc/fayda/request-otp/${values.fin}`)
         .then((res) => {
           setOTPSent(true);
           setStore({
-            ...store,
             fin: res.data.fin,
             transaction_id: res.data.transaction_id,
             registrationMethod: 'national-id',
@@ -69,7 +70,7 @@ const NationalID = () => {
         onSubmit={formik.handleSubmit}
         autoComplete="off"
       >
-        <div className="grid gap-x-6 mb-4 md:grid-cols-5">
+        <div className={`grid gap-2 mb-6 md:grid-cols-3 max-w-[500px] mx-auto items-center`}>
           <div className="md:col-span-2">
             <label htmlFor="fin" className="block mb-2 text-sm font-medium text-gray-900">
               FIN/FCN
@@ -93,10 +94,10 @@ const NationalID = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+            className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm max-w-[180px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? 'Please wait...' : 'Get OTP'}
+              {isLoading ? <LoadingSpinnerButton /> : 'Get OTP'}
             </span>
           </button>
         </div>

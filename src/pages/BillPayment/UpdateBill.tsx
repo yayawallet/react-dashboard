@@ -96,7 +96,7 @@ const UpdateBill = () => {
         .test('due_at', 'Due date must be in the future', (value) => {
           return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
         }),
-      customer_id: Yup.string().required('Customer ID is required'),
+      customer_id: Yup.string(),
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
       bill_season: Yup.string(),
@@ -109,37 +109,8 @@ const UpdateBill = () => {
       email: Yup.string().email('Invalid email address'),
     }),
 
-    onSubmit: (values) => {
-      setLoading(true);
-
-      // Clear existing values
-      setBillPaymentID('');
-      setErrorMessage('');
-
-      authAxios
-        .post('/bill/update', {
-          ...values,
-          customer_yaya_account: selectedUser,
-          start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
-          due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
-        })
-        .then((res) => {
-          setBillPaymentID(res.data.id);
-          setFoundBill(null);
-
-          // clear input fields
-          formik.resetForm();
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.error || error.response?.data?.message || error.message
-          );
-        })
-        .finally(() => {
-          setLoading(false);
-
-          setIsProcessing(false);
-        });
+    onSubmit: () => {
+      setOpenModal(true);
     },
   });
 
@@ -152,7 +123,38 @@ const UpdateBill = () => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    formik.handleSubmit();
+
+    setLoading(true);
+
+    // Clear existing values
+    setBillPaymentID('');
+    setErrorMessage('');
+
+    const values = formik.values;
+
+    authAxios
+      .post('/bill/update', {
+        ...values,
+        customer_yaya_account: selectedUser,
+        start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
+        due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
+      })
+      .then((res) => {
+        setBillPaymentID(res.data.id);
+        setFoundBill(null);
+
+        // clear input fields
+        formik.resetForm();
+      })
+      .catch((error) => {
+        setErrorMessage(
+          error.response?.data?.error || error.response?.data?.message || error.message
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+        setIsProcessing(false);
+      });
   };
 
   return (
@@ -242,10 +244,7 @@ const UpdateBill = () => {
 
       <form
         className={`${foundBill ? '' : 'hidden'} max-w-[var(--form-width)] border border-t-0 p-8 pt-6 rounded-b-xl mx-auto mb-20`}
-        onSubmit={(e) => {
-          e.preventDefault();
-          setOpenModal(true);
-        }}
+        onSubmit={formik.handleSubmit}
       >
         <div className="grid gap-6 mb-4 md:grid-cols-5">
           <div className="md:col-span-3">

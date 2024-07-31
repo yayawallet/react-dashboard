@@ -10,13 +10,13 @@ const InlineNotification = ({ type, customType, info }: Props) => {
   const [hide, setHide] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setHide(true), 60000); // one minute
+    setTimeout(() => setHide(true), 120000000); // two minute
   }, []);
 
   return (
     <div className={`${hide ? 'hidden' : ''}`}>
       <div
-        className={`flex justify-between items-center p-4 mb-1 transition text-[15px] rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
+        className={`flex justify-between items-center p-4 mb-1 max-w-[1140px] mx-auto transition text-[15px] rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
         role="alert"
       >
         <div className="flex items-center">

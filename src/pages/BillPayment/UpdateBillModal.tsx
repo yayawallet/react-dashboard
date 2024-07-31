@@ -36,8 +36,8 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       due_at: bill?.due_at ? new Date(bill.due_at).toISOString().slice(0, 16) : '',
       cluster: bill?.cluster || '',
       description: bill?.description || '',
-      phone: '',
-      email: '',
+      phone: bill?.phone || '',
+      email: bill?.email || '',
     },
 
     enableReinitialize: true,
@@ -50,7 +50,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
         .test('due_at', 'Due date must be in the future', (value) => {
           return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
         }),
-      customer_id: Yup.string().required('Customer ID is required'),
+      customer_id: Yup.string(),
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
       bill_season: Yup.string(),
@@ -63,28 +63,8 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       email: Yup.string().email('Invalid email address'),
     }),
 
-    onSubmit: (values) => {
-      // Clear existing values
-      setSuccessMessage('');
-
-      authAxios
-        .post('/bill/update', {
-          ...values,
-          customer_yaya_account: selectedUser,
-          start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
-          due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
-        })
-        .then(() => {
-          setSuccessMessage('Bill updated successfully');
-          setIsProcessing(false);
-          setOpenInfoCard(true);
-          setUpdateSucceed(true);
-        })
-        .catch(() => {
-          setIsProcessing(false);
-          setOpenInfoCard(true);
-          setUpdateSucceed(false);
-        });
+    onSubmit: () => {
+      setOpenModal(true);
     },
   });
 
@@ -93,7 +73,30 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
     if (!confirm) return;
 
     setIsProcessing(true);
-    formik.handleSubmit();
+
+    // Clear existing values
+    setSuccessMessage('');
+
+    const values = formik.values;
+
+    authAxios
+      .post('/bill/update', {
+        ...values,
+        customer_yaya_account: selectedUser,
+        start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
+        due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
+      })
+      .then(() => {
+        setSuccessMessage('Bill updated successfully');
+        setUpdateSucceed(true);
+      })
+      .catch(() => {
+        setUpdateSucceed(false);
+      })
+      .finally(() => {
+        setIsProcessing(false);
+        setOpenInfoCard(true);
+      });
   };
 
   const handleCloseResultModal = () => {
@@ -116,7 +119,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       />
 
       <div
-        className={`${openModal || isProcessing || openInfoCard ? 'bg-black/20' : 'bg-black/80'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full`}
+        className={`${openModal || isProcessing || openInfoCard ? 'bg-black/20' : 'bg-black/60'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full`}
       >
         <div
           className="absolute top-[50%] left-[50%] bg-white rounded-xl"
@@ -128,7 +131,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
             <button
               type="button"
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[100px] px-5 py-2.5 text-center"
-              onClick={handleCloseResultModal}
+              onClick={() => onCancelUpdate(false)}
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
                 Cancel
@@ -138,10 +141,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
 
           <form
             className={`max-w-[var(--form-width)] p-8 pt-6 rounded-b-xl mx-auto`}
-            onSubmit={(e) => {
-              e.preventDefault();
-              setOpenModal(true);
-            }}
+            onSubmit={formik.handleSubmit}
           >
             <div className="grid gap-6 mb-4 md:grid-cols-5">
               <div className="md:col-span-3">
@@ -403,7 +403,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
               <button
                 type="button"
                 className="text-violet-700 border-2 border-violet-700 hover:bg-violet-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm sm:w-[100px] px-5 py-2 text-center"
-                onClick={handleCloseResultModal}
+                onClick={() => onCancelUpdate(false)}
               >
                 <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
                   Cancel

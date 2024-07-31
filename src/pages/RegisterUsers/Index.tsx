@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import RegistrationMethod from './RegistrationMethod';
 import yayaBrand from '../../assets/yayawallet-brand.svg';
 
@@ -11,7 +11,7 @@ const Index = () => {
     // @ts-ignore
     <RegistrationContext.Provider value={{ store, setStore }}>
       <div className="page-container">
-        <h1 className="text-2xl font-semibold p-2 mb-5">Register Users</h1>
+        {/* <h1 className="text-2xl font-semibold p-2 mb-5">Register Users</h1> */}
 
         <RegistrationMethod />
 

@@ -47,6 +47,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setAccessToken('');
     setRefreshToken('');
     setUser(null);
+
+    window.location.href = '/login';
   };
 
   return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;

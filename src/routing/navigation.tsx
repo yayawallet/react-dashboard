@@ -21,13 +21,11 @@ import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount'
 import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
 import Invitation from '../pages/RegisterUsers/Invitation';
 import NationalID from '../pages/RegisterUsers/NationalID';
-import CreateLevelTwo from '../pages/RegisterUsers/CreateLevelTwo';
-import CreateBusiness from '../pages/RegisterUsers/CreateBusiness';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
 import ScheduledList from '../pages/ScheduledPayment/ScheduledList';
-import ScheduleReport from '../pages/ScheduledPayment/ScheduledReport';
+import ScheduleReport from '../pages/ScheduledPayment/ScheduledBulkReport';
 
 import RecurringContract from '../pages/RecurringContract/Index';
 import CreateContract from '../pages/RecurringContract/CreateContract';
@@ -165,19 +163,6 @@ export const sidebarNavs = [
     accessRoles: ['agent'],
     children: [
       {
-        title: 'Level Two',
-        path: 'leveltwo',
-        element: <CreateLevelTwo />,
-        accessRoles: ['agent'],
-      },
-      {
-        title: 'Business',
-        path: 'business',
-        element: <CreateBusiness />,
-        accessRoles: ['agent'],
-      },
-      ,
-      {
         title: 'Invitation',
         path: 'invitation',
         element: <Invitation />,
@@ -239,8 +224,8 @@ export const sidebarNavs = [
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
-        title: 'Scheduled Report',
-        path: 'report',
+        title: 'Bulk Report',
+        path: 'bulk-report',
         element: <ScheduleReport />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
@@ -340,7 +325,7 @@ export const privateNavs = [
     element: <Layout />,
     children: [
       ...sidebarNavs,
-      { path: 'scheduled-payment/report/:id', element: <BulkImportReportDetails /> },
+      { path: 'scheduled-payment/bulk-report/:id', element: <BulkImportReportDetails /> },
       { path: 'recurring-contract/report/:id', element: <BulkImportReportDetails /> },
       {
         path: 'recurring-contract/request-payment/report/:id',

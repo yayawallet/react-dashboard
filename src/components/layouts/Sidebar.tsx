@@ -36,7 +36,7 @@ const Sidebar = () => {
     <>
       <button
         type="button"
-        className="absolute top-6 left-0 z-10 inline-flex items-center px-2 py-1 mt-2 ms-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+        className="absolute top-3 left-0 z-10 inline-flex items-center px-2 py-1 mt-2 ms-3 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
         onClick={openSidebarMenu}
       >
         <svg

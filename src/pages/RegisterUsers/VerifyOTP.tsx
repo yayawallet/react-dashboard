@@ -7,6 +7,7 @@ import { authAxios } from '../../api/axios';
 import { formatTime } from '../../utils/formatTime';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
+import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 
 const VerifyOTP = () => {
   // @ts-ignore
@@ -14,11 +15,10 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
 
   const [isOTPVerified, setOTPVerified] = useState(false);
-  const [otpExpiresIn, setOTPExpiresIn] = useState(
-    store?.registrationMethod == 'invitation' ? 120 : 300
-  );
+  const [otpExpiresIn, setOTPExpiresIn] = useState(120);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     if (otpExpiresIn > 0) {
@@ -27,7 +27,10 @@ const VerifyOTP = () => {
       }, 1000);
 
       return () => clearInterval(timerId);
-    } else navigate('/register-user', { replace: true });
+    } else if (otpExpiresIn === 0) {
+      console.log('OTP Expires in 0 seconds');
+      navigate('/register-user', { replace: true });
+    }
   }, [otpExpiresIn]);
 
   const formik = useFormik({
@@ -37,39 +40,65 @@ const VerifyOTP = () => {
 
     validationSchema: Yup.object().shape({
       otp: Yup.string()
-        .min(6, 'Must be 6 digit number')
-        .max(6, 'Must be 6 digit number')
+        .matches(/^[0-9]{6}$/, 'Must be 6 digit number')
         .required('Enter the OTP sent to your phone'),
     }),
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setErrorMessage('');
+      setLoading(true);
 
-      if (store.registrationMethod == 'invitation') {
-        if (store.otp?.toString() == values.otp?.toString()) setOTPVerified(true);
-        else setErrorMessage('Invalid OTP');
-      } else if (store.registrationMethod == 'national-id') {
-        setLoading(true);
-        authAxios
-          .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transactionId}/${values.otp}`)
-          .then((res) => {
+      if (store.registrationMethod === 'invitation') {
+        setTimeout(() => {
+          if (store.otp?.toString() === values.otp?.toString()) {
             setOTPVerified(true);
-            setStore({
-              ...store,
-              name: res.data.name_eng,
-              date_of_birth: res.data.dob,
-              gender: res.data.gender,
-              phone: res.data.phone,
-              email: res.data.email,
-              address: res.data.address_eng?.split(',').slice(0, 2).join(','),
-              fin: res.data.fin,
-              photo: res.data.photo,
-            });
+            setOTPExpiresIn(-1);
+          } else {
+            setErrorMessage('Invalid OTP');
+          }
+
+          setLoading(false);
+        }, 1000);
+      } else if (store.registrationMethod === 'national-id') {
+        authAxios
+          .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transaction_id}/${values.otp}`)
+          .then((res) => {
+            const phone = res.data.phone;
+
+            authAxios
+              .post('/user/search', { query: phone })
+              .then((res) => {
+                // if (res.data?.length === 0) {
+                if (true) {
+                  setOTPExpiresIn(-1);
+                  setOTPVerified(true);
+                  setStore({
+                    ...store,
+                    name: res.data.name_eng,
+                    date_of_birth: res.data.dob,
+                    gender: res.data.gender,
+                    phone: res.data.phone,
+                    email: res.data.email,
+                    address: res.data.address_eng?.split(',').slice(0, 2).join(','),
+                    fin: res.data.fin,
+                    photo: res.data.photo,
+                  });
+                }
+
+                setErrorMessage(`User with this number 0${phone} already exists`);
+                setOTPExpiresIn(30);
+                setStore({});
+                setDisabled(true);
+              })
+              .catch(() => setErrorMessage('Something went wrong!'))
+              .finally(() => setLoading(false));
           })
-          .catch(() => setErrorMessage('Invalid OTP'))
-          .finally(() => setLoading(false));
+          .catch(() => {
+            setLoading(false);
+            setErrorMessage('Invalid OTP');
+          });
       } else {
-        setErrorMessage('Something went wrong');
+        setErrorMessage('Something went wrong!');
       }
     },
   });
@@ -89,7 +118,7 @@ const VerifyOTP = () => {
         onSubmit={formik.handleSubmit}
         autoComplete="off"
       >
-        <div className="grid gap-6 mb-4 md:grid-cols-5 items-center">
+        <div className={`grid gap-2 mb-6 md:grid-cols-3 max-w-[500px] mx-auto items-center`}>
           <div className="md:col-span-2 relative">
             <label htmlFor="otp" className="block mb-2 text-sm font-medium text-gray-900">
               Enter 6 digit OTP
@@ -101,7 +130,7 @@ const VerifyOTP = () => {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Enter OTP sent to your phone"
               autoComplete="off"
-              disabled={isLoading}
+              disabled={isLoading || disabled}
               onChange={formik.handleChange}
               value={formik.values.otp}
             />
@@ -115,11 +144,11 @@ const VerifyOTP = () => {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || disabled}
             className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? 'Please wait...' : 'Verify OTP'}
+              {isLoading ? <LoadingSpinnerButton /> : 'Verify OTP'}
             </span>
           </button>
         </div>
