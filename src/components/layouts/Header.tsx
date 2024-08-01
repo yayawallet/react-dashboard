@@ -13,18 +13,21 @@ const Header = () => {
           <BreadCrumbs />
         </div>
 
-        <div className="h-full w-full flex items-center justify-end">
+        <button
+          className="h-full w-full flex items-center justify-end mt-1"
+          onBlur={() => setOpen(false)}
+        >
           <img
             src={avater}
-            alt="Img"
-            className="h-full p-3 cursor-pointer"
+            alt=""
+            className="h-full p-4 cursor-pointer"
             onClick={() => setOpen(!open)}
           />
 
           <div className={`${open ? '' : 'hidden'}`}>
             <UserSettings />
           </div>
-        </div>
+        </button>
       </header>
     </div>
   );
