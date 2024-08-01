@@ -15,7 +15,9 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
 
   const [isOTPVerified, setOTPVerified] = useState(false);
-  const [otpExpiresIn, setOTPExpiresIn] = useState(120);
+  const [otpExpiresIn, setOTPExpiresIn] = useState(
+    store?.registrationMethod == 'invitation' ? 120 : 300
+  );
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -28,7 +30,6 @@ const VerifyOTP = () => {
 
       return () => clearInterval(timerId);
     } else if (otpExpiresIn === 0) {
-      console.log('OTP Expires in 0 seconds');
       navigate('/register-user', { replace: true });
     }
   }, [otpExpiresIn]);

@@ -30,7 +30,7 @@ const ListBill = () => {
     mutate,
     isValidating,
     data: { data: billList, lastPage: pageCount, total: totalBills, perPage } = {},
-  } = usePostData(`/bill/list?p=${currentPage}`, {});
+  } = usePostData(`/bill/list?p=${currentPage}`, { client_yaya_account: ownAccount });
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -166,11 +166,7 @@ const ListBill = () => {
                           </td>
 
                           <td className="border-b border-slate-200 pl-3 py-3">
-                            {bill.cluster ? (
-                              capitalize(bill.cluster)
-                            ) : (
-                              <span className="text-gray-500">unavailable</span>
-                            )}
+                            {bill.cluster ? capitalize(bill.cluster) : ''}
                           </td>
 
                           <td className="border-b border-slate-200 pl-3 py-3">

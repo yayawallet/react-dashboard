@@ -97,7 +97,7 @@ const CreateBusinessAccount = () => {
 
       authAxios
         .post(`/kyc/etrade/find-by-license-number/${values.tin_number}`, {
-          license_number: values.license_number,
+          licenseNumber: values.license_number,
         })
         .then((res) => {
           setBusinessVerfied(true);

@@ -1,47 +1,27 @@
-import { createContext, ReactNode, useState } from 'react';
+import { createContext, ReactNode, useContext, useState } from 'react';
 
 type RegistrationContextType = {
-  accountType: string;
-  status: string;
-  errorMessage: string;
-  successMessage: string;
-  updateStatus: (value: string) => void;
-  updateErrorMessage: (value: string) => void;
-  updateSuccessMessage: (value: string) => void;
+  store: Object;
+  setStore: (value: Object) => void;
 };
 
-const defaultRegistrationValue: RegistrationContextType = {
-  accountType: '',
-  status: '',
-  errorMessage: '',
-  successMessage: '',
-  updateStatus: () => {},
-  updateErrorMessage: () => {},
-  updateSuccessMessage: () => {},
-};
+// const defaultRegistrationValue: RegistrationContextType = {
+//   store: {},
+//   setStore: () => null,
+// };
 
-export const RegistrationContext = createContext<RegistrationContextType>(defaultRegistrationValue);
+export const RegistrationContext = createContext<RegistrationContextType | null>(null);
+
+export const useRegistration = useContext(RegistrationContext);
 
 const RegistrationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [accountType, setAccountType] = useState('');
-  const [status, setStatus] = useState(''); // level-two or business
-  const [errorMessage, setErrorMessage] = useState('There is no error');
-  const [successMessage, setSuccessMessage] = useState('');
-
-  const updateStatus = (status: string) => setStatus(status);
-  const updateErrorMessage = (msg: string) => setErrorMessage(msg);
-  const updateSuccessMessage = (msg: string) => setSuccessMessage(msg);
+  const [store, setStore] = useState({});
 
   return (
     <RegistrationContext.Provider
       value={{
-        accountType,
-        status,
-        errorMessage,
-        successMessage,
-        updateStatus,
-        updateErrorMessage,
-        updateSuccessMessage,
+        store,
+        setStore,
       }}
     >
       {children}
