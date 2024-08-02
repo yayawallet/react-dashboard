@@ -1,8 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode';
 
 const baseURL = import.meta.env.VITE_BASE_URL;
-let NUMBER_OF_TRIES = 0;
+let tokenExpiresIn = new Date().getTime();
 
 export default axios.create({
   baseURL,
@@ -12,9 +13,41 @@ export const authAxios = axios.create({
   baseURL,
 });
 
+const logout = () => {
+  localStorage.removeItem('user');
+  Cookies.remove('access_token');
+  Cookies.remove('refresh_token');
+
+  window.location.href = '/login';
+};
+
+export const updateTokenExpiredTime = (token?: string) => {
+  token = Cookies.get('access_token');
+
+  const decoded = token ? jwtDecode(token) : undefined;
+
+  tokenExpiresIn = decoded?.exp
+    ? new Date(Number(decoded?.exp) * 1000).getTime()
+    : new Date(0).getTime();
+};
+
 authAxios.interceptors.request.use(
-  (config) => {
+  async (config) => {
+    if (tokenExpiresIn <= new Date().getTime() + 30000) {
+      try {
+        const res = await axios.post(`${baseURL}/refresh`, {
+          refresh: Cookies.get('refresh_token'),
+        });
+
+        Cookies.set('access_token', res.data.access);
+        updateTokenExpiredTime(res.data.access);
+      } catch (err) {
+        logout();
+      }
+    }
+
     const accessToken = Cookies.get('access_token');
+
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
@@ -28,27 +61,7 @@ authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      if (NUMBER_OF_TRIES <= 2) {
-        axios
-          .post('/refresh', { refresh: Cookies.get('refresh_token') })
-          .then((res) => {
-            NUMBER_OF_TRIES = 0;
-
-            Cookies.set('access_token', res.data.access, {
-              secure: true,
-              sameSite: 'strict',
-            });
-          })
-          .catch(() => NUMBER_OF_TRIES++);
-
-        return;
-      }
-
-      localStorage.removeItem('user');
-      Cookies.remove('access_token');
-      Cookies.remove('refresh_token');
-
-      window.location.href = '/login';
+      logout();
     }
 
     return Promise.reject(error);
