@@ -9,6 +9,7 @@ import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
+import { MdCallMissedOutgoing } from 'react-icons/md';
 
 const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -138,7 +139,11 @@ const TransactionList = () => {
                           {capitalize(t?.sender.name).split(' ').slice(0, 2).join(' ')}
                         </td>
                         <td className="border-b border-slate-200 p-3">
-                          {ownAccount === t?.receiver.account ? (
+                          {t?.is_outgoing_transfer ? (
+                            <span className="inline-block font-semibold text-red-600 pr-1">
+                              <MdCallMissedOutgoing />
+                            </span>
+                          ) : ownAccount === t?.receiver.account ? (
                             <span className="inline-block font-semibold text-green-600">
                               &#43;&nbsp;
                             </span>

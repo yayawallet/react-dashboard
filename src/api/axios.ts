@@ -33,7 +33,7 @@ export const updateTokenExpiredTime = (token?: string) => {
 
 authAxios.interceptors.request.use(
   async (config) => {
-    if (tokenExpiresIn <= new Date().getTime() + 30000) {
+    if (tokenExpiresIn <= new Date().getTime() + 1000) {
       try {
         const res = await axios.post(`${baseURL}/refresh`, {
           refresh: Cookies.get('refresh_token'),
