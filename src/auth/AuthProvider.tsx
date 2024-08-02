@@ -1,6 +1,8 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useCookies } from '../hooks/useCookies';
+import Cookies from 'js-cookie';
+import { updateTokenExpiredTime } from '../api/axios';
 
 type UserType = {
   roles: string[];
@@ -41,12 +43,14 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
     setUser({ user_id, username, user_role });
+
+    updateTokenExpiredTime(accessToken);
   };
 
   const logout = () => {
-    setAccessToken('');
-    setRefreshToken('');
-    setUser(null);
+    localStorage.removeItem('user');
+    Cookies.remove('access_token');
+    Cookies.remove('refresh_token');
 
     window.location.href = '/login';
   };
