@@ -24,8 +24,9 @@ const TransferList = () => {
     error,
     isLoading,
     mutate,
+    isValidating,
     data: { data: transferList, lastPage: pageCount, total: totalPayoutMethods, perPage } = {},
-  } = useGetData('/transfer/list');
+  } = useGetData(`/transfer/list?p=${currentPage}`);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -41,7 +42,7 @@ const TransferList = () => {
     <div className="table-container">
       {error ? (
         <Error />
-      ) : isLoading ? (
+      ) : isLoading && currentPage === 1 ? (
         <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
@@ -57,7 +58,7 @@ const TransferList = () => {
             <EmptyList />
           ) : (
             <div className="relative">
-              <div className={`${isRefreshing ? '' : 'hidden'}`}>
+              <div className={`${isRefreshing || isValidating ? '' : 'hidden'}`}>
                 <div
                   className="absolute z-10 bg-white rounded-full p-1.5"
                   style={{
