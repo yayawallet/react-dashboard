@@ -142,11 +142,11 @@ const Invitation = () => {
               {!formik.errors.phone && (isNewUser === false ? 'User already exists' : '')}
               {!formik.errors.phone && isCheckingPhone && (
                 <>
-                  <span className="text-gray-700">Checking </span>
                   <span
                     className="inline-block border-gray-500 h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                     role="status"
                   ></span>
+                  <span className="text-gray-700"> Checking</span>
                 </>
               )}
             </span>

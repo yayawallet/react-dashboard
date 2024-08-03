@@ -30,7 +30,7 @@ const ListBill = () => {
     mutate,
     isValidating,
     data: { data: billList, lastPage: pageCount, total: totalBills, perPage } = {},
-  } = usePostData(`/bill/list?p=${currentPage}`, { client_yaya_account: ownAccount });
+  } = usePostData(`/bill/list?p=${currentPage}`, {});
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);

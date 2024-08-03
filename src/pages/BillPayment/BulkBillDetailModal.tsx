@@ -5,7 +5,7 @@ interface Props {
   onHide: () => void;
 }
 
-const BulkBillDetail = ({ failed, onHide }: Props) => {
+const BulkBillDetailModal = ({ failed, onHide }: Props) => {
   return (
     <div className="table-container">
       <div className="border border-slate-200 rounded-xl">
@@ -22,4 +22,4 @@ const BulkBillDetail = ({ failed, onHide }: Props) => {
   );
 };
 
-export default BulkBillDetail;
+export default BulkBillDetailModal;

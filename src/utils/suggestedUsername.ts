@@ -30,9 +30,8 @@ export const suggestedUsername = async (fullname: string) => {
 
   if (normalizedName.length < 12) {
     const characterLeft = 12 - normalizedName.length;
-    const randomNum = generateRandomNumber(characterLeft);
 
-    normalizedName = normalizedName.concat(String(randomNum));
+    normalizedName = normalizedName.concat('1'.repeat(characterLeft));
   }
 
   let isAvailable = await isUsernameAvailable(normalizedName);

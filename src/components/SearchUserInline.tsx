@@ -100,11 +100,11 @@ const SearchUserInline = ({ query, includeSelf, accountType, onSelecteUser }: Pr
         </div>
       ) : isLoading ? (
         <span className="inline-block mt-1 pl-2 font-semibold text-sm text-gray-800">
-          Searching{' '}
           <span
             className="inline-block border-gray-500 h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
-          ></span>
+          ></span>{' '}
+          Searching
         </span>
       ) : userNotFound ? (
         <span className="block px-5 pt-0.5 pb-1 mt-1 font-semibold text-sm bg-gray-100 rounded">
