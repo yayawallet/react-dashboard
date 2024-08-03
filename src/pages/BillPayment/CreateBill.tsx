@@ -190,6 +190,7 @@ const CreateBill = () => {
                 className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="client_yaya_account"
                 autoComplete="off"
+                maxLength={12}
                 disabled={isLoading}
                 onChange={(e) => {
                   formik.handleChange(e);
@@ -228,6 +229,7 @@ const CreateBill = () => {
                 className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="customer_yaya_account"
                 autoComplete="off"
+                maxLength={12}
                 disabled={isLoading}
                 onChange={(e) => {
                   formik.handleChange(e);

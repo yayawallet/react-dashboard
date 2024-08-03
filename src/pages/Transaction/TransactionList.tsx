@@ -140,7 +140,7 @@ const TransactionList = () => {
                         </td>
                         <td className="border-b border-slate-200 p-3">
                           {t?.is_outgoing_transfer ? (
-                            <span className="inline-block font-semibold text-red-600 pr-1">
+                            <span className="inline-block font-semibold text-red-600 -ml-1 mr-1">
                               <MdCallMissedOutgoing />
                             </span>
                           ) : ownAccount === t?.receiver.account ? (

@@ -153,6 +153,7 @@ const Create = () => {
                   className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="account_number"
                   autoComplete="off"
+                  maxLength={12}
                   disabled={isLoading}
                   onChange={formik.handleChange}
                   value={formik.values.account_number}

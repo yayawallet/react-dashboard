@@ -477,11 +477,11 @@ const CreateAccount = () => {
                 />
                 {!formik.errors.email && isChecking && (
                   <span className="inline-block mt-1 pl-2 font-semibold text-sm text-gray-800">
-                    Checking{' '}
                     <span
                       className="inline-block border-gray-500 h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                       role="status"
-                    ></span>
+                    ></span>{' '}
+                    Checking
                   </span>
                 )}
                 <span className="block mb-5 pl-2 text-sm text-red-600">
@@ -589,6 +589,7 @@ const CreateAccount = () => {
                 id="account_name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="account_name"
+                maxLength={12}
                 disabled={isLoading}
                 autoComplete="new-username"
                 onChange={(e) => {
@@ -600,11 +601,11 @@ const CreateAccount = () => {
               />
               {!formik.errors.account_name && isChecking && (
                 <span className="inline-block mt-1 pl-2 font-semibold text-sm text-gray-800">
-                  Checking{' '}
                   <span
                     className="inline-block border-gray-500 h-3 w-3 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
                     role="status"
-                  ></span>
+                  ></span>{' '}
+                  Checking
                 </span>
               )}
               <span className="block mb-5 pl-2 text-sm text-red-600 font-semibold">

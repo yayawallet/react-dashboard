@@ -42,6 +42,8 @@ authAxios.interceptors.request.use(
         Cookies.set('access_token', res.data.access);
         updateTokenExpiredTime(res.data.access);
       } catch (err) {
+        Cookies.set('log', JSON.stringify(err));
+        Cookies.set('log-0', 'Refresh Error');
         logout();
       }
     }
@@ -61,6 +63,8 @@ authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
+      Cookies.set('log', JSON.stringify(error));
+      Cookies.set('log-1', '401 Error');
       logout();
     }
 

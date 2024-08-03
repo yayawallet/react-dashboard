@@ -25,7 +25,7 @@ const ScheduledList = () => {
     data: { data: scheduledPaymentList, lastPage: pageCount, total: totalScheduled, perPage } = {},
     mutate,
     isValidating,
-  } = useGetData('/scheduled-payment/list');
+  } = useGetData(`/scheduled-payment/list?p=${currentPage}`);
 
   const handleOnConfirm = (confirm: boolean) => {
     setOpenModal(false);
@@ -71,7 +71,7 @@ const ScheduledList = () => {
 
       {error ? (
         <Error />
-      ) : isLoading ? (
+      ) : isLoading && currentPage === 1 ? (
         <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
