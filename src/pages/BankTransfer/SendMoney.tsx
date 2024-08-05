@@ -4,11 +4,13 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
 import InstitutionLIst from '../../components/InstitutionLIst';
+import { EXternalAccount } from '../../models';
 
 const CreateTransfer = () => {
   const [transferID, setTransferID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
 
   const formik = useFormik({
     initialValues: {
@@ -51,20 +53,69 @@ const CreateTransfer = () => {
     },
   });
 
+  const handleAccountLookup = () => {
+    formik.setTouched({ institution_code: true, account_number: true });
+    if (formik.errors.institution_code || formik.errors.account_number) return;
+
+    setLoading(true);
+
+    // Clear existing values
+    setErrorMessage('');
+    setExternalAccount(undefined);
+
+    authAxios
+      .post(`/transfer/lookup-external`, {
+        institution_code: formik.values.institution_code,
+        account_number: formik.values.account_number,
+      })
+      .then((res) => setExternalAccount(res.data))
+      .catch((error) =>
+        setErrorMessage(
+          error.response?.data?.message || error.response?.data?.error || error.message
+        )
+      )
+      .finally(() => setLoading(false));
+  };
+
   return (
     <div className="page-container">
       <h1 className="text-2xl font-semibold p-2 mb-10">Transfer Money</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
-      {transferID && <InlineNotification type="success" info={`Transfer ID: ${transferID}`} />}
+      {transferID && (
+        <div>
+          <InlineNotification type="success" info={`Transfer ID: ${transferID}`} />
+          <div className="w-[var(--form-width-small)]  mx-auto my-10">
+            <button
+              type={`${externalAccount ? 'submit' : 'button'}`}
+              disabled={isLoading}
+              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[100px] px-5 py-2.5 text-center"
+              onClick={() => {
+                setExternalAccount(undefined);
+                setTransferID('');
+              }}
+            >
+              <span style={{ letterSpacing: '0.3px' }}>BACK</span>
+            </button>
+          </div>
+        </div>
+      )}
 
-      <div className="flex justify-center lg:mr-32 mt-6">
+      <div
+        className={`${transferID ? 'hidden' : ''} flex flex-col items-center justify-center lg:mr-32 mt-6`}
+      >
+        {externalAccount && (
+          <div className="flex gap-x-4 flex-wrap justify-between mb-2 bg-violet-50 px-4 py-1 rounded-lg border border-violet-100 font-semibold text-gray-600">
+            <div>{`${externalAccount?.institution?.name} ~ ${externalAccount?.full_name} - ${externalAccount?.account_number}`}</div>
+          </div>
+        )}
+
         <form
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
-          <div className="grid gap-6 md:grid-cols-2 mb-6">
+          <div className={`${externalAccount ? 'hidden' : ''} grid gap-6 md:grid-cols-2 mb-6`}>
             <div>
               <InstitutionLIst
                 onSelect={(value) => formik.setFieldValue('institution_code', value)}
@@ -84,6 +135,7 @@ const CreateTransfer = () => {
                 disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.account_number}
+                onKeyDown={(e) => (e.key === 'Enter' ? handleAccountLookup() : undefined)}
               />
 
               <span className="text-sm text-red-600">
@@ -92,74 +144,80 @@ const CreateTransfer = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 mb-6">
-            <div>
-              <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
-                Amount
-              </label>
-              <input
-                type="number"
-                step="any"
-                id="amount"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="amount"
-                autoComplete="off"
-                disabled={isLoading}
-                onChange={formik.handleChange}
-                value={formik.values.amount}
-              />
-              <span className="text-sm text-red-600">
-                {formik.touched.amount && formik.errors.amount}
-              </span>
+          <div className={`${externalAccount ? '' : 'hidden'}`}>
+            <div className="grid gap-6 md:grid-cols-2 mb-6">
+              <div>
+                <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
+                  Amount
+                </label>
+                <input
+                  type="number"
+                  step="any"
+                  id="amount"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="amount"
+                  autoComplete="off"
+                  disabled={isLoading}
+                  onChange={formik.handleChange}
+                  value={formik.values.amount}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.amount && formik.errors.amount}
+                </span>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="sender_note"
+                  className="block mb-2 text-sm font-medium text-gray-900"
+                >
+                  Reason
+                </label>
+                <input
+                  type="text"
+                  id="sender_note"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  placeholder="reason"
+                  autoComplete="off"
+                  disabled={isLoading}
+                  onChange={formik.handleChange}
+                  value={formik.values.sender_note}
+                />
+                <span className="text-sm text-red-600">
+                  {formik.touched.sender_note && formik.errors.sender_note}
+                </span>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="sender_note" className="block mb-2 text-sm font-medium text-gray-900">
-                Reason
+            <div className="mb-6">
+              <label htmlFor="ref_code" className="block mb-2 text-sm font-medium text-gray-900">
+                Reference code
+                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
-                id="sender_note"
+                id="ref_code"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="reason"
+                placeholder="Refrence code"
                 autoComplete="off"
                 disabled={isLoading}
                 onChange={formik.handleChange}
-                value={formik.values.sender_note}
+                value={formik.values.ref_code}
               />
               <span className="text-sm text-red-600">
-                {formik.touched.sender_note && formik.errors.sender_note}
+                {formik.touched.ref_code && formik.errors.ref_code}
               </span>
             </div>
           </div>
 
-          <div className="mb-6">
-            <label htmlFor="ref_code" className="block mb-2 text-sm font-medium text-gray-900">
-              Reference code
-              <span className="font-normal text-gray-400">&nbsp;(optional)</span>
-            </label>
-            <input
-              type="text"
-              id="ref_code"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="reason"
-              autoComplete="off"
-              disabled={isLoading}
-              onChange={formik.handleChange}
-              value={formik.values.ref_code}
-            />
-            <span className="text-sm text-red-600">
-              {formik.touched.ref_code && formik.errors.ref_code}
-            </span>
-          </div>
-
           <button
-            type="submit"
+            type={`${externalAccount ? 'submit' : 'button'}`}
             disabled={isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+            onClick={() => (!externalAccount ? handleAccountLookup() : undefined)}
           >
             <span style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? 'Please wait...' : 'Send Money'}
+              {isLoading ? 'Please wait...' : externalAccount ? 'Send Money' : 'NEXT'}
             </span>
           </button>
         </form>
