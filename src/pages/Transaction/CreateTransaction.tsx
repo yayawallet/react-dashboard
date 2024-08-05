@@ -5,12 +5,15 @@ import * as Yup from 'yup';
 import SearchUserInline from '../../components/SearchUserInline';
 import InlineNotification from '../../components/InlineNotification';
 import InputUserIconPlaceholder from '../../components/ui/InputUserIconPlaceholder';
+import { useGetData } from '../../hooks/useSWR';
 
 const CreateTransaction = () => {
   const [transactionID, setTransactionID] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
+
+  const { data: currentBalance } = useGetData('/user/balance');
 
   const formik = useFormik({
     initialValues: {
@@ -26,6 +29,11 @@ const CreateTransaction = () => {
     }),
 
     onSubmit: (values) => {
+      if (currentBalance && values.amount > currentBalance) {
+        setErrorMessage('No enough balance');
+        return;
+      }
+
       setLoading(true);
 
       // Clear existing values

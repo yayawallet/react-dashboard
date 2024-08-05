@@ -42,9 +42,19 @@ authAxios.interceptors.request.use(
         Cookies.set('access_token', res.data.access);
         updateTokenExpiredTime(res.data.access);
       } catch (err) {
-        Cookies.set('log', JSON.stringify(err));
-        Cookies.set('log-0', 'Refresh Error');
-        logout();
+        try {
+          const res = await axios.post(`${baseURL}/refresh`, {
+            refresh: Cookies.get('refresh_token'),
+          });
+
+          Cookies.set('access_token', res.data.access);
+          updateTokenExpiredTime(res.data.access);
+        } catch (err) {
+          Cookies.set('log', JSON.stringify(err));
+          Cookies.set('log-0', 'Refresh Error');
+
+          logout();
+        }
       }
     }
 

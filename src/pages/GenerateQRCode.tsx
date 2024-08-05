@@ -63,8 +63,11 @@ const GenerateQRCode = () => {
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       {QRCode && (
-        <div className="inline-flex flex-col rounded-lg md:ml-10 -mt-10">
-          <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60 md:h-80 lg:h-96" />
+        <div className="flex items-center justify-center flex-col -mt-10 w-[var(--form-width-small)] px-8">
+          <div className="">
+            <img src={QRCode.qr_image_url} alt="QR Code URL" className="h-60 md:h-80 lg:h-96" />
+          </div>
+
           <p className="text-sm">
             <span className="font-semibold">Payment Link:</span>{' '}
             <span className="px-1 pb-0.5 text-white bg-violet-600 rounded">
@@ -77,10 +80,19 @@ const GenerateQRCode = () => {
               {paymentLinkCopied ? 'copied!' : 'copy'}
             </button>
           </p>
+
+          <div className="inline-block mt-14">
+            <button
+              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+              onClick={() => setQRCode(undefined)}
+            >
+              Generage QR Code
+            </button>
+          </div>
         </div>
       )}
 
-      <div className="flex justify-center lg:mr-40 mt-6">
+      <div className={`${QRCode ? 'hidden' : ''} flex justify-center lg:mr-40 mt-6`}>
         <form
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}

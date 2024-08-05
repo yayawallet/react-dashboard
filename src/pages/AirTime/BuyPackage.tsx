@@ -5,6 +5,7 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import ResultModal from '../../components/modals/ResultModal';
 import { TopUp, Package } from './../../models';
+import { usePostData } from '../../hooks/useSWR';
 
 const packageCategories = [
   'One-Birr Package',
@@ -26,8 +27,7 @@ interface Props {
 }
 
 const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
-  const [packages, setPackages] = useState<Package[]>([]);
-  const [categories, setCategories] = useState(packageCategories);
+  const [categories, setCategories] = useState<any[]>(packageCategories);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
   const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
@@ -38,18 +38,12 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [topup, setTopup] = useState<TopUp>();
   const [openInfoCard, setOpenInfoCard] = useState(false);
 
-  useEffect(() => {
-    authAxios
-      .post('/airtime/packages', {
-        phone: '+2519', // Ethio telecom packages
-      })
-      .then((res) => setPackages(res.data));
-  }, []);
+  const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' }); // Ethio telecom packages
 
   useEffect(() => {
-    if (packages.length === 0) return;
+    if (packages?.length === 0) return;
 
-    const catgSet = new Set(packages.map((p) => p.category));
+    const catgSet = new Set(packages?.map((p: Package) => p.category));
     setCategories(Array.from(catgSet));
   }, [packages]);
 
@@ -101,10 +95,10 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
       />
 
       <div className="flex flex-col sm:flex-row gap-6 border-2 rounded-lg p-5">
-        <div className="flex sm:flex-col flex-wrap gap-x-2 gap-y-5">
+        <div className="flex sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-violet-50">
           {categories.map((c) => (
             <div
-              className={`border border-violet-200 rounded-lg text-violet-900 font-semibold md:w-40 p-2 py-4 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
+              className={`border border-violet-200 text-sm rounded-lg text-violet-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
               key={c}
               onClick={() => setSelectedCategory(c)}
             >
@@ -113,7 +107,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
           ))}
         </div>
 
-        {packages.length > 0 ? (
+        {packages?.length > 0 ? (
           <div className="h-full w-full sticky top-20">
             <div
               className=""
@@ -126,11 +120,13 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
               }}
             >
               {packages
-                .filter((pkg) => (!selectedCategory ? pkg : pkg.category == selectedCategory))
-                .map((pkg) => (
+                ?.filter((pkg: Package) =>
+                  !selectedCategory ? pkg : pkg.category == selectedCategory
+                )
+                .map((pkg: Package) => (
                   <div
                     key={pkg.code}
-                    className={`border border-violet-200 text-gray-900 hover:bg-violet-50 rounded-lg px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
+                    className={`border border-violet-200 text-sm text-gray-900 hover:bg-violet-50 rounded-lg px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
                     onClick={() => {
                       setSelectedPackage(pkg.code);
                       setSelectedPackageAmount(pkg.amount);
@@ -138,7 +134,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
                     }}
                   >
                     <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
-                    <span className="inline-block pt-2i text-lg text-violet-900 font-bold">
+                    <span className="inline-block pt-2i text- text-violet-900 font-bold">
                       {pkg.amount} ETB
                     </span>
                   </div>
@@ -153,7 +149,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
             </button>
           </div>
         ) : (
-          <div className="h-full w-full flex justify-center mt-20">
+          <div className="h-full w-full flex justify-center my-10">
             <LoadingSpinner />
           </div>
         )}

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '../auth/AuthProvider';
 
-export const useInactivityTimeout = (timeout = 60000) => {
+export const useInactivityTimeout = (timeout = 300000) => {
   const { logout: logoutCallback } = useAuth();
   const timeoutId = useRef<number | null>(null);
 
