@@ -84,19 +84,19 @@ export const sidebarNavs = [
     accessRoles: ['admin', 'agent', 'clerk'],
     children: [
       {
-        title: 'Create Transaction',
+        title: 'Send Money',
         path: 'create',
         element: <CreateTransaction />,
         accessRoles: ['admin', 'agent'],
       },
       {
-        title: 'Transaction List',
+        title: 'Transaction History',
         path: 'list',
         element: <TransactionList />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
       {
-        title: 'Verify Transaction',
+        title: 'Verify Transactions',
         path: 'verify-id',
         element: <VerifyTransactionByID />,
         accessRoles: ['admin', 'agent', 'clerk'],
