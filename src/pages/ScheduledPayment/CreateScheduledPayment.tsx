@@ -31,7 +31,10 @@ const Create = () => {
     },
 
     validationSchema: Yup.object({
-      account_number: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
+      account_number: Yup.string()
+        .min(12, 'must be 12 characters')
+        .max(12, 'must be 12 characters')
+        .required('Required'),
       amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
       reason: Yup.string().max(50, 'Must be 50 characters or less').required('Required'),
       recurring: Yup.string().required('Select recurring type'),
@@ -53,7 +56,7 @@ const Create = () => {
       authAxios
         .post('/scheduled-payment/create', {
           ...values,
-          account_number: selectedUser,
+          account_number: selectedUser || values.account_number,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
         })
         .then((res) => {
@@ -141,6 +144,9 @@ const Create = () => {
                   className="block mb-2 text-sm font-medium text-gray-900"
                 >
                   Account number
+                  <span className="block text-sm text-red-600">
+                    {formik.touched.account_number && formik.errors.account_number?.toString()}
+                  </span>
                 </label>
 
                 <div className="relative">
@@ -242,7 +248,7 @@ const Create = () => {
 
             <button
               type="submit"
-              disabled={!selectedUser || isLoading}
+              disabled={isLoading}
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>

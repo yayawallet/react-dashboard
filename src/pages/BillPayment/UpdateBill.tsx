@@ -135,7 +135,7 @@ const UpdateBill = () => {
     authAxios
       .post('/bill/update', {
         ...values,
-        customer_yaya_account: selectedUser,
+        customer_yaya_account: selectedUser || values.customer_yaya_account,
         start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
         due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
       })

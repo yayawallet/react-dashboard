@@ -48,7 +48,10 @@ const CreateBill = () => {
     enableReinitialize: true,
 
     validationSchema: Yup.object({
-      client_yaya_account: Yup.string().required('Required'),
+      client_yaya_account: Yup.string()
+        .max(12, 'must be 12 characters')
+        .min(12, 'must be 12 characters')
+        .required('Required'),
       customer_yaya_account: Yup.string(),
       amount: Yup.number().required('Amount is required').min(1, 'Amount cannot be less than 1.00'),
       start_at: Yup.date(),
@@ -57,7 +60,7 @@ const CreateBill = () => {
         .test('due_at', 'Due date must be in the future', (value) => {
           return new Date(value).getTime() > new Date().getTime() + 60000; // 60000 == 1 minutes
         }),
-      customer_id: Yup.string().required('Customer ID is required'),
+      customer_id: Yup.string(),
       bill_id: Yup.string().required('Bill ID is required'),
       bill_code: Yup.string(),
       bill_season: Yup.string(),
@@ -81,8 +84,8 @@ const CreateBill = () => {
       authAxios
         .post('/bill/create', {
           ...values,
-          client_yaya_account: selectedClient,
-          customer_yaya_account: selectedCustomer,
+          client_yaya_account: selectedClient || values.client_yaya_account,
+          customer_yaya_account: selectedCustomer || values.customer_yaya_account,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
           due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
         })
@@ -178,6 +181,10 @@ const CreateBill = () => {
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Client yaya account
+                <span className="block text-sm text-red-600">
+                  {formik.touched.client_yaya_account &&
+                    formik.errors.client_yaya_account?.toString()}
+                </span>
               </label>
 
               <div className="relative">
@@ -216,7 +223,6 @@ const CreateBill = () => {
                 className="block mb-2 text-sm font-medium text-gray-900"
               >
                 Customer yaya account
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
 
               <div className="relative">
@@ -270,6 +276,7 @@ const CreateBill = () => {
             <div>
               <label htmlFor="amount" className="block mb-2 text-sm font-medium text-gray-900">
                 Amount
+                <span className="font-normal text-gray-400">&nbsp;&nbsp;(Required)</span>
               </label>
               <input
                 type="number"
@@ -290,7 +297,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="start_at" className="block mb-2 text-sm font-medium text-gray-900">
                 Start date
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="datetime-local"
@@ -309,6 +315,7 @@ const CreateBill = () => {
             <div>
               <label htmlFor="due_at" className="block mb-2 text-sm font-medium text-gray-900">
                 Due date
+                <span className="font-normal text-gray-400">&nbsp;&nbsp;(Required)</span>
               </label>
               <input
                 type="datetime-local"
@@ -327,6 +334,7 @@ const CreateBill = () => {
             <div>
               <label htmlFor="bill_id" className="block mb-2 text-sm font-medium text-gray-900">
                 Bill ID
+                <span className="font-normal text-gray-400">&nbsp;&nbsp;(Required)</span>
               </label>
               <input
                 type="text"
@@ -345,7 +353,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="bill_code" className="block mb-2 text-sm font-medium text-gray-900">
                 Bill code
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
@@ -364,7 +371,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="bill_season" className="block mb-2 text-sm font-medium text-gray-900">
                 Bill season
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
@@ -385,7 +391,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="cluster" className="block mb-2 text-sm font-medium text-gray-900">
                 Cluster
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
@@ -404,7 +409,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-900">
                 Description
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
@@ -424,7 +428,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
                 Phone number
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
@@ -444,7 +447,6 @@ const CreateBill = () => {
             <div>
               <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900">
                 Email
-                <span className="font-normal text-gray-400">&nbsp;(optional)</span>
               </label>
               <input
                 type="text"
@@ -464,7 +466,7 @@ const CreateBill = () => {
 
           <button
             type="submit"
-            disabled={isLoading || !selectedClient}
+            disabled={isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>

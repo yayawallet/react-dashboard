@@ -20,7 +20,10 @@ const CreateTransaction = () => {
     },
 
     validationSchema: Yup.object({
-      receiver: Yup.string().required('Required').max(12, 'Must be 12 characters'),
+      receiver: Yup.string()
+        .required('Required')
+        .min(12, 'must be 12 characters')
+        .max(12, 'must be 12 characters'),
       amount: Yup.number().required('Required').min(1, 'Amount cannot be less than 1.00'),
       cause: Yup.string().required('Required').max(128, 'Must be 128 characters or less'),
     }),
@@ -33,7 +36,7 @@ const CreateTransaction = () => {
       setTransactionID('');
 
       authAxios
-        .post('/transaction/create', { ...values, receiver: selectedUser })
+        .post('/transaction/create', { ...values, receiver: selectedUser || values.receiver })
         .then((res) => {
           setTransactionID(res.data.transaction_id);
 
@@ -68,6 +71,9 @@ const CreateTransaction = () => {
             <div className="md:col-span-3">
               <label htmlFor="receiver" className="block mb-2 text-sm font-medium text-gray-900">
                 Receiver
+                <span className="text-sm pl-3 text-red-600">
+                  {formik.touched.receiver && formik.errors.receiver}
+                </span>
               </label>
 
               <div className="relative">
@@ -140,7 +146,7 @@ const CreateTransaction = () => {
 
           <button
             type="submit"
-            disabled={!selectedUser || isLoading}
+            disabled={isLoading}
             className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span style={{ letterSpacing: '0.3px' }}>
