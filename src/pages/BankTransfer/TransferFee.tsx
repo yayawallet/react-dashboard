@@ -19,7 +19,7 @@ const TransferFee = () => {
 
     validationSchema: Yup.object({
       institution_code: Yup.string().required('Required'),
-      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
+      amount: Yup.number().required('Required').min(1, 'Amount cannot be less than 1.00'),
     }),
 
     onSubmit: (values) => {

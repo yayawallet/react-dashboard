@@ -24,7 +24,7 @@ const CreateTransfer = () => {
     validationSchema: Yup.object({
       institution_code: Yup.string().required('Select Institution'),
       account_number: Yup.string().required('Required').max(30, 'Must be less than 30 characters'),
-      amount: Yup.number().required('Required').min(1, 'Amount must cannot be less than 1.00'),
+      amount: Yup.number().required('Required').min(1, 'Amount cannot be less than 1.00'),
       sender_note: Yup.string().required('Required').max(128, 'Must be 128 characters or less'),
       ref_code: Yup.string(),
     }),
