@@ -27,11 +27,11 @@ const UpdateBill = () => {
 
   useEffect(() => {
     setSelectedClient(ownAccount);
-  }, [ownAccount]);
+  }, []);
 
   const formik1 = useFormik({
     initialValues: {
-      client_yaya_account: ownAccount || '',
+      client_yaya_account: selectedClient || ownAccount || '',
       bill_id: params_bill_id || '',
     },
 
@@ -55,12 +55,12 @@ const UpdateBill = () => {
       setFoundBill(null);
 
       authAxios
-        .post('/bill/find', { ...values, client_yaya_account: selectedClient })
+        .post('/bill/find', {
+          ...values,
+          client_yaya_account: selectedClient || values.client_yaya_account,
+        })
         .then((res) => {
           setFoundBill(res.data);
-
-          // clear input fields
-          formik1.resetForm();
         })
         .catch((error) => {
           setErrorMessage(
