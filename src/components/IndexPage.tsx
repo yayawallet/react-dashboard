@@ -14,7 +14,7 @@ const IndexPage = ({ parentPath }: Props) => {
   return (
     <>
       {outlet || (
-        <div className="page-container mt-20 flex flex-wrap gap-10 items-center justify-center">
+        <div className="page-container mt-20 flex flex-wrap gap-20 items-center justify-center">
           <div className="flex flex-col items-center py-8 px-10 border rounded-lg">
             <h2 className="text-2xl font-semibold">
               {parentPath.replace('-', ' ').replace(/\b\w{1}/g, (match) => match.toUpperCase())}{' '}
@@ -34,7 +34,7 @@ const IndexPage = ({ parentPath }: Props) => {
             </ul>
           </div>
 
-          <div className="border bg-gray-50 py-2 px-8 rounded-lg">
+          <div className="">
             <img src={yayaBrank} width={'150px'} alt="" />
           </div>
         </div>

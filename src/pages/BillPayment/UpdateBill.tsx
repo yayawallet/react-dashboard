@@ -27,19 +27,22 @@ const UpdateBill = () => {
 
   useEffect(() => {
     setSelectedClient(ownAccount);
-  }, [ownAccount]);
+  }, []);
 
   const formik1 = useFormik({
     initialValues: {
-      client_yaya_account: ownAccount || '',
+      client_yaya_account: selectedClient || ownAccount || '',
       bill_id: params_bill_id || '',
     },
 
     enableReinitialize: true,
 
     validationSchema: Yup.object({
-      client_yaya_account: Yup.string().required(),
-      bill_id: Yup.string().required('Enter Bill ID of the bill you want to update'),
+      client_yaya_account: Yup.string()
+        .max(12, 'must be 12 characters')
+        .min(12, 'must be 12 characters')
+        .required('Required'),
+      bill_id: Yup.string().required(),
     }),
 
     onSubmit: (values) => {
@@ -52,12 +55,12 @@ const UpdateBill = () => {
       setFoundBill(null);
 
       authAxios
-        .post('/bill/find', { ...values, client_yaya_account: selectedClient })
+        .post('/bill/find', {
+          ...values,
+          client_yaya_account: selectedClient || values.client_yaya_account,
+        })
         .then((res) => {
           setFoundBill(res.data);
-
-          // clear input fields
-          formik1.resetForm();
         })
         .catch((error) => {
           setErrorMessage(
@@ -191,7 +194,11 @@ const UpdateBill = () => {
               <input
                 type="text"
                 id="client_yaya_account"
-                className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                className={`${
+                  formik1.touched.client_yaya_account && formik1.errors.client_yaya_account
+                    ? 'border border-red-500 outline-none'
+                    : ''
+                } pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="client_yaya_account"
                 autoComplete="off"
                 maxLength={12}
@@ -233,7 +240,7 @@ const UpdateBill = () => {
 
           <button
             type="submit"
-            disabled={isLoading || !formik1.values.bill_id || !selectedClient}
+            disabled={isLoading}
             className="text-white md:col-span-1 self-start bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span style={{ letterSpacing: '0.3px' }}>

@@ -50,8 +50,11 @@ authAxios.interceptors.request.use(
           Cookies.set('access_token', res.data.access);
           updateTokenExpiredTime(res.data.access);
         } catch (err) {
-          Cookies.set('log', JSON.stringify(err));
-          Cookies.set('log-0', 'Refresh Error');
+          const countJSON = Cookies.get('count');
+          const count = countJSON ? JSON.parse(countJSON) : 0;
+          Cookies.set('count', JSON.stringify(count + 1));
+
+          Cookies.set(`Log-${count + 1}`, JSON.stringify(err));
 
           logout();
         }
@@ -73,8 +76,7 @@ authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      Cookies.set('log', JSON.stringify(error));
-      Cookies.set('log-1', '401 Error');
+      Cookies.set('unauthorized - 401', JSON.stringify(error));
       logout();
     }
 
