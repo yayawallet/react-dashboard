@@ -85,13 +85,13 @@ export const sidebarNavs = [
     children: [
       {
         title: 'Send Money',
-        path: 'create',
+        path: 'send-money',
         element: <CreateTransaction />,
         accessRoles: ['admin', 'agent'],
       },
       {
         title: 'Transaction History',
-        path: 'list',
+        path: 'history',
         element: <TransactionList />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
@@ -279,13 +279,13 @@ export const sidebarNavs = [
     children: [
       {
         title: 'Send Money',
-        path: 'send',
+        path: 'send-money',
         element: <CreateTransfer />,
         accessRoles: ['admin', 'agent'],
       },
       {
-        title: 'Transfer List',
-        path: 'list',
+        title: 'Transfer History',
+        path: 'history',
         element: <TransferList />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
