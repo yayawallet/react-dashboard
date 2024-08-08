@@ -92,13 +92,10 @@ const Profile = () => {
             </dl>
           </div>
 
-          <div className="flex flex-col items-center justify-center my-10">
-            <img
-              src={profile?.photo_url}
-              width={'60%'}
-              alt=""
-              className="inline-block rounded-xl"
-            />
+          <div className="flex flex-1i justify-center items-center">
+            <div className="max-w-[300px]">
+              <img src={profile?.photo_url} alt="" className="inline-block rounded-xl" />
+            </div>
           </div>
         </div>
       </div>
