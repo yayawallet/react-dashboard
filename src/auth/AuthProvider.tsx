@@ -55,6 +55,12 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     window.location.href = '/login';
   };
 
+  // logout a user if user close browser tap or window, and then set a new session
+  if (!sessionStorage.getItem('session_alive')) {
+    logout();
+    sessionStorage.setItem('session_alive', 'true');
+  }
+
   return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
 };
 
