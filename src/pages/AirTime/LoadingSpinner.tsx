@@ -1,4 +1,4 @@
-import loadingSpin from '../../assets/Spin@1x-1.1s-200px-200px.svg';
+import loadingSpin from '../../assets/Spin@1x-1.1s-200px-200px - Small.svg';
 
 const LoadingSpinner = () => {
   return (

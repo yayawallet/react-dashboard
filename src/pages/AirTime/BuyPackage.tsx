@@ -7,27 +7,13 @@ import ResultModal from '../../components/modals/ResultModal';
 import { TopUp, Package } from './../../models';
 import { usePostData } from '../../hooks/useSWR';
 
-const packageCategories = [
-  'One-Birr Package',
-  'Good Morning',
-  'Birthday Package',
-  'Hourly & Daily Unlimited Package',
-  'Internet',
-  'Voice',
-  'Voice Plus Internet',
-  'Flexi,International Pack- Destination 1',
-  'International Pack- Destination 2',
-  'SMS Package',
-  'Voice Flexi Local All Net Package',
-];
-
 interface Props {
   phoneNumber: string;
   isInvalidNumber: boolean;
 }
 
 const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
-  const [categories, setCategories] = useState<any[]>(packageCategories);
+  const [categories, setCategories] = useState<string[]>();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
   const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
@@ -41,10 +27,10 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' }); // Ethio telecom packages
 
   useEffect(() => {
-    if (packages?.length === 0) return;
+    if (!packages || packages?.length === 0) return;
 
     const catgSet = new Set(packages?.map((p: Package) => p.category));
-    setCategories(Array.from(catgSet));
+    setCategories(Array.from(catgSet.toString()));
   }, [packages]);
 
   const handleConfirm = (confirm: boolean) => {
@@ -94,9 +80,9 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         }
       />
 
-      <div className="flex flex-col sm:flex-row gap-6 border-2 rounded-lg p-5">
+      <div className="flex flex-col sm:flex-row gap-6 border rounded-lg p-5">
         <div className="flex self-start border border-violet-100 sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-violet-50">
-          {categories.map((c) => (
+          {categories?.map((c) => (
             <div
               className={`border-t border-violet-100 shadow-sm shadow-violet-200 text-sm rounded-lg text-violet-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
               key={c}

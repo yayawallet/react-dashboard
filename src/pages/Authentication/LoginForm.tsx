@@ -129,7 +129,7 @@ const LoginForm = () => {
           </div>
           <span
             className="text-sm font-medium text-violet-600 hover:underline cursor-pointer"
-            onClick={() => alert("If you lost your password, please contact the company's Admins.")}
+            onClick={() => alert("If you lost your password, please contact the company's Admin.")}
           >
             Forgot password?
           </span>
