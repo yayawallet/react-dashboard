@@ -21,11 +21,11 @@ const LoginForm = () => {
     validationSchema: Yup.object({
       username: Yup.string()
         .min(4, 'Invalid username')
-        .max(20, 'Must be 30 characters or less')
+        .max(64, 'Must be 64 characters or less')
         .required('username is required'),
       password: Yup.string()
-        .min(8, 'Password must be atleast 8 characters long')
-        .max(50, 'Must be 50 characters or less')
+        .min(6, 'Password must be atleast 6 characters long')
+        .max(64, 'Must be 64 characters or less')
         .required('password is required'),
     }),
 
