@@ -50,7 +50,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
   };
 
   return (
-    <div className="border-2 rounded-lg p-5">
+    <div className="border rounded-lg p-5">
       <ConfirmationModal
         openModal={openConfirmModal}
         onConfirm={handleConfirm}

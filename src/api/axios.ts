@@ -41,7 +41,13 @@ authAxios.interceptors.request.use(
 
         Cookies.set('access_token', res.data.access);
         updateTokenExpiredTime(res.data.access);
-      } catch (err) {
+      } catch (error) {
+        const countJSON = Cookies.get('count-fist');
+        const count = countJSON ? JSON.parse(countJSON) : 0;
+        Cookies.set('count-fist', JSON.stringify(count + 1));
+
+        Cookies.set(`Log-one-${count + 1}`, '1nd_Attempt_Refresh_Error');
+
         try {
           const res = await axios.post(`${baseURL}/refresh`, {
             refresh: Cookies.get('refresh_token'),
@@ -49,12 +55,12 @@ authAxios.interceptors.request.use(
 
           Cookies.set('access_token', res.data.access);
           updateTokenExpiredTime(res.data.access);
-        } catch (err) {
-          const countJSON = Cookies.get('count');
+        } catch (error) {
+          const countJSON = Cookies.get('count-second');
           const count = countJSON ? JSON.parse(countJSON) : 0;
-          Cookies.set('count', JSON.stringify(count + 1));
+          Cookies.set('count-second', JSON.stringify(count + 1));
 
-          Cookies.set(`Log-${count + 1}`, JSON.stringify(err));
+          Cookies.set(`Log-two-${count + 1}`, '2nd_Attempt_Refresh_Error');
 
           logout();
         }

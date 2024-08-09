@@ -27,11 +27,11 @@ const UpdateBill = () => {
 
   useEffect(() => {
     setSelectedClient(ownAccount);
-  }, []);
+  }, [ownAccount]);
 
   const formik1 = useFormik({
     initialValues: {
-      client_yaya_account: selectedClient || ownAccount || '',
+      client_yaya_account: ownAccount || '',
       bill_id: params_bill_id || '',
     },
 
@@ -196,7 +196,7 @@ const UpdateBill = () => {
                 id="client_yaya_account"
                 className={`${
                   formik1.touched.client_yaya_account && formik1.errors.client_yaya_account
-                    ? 'border border-red-500 outline-none'
+                    ? 'border-2 border-red-400 outline-none'
                     : ''
                 } pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                 placeholder="client_yaya_account"

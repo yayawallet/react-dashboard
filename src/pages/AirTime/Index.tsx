@@ -27,7 +27,7 @@ const AirTime = () => {
       <h1 className="text-2xl font-semibold mb-5">Top-up Airtime or Package</h1>
 
       <div className="">
-        <div className="border-2 rounded-lg p-2 px-5">
+        <div className="border rounded-lg p-2 px-5">
           <div className="flex gap-x-4 my-2 justify-end">
             <button
               className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${topupFor === 'self' ? 'bg-violet-600 hover:bg-violet-700 text-white' : 'text-violet-900 border-2 border-violet-600 hover:bg-violet-100'}`}
@@ -87,7 +87,7 @@ const AirTime = () => {
           <span className="block text-red-600 text-sm pl-10">{errorMessage}</span>
         </div>
 
-        <div className="flex gap-x-4 my-4 px-4a mb-10">
+        <div className="flex ms-5 gap-x-4 my-4 px-4a mb-10">
           <button
             className={`focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2 text-center ${selectedCategory == 'airtime' ? 'text-white bg-violet-600 hover:bg-violet-700 ' : 'text-violet-900 bg-white border-2 border-violet-600 hover:bg-violet-100'}`}
             onClick={() => setSelectedCategory('airtime')}

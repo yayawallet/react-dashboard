@@ -40,6 +40,10 @@ const CreatePayoutMethod = () => {
     enableReinitialize: true,
 
     validationSchema: Yup.object({
+      client_yaya_account: Yup.string()
+        .min(12, 'must be 12 characters')
+        .max(12, 'must be 12 characters')
+        .required(),
       cluster: Yup.string().required('cluster is required'),
       bill_code: Yup.string().required('bill_code is required'),
       institution: Yup.string().required('institution is required'),
@@ -55,7 +59,10 @@ const CreatePayoutMethod = () => {
       setErrorMessage('');
 
       authAxios
-        .post('/payout-method/create', { ...values, client_yaya_account: selectedClient })
+        .post('/payout-method/create', {
+          ...values,
+          client_yaya_account: selectedClient || values.client_yaya_account,
+        })
         .then((res) => {
           setPayoutMethodID(res.data.id);
 
@@ -215,7 +222,11 @@ const CreatePayoutMethod = () => {
                 <input
                   type="text"
                   id="client_yaya_account"
-                  className="pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  className={`${
+                    formik.touched.client_yaya_account && formik.errors.client_yaya_account
+                      ? 'border-2 border-red-400 outline-none'
+                      : ''
+                  } pl-8 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5`}
                   placeholder="client_yaya_account"
                   autoComplete="off"
                   disabled={isLoading}
@@ -240,7 +251,7 @@ const CreatePayoutMethod = () => {
 
             <button
               type="submit"
-              disabled={isLoading || !selectedClient}
+              disabled={isLoading}
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
