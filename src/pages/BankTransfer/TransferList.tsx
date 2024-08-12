@@ -65,7 +65,7 @@ const TransferList = () => {
                     top: '30vh',
                     left: '50%',
                     transform: 'translate(-50%)',
-                    boxShadow: '0 0 5px #888',
+                    boxShadow: '0 0 5px #ccc',
                   }}
                 >
                   <span

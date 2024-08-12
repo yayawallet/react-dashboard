@@ -83,7 +83,7 @@ const LoginForm = () => {
             value={formik.values.username}
           />
 
-          <span className="text-xs text-red-600">
+          <span className="text-sm text-red-600">
             {formik.touched.username && formik.errors.username}
           </span>
         </div>
@@ -106,7 +106,7 @@ const LoginForm = () => {
             value={formik.values.password}
           />
 
-          <span className="text-xs text-red-600">
+          <span className="text-sm text-red-600">
             {formik.touched.password && formik.errors.password}
           </span>
         </div>

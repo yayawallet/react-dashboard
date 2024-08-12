@@ -29,8 +29,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   useEffect(() => {
     if (!packages || packages?.length === 0) return;
 
-    const catgSet = new Set(packages?.map((p: Package) => p.category));
-    setCategories(Array.from(catgSet.toString()));
+    const catgSet: Set<string> = new Set(packages?.map((p: Package) => p.category));
+    setCategories(Array.from(catgSet));
   }, [packages]);
 
   const handleConfirm = (confirm: boolean) => {

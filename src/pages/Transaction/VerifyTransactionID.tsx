@@ -63,17 +63,17 @@ const GetTransactionByID = () => {
               Print Invoice
             </a>
           </button>
-          <div className="border-2 shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
+          <div className="border shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
             <dl className="sm:divide-y sm:divide-gray-200">
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Transaction ID</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-5">
                   {transaction.id}
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Sender</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-5">
                   {transaction.sender.name}
                   <br />
                   <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
@@ -81,9 +81,9 @@ const GetTransactionByID = () => {
                   </span>
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Receiver</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-5">
                   {transaction.receiver.name}
                   <br />
                   <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
@@ -91,9 +91,9 @@ const GetTransactionByID = () => {
                   </span>
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Amount</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-5">
                   {ownAccount === transaction.receiver.account ? (
                     <span className="inline-block ml-3  text-green-600">&#43;&nbsp;</span>
                   ) : (
@@ -102,16 +102,16 @@ const GetTransactionByID = () => {
                   {transaction.amount_with_currency}
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Cause</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-5">
                   {transaction.cause}
                 </dd>
               </div>
 
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Created At</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-5">
                   {`${new Date(Number(transaction?.created_at_time) * 1000).toLocaleString()}`}
                 </dd>
               </div>
