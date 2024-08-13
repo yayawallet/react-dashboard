@@ -20,7 +20,7 @@ const IndexPage = ({ parentPath }: Props) => {
             {parentPath.replace('-', ' ').replace(/\b\w{1}/g, (match) => match.toUpperCase())} Menus
           </h3>
 
-          <div className="flex flex-wrap gap-x-56 gap-y-4 items-center md:px-20">
+          <div className="flex flex-wrap gap-x-56 gap-y-4 items-center md:px-10">
             <ul className="flex flex-col flex-wrap justify-center gap-5">
               {menus?.map((menu) => (
                 <li key={menu.path} className="md:min-w-[280px]">
