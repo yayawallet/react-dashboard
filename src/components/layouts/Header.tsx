@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import BreadCrumbs from './BreadCrumbs';
-import UserSettings from '../../pages/userSettings/UserSettings';
+import UserSettings from '../../pages/UserSettings/UserSettings';
 import avater from '../../assets/avater.svg';
 import { useAuth } from '../../auth/AuthProvider';
 import { capitalize } from 'lodash';
@@ -17,20 +17,19 @@ const Header = () => {
           <BreadCrumbs />
         </div>
 
-        <div className="h-full w-full flex items-center justify-end mt-1">
-          <button
-            className="h-full flex items-center"
-            onClick={() => setOpen(!open)}
-            onBlur={() => setOpen(false)}
-          >
+        <button
+          className="h-full w-full flex items-center justify-end mt-1"
+          onBlur={() => setOpen(false)}
+        >
+          <div className="h-full flex items-center" onClick={() => setOpen(!open)}>
             <span className="text-gray-600 font-semibold">{capitalize(user_role)}</span>
             <img src={avater} alt="" className="h-full p-4 cursor-pointer" />
-          </button>
+          </div>
 
           <div className={`${open ? '' : 'hidden'}`}>
-            <UserSettings />
+            <UserSettings onCloseUserSettings={() => setOpen(false)} />
           </div>
-        </div>
+        </button>
       </header>
     </div>
   );

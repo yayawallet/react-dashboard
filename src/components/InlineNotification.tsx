@@ -30,7 +30,7 @@ const InlineNotification = ({ type, customType, info }: Props) => {
           <span className="sr-only">Info</span>
           <div>
             <span className="font-medium mr-2">
-              {customType ? customType + ' -' : type === 'success' ? 'Success -' : 'Error -'}
+              {customType ? customType + ':' : type === 'success' ? 'Success:' : 'Error:'}
             </span>
             {info}
           </div>

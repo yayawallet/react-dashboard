@@ -42,6 +42,9 @@ import TransferFee from '../pages/BankTransfer/TransferFee';
 
 import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
+import UserAccount from '../pages/UserSettings/UserAccount';
+import ChangePassword from '../pages/UserSettings/ChangePassword';
+
 import Support from '../pages/Support';
 import Guide from '../pages/Guide';
 import HelpCenter from '../pages/HelpCenter';
@@ -52,7 +55,6 @@ import DefaultHeader from '../components/layouts/DefaultHeader';
 import Layout from '../components/layouts/Index';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
-import AboutMe from '../pages/AboutMe';
 import Login from '../pages/Authentication/Login';
 import NotFound from '../pages/NotFound';
 
@@ -334,9 +336,10 @@ export const privateNavs = [
       { path: 'bill/update/:bill_id', element: <UpdateBill /> },
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
-      { path: 'me', element: <AboutMe /> },
       { path: 'login', element: <Navigate to="/" replace={true} /> },
       { path: '*', element: <NotFound /> },
+      { path: 'account', element: <UserAccount /> },
+      { path: 'account/change-password', element: <ChangePassword /> },
     ],
   },
 ];
