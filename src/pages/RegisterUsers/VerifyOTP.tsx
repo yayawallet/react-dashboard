@@ -64,32 +64,35 @@ const VerifyOTP = () => {
         authAxios
           .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transaction_id}/${values.otp}`)
           .then((res) => {
+            const fayda = res.data;
             const phone = res.data.phone;
 
             authAxios
               .post('/user/search', { query: phone })
               .then((res) => {
                 // if (res.data?.length === 0) {
-                if (true) {
-                  setOTPExpiresIn(-1);
-                  setOTPVerified(true);
-                  setStore({
-                    ...store,
-                    name: res.data.name_eng,
-                    date_of_birth: res.data.dob,
-                    gender: res.data.gender,
-                    phone: res.data.phone,
-                    email: res.data.email,
-                    address: res.data.address_eng?.split(',').slice(0, 2).join(','),
-                    fin: res.data.fin,
-                    photo: res.data.photo,
-                  });
+                if (false) {
+                  setErrorMessage(`User with this number 0${phone} already exists`);
+                  setOTPExpiresIn(30);
+                  setStore({});
+                  setDisabled(true);
+
+                  return;
                 }
 
-                setErrorMessage(`User with this number 0${phone} already exists`);
-                setOTPExpiresIn(30);
-                setStore({});
-                setDisabled(true);
+                setOTPExpiresIn(-1);
+                setOTPVerified(true);
+                setStore({
+                  ...store,
+                  name: fayda.name_eng,
+                  date_of_birth: fayda.dob,
+                  gender: fayda.gender,
+                  phone: fayda.phone,
+                  email: fayda.email,
+                  address: fayda.address_eng?.split(',').slice(0, 2).join(','),
+                  fin: fayda.fin,
+                  photo: fayda.photo,
+                });
               })
               .catch(() => setErrorMessage('Something went wrong!'))
               .finally(() => setLoading(false));
