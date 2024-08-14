@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import BreadCrumbs from './BreadCrumbs';
-import UserSettings from '../../pages/UserSettingss/UserSettings';
+import UserSettings from '../../pages/UserSettings/UserSettings';
 import avater from '../../assets/avater.svg';
 import { useAuth } from '../../auth/AuthProvider';
 import { capitalize } from 'lodash';

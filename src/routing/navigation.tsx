@@ -42,9 +42,8 @@ import TransferFee from '../pages/BankTransfer/TransferFee';
 
 import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
-import UserAccount from '../pages/UserSettingss/UserAccount';
-import ChangePassword from '../pages/UserSettingss/ChangePassword';
-//
+import UserAccount from '../pages/UserSettings/UserAccount';
+import ChangePassword from '../pages/UserSettings/ChangePassword';
 
 import Support from '../pages/Support';
 import Guide from '../pages/Guide';
