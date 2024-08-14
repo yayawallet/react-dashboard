@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import InlineNotification from '../../components/InlineNotification';
 import InstitutionLIst from '../../components/InstitutionLIst';
 import { EXternalAccount } from '../../models';
+import { MdOutlineAccountBox } from 'react-icons/md';
 
 const CreateTransfer = () => {
   const [transferID, setTransferID] = useState('');
@@ -88,8 +89,7 @@ const CreateTransfer = () => {
           <InlineNotification type="success" info={`Transfer ID: ${transferID}`} />
           <div className="w-[var(--form-width-small)]  mx-auto my-10">
             <button
-              type={`${externalAccount ? 'submit' : 'button'}`}
-              disabled={isLoading}
+              type="button"
               className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[100px] px-5 py-2.5 text-center"
               onClick={() => {
                 setExternalAccount(undefined);
@@ -105,16 +105,19 @@ const CreateTransfer = () => {
       <div
         className={`${transferID ? 'hidden' : ''} flex flex-col items-center justify-center lg:mr-32 mt-6`}
       >
-        {externalAccount && (
-          <div className="flex gap-x-4 flex-wrap justify-between mb-2 bg-violet-50 px-4 py-1 rounded-lg border border-violet-100 font-semibold text-gray-600">
-            <div>{`${externalAccount?.institution?.name} ~ ${externalAccount?.full_name} - ${externalAccount?.account_number}`}</div>
-          </div>
-        )}
-
         <form
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
         >
+          {externalAccount && (
+            <div className="flex items-center gap-x-2 ms-2 text-gray-800 mb-5 font-semibold">
+              <span className="text-gray-600 text-lg mt-0.5">
+                <MdOutlineAccountBox />
+              </span>
+              <div>{`${externalAccount?.full_name} - ${externalAccount?.account_number}`}</div>
+            </div>
+          )}
+
           <div className={`${externalAccount ? 'hidden' : ''} grid gap-6 md:grid-cols-2 mb-6`}>
             <div>
               <InstitutionLIst

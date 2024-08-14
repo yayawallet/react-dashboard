@@ -72,6 +72,7 @@ const AirTime = () => {
               type="number"
               id="phone-number"
               autoComplete="off"
+              maxLength={10}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full ps-14 p-2.5 outline-none"
               placeholder="Phone number"
               value={topupFor === 'self' ? ownPhoneNumber : phoneNumber}

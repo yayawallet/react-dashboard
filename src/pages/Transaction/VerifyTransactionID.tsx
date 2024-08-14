@@ -5,12 +5,25 @@ import * as Yup from 'yup';
 import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { TransactionType } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
+import { PiPrinterFill } from 'react-icons/pi';
+import { formatDate } from '../../utils/table_utils';
+import { useGetData } from '../../hooks/useSWR';
+import avater from '../../assets/avater.svg';
+
+type TransactingUserType = {
+  photo: string;
+  name: string;
+};
 
 const GetTransactionByID = () => {
-  const [ownAccount, setOwnAccount] = useState('');
   const [transaction, setTransaction] = useState<TransactionType>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [transactingUser, setTransactingUser] = useState<TransactingUserType | null>(null);
+
+  console.log(transactingUser);
+
+  const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
   const formik = useFormik({
     initialValues: {
@@ -28,12 +41,21 @@ const GetTransactionByID = () => {
       setErrorMessage('');
       setTransaction(undefined);
 
-      authAxios.get('/user/profile').then((res) => setOwnAccount(res.data.account));
-
       authAxios
         .get(`/transaction/find/${values.transactionID}`)
         .then((res) => {
           setTransaction(res.data);
+
+          const user =
+            res.data?.receiver.account === ownAccount
+              ? res.data?.sender.account
+              : res.data.receiver.account;
+
+          authAxios
+            .post('/user/search', {
+              query: user,
+            })
+            .then((res) => setTransactingUser(res.data));
 
           // clear input fields
           formik.resetForm();
@@ -57,23 +79,25 @@ const GetTransactionByID = () => {
         <div className="bg-white overflow-hidden mb-5">
           <button
             type="button"
-            className="block ml-auto py-1.5 px-6 m-1 font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-violet-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-violet-100"
+            className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-violet-700 rounded-lg border border-violet-700 hover:bg-violet-800 focus:z-10 focus:ring-4 focus:ring-violet-100"
           >
-            <a href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`} target="_blank">
-              Print Invoice
+            <a
+              href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`}
+              target="_blank"
+              className="flex items-center gap-2"
+            >
+              <span className="text-lg">
+                <PiPrinterFill />
+              </span>
+              <span>Print Invoice</span>
             </a>
           </button>
-          <div className="border-2 shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
+
+          <div className="border shadow rounded-lg border-gray-200 px-4 py-5 sm:p-0">
             <dl className="sm:divide-y sm:divide-gray-200">
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Transaction ID</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction.id}
-                </dd>
-              </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
                 <dt className="text-sm font-medium text-gray-500">Sender</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <dd className="mt-1 text-gray-800 sm:mt-0 sm:col-span-5">
                   {transaction.sender.name}
                   <br />
                   <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
@@ -81,9 +105,9 @@ const GetTransactionByID = () => {
                   </span>
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Receiver</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Receiver</dt>
+                <dd className="mt-1 text-gray-800 sm:mt-0 sm:col-span-5">
                   {transaction.receiver.name}
                   <br />
                   <span className="text-gray-500 text-sm block" style={{ marginTop: '-3px' }}>
@@ -91,36 +115,45 @@ const GetTransactionByID = () => {
                   </span>
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Amount</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Amount</dt>
+                <dd className="mt-1 text-gray-800 sm:mt-0 sm:col-span-5">
                   {ownAccount === transaction.receiver.account ? (
-                    <span className="inline-block ml-3  text-green-600">&#43;&nbsp;</span>
+                    <span className="inline-block text-green-600">&#43;&nbsp;</span>
                   ) : (
-                    <span className="inline-block ml-3 text-red-600">&#8722;&nbsp;</span>
+                    <span className="inline-block text-red-600">&#8722;&nbsp;</span>
                   )}
                   {transaction.amount_with_currency}
                 </dd>
               </div>
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Cause</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {transaction.cause}
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Note</dt>
+                <dd className="mt-1 text-gray-800 sm:mt-0 sm:col-span-5">
+                  {transaction.sender_caption.split(',')[0]}
                 </dd>
               </div>
 
-              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">Created At</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {`${new Date(Number(transaction?.created_at_time) * 1000).toLocaleString()}`}
+              <div className="py-2 sm:py-4 sm:grid sm:grid-cols-6 sm:gap-4 sm:px-6">
+                <dt className="font-medium text-gray-500">Date</dt>
+                <dd className="mt-1 text-gray-800 sm:mt-0 sm:col-span-5">
+                  {`${formatDate(transaction?.created_at_time)}`}
                 </dd>
               </div>
             </dl>
           </div>
+
+          <div className="text-center mt-14 md:mr-40">
+            <button
+              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+              onClick={() => setTransaction(undefined)}
+            >
+              Verify Transaction ID
+            </button>
+          </div>
         </div>
       )}
 
-      <div className="flex justify-center lg:mr-32 mt-6">
+      <div className={`${transaction ? 'hidden' : ''} flex justify-center lg:mr-32 mt-6`}>
         <form
           className="w-[var(--form-width-small)] border p-8 pt-6 rounded-xl mb-20"
           onSubmit={formik.handleSubmit}
