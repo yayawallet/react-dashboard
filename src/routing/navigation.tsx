@@ -72,13 +72,6 @@ import { FaUserPlus } from 'react-icons/fa6';
 
 export const sidebarNavs = [
   {
-    title: 'Airtime/Package',
-    path: 'airtime',
-    icon: <MdSendToMobile />,
-    element: <AirTime />,
-    accessRoles: ['admin', 'agent', 'clerk'],
-  },
-  {
     title: 'Transaction',
     path: 'transaction',
     icon: <BiTransferAlt />,
@@ -101,6 +94,39 @@ export const sidebarNavs = [
         title: 'Verify Transactions',
         path: 'verify-id',
         element: <VerifyTransactionByID />,
+        accessRoles: ['admin', 'agent', 'clerk'],
+      },
+    ],
+  },
+  {
+    title: 'Other Banks',
+    path: 'transfer',
+    icon: <RiBankFill />,
+    element: <Transfer />,
+    accessRoles: ['admin', 'agent', 'clerk'],
+    children: [
+      {
+        title: 'Send Money',
+        path: 'send-money',
+        element: <CreateTransfer />,
+        accessRoles: ['admin', 'agent'],
+      },
+      {
+        title: 'Transfer History',
+        path: 'history',
+        element: <TransferList />,
+        accessRoles: ['admin', 'agent', 'clerk'],
+      },
+      {
+        title: 'Transfer Fee',
+        path: 'transfer-fee',
+        element: <TransferFee />,
+        accessRoles: ['admin', 'agent', 'clerk'],
+      },
+      {
+        title: 'Account Lookup',
+        path: 'account-lookup',
+        element: <ExternalAccountLookup />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
@@ -157,55 +183,7 @@ export const sidebarNavs = [
       },
     ],
   },
-  {
-    title: 'Register Users',
-    path: 'register-user',
-    icon: <FaUserPlus />,
-    element: <RegisterUsers />,
-    accessRoles: ['agent'],
-    children: [
-      {
-        title: 'Invitation',
-        path: 'invitation',
-        element: <Invitation />,
-        accessRoles: ['agent'],
-        children: [
-          {
-            title: 'Level Two',
-            path: 'level-two',
-            element: <CreateLevelTwoAccount />,
-            accessRoles: ['agent'],
-          },
-          {
-            title: 'Level Two',
-            path: 'business',
-            element: <CreateBussinessAccount />,
-            accessRoles: ['agent'],
-          },
-        ],
-      },
-      {
-        title: 'National ID',
-        path: 'national-id',
-        element: <NationalID />,
-        accessRoles: ['agent'],
-        children: [
-          {
-            title: 'Level Two',
-            path: 'level-two',
-            element: <CreateLevelTwoAccount />,
-            accessRoles: ['agent'],
-          },
-          {
-            title: 'Business',
-            path: 'business',
-            element: <CreateBussinessAccount />,
-            accessRoles: ['agent'],
-          },
-        ],
-      },
-    ],
-  },
+
   {
     title: 'Scheduled Payment',
     path: 'scheduled-payment',
@@ -273,37 +251,60 @@ export const sidebarNavs = [
     ],
   },
   {
-    title: 'Other Banks',
-    path: 'transfer',
-    icon: <RiBankFill />,
-    element: <Transfer />,
-    accessRoles: ['admin', 'agent', 'clerk'],
+    title: 'Register Users',
+    path: 'register-user',
+    icon: <FaUserPlus />,
+    element: <RegisterUsers />,
+    accessRoles: ['agent'],
     children: [
       {
-        title: 'Send Money',
-        path: 'send-money',
-        element: <CreateTransfer />,
-        accessRoles: ['admin', 'agent'],
+        title: 'Invitation',
+        path: 'invitation',
+        element: <Invitation />,
+        accessRoles: ['agent'],
+        children: [
+          {
+            title: 'Level Two',
+            path: 'level-two',
+            element: <CreateLevelTwoAccount />,
+            accessRoles: ['agent'],
+          },
+          {
+            title: 'Level Two',
+            path: 'business',
+            element: <CreateBussinessAccount />,
+            accessRoles: ['agent'],
+          },
+        ],
       },
       {
-        title: 'Transfer History',
-        path: 'history',
-        element: <TransferList />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Transfer Fee',
-        path: 'transfer-fee',
-        element: <TransferFee />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Account Lookup',
-        path: 'account-lookup',
-        element: <ExternalAccountLookup />,
-        accessRoles: ['admin', 'agent', 'clerk'],
+        title: 'National ID',
+        path: 'national-id',
+        element: <NationalID />,
+        accessRoles: ['agent'],
+        children: [
+          {
+            title: 'Level Two',
+            path: 'level-two',
+            element: <CreateLevelTwoAccount />,
+            accessRoles: ['agent'],
+          },
+          {
+            title: 'Business',
+            path: 'business',
+            element: <CreateBussinessAccount />,
+            accessRoles: ['agent'],
+          },
+        ],
       },
     ],
+  },
+  {
+    title: 'Airtime/Package',
+    path: 'airtime',
+    icon: <MdSendToMobile />,
+    element: <AirTime />,
+    accessRoles: ['admin', 'agent', 'clerk'],
   },
   {
     title: 'User Guide',
