@@ -7,6 +7,7 @@ import CreateTransaction from '../pages/Transaction/CreateTransaction';
 import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
+import ApprovalRequestsList from '../pages/Transaction/ApprovalRequestsList';
 
 import BillPayment from '../pages/BillPayment/Index';
 import CreateBill from '../pages/BillPayment/CreateBill';
@@ -94,6 +95,12 @@ export const sidebarNavs = [
         title: 'Verify Transactions',
         path: 'verify-id',
         element: <VerifyTransactionByID />,
+        accessRoles: ['admin', 'agent', 'clerk'],
+      },
+      {
+        title: 'Approval Requests',
+        path: 'approval-requests',
+        element: <ApprovalRequestsList />,
         accessRoles: ['admin', 'agent', 'clerk'],
       },
     ],
