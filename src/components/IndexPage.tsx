@@ -26,7 +26,7 @@ const IndexPage = ({ parentPath }: Props) => {
                 <li key={menu.path} className="md:min-w-[280px]">
                   <Link
                     to={menu.path}
-                    className="flex gap-x-5 justify-between bg-gray-100 rounded py-3 px-4 text-gray-800 hover:text-gray-900 hover:bg-gray-200"
+                    className="flex gap-x-5 justify-between bg-slate-100 rounded py-3 px-4 text-slate-900 hover:text-slate-900 hover:bg-slate-200"
                   >
                     <span>{menu.title}</span>
                     <span className="text-lg">
