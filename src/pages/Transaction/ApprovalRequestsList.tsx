@@ -54,19 +54,23 @@ const ApprovalRequestsList = () => {
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4">
-            <div className="">
-              <span className="font-semibold">Filter by</span>
+            <div className="flex items-center gap-4">
+              <span className="font-semibold pb-1">Filter by</span>
               <span
-                className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer`}
-                // onClick={() => setFilterByStatus((prev) => (prev === 'approved' ? '' : 'approved'))}
+                className={`inline-flex items-center text-[15px] px-3 pb-1 pt-0.5 border bg-gray-100 text-gray-500 rounded cursor-pointer`}
               >
-                Aproved
+                Pending (12)
               </span>
               <span
-                className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer`}
-                // onClick={() => setFilterByStatus((prev) => (prev === 'pending' ? '' : 'pending'))}
+                className={`inline-flex items-center text-[15px] pb-1 pt-0.5 border bg-gray-100 text-gray-500 px-3 pb- rounded cursor-pointer`}
               >
-                Pending
+                Approved
+              </span>
+
+              <span
+                className={`inline-flex items-center text-[15px] px-3 pb-1 pt-0.5 border bg-gray-100 text-gray-500 rounded cursor-pointer`}
+              >
+                Canceled
               </span>
             </div>
 
