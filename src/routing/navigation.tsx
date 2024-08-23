@@ -139,13 +139,6 @@ export const sidebarNavs = [
     ],
   },
   {
-    title: 'Generate QR Code',
-    path: 'qr-code',
-    icon: <IoQrCode />,
-    element: <GenerateQRCode />,
-    accessRoles: ['admin', 'agent', 'clerk'],
-  },
-  {
     title: 'Bill Payment',
     path: 'bill',
     icon: <FaMoneyBillTrendUp />,
@@ -311,6 +304,13 @@ export const sidebarNavs = [
     path: 'airtime',
     icon: <MdSendToMobile />,
     element: <AirTime />,
+    accessRoles: ['admin', 'agent', 'clerk'],
+  },
+  {
+    title: 'Generate QR Code',
+    path: 'qr-code',
+    icon: <IoQrCode />,
+    element: <GenerateQRCode />,
     accessRoles: ['admin', 'agent', 'clerk'],
   },
   {
