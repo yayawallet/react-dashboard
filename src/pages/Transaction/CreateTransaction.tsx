@@ -12,6 +12,7 @@ const CreateTransaction = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const { data: currentBalance } = useGetData('/user/balance');
 
@@ -39,11 +40,19 @@ const CreateTransaction = () => {
       // Clear existing values
       setErrorMessage('');
       setTransactionID('');
+      setSuccessMessage('');
 
       authAxios
-        .post('/transaction/create', { ...values, receiver: selectedUser })
+        .post('/transaction/transaction-request', {
+          receiver: selectedUser,
+          amount: values.amount,
+          cause: values.cause,
+        })
         .then((res) => {
           setTransactionID(res.data.transaction_id);
+
+          if (res.data.transaction_id === undefined)
+            setSuccessMessage('Approval Request Made Successfully');
 
           // clear input fields
           formik.resetForm();
@@ -65,6 +74,10 @@ const CreateTransaction = () => {
 
       {transactionID && (
         <InlineNotification type="success" info={`Transaction ID: ${transactionID}`} />
+      )}
+
+      {successMessage && !transactionID && (
+        <InlineNotification type="success" info={successMessage} />
       )}
 
       <div className="flex justify-center lg:mr-32 mt-6">
