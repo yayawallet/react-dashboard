@@ -10,6 +10,7 @@ import EmptyList from '../../components/ui/EmptyList';
 import { useGetData } from '../../hooks/useSWR';
 import RefreshButton from '../../components/ui/RefreshButton';
 import Pagination from '../../components/Pagination';
+import { useAuth } from '../../auth/AuthProvider';
 
 const ScheduledList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -18,6 +19,9 @@ const ScheduledList = () => {
   const [openModal, setOpenModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const { user } = useAuth();
+  const user_role = user?.user_role || null;
 
   const {
     error,
@@ -34,7 +38,10 @@ const ScheduledList = () => {
     setIsProcessing(true);
     authAxios
       .get(`/scheduled-payment/archive/${selectedSchedule?.id}`)
-      .then(() => mutate())
+      .then(() => {
+        setIsProcessing(false);
+        mutate();
+      })
       .finally(() => setIsProcessing(false));
   };
 
@@ -150,6 +157,7 @@ const ScheduledList = () => {
                         <td className="border-b border-slate-200 p-3">
                           <button
                             type="button"
+                            disabled={user_role !== 'accountant'}
                             className="pt-0.5 pb-1 px-3 focus:outline-none text-white bg-red-500 rounded hover:bg-red-600 focus:z-10 focus:ring-4 focus:ring-red-200"
                             onClick={() => {
                               setSelectedSchedule(item);
