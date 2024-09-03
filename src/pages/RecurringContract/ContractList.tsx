@@ -127,7 +127,7 @@ const ContractList = () => {
                     setFilterByStatus((prev) => (prev === 'approved' ? '' : 'approved'))
                   }
                 >
-                  Aproved
+                  Approved
                 </span>
                 <span
                   className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}

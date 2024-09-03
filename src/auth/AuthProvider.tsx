@@ -13,6 +13,7 @@ type UserType = {
 type FilteredUserType = {
   username: string;
   user_role: string;
+  user_id: number;
 };
 
 type AuthContextType = {

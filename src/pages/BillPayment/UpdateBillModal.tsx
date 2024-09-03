@@ -119,12 +119,9 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
       />
 
       <div
-        className={`${openModal || isProcessing || openInfoCard ? 'bg-black/20' : 'bg-black/60'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 justify-center items-center w-full md:inset-0 h-full`}
+        className={`${openModal || isProcessing || openInfoCard ? 'bg-black/20' : 'bg-black/60'} overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-40 flex justify-center md:items-center w-full md:inset-0 h-full`}
       >
-        <div
-          className="absolute top-[50%] left-[50%] bg-white rounded-xl"
-          style={{ transform: 'translate(-50%, -50%)' }}
-        >
+        <div className="bg-white rounded-xl">
           <div className="max-w-[var(--form-width)] flex justify-between items-center bg-gray-50 px-8 py-4 rounded-t-xl mx-auto">
             <h3 className="text-lg font-semibold text-gray-900">Update Bill</h3>
 

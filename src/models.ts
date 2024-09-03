@@ -276,3 +276,49 @@ export interface PayoutMethodType {
   account_number: string;
   createdAt: Date;
 }
+
+export interface ApprovalRequesType {
+  uuid: string;
+  requesting_user: {
+    user: {
+      id: number;
+      first_name: string;
+      last_name: string;
+    };
+    phone: string;
+  };
+  approved_by: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  }[];
+  rejected_by: {
+    user: {
+      id: number;
+      first_name: string;
+      last_name: string;
+    };
+    rejection_reason: string;
+  }[];
+  approvers: {
+    id: number;
+    first_name: string;
+    last_name: string;
+  }[];
+  request_type: string;
+  remark: string | null;
+  request_json: {
+    receiver: string;
+    amount: number;
+    cause: string;
+
+    account_number: string;
+    reason: string;
+    recurring: string;
+    start_at: Date;
+
+    institution_code: string;
+    sender_note: string;
+  };
+  created_at: Date;
+}

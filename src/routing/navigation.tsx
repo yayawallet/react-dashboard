@@ -7,6 +7,7 @@ import CreateTransaction from '../pages/Transaction/CreateTransaction';
 import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
+import ApprovalRequestsList from '../pages/Transaction/ApprovalRequestsList';
 
 import BillPayment from '../pages/BillPayment/Index';
 import CreateBill from '../pages/BillPayment/CreateBill';
@@ -26,6 +27,7 @@ import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
 import ScheduledList from '../pages/ScheduledPayment/ScheduledList';
 import ScheduleReport from '../pages/ScheduledPayment/ScheduledBulkReport';
+import ScheduleApprovalRequestsList from '../pages/ScheduledPayment/ApprovalRequestsList';
 
 import RecurringContract from '../pages/RecurringContract/Index';
 import CreateContract from '../pages/RecurringContract/CreateContract';
@@ -39,6 +41,7 @@ import CreateTransfer from '../pages/BankTransfer/SendMoney';
 import TransferList from '../pages/BankTransfer/TransferList';
 import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
 import TransferFee from '../pages/BankTransfer/TransferFee';
+import BankTransferApprovalRequestsList from '../pages/BankTransfer/ApprovalRequestsList';
 
 import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
@@ -72,88 +75,195 @@ import { FaUserPlus } from 'react-icons/fa6';
 
 export const sidebarNavs = [
   {
-    title: 'Airtime/Package',
-    path: 'airtime',
-    icon: <MdSendToMobile />,
-    element: <AirTime />,
-    accessRoles: ['admin', 'agent', 'clerk'],
-  },
-  {
     title: 'Transaction',
     path: 'transaction',
     icon: <BiTransferAlt />,
     element: <Transaction />,
-    accessRoles: ['admin', 'agent', 'clerk'],
+    accessRoles: ['accountant', 'approver', 'clerk'],
     children: [
       {
         title: 'Send Money',
         path: 'send-money',
         element: <CreateTransaction />,
-        accessRoles: ['admin', 'agent'],
+        accessRoles: ['accountant'],
       },
       {
         title: 'Transaction History',
         path: 'history',
         element: <TransactionList />,
-        accessRoles: ['admin', 'agent', 'clerk'],
+        accessRoles: ['accountant', 'approver', 'clerk'],
       },
       {
         title: 'Verify Transactions',
         path: 'verify-id',
         element: <VerifyTransactionByID />,
-        accessRoles: ['admin', 'agent', 'clerk'],
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Approval Requests',
+        path: 'approval-requests',
+        element: <ApprovalRequestsList />,
+        accessRoles: ['accountant', 'approver'],
       },
     ],
   },
+
   {
-    title: 'Generate QR Code',
-    path: 'qr-code',
-    icon: <IoQrCode />,
-    element: <GenerateQRCode />,
-    accessRoles: ['admin', 'agent', 'clerk'],
+    title: 'Scheduled Payment',
+    path: 'scheduled-payment',
+    icon: <RiCalendarScheduleLine />,
+    element: <ScheduledPayment />,
+    accessRoles: ['accountant', 'approver', 'clerk'],
+    children: [
+      {
+        title: 'Create Schedule',
+        path: 'create',
+        element: <CreateScheduled />,
+        accessRoles: ['accountant'],
+      },
+      {
+        title: 'Scheduled List',
+        path: 'list',
+        element: <ScheduledList />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Bulk Report',
+        path: 'bulk-report',
+        element: <ScheduleReport />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Approval Requests',
+        path: 'approval-requests',
+        element: <ScheduleApprovalRequestsList />,
+        accessRoles: ['accountant', 'approver'],
+      },
+    ],
   },
+
+  {
+    title: 'Other Banks',
+    path: 'transfer',
+    icon: <RiBankFill />,
+    element: <Transfer />,
+    accessRoles: ['accountant', 'approver', 'clerk'],
+    children: [
+      {
+        title: 'Send Money',
+        path: 'send-money',
+        element: <CreateTransfer />,
+        accessRoles: ['accountant'],
+      },
+      {
+        title: 'Transfer History',
+        path: 'history',
+        element: <TransferList />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Transfer Fee',
+        path: 'transfer-fee',
+        element: <TransferFee />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Account Lookup',
+        path: 'account-lookup',
+        element: <ExternalAccountLookup />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Approval Requests',
+        path: 'approval-requests',
+        element: <BankTransferApprovalRequestsList />,
+        accessRoles: ['accountant', 'approver'],
+      },
+    ],
+  },
+
   {
     title: 'Bill Payment',
     path: 'bill',
     icon: <FaMoneyBillTrendUp />,
     element: <BillPayment />,
-    accessRoles: ['admin', 'agent', 'clerk'],
+    accessRoles: ['accountant', 'approver', 'clerk'],
     children: [
       {
         title: 'Create Bill',
         path: 'create',
         element: <CreateBill />,
-        accessRoles: ['admin', 'agent'],
+        accessRoles: ['accountant'],
       },
       {
         title: 'List Bills',
         path: 'list',
         element: <BillList />,
-        accessRoles: ['admin', 'agent', 'clerk'],
+        accessRoles: ['accountant', 'approver', 'clerk'],
       },
       {
         title: 'Update Bill',
         path: 'update',
         element: <UpdateBill />,
-        accessRoles: ['admin', 'agent'],
+        accessRoles: ['accountant'],
       },
       {
         title: 'Check Bulk Status',
         path: 'bulkimport-list',
         element: <CheckBulkBillStatus />,
-        accessRoles: ['admin', 'agent', 'clerk'],
+        accessRoles: ['accountant', 'approver', 'clerk'],
       },
       {
         title: 'Create Payout Method',
         path: 'create-payout-methods',
         element: <CreatePayoutMethod />,
-        accessRoles: ['admin', 'agent'],
+        accessRoles: ['accountant'],
       },
       {
         title: 'List Payout Methods',
         path: 'payout-methods-list',
         element: <ListPayoutMethods />,
-        accessRoles: ['admin', 'agent', 'clerk'],
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+    ],
+  },
+
+  {
+    title: 'Recurring Contract',
+    path: 'recurring-contract',
+    icon: <MdOutlinePayments />,
+    element: <RecurringContract />,
+    accessRoles: ['accountant', 'approver', 'clerk'],
+    children: [
+      {
+        title: 'Create Contract',
+        path: 'create',
+        element: <CreateContract />,
+        accessRoles: ['accountant'],
+      },
+      {
+        title: 'Contract List',
+        path: 'list',
+        element: <ContractList />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Contract Report',
+        path: 'report',
+        element: <ContractReport />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
+      },
+      {
+        title: 'Request Payment',
+        path: 'request-payment',
+        element: <RequestPayment />,
+        accessRoles: ['accountant'],
+      },
+      {
+        title: 'Request Payments Report',
+        path: 'request-payment-report',
+        element: <RequestPaymentReport />,
+        accessRoles: ['accountant', 'approver', 'clerk'],
       },
     ],
   },
@@ -207,117 +317,32 @@ export const sidebarNavs = [
     ],
   },
   {
-    title: 'Scheduled Payment',
-    path: 'scheduled-payment',
-    icon: <RiCalendarScheduleLine />,
-    element: <ScheduledPayment />,
-    accessRoles: ['admin', 'agent', 'clerk'],
-    children: [
-      {
-        title: 'Create Schedule',
-        path: 'create',
-        element: <CreateScheduled />,
-        accessRoles: ['admin', 'agent'],
-      },
-      {
-        title: 'Scheduled List',
-        path: 'list',
-        element: <ScheduledList />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Bulk Report',
-        path: 'bulk-report',
-        element: <ScheduleReport />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-    ],
+    title: 'Airtime/Package',
+    path: 'airtime',
+    icon: <MdSendToMobile />,
+    element: <AirTime />,
+    accessRoles: ['accountant'],
   },
   {
-    title: 'Recurring Contract',
-    path: 'recurring-contract',
-    icon: <MdOutlinePayments />,
-    element: <RecurringContract />,
-    accessRoles: ['admin', 'agent', 'clerk'],
-    children: [
-      {
-        title: 'Create Contract',
-        path: 'create',
-        element: <CreateContract />,
-        accessRoles: ['admin', 'agent'],
-      },
-      {
-        title: 'Contract List',
-        path: 'list',
-        element: <ContractList />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Contract Report',
-        path: 'report',
-        element: <ContractReport />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Request Payment',
-        path: 'request-payment',
-        element: <RequestPayment />,
-        accessRoles: ['admin', 'agent'],
-      },
-      {
-        title: 'Request Payments Report',
-        path: 'request-payment-report',
-        element: <RequestPaymentReport />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-    ],
-  },
-  {
-    title: 'Other Banks',
-    path: 'transfer',
-    icon: <RiBankFill />,
-    element: <Transfer />,
-    accessRoles: ['admin', 'agent', 'clerk'],
-    children: [
-      {
-        title: 'Send Money',
-        path: 'send-money',
-        element: <CreateTransfer />,
-        accessRoles: ['admin', 'agent'],
-      },
-      {
-        title: 'Transfer History',
-        path: 'history',
-        element: <TransferList />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Transfer Fee',
-        path: 'transfer-fee',
-        element: <TransferFee />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-      {
-        title: 'Account Lookup',
-        path: 'account-lookup',
-        element: <ExternalAccountLookup />,
-        accessRoles: ['admin', 'agent', 'clerk'],
-      },
-    ],
+    title: 'Generate QR Code',
+    path: 'qr-code',
+    icon: <IoQrCode />,
+    element: <GenerateQRCode />,
+    accessRoles: ['accountant', 'approver', 'clerk'],
   },
   {
     title: 'User Guide',
     path: 'guide',
     element: <Guide />,
     icon: <MdOutlineContactSupport />,
-    accessRoles: ['admin', 'agent', 'clerk'],
+    accessRoles: ['accountant', 'approver', 'clerk'],
   },
   {
     title: 'Support',
     path: 'support',
     element: <Support />,
     icon: <HiOutlineSupport />,
-    accessRoles: ['admin', 'agent', 'clerk'],
+    accessRoles: ['accountant', 'approver', 'clerk'],
   },
 ];
 

@@ -51,13 +51,16 @@ const Create = () => {
       setErrorMessage('');
 
       authAxios
-        .post('/scheduled-payment/create', {
+        .post('/scheduled-payment/schedule-request', {
           ...values,
           account_number: selectedUser,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
         })
         .then((res) => {
           setScheduledPaymentID(res.data.id);
+
+          if (res.data.transaction_id === undefined)
+            setSuccessMessage('Approval Request Made Successfully');
 
           // clear input fields
           formik.resetForm();

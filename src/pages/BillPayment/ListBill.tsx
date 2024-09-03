@@ -85,7 +85,7 @@ const ListBill = () => {
       ) : isLoading && currentPage === 1 ? (
         <Loading />
       ) : (
-        <div className="border border-slate-200 rounded-xl">
+        <div className="border border-gray-200 rounded-xl">
           <div className="flex flex-wrap justify-between items-center m-4 text-[15px]">
             <div className="w-64">
               <SearchBar
@@ -109,7 +109,7 @@ const ListBill = () => {
                   style={{
                     top: '30vh',
                     left: '50%',
-                    transform: 'translate(-50%)',
+                    transform: 'trangray(-50%)',
                     boxShadow: '0 0 5px #888',
                   }}
                 >
@@ -126,9 +126,9 @@ const ListBill = () => {
                   <thead>
                     <tr>
                       <th className="text-left pl-3 py-3 font-medium">ID</th>
-                      <th className="text-left pl-3 py-3 font-medium">Customer Account</th>
+                      <th className="text-left pl-3 py-3 font-medium">Client</th>
                       <th className="text-left pl-3 py-3 font-medium">Cluster</th>
-                      <th className="text-left pl-3 py-3 font-medium">Customer ID</th>
+                      <th className="text-left pl-3 py-3 font-medium">Customer Account</th>
                       <th className="text-left pl-3 py-3 font-medium">Bill ID</th>
                       <th className="text-left pl-3 py-3 font-medium">Amount</th>
                       <th className="text-left pl-3 py-3 font-medium">Status</th>
@@ -142,11 +142,12 @@ const ListBill = () => {
                       (bill: BillListType) => (
                         <tr
                           key={bill.id}
-                          className={`text-nowrap ${new Date(bill.due_at) < new Date() ? 'bg-red-100 hover:bg-red-100' : 'hover:bg-slate-100'}`}
+                          className={`text-nowrap ${new Date(bill.due_at) < new Date() ? 'bg-red-100 hover:bg-red-100' : 'hover:bg-gray-100'}`}
+                          title={`${bill.client_yaya_account.name}\nClient yaya account: ${bill.client_yaya_account.account}\n${bill.bill_code && `Bill code: ${bill.bill_code} \n`}${bill.bill_season && `Bill season: ${bill.bill_season} \n`}${bill.description && `Description: ${bill.description}\n`}${bill.customer_id && `Customer Id: ${bill.customer_id}\n`}${bill.phone && `Phone: ${bill.phone}\n`}${bill.email && `Email: ${bill.email}`}`}
                         >
                           <td
                             title={bill.id}
-                            className="relative border-b border-slate-200 pl-3 py-3 cursor-pointer"
+                            className="relative border-b border-gray-200 pl-3 py-3 cursor-pointer"
                             onClick={() => copyTransactionID(bill.id)}
                           >
                             {`${bill.id.slice(0, 6)}...${bill.id.slice(-2)}`}
@@ -157,7 +158,15 @@ const ListBill = () => {
                             </span>
                           </td>
 
-                          <td className="border-b border-slate-200 pl-3 py-3">
+                          <td className="border-b border-gray-200 pl-3 py-3 text-gray-500">
+                            @{bill.client_yaya_account.account}
+                          </td>
+
+                          <td className="border-b border-gray-200 pl-3 py-3">
+                            {bill.cluster ? capitalize(bill.cluster) : ''}
+                          </td>
+
+                          <td className="border-b border-gray-200 pl-3 py-3">
                             {bill.customer_yaya_account ? (
                               bill.customer_yaya_account?.account
                             ) : (
@@ -165,22 +174,14 @@ const ListBill = () => {
                             )}
                           </td>
 
-                          <td className="border-b border-slate-200 pl-3 py-3">
-                            {bill.cluster ? capitalize(bill.cluster) : ''}
-                          </td>
+                          <td className="border-b border-gray-200 pl-3 py-3">{bill.bill_id}</td>
 
-                          <td className="border-b border-slate-200 pl-3 py-3">
-                            {bill.customer_id}
-                          </td>
-
-                          <td className="border-b border-slate-200 pl-3 py-3">{bill.bill_id}</td>
-
-                          <td className="border-b border-slate-200 pl-3 py-3">
+                          <td className="border-b border-gray-200 pl-3 py-3">
                             {bill.amount?.toFixed(2)}{' '}
                             <span className="text-gray-500 text-sm">{bill.currency}</span>
                           </td>
 
-                          <td className="border-b border-slate-200 pl-3 py-3">
+                          <td className="border-b border-gray-200 pl-3 py-3">
                             <span
                               className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${bill.status == 'PAID' ? 'green' : 'orange'}-500`}
                             >
@@ -189,11 +190,11 @@ const ListBill = () => {
                             {capitalize(bill.status || 'pending')}
                           </td>
 
-                          <td className="border-b border-slate-200 pl-3 py-3 text-gray-500 tracking-normal">
+                          <td className="border-b border-gray-200 pl-3 py-3 text-gray-500 tracking-normal">
                             {formatDate(bill.due_at).split('-')[0]}
                           </td>
 
-                          <td className="relative border-b border-slate-200 pl-3 py-3">
+                          <td className="relative border-b border-gray-200 pl-3 py-3">
                             <button
                               type="button"
                               disabled={bill.status === 'PAID'}
