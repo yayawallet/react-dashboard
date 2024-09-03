@@ -12,6 +12,7 @@ const CreateTransfer = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [externalAccount, setExternalAccount] = useState<EXternalAccount>();
+  const [successMessage, setSuccessMessage] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -36,11 +37,14 @@ const CreateTransfer = () => {
       // Clear existing values
       setErrorMessage('');
       setTransferID('');
+      setSuccessMessage('');
 
       authAxios
         .post('/transfer/send', values)
         .then((res) => {
           setTransferID(res.data.id);
+
+          if (res.data.id === undefined) setSuccessMessage('Approval Request Made Successfully');
 
           // clear input fields
           formik.resetForm();
@@ -63,6 +67,7 @@ const CreateTransfer = () => {
     // Clear existing values
     setErrorMessage('');
     setExternalAccount(undefined);
+    setSuccessMessage('');
 
     authAxios
       .post(`/transfer/lookup-external`, {
@@ -83,6 +88,8 @@ const CreateTransfer = () => {
       <h1 className="text-2xl font-semibold p-2 mb-10">Transfer Money</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
+
+      {successMessage && !transferID && <InlineNotification type="success" info={successMessage} />}
 
       {transferID && (
         <div>
