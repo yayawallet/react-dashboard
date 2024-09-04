@@ -202,7 +202,7 @@ const ApprovalRequestsList = () => {
                     {approvalRequestList.map((t: ApprovalRequesType) => (
                       <React.Fragment key={t.uuid}>
                         <tr
-                          className="relative hover:bg-slate-100 text-nowrap"
+                          className={`text-nowrap ${showDetailID === t.uuid ? '' : 'hover:bg-slate-100'}`}
                           onClick={() => setShowDetailID(showDetailID === t.uuid ? null : t.uuid)}
                         >
                           <td

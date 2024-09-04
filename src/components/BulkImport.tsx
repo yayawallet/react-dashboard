@@ -9,6 +9,7 @@ interface Props {
   instruction?: string | ReactNode;
   apiEndpoint: string;
   templateFile: string;
+  approvalRequest?: boolean;
   onLoading: (value: boolean) => void;
   onError: (value: string) => void;
   onSuccess: (value: string) => void;
@@ -19,6 +20,7 @@ const BulkImport = ({
   instruction,
   apiEndpoint,
   templateFile,
+  approvalRequest,
   onLoading,
   onError,
   onSuccess,
@@ -47,7 +49,11 @@ const BulkImport = ({
         .post(`/${apiEndpoint}`, formData)
         .then(() => {
           onError('');
-          onSuccess('Your file is being processed.');
+          onSuccess(
+            approvalRequest
+              ? 'Approval Request Sent to Approvers.'
+              : 'Your file is being processed.'
+          );
         })
         .catch((err) => {
           onSuccess('');

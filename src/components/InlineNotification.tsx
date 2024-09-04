@@ -16,7 +16,7 @@ const InlineNotification = ({ type, customType, info }: Props) => {
   return (
     <div className={`${hide ? 'hidden' : ''}`}>
       <div
-        className={`flex justify-between items-center p-4 mb-1 max-w-[1140px] mx-auto transition text-[15px] rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
+        className={`flex justify-between items-center p-4 mb-5 max-w-[1140px] mx-auto transition text-[15px] rounded-lg ${type === 'success' ? 'bg-blue-50 text-blue-800' : 'bg-red-50 text-red-800'}`}
         role="alert"
       >
         <div className="flex items-center">

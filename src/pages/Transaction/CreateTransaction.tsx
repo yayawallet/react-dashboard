@@ -52,7 +52,7 @@ const CreateTransaction = () => {
           setTransactionID(res.data.transaction_id);
 
           if (res.data.transaction_id === undefined)
-            setSuccessMessage('Approval Request Made Successfully');
+            setSuccessMessage('Approval Request Sent to Approvers.');
 
           // clear input fields
           formik.resetForm();

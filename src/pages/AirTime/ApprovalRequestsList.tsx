@@ -43,11 +43,9 @@ const ApprovalRequestsList = () => {
       total: totalApprovalRequests,
       perPage,
     } = {},
-  } = useGetData(`/transfer/transfer-requests?page=${currentPage}`);
+  } = useGetData(`/airtime/airtime-requests?page=${currentPage}`);
 
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
-  });
+  const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' });
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -102,7 +100,7 @@ const ApprovalRequestsList = () => {
     formData.append('approval_request_id', selectedActionUUID);
 
     authAxios
-      .post('transfer/submit-transfer-response', formData)
+      .post('airtime/submit-airtime-response', formData)
       .then(() => {
         setIsProcessing(false);
         mutate();
@@ -125,7 +123,7 @@ const ApprovalRequestsList = () => {
     formData.append('rejection_reason', confirm.toString());
 
     authAxios
-      .post('transfer/submit-transfer-response', formData)
+      .post('airtime/submit-airtime-response', formData)
       .then(() => {
         setIsProcessing(false);
         mutate();
@@ -189,10 +187,9 @@ const ApprovalRequestsList = () => {
                     <tr>
                       <th className="text-left px-4 py-3 font-medium">ID</th>
                       <th className="text-left px-4 py-3 font-medium">Accountant</th>
-                      <th className="text-left px-4 py-3 font-medium">Account Number</th>
-                      <th className="text-left px-4 py-3 font-medium">Institution</th>
+                      <th className="text-left px-4 py-3 font-medium">Receiver</th>
                       <th className="text-left px-4 py-3 font-medium">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium">Reason</th>
+                      <th className="text-left px-4 py-3 font-medium">Package</th>
                       <th className="text-left px-4 py-3 font-medium">Status</th>
                       <th className="text-left px-4 py-3 font-medium">Created At</th>
                       {user_role === 'approver' ? (
@@ -229,27 +226,26 @@ const ApprovalRequestsList = () => {
                             )}
                           </td>
                           <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.account_number}
+                            {JSON.parse(t.request_json)?.phone}
                           </td>
 
                           <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.institution_code
-                              ? institutionList
-                                  .find(
-                                    (i: { code: string; name: string }) =>
-                                      i.code == t.request_json?.institution_code
-                                  )
-                                  .map((i: { code: string; name: string }) => i.name)
-                              : '-'}
-                          </td>
-
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.amount?.toFixed(2)}{' '}
+                            {JSON.parse(t.request_json)?.amount
+                              ? JSON.parse(t.request_json)?.amount
+                              : packages?.find(
+                                  (p: { code: string; amount: number; name: string }) =>
+                                    p.code == JSON.parse(t.request_json)?.package
+                                )?.amount}{' '}
                             <span className="text-gray-500 text-sm">ETB</span>
                           </td>
 
-                          <td className="border-b border-slate-200 p-3 text-wrap">
-                            {t.request_json?.sender_note}
+                          <td className="border-b border-slate-200 p-3 text-wrapp">
+                            {JSON.parse(t.request_json)?.package
+                              ? packages?.find(
+                                  (p: { code: string; amount: number; name: string }) =>
+                                    p.code == JSON.parse(t.request_json)?.package
+                                )?.name
+                              : ''}
                           </td>
 
                           <td className="border-b border-slate-200 py-3">
@@ -265,7 +261,7 @@ const ApprovalRequestsList = () => {
                                 : 'Pending'}
                           </td>
 
-                          <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
+                          <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">
                             {formatDate(t.created_at)}
                           </td>
 
@@ -305,11 +301,11 @@ const ApprovalRequestsList = () => {
                             )}
                           </td>
                         </tr>
+
                         <tr>
                           <td
-                            colSpan={user_role === 'accountant' ? 7 : 8}
+                            colSpan={user_role === 'accountant' ? 9 : 10}
                             className={`${showDetailID === t.uuid ? '' : 'hidden'} border shadow-lg pl-5 p-3 pb-10 bg-white`}
-                            onClick={(e) => e.stopPropagation()}
                           >
                             <div className={`${t.approvers.length === 0 ? 'hidden' : ''} mb-6`}>
                               <h4 className="font-semibold text-lg mb-1">List of All Approvers</h4>

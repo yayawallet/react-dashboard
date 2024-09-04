@@ -44,7 +44,7 @@ const CreateTransfer = () => {
         .then((res) => {
           setTransferID(res.data.id);
 
-          if (res.data.id === undefined) setSuccessMessage('Approval Request Made Successfully');
+          if (res.data.id === undefined) setSuccessMessage('Approval Request Sent to Approvers.');
 
           // clear input fields
           formik.resetForm();

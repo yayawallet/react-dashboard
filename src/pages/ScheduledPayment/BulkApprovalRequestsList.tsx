@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Pagination from '../../components/Pagination';
 import { ApprovalRequesType } from '../../models';
-import { useGetData, usePostData } from '../../hooks/useSWR';
+import { useGetData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
 import Error from '../../components/ui/Error';
 import EmptyList from '../../components/ui/EmptyList';
@@ -16,8 +16,9 @@ import { capitalize } from 'lodash';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../../auth/AuthProvider';
 import React from 'react';
+import { BsDownload } from 'react-icons/bs';
 
-const ApprovalRequestsList = () => {
+const BulkApprovalRequestsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -43,11 +44,7 @@ const ApprovalRequestsList = () => {
       total: totalApprovalRequests,
       perPage,
     } = {},
-  } = useGetData(`/transfer/transfer-requests?page=${currentPage}`);
-
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
-  });
+  } = useGetData(`/scheduled-payment/scheduled-bulk-requests?page=${currentPage}`);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -102,7 +99,7 @@ const ApprovalRequestsList = () => {
     formData.append('approval_request_id', selectedActionUUID);
 
     authAxios
-      .post('transfer/submit-transfer-response', formData)
+      .post('scheduled-payment/submit-bulk-schedule-response', formData)
       .then(() => {
         setIsProcessing(false);
         mutate();
@@ -125,7 +122,7 @@ const ApprovalRequestsList = () => {
     formData.append('rejection_reason', confirm.toString());
 
     authAxios
-      .post('transfer/submit-transfer-response', formData)
+      .post('scheduled-payment/submit-bulk-schedule-response', formData)
       .then(() => {
         setIsProcessing(false);
         mutate();
@@ -189,10 +186,8 @@ const ApprovalRequestsList = () => {
                     <tr>
                       <th className="text-left px-4 py-3 font-medium">ID</th>
                       <th className="text-left px-4 py-3 font-medium">Accountant</th>
-                      <th className="text-left px-4 py-3 font-medium">Account Number</th>
-                      <th className="text-left px-4 py-3 font-medium">Institution</th>
-                      <th className="text-left px-4 py-3 font-medium">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium">Reason</th>
+                      <th className="text-left px-4 py-3 font-medium">File</th>
+                      <th className="text-left px-4 py-3 font-medium">Accountant Remark</th>
                       <th className="text-left px-4 py-3 font-medium">Status</th>
                       <th className="text-left px-4 py-3 font-medium">Created At</th>
                       {user_role === 'approver' ? (
@@ -228,28 +223,28 @@ const ApprovalRequestsList = () => {
                                 t.requesting_user?.user?.last_name
                             )}
                           </td>
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.account_number}
+                          <td
+                            className="border-b border-slate-200 p-3"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {t.file ? (
+                              <a
+                                href={t.file}
+                                download={`YaYa_Scheduled_Bulk_Request_${t.file}`}
+                                className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
+                              >
+                                Download
+                                <span className="text-sm">
+                                  <BsDownload />
+                                </span>{' '}
+                              </a>
+                            ) : (
+                              '~'
+                            )}
                           </td>
 
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.institution_code
-                              ? institutionList
-                                  .find(
-                                    (i: { code: string; name: string }) =>
-                                      i.code == t.request_json?.institution_code
-                                  )
-                                  .map((i: { code: string; name: string }) => i.name)
-                              : '-'}
-                          </td>
-
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.amount?.toFixed(2)}{' '}
-                            <span className="text-gray-500 text-sm">ETB</span>
-                          </td>
-
-                          <td className="border-b border-slate-200 p-3 text-wrap">
-                            {t.request_json?.sender_note}
+                          <td className="border-b border-slate-200 p-3 text-wrapp">
+                            {t.remark || '~'}
                           </td>
 
                           <td className="border-b border-slate-200 py-3">
@@ -265,7 +260,7 @@ const ApprovalRequestsList = () => {
                                 : 'Pending'}
                           </td>
 
-                          <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
+                          <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">
                             {formatDate(t.created_at)}
                           </td>
 
@@ -305,11 +300,11 @@ const ApprovalRequestsList = () => {
                             )}
                           </td>
                         </tr>
+
                         <tr>
                           <td
-                            colSpan={user_role === 'accountant' ? 7 : 8}
-                            className={`${showDetailID === t.uuid ? '' : 'hidden'} border shadow-lg pl-5 p-3 pb-10 bg-white`}
-                            onClick={(e) => e.stopPropagation()}
+                            colSpan={user_role === 'accountant' ? 9 : 10}
+                            className={`${showDetailID === t.uuid ? '' : 'hidden'} border-b shadow-lg pl-5 p-3 pb-6 bg-white`}
                           >
                             <div className={`${t.approvers.length === 0 ? 'hidden' : ''} mb-6`}>
                               <h4 className="font-semibold text-lg mb-1">List of All Approvers</h4>
@@ -393,4 +388,4 @@ const ApprovalRequestsList = () => {
   );
 };
 
-export default ApprovalRequestsList;
+export default BulkApprovalRequestsList;
