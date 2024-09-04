@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { authAxios } from '../../api/axios';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
-import ResultModal from '../../components/modals/ResultModal';
-import { TopUp } from '../../models';
+import InlineNotification from '../../components/InlineNotification';
 
 interface Props {
   phoneNumber: string;
@@ -14,10 +13,8 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isSucceed, setIsSucceed] = useState(false);
-  const [topup, setTopup] = useState<TopUp>();
-  const [openInfoCard, setOpenInfoCard] = useState(false);
-  const [errorMessage, setErrorMessge] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const definedAmounts = [5, 10, 15, 25, 50, 100, 250, 500, 1000];
 
@@ -26,27 +23,23 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
     if (!confirm) return;
 
     setIsProcessing(true);
+    setSuccessMessage('');
+    setErrorMessage('');
+
     authAxios
-      .post('/airtime/buy', {
+      .post('/airtime/airtime-request', {
         phone: '+251' + phoneNumber,
         amount: selectedAmount,
       })
-      .then((res) => {
-        setIsProcessing(false);
-        setTopup(res.data);
-        setOpenInfoCard(true);
-        setIsSucceed(true);
+      .then(() => {
+        setSuccessMessage('Approval Request sent to Approvers.');
       })
-      .catch(() => {
-        setIsProcessing(false);
-        setTopup(undefined);
-        setOpenInfoCard(true);
-        setIsSucceed(false);
-      });
-  };
-
-  const handleCloseInfoCard = () => {
-    setOpenInfoCard(false);
+      .catch((error) => {
+        setErrorMessage(
+          error.response?.data?.message || error.response?.data?.error || error.message
+        );
+      })
+      .finally(() => setIsProcessing(false));
   };
 
   return (
@@ -58,13 +51,9 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
         infoList={[`Ethio Telecom Airtime`, `Service Number: ${phoneNumber}`]}
       />
       <ProcessingModal isProcessing={isProcessing} />
-      <ResultModal
-        openModal={openInfoCard}
-        onCloseModal={handleCloseInfoCard}
-        successMessage={
-          isSucceed ? `You've paid ${topup?.amount.toFixed(2)} ETB for ${topup?.phone}` : ''
-        }
-      />
+
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
+      {successMessage && <InlineNotification type="success" info={successMessage} />}
 
       <h2 className="font-semibold mb-2">Select Denomination</h2>
 
@@ -84,7 +73,7 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
             className={`flex justify-center items-center border border-violet-200 hover:bg-violet-50 rounded p-2 py-5 cursor-pointer ${selectedAmount === amount ? 'ring-4 ring-violet-300' : ''}`}
             onClick={() => {
               setSelectedAmount(amount);
-              setErrorMessge('');
+              setErrorMessage('');
             }}
           >
             <span className="pr-1">{amount}</span>
@@ -112,10 +101,10 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
             onChange={(e) => {
               setSelectedAmount(Number(e.currentTarget.value));
               Number(e.currentTarget.value) < 5
-                ? setErrorMessge('Amount cannot be less than 5')
+                ? setErrorMessage('Amount cannot be less than 5')
                 : Number(e.currentTarget.value) > Math.floor(Number(e.currentTarget.value))
-                  ? setErrorMessge('Invalid amount')
-                  : setErrorMessge('');
+                  ? setErrorMessage('Invalid amount')
+                  : setErrorMessage('');
             }}
           />
         </div>
