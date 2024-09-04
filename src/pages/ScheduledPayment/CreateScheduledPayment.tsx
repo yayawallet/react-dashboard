@@ -60,7 +60,7 @@ const Create = () => {
           setScheduledPaymentID(res.data.id);
 
           if (res.data.transaction_id === undefined)
-            setSuccessMessage('Approval Request Made Successfully');
+            setSuccessMessage('Approval Request Sent to Approvers.');
 
           // clear input fields
           formik.resetForm();
@@ -257,11 +257,12 @@ const Create = () => {
       ) : (
         <BulkImport
           isLoading={isLoading}
-          apiEndpoint="scheduled-payment/bulk-import"
+          apiEndpoint="scheduled-payment/bulk-schedule-import-request"
           templateFile={createSchedulePaymentTemplate}
           onLoading={handleOnLoading}
           onError={handleOnError}
           onSuccess={handleOnSuccess}
+          approvalRequest={true}
         />
       )}
     </div>
