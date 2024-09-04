@@ -3,9 +3,10 @@ import { authAxios } from '../../api/axios';
 import LoadingSpinner from './LoadingSpinner';
 import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
-import ResultModal from '../../components/modals/ResultModal';
-import { TopUp, Package } from './../../models';
+
+import { Package } from './../../models';
 import { usePostData } from '../../hooks/useSWR';
+import InlineNotification from '../../components/InlineNotification';
 
 interface Props {
   phoneNumber: string;
@@ -20,9 +21,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
   const [selectedPackageName, setSelectedPackageName] = useState('');
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isSucceed, setIsSucceed] = useState(false);
-  const [topup, setTopup] = useState<TopUp>();
-  const [openInfoCard, setOpenInfoCard] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' }); // Ethio telecom packages
 
@@ -38,29 +38,23 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
     if (!confirm) return;
 
     setIsProcessing(true);
+    setErrorMessage('');
+    setSuccessMessage('');
+
     authAxios
-      .post(`${import.meta.env.VITE_BASE_URL}/package/buy`, {
+      .post(`/airtime/package-request`, {
         phone: '+251' + phoneNumber,
         package: selectedPackage,
       })
-      .then((res) => {
-        setIsProcessing(false);
-        setTopup(res.data);
-        console.log('hiiii');
-        console.log(res.data);
-        setOpenInfoCard(true);
-        setIsSucceed(true);
+      .then(() => {
+        setSuccessMessage('Approval Request Sent to Approvers.');
       })
-      .catch(() => {
-        setIsProcessing(false);
-        setTopup(undefined);
-        setOpenInfoCard(true);
-        setIsSucceed(false);
-      });
-  };
-
-  const handleCloseInfoCard = () => {
-    setOpenInfoCard(false);
+      .catch((error) => {
+        setErrorMessage(
+          error.response?.data?.message || error.response?.data?.error || error.message
+        );
+      })
+      .finally(() => setIsProcessing(false));
   };
 
   return (
@@ -72,19 +66,15 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         infoList={[selectedPackageName, `Service Number: ${phoneNumber}`]}
       />
       <ProcessingModal isProcessing={isProcessing} />
-      <ResultModal
-        openModal={openInfoCard}
-        onCloseModal={handleCloseInfoCard}
-        successMessage={
-          isSucceed ? `You've paid ${topup?.amount.toFixed(2)} ETB for ${topup?.phone}` : ''
-        }
-      />
+
+      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
+      {successMessage && <InlineNotification type="success" info={successMessage} />}
 
       <div className="flex flex-col sm:flex-row gap-6 border rounded-lg p-5">
         <div className="flex self-start border border-violet-100 sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-violet-50">
           {categories?.map((c) => (
             <div
-              className={`border-t border-violet-100 shadow-sm shadow-violet-200 text-sm rounded-lg text-violet-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : ''}`}
+              className={`border-t border-violet-100 shadow-sm shadow-violet-200 text-sm rounded-lg text-violet-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : 'bg-white'}`}
               key={c}
               onClick={() => setSelectedCategory(c)}
             >
