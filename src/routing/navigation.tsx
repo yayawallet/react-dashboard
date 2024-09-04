@@ -1,6 +1,8 @@
 import { Navigate } from 'react-router-dom';
 
-import AirTime from '../pages/AirTime/Index';
+import AirTime from '../pages/AirTime/IndexPage';
+import BuyAirTime from '../pages/AirTime/Index';
+import AirTimeApprovalRequestsList from '../pages/AirTime/ApprovalRequestsList';
 
 import Transaction from '../pages/Transaction/Index';
 import CreateTransaction from '../pages/Transaction/CreateTransaction';
@@ -26,8 +28,9 @@ import NationalID from '../pages/RegisterUsers/NationalID';
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
 import ScheduledList from '../pages/ScheduledPayment/ScheduledList';
-import ScheduleReport from '../pages/ScheduledPayment/ScheduledBulkReport';
-import ScheduleApprovalRequestsList from '../pages/ScheduledPayment/ApprovalRequestsList';
+import ScheduledReport from '../pages/ScheduledPayment/ScheduledBulkReport';
+import ScheduledApprovalRequestsList from '../pages/ScheduledPayment/ApprovalRequestsList';
+import ScheduledBulkApprovalRequestsList from '../pages/ScheduledPayment/BulkApprovalRequestsList';
 
 import RecurringContract from '../pages/RecurringContract/Index';
 import CreateContract from '../pages/RecurringContract/CreateContract';
@@ -130,13 +133,19 @@ export const sidebarNavs = [
       {
         title: 'Bulk Report',
         path: 'bulk-report',
-        element: <ScheduleReport />,
+        element: <ScheduledReport />,
         accessRoles: ['accountant', 'approver', 'clerk'],
       },
       {
         title: 'Approval Requests',
         path: 'approval-requests',
-        element: <ScheduleApprovalRequestsList />,
+        element: <ScheduledApprovalRequestsList />,
+        accessRoles: ['accountant', 'approver'],
+      },
+      {
+        title: 'Bulk Approval Requests',
+        path: 'bulk-approval-requests',
+        element: <ScheduledBulkApprovalRequestsList />,
         accessRoles: ['accountant', 'approver'],
       },
     ],
@@ -321,8 +330,23 @@ export const sidebarNavs = [
     path: 'airtime',
     icon: <MdSendToMobile />,
     element: <AirTime />,
-    accessRoles: ['accountant'],
+    accessRoles: ['accountant', 'approver'],
+    children: [
+      {
+        title: 'Airtime/Package',
+        path: 'buy',
+        element: <BuyAirTime />,
+        accessRoles: ['accountant'],
+      },
+      {
+        title: 'Approval Requests',
+        path: 'approval-requests',
+        element: <AirTimeApprovalRequestsList />,
+        accessRoles: ['accountant', 'approver'],
+      },
+    ],
   },
+
   {
     title: 'Generate QR Code',
     path: 'qr-code',
