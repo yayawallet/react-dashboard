@@ -306,7 +306,6 @@ export interface ApprovalRequesType {
     last_name: string;
   }[];
   request_type: string;
-  remark: string | null;
   request_json: {
     receiver: string;
     amount: number;
@@ -319,6 +318,11 @@ export interface ApprovalRequesType {
 
     institution_code: string;
     sender_note: string;
+
+    phone: string;
+    package: string;
   };
+  file: string;
+  remark: string;
   created_at: Date;
 }
