@@ -37,7 +37,7 @@ const ChangePassword = () => {
       setSuccessMessage('');
 
       authAxios
-        .post('/user/change-password/', {
+        .post('/user/change-password', {
           old_password: values.current_password,
           new_password: values.new_password,
         })
