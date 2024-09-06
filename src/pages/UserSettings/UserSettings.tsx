@@ -15,7 +15,7 @@ const UserSettings = ({ onCloseUserSettings }: Props) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const { data: userInfo } = useGetData('/user/me');
+  const { data: userInfo } = useGetData('/user/me/');
 
   return (
     <div className="absolute top-16 right-4 bg-white z-50">
