@@ -12,7 +12,7 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import RejectionModal from '../../components/modals/RejectionModal';
 import { authAxios } from '../../api/axios';
-import { capitalize } from 'lodash';
+import { capitalize } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../../auth/AuthProvider';
 import React from 'react';
@@ -225,25 +225,23 @@ const ApprovalRequestsList = () => {
                                 t.requesting_user?.user?.last_name
                             )}
                           </td>
-                          <td className="border-b border-slate-200 p-3">
-                            {JSON.parse(t.request_json)?.phone}
-                          </td>
+                          <td className="border-b border-slate-200 p-3">{t.request_json?.phone}</td>
 
                           <td className="border-b border-slate-200 p-3">
-                            {JSON.parse(t.request_json)?.amount
-                              ? JSON.parse(t.request_json)?.amount
+                            {t.request_json?.amount
+                              ? t.request_json?.amount
                               : packages?.find(
                                   (p: { code: string; amount: number; name: string }) =>
-                                    p.code == JSON.parse(t.request_json)?.package
+                                    p.code == t.request_json?.package
                                 )?.amount}{' '}
                             <span className="text-gray-500 text-sm">ETB</span>
                           </td>
 
                           <td className="border-b border-slate-200 p-3 text-wrapp">
-                            {JSON.parse(t.request_json)?.package
+                            {t.request_json?.package
                               ? packages?.find(
                                   (p: { code: string; amount: number; name: string }) =>
-                                    p.code == JSON.parse(t.request_json)?.package
+                                    p.code == t.request_json?.package
                                 )?.name
                               : ''}
                           </td>

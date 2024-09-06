@@ -10,6 +10,7 @@ interface Props {
 }
 
 const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
+  const [airtimePaymentID, setAirtimePaymentID] = useState('');
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -25,14 +26,17 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
     setIsProcessing(true);
     setSuccessMessage('');
     setErrorMessage('');
+    setAirtimePaymentID('');
 
     authAxios
       .post('/airtime/airtime-request', {
         phone: '+251' + phoneNumber,
         amount: selectedAmount,
       })
-      .then(() => {
-        setSuccessMessage('Approval Request sent to Approvers.');
+      .then((res) => {
+        setAirtimePaymentID(res.data.id);
+
+        if (res.data.id === undefined) setSuccessMessage('Approval Request Sent to Approvers.');
       })
       .catch((error) => {
         setErrorMessage(
@@ -54,6 +58,9 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
       {successMessage && <InlineNotification type="success" info={successMessage} />}
+      {airtimePaymentID && (
+        <InlineNotification type="success" info={`Payment ID: ${airtimePaymentID}`} />
+      )}
 
       <h2 className="font-semibold mb-2">Select Denomination</h2>
 

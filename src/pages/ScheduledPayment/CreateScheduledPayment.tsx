@@ -59,8 +59,7 @@ const Create = () => {
         .then((res) => {
           setScheduledPaymentID(res.data.id);
 
-          if (res.data.transaction_id === undefined)
-            setSuccessMessage('Approval Request Sent to Approvers.');
+          if (res.data.id === undefined) setSuccessMessage('Approval Request Sent to Approvers.');
 
           // clear input fields
           formik.resetForm();

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface Props {
   header: string;
@@ -9,11 +9,20 @@ interface Props {
 
 const RejectionModal = ({ header, openModal, onConfirm }: Props) => {
   const [rejectionReason, setRejectionReason] = useState('');
+  const modalRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (openModal && modalRef.current) {
+      modalRef.current.focus();
+    }
+  }, [openModal]);
+
+  if (!openModal) return null;
 
   return (
     <div
       id="popup-modal"
-      className={`bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${openModal ? 'flex' : 'hidden'}`}
+      className="flex bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full"
     >
       <div className="relative p-4 w-full max-w-xl max-h-full cursor-auto">
         <div className="relative bg-white rounded-lg shadow">

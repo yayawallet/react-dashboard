@@ -12,7 +12,7 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import RejectionModal from '../../components/modals/RejectionModal';
 import { authAxios } from '../../api/axios';
-import { capitalize } from 'lodash';
+import { capitalize } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../../auth/AuthProvider';
 import React from 'react';
@@ -226,24 +226,24 @@ const ApprovalRequestsList = () => {
                             )}
                           </td>
                           <td className="border-b border-slate-200 p-3">
-                            {JSON.parse(t.request_json)?.account_number}
+                            {t.request_json?.account_number}
                           </td>
 
                           <td className="border-b border-slate-200 p-3">
-                            {JSON.parse(t.request_json)?.amount?.toFixed(2)}{' '}
+                            {t.request_json?.amount?.toFixed(2)}{' '}
                             <span className="text-gray-500 text-sm">ETB</span>
                           </td>
 
                           <td className="border-b border-slate-200 p-3 text-wrapp">
-                            {JSON.parse(t.request_json)?.reason}
+                            {t.request_json?.reason}
                           </td>
 
                           <td className="border-b border-slate-200 p-3 text-wrap">
-                            {JSON.parse(t.request_json)?.recurring}
+                            {t.request_json?.recurring}
                           </td>
 
                           <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">
-                            {formatDate(JSON.parse(t.request_json)?.start_at)}
+                            {formatDate(t.request_json?.start_at)}
                           </td>
 
                           <td className="border-b border-slate-200 py-3">

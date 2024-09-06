@@ -1,23 +1,34 @@
 import { useState } from 'react';
-import Pagination from '../../components/Pagination';
-import { ApprovalRequesType } from '../../models';
-import { useGetData, usePostData } from '../../hooks/useSWR';
-import Loading from '../../components/ui/Loading';
-import Error from '../../components/ui/Error';
-import EmptyList from '../../components/ui/EmptyList';
-import { formatDate } from '../../utils/table_utils';
-import RefreshButton from '../../components/ui/RefreshButton';
-import RefreshComponent from '../../components/ui/RefreshComponent';
-import ConfirmationModal from '../../components/modals/ConfirmationModal';
-import ProcessingModal from '../../components/modals/ProcessingModal';
-import RejectionModal from '../../components/modals/RejectionModal';
-import { authAxios } from '../../api/axios';
-import { capitalize } from '../../utils/table_utils';
+import Pagination from './Pagination';
+import { ApprovalRequesType } from '../models';
+import { useGetData, usePostData } from '../hooks/useSWR';
+import Loading from './ui/Loading';
+import Error from './ui/Error';
+import EmptyList from './ui/EmptyList';
+import { formatDate } from '../utils/table_utils';
+import RefreshButton from './ui/RefreshButton';
+import RefreshComponent from './ui/RefreshComponent';
+import ConfirmationModal from './modals/ConfirmationModal';
+import ProcessingModal from './modals/ProcessingModal';
+import RejectionModal from './modals/RejectionModal';
+import { authAxios } from '../api/axios';
+import { capitalize } from '../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
-import { useAuth } from '../../auth/AuthProvider';
+import { useAuth } from '../auth/AuthProvider';
 import React from 'react';
+import { BsDownload } from 'react-icons/bs';
 
-const ApprovalRequestsList = () => {
+interface Props {
+  requestType: 'transaction' | 'bank-transfer' | 'scheduled-payment' | 'bulk' | 'airtime';
+  requestsListEndpoint: string;
+  submittingEndpoints: string;
+}
+
+const ApprovalRequestsList = ({
+  requestType,
+  requestsListEndpoint,
+  submittingEndpoints,
+}: Props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -32,6 +43,11 @@ const ApprovalRequestsList = () => {
   const user_id = user?.user_id || null;
   const user_role = user?.user_role || null;
 
+  const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' });
+  const { data: institutionList } = usePostData('/financial-institution/list', {
+    country: 'Ethiopia',
+  });
+
   const {
     error,
     isLoading,
@@ -43,11 +59,7 @@ const ApprovalRequestsList = () => {
       total: totalApprovalRequests,
       perPage,
     } = {},
-  } = useGetData(`/transfer/transfer-requests?page=${currentPage}`);
-
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
-  });
+  } = useGetData(`/${requestsListEndpoint}?page=${currentPage}`);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -102,7 +114,7 @@ const ApprovalRequestsList = () => {
     formData.append('approval_request_id', selectedActionUUID);
 
     authAxios
-      .post('transfer/submit-transfer-response', formData)
+      .post(submittingEndpoints, formData)
       .then(() => {
         setIsProcessing(false);
         mutate();
@@ -125,7 +137,7 @@ const ApprovalRequestsList = () => {
     formData.append('rejection_reason', confirm.toString());
 
     authAxios
-      .post('transfer/submit-transfer-response', formData)
+      .post(submittingEndpoints, formData)
       .then(() => {
         setIsProcessing(false);
         mutate();
@@ -189,10 +201,52 @@ const ApprovalRequestsList = () => {
                     <tr>
                       <th className="text-left px-4 py-3 font-medium">ID</th>
                       <th className="text-left px-4 py-3 font-medium">Accountant</th>
-                      <th className="text-left px-4 py-3 font-medium">Account Number</th>
-                      <th className="text-left px-4 py-3 font-medium">Institution</th>
-                      <th className="text-left px-4 py-3 font-medium">Amount</th>
-                      <th className="text-left px-4 py-3 font-medium">Reason</th>
+
+                      {(requestType === 'transaction' ||
+                        requestType === 'bank-transfer' ||
+                        requestType === 'scheduled-payment' ||
+                        requestType === 'airtime') && (
+                        <th className="text-left px-4 py-3 font-medium">Receiver</th>
+                      )}
+
+                      {(requestType === 'transaction' ||
+                        requestType === 'bank-transfer' ||
+                        requestType === 'scheduled-payment' ||
+                        requestType === 'airtime') && (
+                        <th className="text-left px-4 py-3 font-medium">Amount</th>
+                      )}
+
+                      {(requestType === 'transaction' ||
+                        requestType === 'bank-transfer' ||
+                        requestType === 'scheduled-payment') && (
+                        <th className="text-left px-4 py-3 font-medium">Reason</th>
+                      )}
+
+                      {requestType === 'scheduled-payment' && (
+                        <th className="text-left px-4 py-3 font-medium">Recurring</th>
+                      )}
+                      {requestType === 'scheduled-payment' && (
+                        <th className="text-left px-4 py-3 font-medium">Start At</th>
+                      )}
+
+                      {requestType === 'bank-transfer' && (
+                        <th className="text-left px-4 py-3 font-medium">Account Number</th>
+                      )}
+                      {requestType === 'bank-transfer' && (
+                        <th className="text-left px-4 py-3 font-medium">Institution</th>
+                      )}
+
+                      {requestType === 'airtime' && (
+                        <th className="text-left px-4 py-3 font-medium">Package</th>
+                      )}
+
+                      {requestType === 'bulk' && (
+                        <th className="text-left px-4 py-3 font-medium">Bulk File</th>
+                      )}
+                      {requestType === 'bulk' && (
+                        <th className="text-left px-4 py-3 font-medium">Remark</th>
+                      )}
+
                       <th className="text-left px-4 py-3 font-medium">Status</th>
                       <th className="text-left px-4 py-3 font-medium">Created At</th>
                       {user_role === 'approver' ? (
@@ -228,29 +282,126 @@ const ApprovalRequestsList = () => {
                                 t.requesting_user?.user?.last_name
                             )}
                           </td>
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.account_number}
-                          </td>
 
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.institution_code
-                              ? institutionList
-                                  .find(
-                                    (i: { code: string; name: string }) =>
-                                      i.code == t.request_json?.institution_code
-                                  )
-                                  .map((i: { code: string; name: string }) => i.name)
-                              : '-'}
-                          </td>
+                          {(requestType === 'transaction' ||
+                            requestType === 'scheduled-payment') && (
+                            <td className="border-b border-slate-200 p-3">
+                              {t.request_json?.amount?.toFixed(2)}{' '}
+                              <span className="text-gray-500 text-sm">ETB</span>
+                            </td>
+                          )}
 
-                          <td className="border-b border-slate-200 p-3">
-                            {t.request_json?.amount?.toFixed(2)}{' '}
-                            <span className="text-gray-500 text-sm">ETB</span>
-                          </td>
+                          {requestType === 'airtime' && (
+                            <td className="border-b border-slate-200 p-3">
+                              {t.request_json?.amount
+                                ? t.request_json?.amount
+                                : packages?.find(
+                                    (p: { code: string; amount: number; name: string }) =>
+                                      p.code == t.request_json?.package
+                                  )?.amount}{' '}
+                              <span className="text-gray-500 text-sm">ETB</span>
+                            </td>
+                          )}
 
-                          <td className="border-b border-slate-200 p-3 text-wrap">
-                            {t.request_json?.sender_note}
-                          </td>
+                          {requestType === 'transaction' && (
+                            <>
+                              <td className="border-b border-slate-200 p-3">
+                                {t.request_json?.receiver}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.cause}
+                              </td>
+                            </>
+                          )}
+
+                          {requestType === 'scheduled-payment' && (
+                            <>
+                              <td className="border-b border-slate-200 p-3">
+                                {t.request_json?.account_number}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                                {t.request_json?.reason}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.recurring}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">
+                                {formatDate(t.request_json?.start_at)}
+                              </td>
+                            </>
+                          )}
+
+                          {requestType === 'bank-transfer' && (
+                            <>
+                              <td className="border-b border-slate-200 p-3">
+                                {t.request_json?.account_number}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3">
+                                {t.request_json?.institution_code
+                                  ? institutionList
+                                      .find(
+                                        (i: { code: string; name: string }) =>
+                                          i.code == t.request_json?.institution_code
+                                      )
+                                      .map((i: { code: string; name: string }) => i.name)
+                                  : '-'}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.sender_note}
+                              </td>
+                            </>
+                          )}
+
+                          {requestType === 'airtime' && (
+                            <>
+                              <td className="border-b border-slate-200 p-3">
+                                {t.request_json?.phone}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                                {t.request_json?.package
+                                  ? packages?.find(
+                                      (p: { code: string; amount: number; name: string }) =>
+                                        p.code == t.request_json?.package
+                                    )?.name
+                                  : ''}
+                              </td>
+                            </>
+                          )}
+
+                          {requestType === 'bulk' && (
+                            <>
+                              <td
+                                className="border-b border-slate-200 p-3"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {t.file ? (
+                                  <a
+                                    href={t.file}
+                                    download={`YaYa_Scheduled_Bulk_Request_${t.file}`}
+                                    className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
+                                  >
+                                    Download
+                                    <span className="text-sm">
+                                      <BsDownload />
+                                    </span>{' '}
+                                  </a>
+                                ) : (
+                                  '~'
+                                )}
+                              </td>
+
+                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                                {t.remark || '~'}
+                              </td>
+                            </>
+                          )}
 
                           <td className="border-b border-slate-200 py-3">
                             <span
@@ -265,7 +416,7 @@ const ApprovalRequestsList = () => {
                                 : 'Pending'}
                           </td>
 
-                          <td className="border-b border-slate-200 p-3 text-gray-500 tracking-normal">
+                          <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">
                             {formatDate(t.created_at)}
                           </td>
 
@@ -305,11 +456,11 @@ const ApprovalRequestsList = () => {
                             )}
                           </td>
                         </tr>
+
                         <tr>
                           <td
-                            colSpan={user_role === 'accountant' ? 7 : 8}
+                            colSpan={user_role === 'accountant' ? 9 : 10}
                             className={`${showDetailID === t.uuid ? '' : 'hidden'} border shadow-lg pl-5 p-3 pb-10 bg-white`}
-                            onClick={(e) => e.stopPropagation()}
                           >
                             <div className={`${t.approvers.length === 0 ? 'hidden' : ''} mb-6`}>
                               <h4 className="font-semibold text-lg mb-1">List of All Approvers</h4>

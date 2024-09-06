@@ -76,9 +76,7 @@ const CreateTransaction = () => {
         <InlineNotification type="success" info={`Transaction ID: ${transactionID}`} />
       )}
 
-      {successMessage && !transactionID && (
-        <InlineNotification type="success" info={successMessage} />
-      )}
+      {successMessage && <InlineNotification type="success" info={successMessage} />}
 
       <div className="flex justify-center lg:mr-32 mt-6">
         <form

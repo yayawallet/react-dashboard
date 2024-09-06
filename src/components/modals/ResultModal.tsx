@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 interface Props {
   openModal: boolean;
   onCloseModal: () => void;
@@ -5,10 +7,20 @@ interface Props {
 }
 
 const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (openModal && buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, [openModal]);
+
+  if (!openModal) return null;
+
   return (
     <div
       id="popup-modal"
-      className={`bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${openModal ? 'flex' : 'hidden'}`}
+      className="bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full"
     >
       <div className="relative p-4 w-full max-w-xl max-h-full cursor-auto">
         <div className="relative bg-white rounded-lg shadow">
@@ -54,6 +66,7 @@ const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
               <h3 className="pb-1 text-lg text-gray-800">{successMessage}</h3>
               <hr className="mb-2" />
               <button
+                ref={buttonRef}
                 data-modal-hide="popup-modal"
                 type="button"
                 className="mt-6 text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
@@ -88,6 +101,7 @@ const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
               <hr className="mb-2" />
 
               <button
+                ref={buttonRef}
                 type="button"
                 className="mt-5 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
                 onClick={() => onCloseModal()}
