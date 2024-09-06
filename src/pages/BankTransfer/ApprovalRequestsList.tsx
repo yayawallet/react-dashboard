@@ -12,7 +12,7 @@ import ConfirmationModal from '../../components/modals/ConfirmationModal';
 import ProcessingModal from '../../components/modals/ProcessingModal';
 import RejectionModal from '../../components/modals/RejectionModal';
 import { authAxios } from '../../api/axios';
-import { capitalize } from 'lodash';
+import { capitalize } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../../auth/AuthProvider';
 import React from 'react';
