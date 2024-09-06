@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 interface Props {
   header: string;
   infoList?: (string | number)[];
@@ -6,10 +8,20 @@ interface Props {
 }
 
 const ConfirmationModal = ({ header, infoList, openModal, onConfirm }: Props) => {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (openModal && buttonRef.current) {
+      buttonRef.current.focus();
+    }
+  }, [openModal]);
+
+  if (!openModal) return null;
+
   return (
     <div
       id="popup-modal"
-      className={`bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full cursor-not-allowed ${openModal ? 'flex' : 'hidden'}`}
+      className="flex bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full"
     >
       <div className="relative p-4 w-full max-w-xl max-h-full cursor-auto">
         <div className="relative bg-white rounded-lg shadow">
@@ -67,6 +79,7 @@ const ConfirmationModal = ({ header, infoList, openModal, onConfirm }: Props) =>
             )}
 
             <button
+              ref={buttonRef}
               data-modal-hide="popup-modal"
               type="button"
               className="mt-6 text-white bg-violet-600 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"

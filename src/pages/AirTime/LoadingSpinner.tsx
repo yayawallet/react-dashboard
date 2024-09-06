@@ -1,10 +1,10 @@
-import loadingSpin from '../../assets/Spin@1x-1.1s-200px-200px - Small.svg';
+import loadingSpin from '../../assets/Rolling@1x-1.0s-200px-200px.svg';
 
 const LoadingSpinner = () => {
   return (
     <div>
       <div aria-label="Loading..." role="status" className="flex items-center space-x-2">
-        <img src={loadingSpin} width={'160px'} alt="" />
+        <img src={loadingSpin} width={'56px'} alt="" />
       </div>
 
       {/* <button
