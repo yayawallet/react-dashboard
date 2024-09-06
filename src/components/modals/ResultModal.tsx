@@ -20,7 +20,7 @@ const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
   return (
     <div
       id="popup-modal"
-      className="bg-black/60 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full"
+      className="bg-black/40 overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full md:inset-0 h-full"
     >
       <div className="relative p-4 w-full max-w-xl max-h-full cursor-auto">
         <div className="relative bg-white rounded-lg shadow">
@@ -101,6 +101,7 @@ const ResultModal = ({ openModal, onCloseModal, successMessage }: Props) => {
               <hr className="mb-2" />
 
               <button
+                ref={buttonRef}
                 type="button"
                 className="mt-5 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
                 onClick={() => onCloseModal()}
