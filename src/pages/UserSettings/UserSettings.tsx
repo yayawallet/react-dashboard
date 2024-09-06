@@ -4,15 +4,18 @@ import { IoMdSettings } from 'react-icons/io';
 import { MdContactSupport } from 'react-icons/md';
 import { LuLogOut } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
+import { capitalize } from '../../utils/table_utils';
+import { useGetData } from '../../hooks/useSWR';
 
 interface Props {
   onCloseUserSettings: () => void;
 }
 
 const UserSettings = ({ onCloseUserSettings }: Props) => {
-  const { user, logout } = useAuth();
-  const { username } = user || {};
+  const { logout } = useAuth();
   const navigate = useNavigate();
+
+  const { data: userInfo } = useGetData('/user/me');
 
   return (
     <div className="absolute top-16 right-4 bg-white z-50">
@@ -21,7 +24,9 @@ const UserSettings = ({ onCloseUserSettings }: Props) => {
           <li className="flex-col items-center px-3">
             <span className="flex gap-x-2 items-center p-1 mr-2">
               <img src={avater} className="w-8 h-8 object-cover rounded" />
-              <span>{username && username}</span>
+              <span>
+                {capitalize(userInfo?.user?.first_name + ' ' + userInfo?.user?.last_name)}
+              </span>
             </span>
           </li>
         </div>
