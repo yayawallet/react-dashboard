@@ -234,12 +234,10 @@ const ApprovalRequestsList = () => {
 
                           <td className="border-b border-slate-200 p-3">
                             {t.request_json?.institution_code
-                              ? institutionList
-                                  .find(
-                                    (i: { code: string; name: string }) =>
-                                      i.code == t.request_json?.institution_code
-                                  )
-                                  .map((i: { code: string; name: string }) => i.name)
+                              ? institutionList?.find(
+                                  (i: { code: string; name: string }) =>
+                                    i.code == t.request_json?.institution_code
+                                ).name
                               : '-'}
                           </td>
 
