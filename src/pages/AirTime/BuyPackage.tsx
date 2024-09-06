@@ -14,6 +14,7 @@ interface Props {
 }
 
 const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
+  const [packagePaymentID, setPackagePaymentID] = useState('');
   const [categories, setCategories] = useState<string[]>();
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedPackage, setSelectedPackage] = useState('');
@@ -40,13 +41,16 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
     setIsProcessing(true);
     setErrorMessage('');
     setSuccessMessage('');
+    setPackagePaymentID('');
 
     authAxios
       .post(`/airtime/package-request`, {
         phone: '+251' + phoneNumber,
         package: selectedPackage,
+        amount: selectedPackageAmount,
       })
-      .then(() => {
+      .then((res) => {
+        setPackagePaymentID(res.data.id);
         setSuccessMessage('Approval Request Sent to Approvers.');
       })
       .catch((error) => {
@@ -69,6 +73,9 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
       {successMessage && <InlineNotification type="success" info={successMessage} />}
+      {packagePaymentID && (
+        <InlineNotification type="success" info={`Payment ID: ${packagePaymentID}`} />
+      )}
 
       <div className="flex flex-col sm:flex-row gap-6 border rounded-lg p-5">
         <div className="flex self-start border border-violet-100 sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-violet-50">

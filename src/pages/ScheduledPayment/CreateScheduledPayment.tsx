@@ -88,6 +88,10 @@ const Create = () => {
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
+      {scheduledPaymentID && (
+        <InlineNotification type="success" info={`Scheduled Payment ID: ${scheduledPaymentID}`} />
+      )}
+
       {(scheduledPaymentID || successMessage) && (
         <InlineNotification
           type="success"
