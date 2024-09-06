@@ -35,7 +35,8 @@ const BuyAirTime = ({ phoneNumber, isInvalidNumber }: Props) => {
       })
       .then((res) => {
         setAirtimePaymentID(res.data.id);
-        setSuccessMessage('Approval Request sent to Approvers.');
+
+        if (res.data.id === undefined) setSuccessMessage('Approval Request Sent to Approvers.');
       })
       .catch((error) => {
         setErrorMessage(

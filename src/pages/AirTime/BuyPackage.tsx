@@ -51,7 +51,8 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
       })
       .then((res) => {
         setPackagePaymentID(res.data.id);
-        setSuccessMessage('Approval Request Sent to Approvers.');
+
+        if (res.data.id === undefined) setSuccessMessage('Approval Request Sent to Approvers.');
       })
       .catch((error) => {
         setErrorMessage(

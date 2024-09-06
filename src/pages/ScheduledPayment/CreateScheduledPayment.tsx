@@ -59,8 +59,7 @@ const Create = () => {
         .then((res) => {
           setScheduledPaymentID(res.data.id);
 
-          if (res.data.transaction_id === undefined)
-            setSuccessMessage('Approval Request Sent to Approvers.');
+          if (res.data.id === undefined) setSuccessMessage('Approval Request Sent to Approvers.');
 
           // clear input fields
           formik.resetForm();
@@ -87,10 +86,6 @@ const Create = () => {
       <h1 className="text-2xl font-semibold p-2 mb-5">Schedule Payments</h1>
 
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
-
-      {scheduledPaymentID && (
-        <InlineNotification type="success" info={`Scheduled Payment ID: ${scheduledPaymentID}`} />
-      )}
 
       {(scheduledPaymentID || successMessage) && (
         <InlineNotification
