@@ -279,6 +279,7 @@ export interface PayoutMethodType {
 
 export interface ApprovalRequesType {
   uuid: string;
+  is_successful: boolean | null;
   requesting_user: {
     user: {
       id: number;
