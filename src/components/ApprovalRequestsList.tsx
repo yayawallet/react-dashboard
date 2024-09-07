@@ -17,6 +17,7 @@ import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../auth/AuthProvider';
 import React from 'react';
 import { BsDownload } from 'react-icons/bs';
+import { SmallLoading } from './ui/DotLoader';
 
 interface Props {
   requestType: 'transaction' | 'bank-transfer' | 'scheduled-payment' | 'bulk' | 'airtime';
@@ -43,10 +44,15 @@ const ApprovalRequestsList = ({
   const user_id = user?.user_id || null;
   const user_role = user?.user_role || null;
 
-  const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' });
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
+  const { data: packages, isLoading: isPackagesLoading } = usePostData('/airtime/packages', {
+    phone: '+2519',
   });
+  const { data: institutionList, isLoading: isInstitutionListLoading } = usePostData(
+    '/financial-institution/list',
+    {
+      country: 'Ethiopia',
+    }
+  );
 
   const {
     error,
@@ -321,11 +327,11 @@ const ApprovalRequestsList = ({
                                 {t.request_json?.account_number}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
                                 {t.request_json?.reason}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrap">
+                              <td className="border-b border-slate-200 p-3">
                                 {t.request_json?.recurring}
                               </td>
 
@@ -341,7 +347,10 @@ const ApprovalRequestsList = ({
                                 {t.request_json?.account_number}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.institution_code && isInstitutionListLoading ? (
+                                  <SmallLoading />
+                                ) : null}
                                 {t.request_json?.institution_code
                                   ? institutionList
                                       .find(
@@ -364,13 +373,16 @@ const ApprovalRequestsList = ({
                                 {t.request_json?.phone}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.package && isPackagesLoading ? (
+                                  <SmallLoading />
+                                ) : null}
                                 {t.request_json?.package
                                   ? packages?.find(
                                       (p: { code: string; amount: number; name: string }) =>
                                         p.code == t.request_json?.package
                                     )?.name
-                                  : ''}
+                                  : 'Airtime'}
                               </td>
                             </>
                           )}
@@ -397,7 +409,7 @@ const ApprovalRequestsList = ({
                                 )}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
                                 {t.remark || '~'}
                               </td>
                             </>
@@ -405,15 +417,19 @@ const ApprovalRequestsList = ({
 
                           <td className="border-b border-slate-200 py-3">
                             <span
-                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.rejected_by.length > 0 ? 'red' : t.approved_by.length === t.approvers.length ? 'green' : 'orange'}-500`}
+                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.rejected_by.length > 0 || !t.is_successful ? 'red' : t.approved_by.length === t.approvers.length || t.is_successful ? 'green' : 'orange'}-500`}
                             >
                               <GoDotFill />
                             </span>
-                            {t.rejected_by.length > 0
-                              ? 'Rejected'
-                              : t.approved_by.length === t.approvers.length
-                                ? 'Approved'
-                                : 'Pending'}
+                            {t.is_successful
+                              ? 'Succeed'
+                              : !t.is_successful
+                                ? 'Failed'
+                                : t.rejected_by.length > 0
+                                  ? 'Rejected'
+                                  : t.approved_by.length === t.approvers.length
+                                    ? 'Approved'
+                                    : 'Pending'}
                           </td>
 
                           <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">

@@ -16,6 +16,7 @@ import { capitalize } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../../auth/AuthProvider';
 import React from 'react';
+import { SmallLoading } from '../../components/ui/DotLoader';
 
 const ApprovalRequestsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,7 +46,9 @@ const ApprovalRequestsList = () => {
     } = {},
   } = useGetData(`/airtime/airtime-requests?page=${currentPage}`);
 
-  const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' });
+  const { data: packages, isLoading: isPackagesLoading } = usePostData('/airtime/packages', {
+    phone: '+2519',
+  });
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -237,13 +240,14 @@ const ApprovalRequestsList = () => {
                             <span className="text-gray-500 text-sm">ETB</span>
                           </td>
 
-                          <td className="border-b border-slate-200 p-3 text-wrapp">
+                          <td className="border-b border-slate-200 p-3 text-wrap">
+                            {t.request_json?.package && isPackagesLoading ? <SmallLoading /> : null}
                             {t.request_json?.package
                               ? packages?.find(
                                   (p: { code: string; amount: number; name: string }) =>
                                     p.code == t.request_json?.package
                                 )?.name
-                              : ''}
+                              : 'Airtime'}
                           </td>
 
                           <td className="border-b border-slate-200 py-3">

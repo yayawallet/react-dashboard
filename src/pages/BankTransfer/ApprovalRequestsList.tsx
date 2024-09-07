@@ -16,6 +16,7 @@ import { capitalize } from '../../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../../auth/AuthProvider';
 import React from 'react';
+import { SmallLoading } from '../../components/ui/DotLoader';
 
 const ApprovalRequestsList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,9 +46,12 @@ const ApprovalRequestsList = () => {
     } = {},
   } = useGetData(`/transfer/transfer-requests?page=${currentPage}`);
 
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
-  });
+  const { data: institutionList, isLoading: isInstitutionListLoading } = usePostData(
+    '/financial-institution/list',
+    {
+      country: 'Ethiopia',
+    }
+  );
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -232,7 +236,10 @@ const ApprovalRequestsList = () => {
                             {t.request_json?.account_number}
                           </td>
 
-                          <td className="border-b border-slate-200 p-3">
+                          <td className="border-b border-slate-200 p-3 text-wrap">
+                            {t.request_json?.institution_code && isInstitutionListLoading ? (
+                              <SmallLoading />
+                            ) : null}
                             {t.request_json?.institution_code
                               ? institutionList?.find(
                                   (i: { code: string; name: string }) =>

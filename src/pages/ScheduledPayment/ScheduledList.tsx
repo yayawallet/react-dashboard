@@ -11,6 +11,7 @@ import { useGetData } from '../../hooks/useSWR';
 import RefreshButton from '../../components/ui/RefreshButton';
 import Pagination from '../../components/Pagination';
 import { useAuth } from '../../auth/AuthProvider';
+import RefreshComponent from '../../components/ui/RefreshComponent';
 
 const ScheduledList = () => {
   const [copiedID, setCopiedID] = useState('');
@@ -92,23 +93,7 @@ const ScheduledList = () => {
             <EmptyList />
           ) : (
             <div className="relative">
-              <div className={`${isRefreshing || isValidating ? '' : 'hidden'}`}>
-                <div
-                  className="absolute z-10 bg-white rounded-full p-1.5"
-                  style={{
-                    top: '30vh',
-                    left: '50%',
-                    transform: 'translate(-50%)',
-                    boxShadow: '0 0 5px #888',
-                  }}
-                >
-                  <span
-                    className="inline-block border-gray-400 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                    role="status"
-                  ></span>
-                </div>
-                <div className="absolute z-20 h-full w-full"></div>
-              </div>
+              <RefreshComponent isRefreshing={isRefreshing || isValidating} />
 
               <div className="overflow-x-auto">
                 <table className="w-full">
