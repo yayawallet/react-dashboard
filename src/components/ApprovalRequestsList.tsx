@@ -44,11 +44,11 @@ const ApprovalRequestsList = ({
   const user_id = user?.user_id || null;
   const user_role = user?.user_role || null;
 
-  const { data: packages, isLoading: isPackagesLoading } = usePostData('/airtime/packages', {
+  const { data: packages, isLoading: isPackagesLoading } = usePostData('airtime/packages', {
     phone: '+2519',
   });
   const { data: institutionList, isLoading: isInstitutionListLoading } = usePostData(
-    '/financial-institution/list',
+    'financial-institution/list',
     {
       country: 'Ethiopia',
     }
@@ -65,7 +65,7 @@ const ApprovalRequestsList = ({
       total: totalApprovalRequests,
       perPage,
     } = {},
-  } = useGetData(`/${requestsListEndpoint}?page=${currentPage}`);
+  } = useGetData(`${requestsListEndpoint}?page=${currentPage}`);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -212,14 +212,22 @@ const ApprovalRequestsList = ({
                         requestType === 'bank-transfer' ||
                         requestType === 'scheduled-payment' ||
                         requestType === 'airtime') && (
-                        <th className="text-left px-4 py-3 font-medium">Receiver</th>
+                        <th className="text-left px-4 py-3 font-medium">Amount</th>
                       )}
 
                       {(requestType === 'transaction' ||
                         requestType === 'bank-transfer' ||
                         requestType === 'scheduled-payment' ||
                         requestType === 'airtime') && (
-                        <th className="text-left px-4 py-3 font-medium">Amount</th>
+                        <th className="text-left px-4 py-3 font-medium">Receiver</th>
+                      )}
+
+                      {requestType === 'bank-transfer' && (
+                        <th className="text-left px-4 py-3 font-medium">Account Number</th>
+                      )}
+
+                      {requestType === 'bank-transfer' && (
+                        <th className="text-left px-4 py-3 font-medium">Institution</th>
                       )}
 
                       {(requestType === 'transaction' ||
@@ -233,13 +241,6 @@ const ApprovalRequestsList = ({
                       )}
                       {requestType === 'scheduled-payment' && (
                         <th className="text-left px-4 py-3 font-medium">Start At</th>
-                      )}
-
-                      {requestType === 'bank-transfer' && (
-                        <th className="text-left px-4 py-3 font-medium">Account Number</th>
-                      )}
-                      {requestType === 'bank-transfer' && (
-                        <th className="text-left px-4 py-3 font-medium">Institution</th>
                       )}
 
                       {requestType === 'airtime' && (
@@ -265,7 +266,7 @@ const ApprovalRequestsList = ({
                     {approvalRequestList.map((t: ApprovalRequesType) => (
                       <React.Fragment key={t.uuid}>
                         <tr
-                          className={`text-nowrap ${showDetailID === t.uuid ? '' : 'hover:bg-slate-100'}`}
+                          className={`text-nowrap ${t.approvers.length > 0 && showDetailID === t.uuid ? '' : 'hover:bg-slate-100'}`}
                           onClick={() => setShowDetailID(showDetailID === t.uuid ? null : t.uuid)}
                         >
                           <td
@@ -290,6 +291,7 @@ const ApprovalRequestsList = ({
                           </td>
 
                           {(requestType === 'transaction' ||
+                            requestType === 'bank-transfer' ||
                             requestType === 'scheduled-payment') && (
                             <td className="border-b border-slate-200 p-3">
                               {t.request_json?.amount?.toFixed(2)}{' '}
@@ -343,6 +345,10 @@ const ApprovalRequestsList = ({
 
                           {requestType === 'bank-transfer' && (
                             <>
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.full_name}
+                              </td>
+
                               <td className="border-b border-slate-200 p-3">
                                 {t.request_json?.account_number}
                               </td>
@@ -352,12 +358,10 @@ const ApprovalRequestsList = ({
                                   <SmallLoading />
                                 ) : null}
                                 {t.request_json?.institution_code
-                                  ? institutionList
-                                      .find(
-                                        (i: { code: string; name: string }) =>
-                                          i.code == t.request_json?.institution_code
-                                      )
-                                      .map((i: { code: string; name: string }) => i.name)
+                                  ? institutionList?.find(
+                                      (i: { code: string; name: string }) =>
+                                        i.code == t.request_json?.institution_code
+                                    ).name
                                   : '-'}
                               </td>
 
@@ -473,7 +477,7 @@ const ApprovalRequestsList = ({
                           </td>
                         </tr>
 
-                        <tr>
+                        <tr className={`${t.approvers.length === 0 ? 'hidden' : ''}`}>
                           <td
                             colSpan={user_role === 'accountant' ? 9 : 10}
                             className={`${showDetailID === t.uuid ? '' : 'hidden'} border shadow-lg pl-5 p-3 pb-10 bg-white`}
