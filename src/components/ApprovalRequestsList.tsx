@@ -18,6 +18,7 @@ import { useAuth } from '../auth/AuthProvider';
 import React from 'react';
 import { BsDownload } from 'react-icons/bs';
 import { SmallLoading } from './ui/DotLoader';
+import InlineNotification from './InlineNotification';
 
 interface Props {
   requestType: 'transaction' | 'bank-transfer' | 'scheduled-payment' | 'bulk' | 'airtime';
@@ -38,6 +39,7 @@ const ApprovalRequestsList = ({
   const [openRejectionModal, setOpenRejectionModal] = useState(false);
   const [showDetailID, setShowDetailID] = useState<string | null>(null);
   const [selectedActionUUID, setSelectedActionUUID] = useState('');
+  const [approvalError, setApprovalError] = useState('');
   const [filterPending, setFilterPending] = useState(false);
 
   const { user } = useAuth();
@@ -114,6 +116,7 @@ const ApprovalRequestsList = ({
     if (!confirm) return;
 
     setIsProcessing(true);
+    setApprovalError('');
 
     const formData = new FormData();
     formData.append('response', 'Approve');
@@ -124,6 +127,9 @@ const ApprovalRequestsList = ({
       .then(() => {
         setIsProcessing(false);
         mutate();
+      })
+      .catch(() => {
+        setApprovalError('Something went wrong');
       })
       .finally(() => {
         setIsProcessing(false);
@@ -136,6 +142,7 @@ const ApprovalRequestsList = ({
     if (!confirm) return;
 
     setIsProcessing(true);
+    setApprovalError('');
 
     const formData = new FormData();
     formData.append('response', 'Reject');
@@ -147,6 +154,9 @@ const ApprovalRequestsList = ({
       .then(() => {
         setIsProcessing(false);
         mutate();
+      })
+      .catch(() => {
+        setApprovalError('Something went wrong');
       })
       .finally(() => {
         setIsProcessing(false);
@@ -171,6 +181,14 @@ const ApprovalRequestsList = ({
       />
 
       <ProcessingModal isProcessing={isProcessing} />
+
+      {approvalError && (
+        <InlineNotification
+          type="error"
+          info="Failed to make an action!"
+          disappear_after_time={10000}
+        />
+      )}
 
       {error ? (
         <Error />
@@ -274,7 +292,7 @@ const ApprovalRequestsList = ({
                             className="relative border-b border-slate-200 p-3 cursor-pointer"
                             onClick={() => copyTransactionID(t.uuid)}
                           >
-                            {`${t.uuid.slice(0, 6)}...${t.uuid.slice(-2)}`}
+                            {`${t.uuid.slice(0, 3)}...${t.uuid.slice(-2)}`}
                             <span
                               className={`${copiedID === t.uuid ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                             >
@@ -421,13 +439,13 @@ const ApprovalRequestsList = ({
 
                           <td className="border-b border-slate-200 py-3">
                             <span
-                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.rejected_by.length > 0 || !t.is_successful ? 'red' : t.approved_by.length === t.approvers.length || t.is_successful ? 'green' : 'orange'}-500`}
+                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.rejected_by.length > 0 || t.is_successful === false ? 'red' : t.approved_by.length === t.approvers.length || t.is_successful ? 'green' : 'orange'}-500`}
                             >
                               <GoDotFill />
                             </span>
-                            {t.is_successful
-                              ? 'Succeed'
-                              : !t.is_successful
+                            {t.is_successful === true
+                              ? 'Succeeded'
+                              : t.is_successful === false
                                 ? 'Failed'
                                 : t.rejected_by.length > 0
                                   ? 'Rejected'
