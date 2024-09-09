@@ -9,7 +9,7 @@ const UserAccount = () => {
   const { user } = useAuth();
   const { user_role } = user || {};
 
-  const { data: userInfo } = useGetData('/user/me/');
+  const { data: userInfo } = useGetData('user/me/');
 
   return (
     <div className="page-container">
@@ -21,7 +21,7 @@ const UserAccount = () => {
             <img
               src={import.meta.env.VITE_BASE_URL + userInfo?.profile_image}
               alt=""
-              className="border h-28 rounded-full"
+              className="border h-28 w-28 object-cover rounded-full"
             />
           </div>
 
