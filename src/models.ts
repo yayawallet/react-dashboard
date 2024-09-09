@@ -319,6 +319,7 @@ export interface ApprovalRequesType {
 
     institution_code: string;
     sender_note: string;
+    full_name: string;
 
     phone: string;
     package: string;
