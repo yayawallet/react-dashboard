@@ -4,13 +4,14 @@ interface Props {
   type: 'success' | 'error';
   customType?: string;
   info: string;
+  disappear_after_time?: number; // in milli seconds
 }
 
-const InlineNotification = ({ type, customType, info }: Props) => {
+const InlineNotification = ({ type, customType, info, disappear_after_time }: Props) => {
   const [hide, setHide] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => setHide(true), 120000000); // two minute
+    setTimeout(() => setHide(true), disappear_after_time || 120000000); // two minute
   }, []);
 
   return (

@@ -279,6 +279,7 @@ export interface PayoutMethodType {
 
 export interface ApprovalRequesType {
   uuid: string;
+  is_successful: boolean | null;
   requesting_user: {
     user: {
       id: number;
@@ -318,6 +319,7 @@ export interface ApprovalRequesType {
 
     institution_code: string;
     sender_note: string;
+    full_name: string;
 
     phone: string;
     package: string;

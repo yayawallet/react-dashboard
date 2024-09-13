@@ -40,7 +40,7 @@ const CreateTransfer = () => {
       setSuccessMessage('');
 
       authAxios
-        .post('/transfer/transfer-request', values)
+        .post('/transfer/transfer-request', { ...values, full_name: externalAccount?.full_name })
         .then((res) => {
           setTransferID(res.data.id);
 

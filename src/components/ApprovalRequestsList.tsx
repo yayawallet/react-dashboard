@@ -17,6 +17,8 @@ import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../auth/AuthProvider';
 import React from 'react';
 import { BsDownload } from 'react-icons/bs';
+import { SmallLoading } from './ui/DotLoader';
+import InlineNotification from './InlineNotification';
 
 interface Props {
   requestType: 'transaction' | 'bank-transfer' | 'scheduled-payment' | 'bulk' | 'airtime';
@@ -37,16 +39,22 @@ const ApprovalRequestsList = ({
   const [openRejectionModal, setOpenRejectionModal] = useState(false);
   const [showDetailID, setShowDetailID] = useState<string | null>(null);
   const [selectedActionUUID, setSelectedActionUUID] = useState('');
+  const [approvalError, setApprovalError] = useState('');
   const [filterPending, setFilterPending] = useState(false);
 
   const { user } = useAuth();
   const user_id = user?.user_id || null;
   const user_role = user?.user_role || null;
 
-  const { data: packages } = usePostData('/airtime/packages', { phone: '+2519' });
-  const { data: institutionList } = usePostData('/financial-institution/list', {
-    country: 'Ethiopia',
+  const { data: packages, isLoading: isPackagesLoading } = usePostData('airtime/packages', {
+    phone: '+2519',
   });
+  const { data: institutionList, isLoading: isInstitutionListLoading } = usePostData(
+    'financial-institution/list',
+    {
+      country: 'Ethiopia',
+    }
+  );
 
   const {
     error,
@@ -59,7 +67,7 @@ const ApprovalRequestsList = ({
       total: totalApprovalRequests,
       perPage,
     } = {},
-  } = useGetData(`/${requestsListEndpoint}?page=${currentPage}`);
+  } = useGetData(`${requestsListEndpoint}?page=${currentPage}`);
 
   const copyTransactionID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -108,6 +116,7 @@ const ApprovalRequestsList = ({
     if (!confirm) return;
 
     setIsProcessing(true);
+    setApprovalError('');
 
     const formData = new FormData();
     formData.append('response', 'Approve');
@@ -118,6 +127,9 @@ const ApprovalRequestsList = ({
       .then(() => {
         setIsProcessing(false);
         mutate();
+      })
+      .catch(() => {
+        setApprovalError('Something went wrong');
       })
       .finally(() => {
         setIsProcessing(false);
@@ -130,6 +142,7 @@ const ApprovalRequestsList = ({
     if (!confirm) return;
 
     setIsProcessing(true);
+    setApprovalError('');
 
     const formData = new FormData();
     formData.append('response', 'Reject');
@@ -141,6 +154,9 @@ const ApprovalRequestsList = ({
       .then(() => {
         setIsProcessing(false);
         mutate();
+      })
+      .catch(() => {
+        setApprovalError('Something went wrong');
       })
       .finally(() => {
         setIsProcessing(false);
@@ -165,6 +181,14 @@ const ApprovalRequestsList = ({
       />
 
       <ProcessingModal isProcessing={isProcessing} />
+
+      {approvalError && (
+        <InlineNotification
+          type="error"
+          info="Failed to make an action!"
+          disappear_after_time={10000}
+        />
+      )}
 
       {error ? (
         <Error />
@@ -206,14 +230,22 @@ const ApprovalRequestsList = ({
                         requestType === 'bank-transfer' ||
                         requestType === 'scheduled-payment' ||
                         requestType === 'airtime') && (
-                        <th className="text-left px-4 py-3 font-medium">Receiver</th>
+                        <th className="text-left px-4 py-3 font-medium">Amount</th>
                       )}
 
                       {(requestType === 'transaction' ||
                         requestType === 'bank-transfer' ||
                         requestType === 'scheduled-payment' ||
                         requestType === 'airtime') && (
-                        <th className="text-left px-4 py-3 font-medium">Amount</th>
+                        <th className="text-left px-4 py-3 font-medium">Receiver</th>
+                      )}
+
+                      {requestType === 'bank-transfer' && (
+                        <th className="text-left px-4 py-3 font-medium">Account Number</th>
+                      )}
+
+                      {requestType === 'bank-transfer' && (
+                        <th className="text-left px-4 py-3 font-medium">Institution</th>
                       )}
 
                       {(requestType === 'transaction' ||
@@ -227,13 +259,6 @@ const ApprovalRequestsList = ({
                       )}
                       {requestType === 'scheduled-payment' && (
                         <th className="text-left px-4 py-3 font-medium">Start At</th>
-                      )}
-
-                      {requestType === 'bank-transfer' && (
-                        <th className="text-left px-4 py-3 font-medium">Account Number</th>
-                      )}
-                      {requestType === 'bank-transfer' && (
-                        <th className="text-left px-4 py-3 font-medium">Institution</th>
                       )}
 
                       {requestType === 'airtime' && (
@@ -259,7 +284,7 @@ const ApprovalRequestsList = ({
                     {approvalRequestList.map((t: ApprovalRequesType) => (
                       <React.Fragment key={t.uuid}>
                         <tr
-                          className={`text-nowrap ${showDetailID === t.uuid ? '' : 'hover:bg-slate-100'}`}
+                          className={`text-nowrap ${t.approvers.length > 0 && showDetailID === t.uuid ? '' : 'hover:bg-slate-100'}`}
                           onClick={() => setShowDetailID(showDetailID === t.uuid ? null : t.uuid)}
                         >
                           <td
@@ -267,7 +292,7 @@ const ApprovalRequestsList = ({
                             className="relative border-b border-slate-200 p-3 cursor-pointer"
                             onClick={() => copyTransactionID(t.uuid)}
                           >
-                            {`${t.uuid.slice(0, 6)}...${t.uuid.slice(-2)}`}
+                            {`${t.uuid.slice(0, 3)}...${t.uuid.slice(-2)}`}
                             <span
                               className={`${copiedID === t.uuid ? '' : 'hidden'} absolute -top-2 left-4 z-10 w-30 text-center text-white bg-black opacity-70 text-sm px-3 py-1 rounded-lg`}
                             >
@@ -284,6 +309,7 @@ const ApprovalRequestsList = ({
                           </td>
 
                           {(requestType === 'transaction' ||
+                            requestType === 'bank-transfer' ||
                             requestType === 'scheduled-payment') && (
                             <td className="border-b border-slate-200 p-3">
                               {t.request_json?.amount?.toFixed(2)}{' '}
@@ -321,11 +347,11 @@ const ApprovalRequestsList = ({
                                 {t.request_json?.account_number}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
                                 {t.request_json?.reason}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrap">
+                              <td className="border-b border-slate-200 p-3">
                                 {t.request_json?.recurring}
                               </td>
 
@@ -337,18 +363,23 @@ const ApprovalRequestsList = ({
 
                           {requestType === 'bank-transfer' && (
                             <>
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.full_name}
+                              </td>
+
                               <td className="border-b border-slate-200 p-3">
                                 {t.request_json?.account_number}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.institution_code && isInstitutionListLoading ? (
+                                  <SmallLoading />
+                                ) : null}
                                 {t.request_json?.institution_code
-                                  ? institutionList
-                                      .find(
-                                        (i: { code: string; name: string }) =>
-                                          i.code == t.request_json?.institution_code
-                                      )
-                                      .map((i: { code: string; name: string }) => i.name)
+                                  ? institutionList?.find(
+                                      (i: { code: string; name: string }) =>
+                                        i.code == t.request_json?.institution_code
+                                    ).name
                                   : '-'}
                               </td>
 
@@ -364,13 +395,16 @@ const ApprovalRequestsList = ({
                                 {t.request_json?.phone}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
+                                {t.request_json?.package && isPackagesLoading ? (
+                                  <SmallLoading />
+                                ) : null}
                                 {t.request_json?.package
                                   ? packages?.find(
                                       (p: { code: string; amount: number; name: string }) =>
                                         p.code == t.request_json?.package
                                     )?.name
-                                  : ''}
+                                  : 'Airtime'}
                               </td>
                             </>
                           )}
@@ -397,7 +431,7 @@ const ApprovalRequestsList = ({
                                 )}
                               </td>
 
-                              <td className="border-b border-slate-200 p-3 text-wrapp">
+                              <td className="border-b border-slate-200 p-3 text-wrap">
                                 {t.remark || '~'}
                               </td>
                             </>
@@ -405,15 +439,19 @@ const ApprovalRequestsList = ({
 
                           <td className="border-b border-slate-200 py-3">
                             <span
-                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.rejected_by.length > 0 ? 'red' : t.approved_by.length === t.approvers.length ? 'green' : 'orange'}-500`}
+                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${t.rejected_by.length > 0 || t.is_successful === false ? 'red' : t.approved_by.length === t.approvers.length || t.is_successful ? 'green' : 'orange'}-500`}
                             >
                               <GoDotFill />
                             </span>
-                            {t.rejected_by.length > 0
-                              ? 'Rejected'
-                              : t.approved_by.length === t.approvers.length
-                                ? 'Approved'
-                                : 'Pending'}
+                            {t.is_successful === true
+                              ? 'Succeeded'
+                              : t.is_successful === false
+                                ? 'Failed'
+                                : t.rejected_by.length > 0
+                                  ? 'Rejected'
+                                  : t.approved_by.length === t.approvers.length
+                                    ? 'Approved'
+                                    : 'Pending'}
                           </td>
 
                           <td className="border-b border-slate-200 p-3 text-gray-500 text-wrap tracking-normal">
@@ -457,7 +495,7 @@ const ApprovalRequestsList = ({
                           </td>
                         </tr>
 
-                        <tr>
+                        <tr className={`${t.approvers.length === 0 ? 'hidden' : ''}`}>
                           <td
                             colSpan={user_role === 'accountant' ? 9 : 10}
                             className={`${showDetailID === t.uuid ? '' : 'hidden'} border shadow-lg pl-5 p-3 pb-10 bg-white`}

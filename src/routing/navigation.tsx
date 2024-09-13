@@ -2,14 +2,14 @@ import { Navigate } from 'react-router-dom';
 
 import AirTime from '../pages/AirTime/IndexPage';
 import BuyAirTime from '../pages/AirTime/Index';
-import AirTimeApprovalRequestsList from '../pages/AirTime/ApprovalRequestsList';
+import AirtimeApprovalList from '../pages/AirTime/AirtimeApprovalList';
 
 import Transaction from '../pages/Transaction/Index';
 import CreateTransaction from '../pages/Transaction/CreateTransaction';
 import TransactionList from '../pages/Transaction/TransactionList';
 import VerifyTransactionByID from '../pages/Transaction/VerifyTransactionID';
 import GenerateQRCode from '../pages/GenerateQRCode';
-import ApprovalRequestsList from '../pages/Transaction/ApprovalRequestsList';
+import TransactionApprovalList from '../pages/Transaction/TransactionApprovalList';
 
 import BillPayment from '../pages/BillPayment/Index';
 import CreateBill from '../pages/BillPayment/CreateBill';
@@ -29,8 +29,8 @@ import ScheduledPayment from '../pages/ScheduledPayment/Index';
 import CreateScheduled from '../pages/ScheduledPayment/CreateScheduledPayment';
 import ScheduledList from '../pages/ScheduledPayment/ScheduledList';
 import ScheduledReport from '../pages/ScheduledPayment/ScheduledBulkReport';
-import ScheduledApprovalRequestsList from '../pages/ScheduledPayment/ApprovalRequestsList';
-import ScheduledBulkApprovalRequestsList from '../pages/ScheduledPayment/BulkApprovalRequestsList';
+import ScheduledApprovalList from '../pages/ScheduledPayment/ScheduledApprovalList';
+import ScheduledBulkApprovalList from '../pages/ScheduledPayment/ScheduledBulkApprovalList';
 
 import RecurringContract from '../pages/RecurringContract/Index';
 import CreateContract from '../pages/RecurringContract/CreateContract';
@@ -44,7 +44,7 @@ import CreateTransfer from '../pages/BankTransfer/SendMoney';
 import TransferList from '../pages/BankTransfer/TransferList';
 import ExternalAccountLookup from '../pages/BankTransfer/ExternalAccountLookup';
 import TransferFee from '../pages/BankTransfer/TransferFee';
-import BankTransferApprovalRequestsList from '../pages/BankTransfer/ApprovalRequestsList';
+import BankTransferApprovalList from '../pages/BankTransfer/BankTransferApprovalList';
 
 import BulkImportReportDetails from '../components/BulkImportReportDetails';
 
@@ -105,7 +105,7 @@ export const sidebarNavs = [
       {
         title: 'Approval Requests',
         path: 'approval-requests',
-        element: <ApprovalRequestsList />,
+        element: <TransactionApprovalList />,
         accessRoles: ['accountant', 'approver'],
       },
     ],
@@ -139,13 +139,13 @@ export const sidebarNavs = [
       {
         title: 'Approval Requests',
         path: 'approval-requests',
-        element: <ScheduledApprovalRequestsList />,
+        element: <ScheduledApprovalList />,
         accessRoles: ['accountant', 'approver'],
       },
       {
         title: 'Bulk Approval Requests',
         path: 'bulk-approval-requests',
-        element: <ScheduledBulkApprovalRequestsList />,
+        element: <ScheduledBulkApprovalList />,
         accessRoles: ['accountant', 'approver'],
       },
     ],
@@ -185,7 +185,7 @@ export const sidebarNavs = [
       {
         title: 'Approval Requests',
         path: 'approval-requests',
-        element: <BankTransferApprovalRequestsList />,
+        element: <BankTransferApprovalList />,
         accessRoles: ['accountant', 'approver'],
       },
     ],
@@ -341,7 +341,7 @@ export const sidebarNavs = [
       {
         title: 'Approval Requests',
         path: 'approval-requests',
-        element: <AirTimeApprovalRequestsList />,
+        element: <AirtimeApprovalList />,
         accessRoles: ['accountant', 'approver'],
       },
     ],

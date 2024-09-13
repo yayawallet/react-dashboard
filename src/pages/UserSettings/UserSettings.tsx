@@ -6,6 +6,7 @@ import { LuLogOut } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import { capitalize } from '../../utils/table_utils';
 import { useGetData } from '../../hooks/useSWR';
+import { useState } from 'react';
 
 interface Props {
   onCloseUserSettings: () => void;
@@ -16,6 +17,7 @@ const UserSettings = ({ onCloseUserSettings }: Props) => {
   const navigate = useNavigate();
 
   const { data: userInfo } = useGetData('/user/me/');
+  const [profileImgSrc, setProfileImgSrc] = useState(avater);
 
   return (
     <div className="absolute top-16 right-4 bg-white z-50">
@@ -23,7 +25,14 @@ const UserSettings = ({ onCloseUserSettings }: Props) => {
         <div className="py-1 mb-2 text-lg shadow rounded-lg">
           <li className="flex-col items-center px-3">
             <span className="flex gap-x-2 items-center p-1 mr-2">
-              <img src={avater} className="w-8 h-8 object-cover rounded" />
+              <img
+                src={profileImgSrc}
+                onLoad={() =>
+                  setProfileImgSrc(import.meta.env.VITE_BASE_URL + userInfo?.profile_image)
+                }
+                onError={() => setProfileImgSrc(avater)}
+                className="w-8 h-8 object-cover rounded-full"
+              />
               <span>
                 {capitalize(userInfo?.user?.first_name + ' ' + userInfo?.user?.last_name)}
               </span>

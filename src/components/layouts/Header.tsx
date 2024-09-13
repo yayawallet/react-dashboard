@@ -4,11 +4,15 @@ import UserSettings from '../../pages/UserSettings/UserSettings';
 import avater from '../../assets/avater.svg';
 import { useAuth } from '../../auth/AuthProvider';
 import { capitalize } from 'lodash';
+import { useGetData } from '../../hooks/useSWR';
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const { user } = useAuth();
   const { user_role } = user || {};
+
+  const { data: userInfo } = useGetData('user/me/');
+  const [profileImgSrc, setProfileImgSrc] = useState(avater);
 
   return (
     <div className="h-header shadow-sm">
@@ -22,8 +26,16 @@ const Header = () => {
           onBlur={() => setOpen(false)}
         >
           <div className="h-full flex items-center" onClick={() => setOpen(!open)}>
-            <span className="text-gray-600 font-semibold">{capitalize(user_role)}</span>
-            <img src={avater} alt="" className="h-full p-4 cursor-pointer" />
+            <span className="text-gray-600 font-semibold mr-2">{capitalize(user_role)}</span>
+            <img
+              src={profileImgSrc}
+              onLoad={() =>
+                setProfileImgSrc(import.meta.env.VITE_BASE_URL + userInfo?.profile_image)
+              }
+              onError={() => setProfileImgSrc(avater)}
+              alt=""
+              className="h-8 w-8 object-cover cursor-pointer rounded-full"
+            />
           </div>
 
           <div className={`${open ? '' : 'hidden'}`}>
