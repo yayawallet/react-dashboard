@@ -8,20 +8,11 @@ import InlineNotification from '../../components/InlineNotification';
 import { PiPrinterFill } from 'react-icons/pi';
 import { formatDate } from '../../utils/table_utils';
 import { useGetData } from '../../hooks/useSWR';
-import avater from '../../assets/avater.svg';
-
-type TransactingUserType = {
-  photo: string;
-  name: string;
-};
 
 const GetTransactionByID = () => {
   const [transaction, setTransaction] = useState<TransactionType>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [transactingUser, setTransactingUser] = useState<TransactingUserType | null>(null);
-
-  console.log(transactingUser);
 
   const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
@@ -45,17 +36,6 @@ const GetTransactionByID = () => {
         .get(`/transaction/find/${values.transactionID}`)
         .then((res) => {
           setTransaction(res.data);
-
-          const user =
-            res.data?.receiver.account === ownAccount
-              ? res.data?.sender.account
-              : res.data.receiver.account;
-
-          authAxios
-            .post('/user/search', {
-              query: user,
-            })
-            .then((res) => setTransactingUser(res.data));
 
           // clear input fields
           formik.resetForm();
@@ -167,6 +147,7 @@ const GetTransactionByID = () => {
               id="transactionID"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="transaction_id"
+              autoFocus
               autoComplete="off"
               disabled={isLoading}
               onChange={formik.handleChange}
