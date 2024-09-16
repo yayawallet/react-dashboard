@@ -444,7 +444,7 @@ const ApprovalRequestsList = ({
                               <GoDotFill />
                             </span>
                             {t.is_successful === true
-                              ? 'Succeeded'
+                              ? 'Completed'
                               : t.is_successful === false
                                 ? 'Failed'
                                 : t.rejected_by.length > 0
