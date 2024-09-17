@@ -97,7 +97,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 1 ? 'hidden' : ''}
-            ${currentPage === 1 ? 'bg-violet-600 text-white' : ''}
+            ${currentPage === 1 ? 'bg-yayaBrand-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(1)}
@@ -110,7 +110,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 2 ? 'hidden' : ''}
-            ${currentPage === left ? 'bg-violet-600 text-white' : ''}
+            ${currentPage === left ? 'bg-yayaBrand-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(left)}
@@ -123,7 +123,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 3 ? 'hidden' : ''}
-            ${currentPage === middle ? 'bg-violet-600 text-white' : ''}
+            ${currentPage === middle ? 'bg-yayaBrand-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(middle)}
@@ -136,7 +136,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 4 ? 'hidden' : ''}
-            ${currentPage === right ? 'bg-violet-600 text-white' : ''}
+            ${currentPage === right ? 'bg-yayaBrand-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(right)}
@@ -149,7 +149,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 5 ? 'hidden' : ''}
-            ${currentPage === pageCount ? 'bg-violet-600 text-white' : ''}
+            ${currentPage === pageCount ? 'bg-yayaBrand-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(pageCount)}

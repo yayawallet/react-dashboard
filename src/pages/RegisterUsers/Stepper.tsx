@@ -14,7 +14,7 @@ const Stepper = ({ totalSteps, currentStep }: Props) => {
         >
           <span className="flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200">
             <span
-              className={`me-2 ${i <= currentStep ? 'bg-violet-600 text-white rounded-full w-6 h-6 flex justify-center items-baseline' : ''}`}
+              className={`me-2 ${i <= currentStep ? 'bg-yayaBrand-600 text-white rounded-full w-6 h-6 flex justify-center items-baseline' : ''}`}
             >
               {i}
             </span>
@@ -24,7 +24,7 @@ const Stepper = ({ totalSteps, currentStep }: Props) => {
 
       <li className="flex items-center">
         <span
-          className={`me-2 ${totalSteps <= currentStep ? 'bg-violet-600 text-white rounded-full w-6 h-6 flex justify-center items-baseline' : ''}`}
+          className={`me-2 ${totalSteps <= currentStep ? 'bg-yayaBrand-600 text-white rounded-full w-6 h-6 flex justify-center items-baseline' : ''}`}
         >
           {totalSteps}
         </span>

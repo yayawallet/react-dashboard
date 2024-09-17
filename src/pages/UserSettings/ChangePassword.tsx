@@ -67,7 +67,7 @@ const ChangePassword = () => {
           <Link to="/account">
             <button
               type="button"
-              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:w-[120px] px-5 py-2.5 text-center"
+              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg w-full sm:w-[120px] px-5 py-2.5 text-center"
             >
               <div
                 className="flex items-center justify-center pr-2 gap-x-1"
@@ -99,7 +99,7 @@ const ChangePassword = () => {
               id="current_password"
               placeholder="••••••••"
               autoComplete="off"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yayaBrand-600 focus:border-yayaBrand-600 block w-full p-2.5"
               disabled={isLoading}
               onChange={(e) => {
                 formik.handleChange(e);
@@ -120,7 +120,7 @@ const ChangePassword = () => {
               id="new_password"
               placeholder="New Password"
               autoComplete="off"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yayaBrand-600 focus:border-yayaBrand-600 block w-full p-2.5"
               disabled={isLoading}
               onChange={(e) => {
                 formik.handleChange(e);
@@ -141,7 +141,7 @@ const ChangePassword = () => {
               id="confirm_password"
               placeholder="Confirm Password"
               autoComplete="off"
-              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-violet-600 focus:border-violet-600 block w-full p-2.5"
+              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yayaBrand-600 focus:border-yayaBrand-600 block w-full p-2.5"
               disabled={isLoading}
               onChange={(e) => {
                 formik.handleChange(e);
@@ -157,7 +157,7 @@ const ChangePassword = () => {
 
           <button
             type="submit"
-            className="w-full text-white bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            className="w-full text-white bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             disabled={isLoading}
           >
             {isLoading ? 'Please wait...' : 'Change Password'}

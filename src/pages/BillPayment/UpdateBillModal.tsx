@@ -127,7 +127,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
 
             <button
               type="button"
-              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[100px] px-5 py-2.5 text-center"
+              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-[100px] px-5 py-2.5 text-center"
               onClick={() => onCancelUpdate(false)}
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
@@ -391,7 +391,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
             <div className="flex gap-4 items-center">
               <button
                 type="submit"
-                className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm sm:w-[200px] px-5 py-2.5 text-center"
+                className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm sm:w-[200px] px-5 py-2.5 text-center"
               >
                 <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
                   Update Bill
@@ -400,7 +400,7 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
 
               <button
                 type="button"
-                className="text-violet-700 border-2 border-violet-700 hover:bg-violet-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm sm:w-[100px] px-5 py-2 text-center"
+                className="text-yayaBrand-700 border-2 border-yayaBrand-700 hover:bg-yayaBrand-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm sm:w-[100px] px-5 py-2 text-center"
                 onClick={() => onCancelUpdate(false)}
               >
                 <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>

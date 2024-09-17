@@ -62,7 +62,7 @@ const BulkImportReport = ({ documentType }: Props) => {
               <div className="overflow-auto">
                 <table className="w-full">
                   <thead className="">
-                    <tr className="bg-violet-500 text-gray-50">
+                    <tr className="bg-yayaBrand-500 text-gray-50">
                       <th className="text-left px-4 py-3 font-medium">ID</th>
                       <th className="text-left px-4 py-3 font-medium">Detail</th>
                       <th className="text-left px-4 py-3 font-medium">Succeed</th>
@@ -91,7 +91,7 @@ const BulkImportReport = ({ documentType }: Props) => {
                         <td className="relative border-b border-slate-200 p-3">
                           <button
                             type="button"
-                            className="py-0.5 px-3 focus:outline-none bg-white rounded border border-violet-200 hover:bg-slate-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-slate-200"
+                            className="py-0.5 px-3 focus:outline-none bg-white rounded border border-yayaBrand-200 hover:bg-slate-200 hover:text-gray-700 focus:z-10 focus:ring-4 focus:ring-slate-200"
                           >
                             <Link to={list.uuid}>Detail</Link>
                           </button>

@@ -59,7 +59,7 @@ const GetTransactionByID = () => {
         <div className="bg-white overflow-hidden mb-5">
           <button
             type="button"
-            className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-violet-700 rounded-lg border border-violet-700 hover:bg-violet-800 focus:z-10 focus:ring-4 focus:ring-violet-100"
+            className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-yayaBrand-700 rounded-lg border border-yayaBrand-700 hover:bg-yayaBrand-800 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
           >
             <a
               href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`}
@@ -124,7 +124,7 @@ const GetTransactionByID = () => {
 
           <div className="text-center mt-14 md:mr-40">
             <button
-              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
               onClick={() => setTransaction(undefined)}
             >
               Verify Transaction ID
@@ -161,7 +161,7 @@ const GetTransactionByID = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+            className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span style={{ letterSpacing: '0.3px' }}>
               {isLoading ? 'Please wait...' : 'Verify ID'}

@@ -79,10 +79,10 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
       )}
 
       <div className="flex flex-col sm:flex-row gap-6 border rounded-lg p-5">
-        <div className="flex self-start border border-violet-100 sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-violet-50">
+        <div className="flex self-start border border-yayaBrand-100 sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-yayaBrand-50">
           {categories?.map((c) => (
             <div
-              className={`border-t border-violet-100 shadow-sm shadow-violet-200 text-sm rounded-lg text-violet-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-violet-50 cursor-pointer ${selectedCategory == c ? 'bg-violet-600 text-white border-violet-600 hover:bg-violet-700' : 'bg-white'}`}
+              className={`border-t border-yayaBrand-100 shadow-sm shadow-yayaBrand-200 text-sm rounded-lg text-yayaBrand-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-yayaBrand-50 cursor-pointer ${selectedCategory == c ? 'bg-yayaBrand-600 text-white border-yayaBrand-600 hover:bg-yayaBrand-700' : 'bg-white'}`}
               key={c}
               onClick={() => setSelectedCategory(c)}
             >
@@ -110,7 +110,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
                 .map((pkg: Package) => (
                   <div
                     key={pkg.code}
-                    className={`border border-violet-100 text-sm text-gray-900 hover:bg-violet-50 rounded-lg px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-violet-300' : ''}`}
+                    className={`border border-yayaBrand-100 text-sm text-gray-900 hover:bg-yayaBrand-50 rounded-lg px-3 py-2 flex flex-col justify-between cursor-pointer ${selectedPackage === pkg.code ? 'ring-4 ring-yayaBrand-300' : ''}`}
                     onClick={() => {
                       setSelectedPackage(pkg.code);
                       setSelectedPackageAmount(pkg.amount);
@@ -118,14 +118,14 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
                     }}
                   >
                     <span>{pkg.name.replace(/:\s\d+\sBirr$/, '')}</span> <br />
-                    <span className="inline-block pt-2i text- text-violet-900 font-bold">
+                    <span className="inline-block pt-2i text- text-yayaBrand-900 font-bold">
                       {pkg.amount} ETB
                     </span>
                   </div>
                 ))}
             </div>
             <button
-              className="block mx-auto mt-10 text-white gap-x-2 bg-violet-600 hover:bg-violet-700 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center cursor-pointer"
+              className="block mx-auto mt-10 text-white gap-x-2 bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg w-full sm:max-w-56 px-5 py-2 text-center cursor-pointer"
               disabled={!selectedPackage || isInvalidNumber}
               onClick={() => setOpenConfirmModal(true)}
             >

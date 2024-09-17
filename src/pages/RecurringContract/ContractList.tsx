@@ -122,7 +122,7 @@ const ContractList = () => {
               <div className="">
                 Filter by:
                 <span
-                  className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'approved' ? 'bg-violet-600 text-white' : ''}`}
+                  className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'approved' ? 'bg-yayaBrand-600 text-white' : ''}`}
                   onClick={() =>
                     setFilterByStatus((prev) => (prev === 'approved' ? '' : 'approved'))
                   }
@@ -130,7 +130,7 @@ const ContractList = () => {
                   Approved
                 </span>
                 <span
-                  className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-violet-600 text-white' : ''}`}
+                  className={`inline-flex items-center border bg-gray-100 text-gray-500 px-4 pb-1.5 pt-1 rounded mx-2 cursor-pointer ${filterByStatus === 'pending' ? 'bg-yayaBrand-600 text-white' : ''}`}
                   onClick={() => setFilterByStatus((prev) => (prev === 'pending' ? '' : 'pending'))}
                 >
                   Pending
