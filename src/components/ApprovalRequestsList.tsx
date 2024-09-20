@@ -16,9 +16,10 @@ import { capitalize } from '../utils/table_utils';
 import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../auth/AuthProvider';
 import React from 'react';
-import { BsDownload } from 'react-icons/bs';
+// import { BsDownload } from 'react-icons/bs';
 import { SmallLoading } from './ui/DotLoader';
 import InlineNotification from './InlineNotification';
+import { Link } from 'react-router-dom';
 
 interface Props {
   requestType: 'transaction' | 'bank-transfer' | 'scheduled-payment' | 'bulk' | 'airtime';
@@ -411,13 +412,13 @@ const ApprovalRequestsList = ({
 
                           {requestType === 'bulk' && (
                             <>
-                              <td
+                              {/* <td
                                 className="border-b border-slate-200 p-3"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 {t.file ? (
                                   <a
-                                    href={t.file}
+                                    href={import.meta.env.VITE_BASE_URL + t.file}
                                     download={`YaYa_Scheduled_Bulk_Request_${t.file}`}
                                     className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
                                   >
@@ -429,6 +430,19 @@ const ApprovalRequestsList = ({
                                 ) : (
                                   '~'
                                 )}
+                              </td> */}
+
+                              <td className="border-b border-slate-200 p-3">
+                                <Link
+                                  to="json-display"
+                                  // target="_blank"
+                                  // rel="noopener noreferrer"
+                                  state={{ data: t.file, remark: t.remark }}
+                                >
+                                  <span className="text-blue-800 hover:text-blue-900 hover:underline">
+                                    View Details
+                                  </span>
+                                </Link>
                               </td>
 
                               <td className="border-b border-slate-200 p-3 text-wrap">
