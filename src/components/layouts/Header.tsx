@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BreadCrumbs from './BreadCrumbs';
 import UserSettings from '../../pages/UserSettings/UserSettings';
 import avater from '../../assets/avater.svg';
@@ -8,10 +8,18 @@ import { useGetData } from '../../hooks/useSWR';
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+  const [imgSrc, setImgSrc] = useState(avater);
+
   const { user } = useAuth();
   const { user_role } = user || {};
 
   const { data: userInfo } = useGetData('user/me/');
+
+  useEffect(() => {
+    if (userInfo?.profile_image) {
+      setImgSrc(userInfo?.profile_image);
+    }
+  }, [userInfo]);
 
   return (
     <div className="h-header shadow-sm">
@@ -27,13 +35,10 @@ const Header = () => {
           <div className="h-full flex items-center" onClick={() => setOpen(!open)}>
             <span className="text-gray-600 font-semibold mr-2">{capitalize(user_role)}</span>
             <img
-              src={
-                userInfo?.profile_image
-                  ? import.meta.env.VITE_BASE_URL + userInfo?.profile_image
-                  : avater
-              }
+              src={imgSrc}
               alt=""
-              className="h-8 w-8 object-cover cursor-pointer rounded-full"
+              onError={() => setImgSrc(avater)}
+              className="w-8 h-8 object-cover cursor-pointer rounded-full"
             />
           </div>
 
