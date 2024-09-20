@@ -4,13 +4,22 @@ import { useGetData } from '../../hooks/useSWR';
 import { capitalize } from '../../utils/table_utils';
 import { useAuth } from '../../auth/AuthProvider';
 import avater from '../../assets/avater.svg';
+import { useEffect, useState } from 'react';
 
 const UserAccount = () => {
+  const [imgSrc, setImgSrc] = useState(avater);
+
   const navigate = useNavigate();
   const { user } = useAuth();
   const { user_role } = user || {};
 
   const { data: userInfo } = useGetData('user/me/');
+
+  useEffect(() => {
+    if (userInfo?.profile_image) {
+      setImgSrc(userInfo?.profile_image);
+    }
+  }, [userInfo]);
 
   return (
     <div className="page-container">
@@ -20,13 +29,10 @@ const UserAccount = () => {
         <div className="flex flex-wrap gap-5 items-center justify-center">
           <div className="flex flex-col justify-center items-center">
             <img
-              src={
-                userInfo?.profile_image
-                  ? import.meta.env.VITE_BASE_URL + userInfo?.profile_image
-                  : avater
-              }
+              src={imgSrc}
               alt=""
-              className="border h-28 w-28 object-cover rounded-full"
+              onError={() => setImgSrc(avater)}
+              className="h-28 w-28 object-cover rounded-full"
             />
           </div>
 
