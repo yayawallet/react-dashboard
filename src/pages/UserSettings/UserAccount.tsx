@@ -3,6 +3,7 @@ import { IoChevronForward } from 'react-icons/io5';
 import { useGetData } from '../../hooks/useSWR';
 import { capitalize } from '../../utils/table_utils';
 import { useAuth } from '../../auth/AuthProvider';
+import avater from '../../assets/avater.svg';
 
 const UserAccount = () => {
   const navigate = useNavigate();
@@ -19,7 +20,11 @@ const UserAccount = () => {
         <div className="flex flex-wrap gap-5 items-center justify-center">
           <div className="flex flex-col justify-center items-center">
             <img
-              src={import.meta.env.VITE_BASE_URL + userInfo?.profile_image}
+              src={
+                userInfo?.profile_image
+                  ? import.meta.env.VITE_BASE_URL + userInfo?.profile_image
+                  : avater
+              }
               alt=""
               className="border h-28 w-28 object-cover rounded-full"
             />

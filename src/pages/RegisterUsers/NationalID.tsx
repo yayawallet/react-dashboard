@@ -94,7 +94,7 @@ const NationalID = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="text-white self-center bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm max-w-[180px] px-5 py-2.5 text-center"
+            className="text-white self-center bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm max-w-[180px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
               {isLoading ? <LoadingSpinnerButton /> : 'Get OTP'}

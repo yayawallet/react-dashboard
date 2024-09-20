@@ -8,20 +8,11 @@ import InlineNotification from '../../components/InlineNotification';
 import { PiPrinterFill } from 'react-icons/pi';
 import { formatDate } from '../../utils/table_utils';
 import { useGetData } from '../../hooks/useSWR';
-import avater from '../../assets/avater.svg';
-
-type TransactingUserType = {
-  photo: string;
-  name: string;
-};
 
 const GetTransactionByID = () => {
   const [transaction, setTransaction] = useState<TransactionType>();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-  const [transactingUser, setTransactingUser] = useState<TransactingUserType | null>(null);
-
-  console.log(transactingUser);
 
   const { data: { account: ownAccount } = {} } = useGetData('/user/profile');
 
@@ -46,17 +37,6 @@ const GetTransactionByID = () => {
         .then((res) => {
           setTransaction(res.data);
 
-          const user =
-            res.data?.receiver.account === ownAccount
-              ? res.data?.sender.account
-              : res.data.receiver.account;
-
-          authAxios
-            .post('/user/search', {
-              query: user,
-            })
-            .then((res) => setTransactingUser(res.data));
-
           // clear input fields
           formik.resetForm();
         })
@@ -79,7 +59,7 @@ const GetTransactionByID = () => {
         <div className="bg-white overflow-hidden mb-5">
           <button
             type="button"
-            className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-violet-700 rounded-lg border border-violet-700 hover:bg-violet-800 focus:z-10 focus:ring-4 focus:ring-violet-100"
+            className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-yayaBrand-700 rounded-lg border border-yayaBrand-700 hover:bg-yayaBrand-800 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
           >
             <a
               href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`}
@@ -144,7 +124,7 @@ const GetTransactionByID = () => {
 
           <div className="text-center mt-14 md:mr-40">
             <button
-              className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
               onClick={() => setTransaction(undefined)}
             >
               Verify Transaction ID
@@ -167,6 +147,7 @@ const GetTransactionByID = () => {
               id="transactionID"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="transaction_id"
+              autoFocus
               autoComplete="off"
               disabled={isLoading}
               onChange={formik.handleChange}
@@ -180,7 +161,7 @@ const GetTransactionByID = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+            className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
           >
             <span style={{ letterSpacing: '0.3px' }}>
               {isLoading ? 'Please wait...' : 'Verify ID'}

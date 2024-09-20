@@ -82,7 +82,7 @@ const SearchUserInline = ({ query, includeSelf, accountType, onSelecteUser }: Pr
           {usersList?.slice(0, 5).map((user) => (
             <div
               key={user.account}
-              className={`flex gap-2 items-center px-2 py-1 border-b border-gray-100 hover:bg-gray-100 cursor-pointer wborder rounded ${selectedUser ? 'bg-violet-500 hover:bg-violet-500 rounded text-white' : ''}`}
+              className={`flex gap-2 items-center px-2 py-1 border-b border-gray-100 hover:bg-gray-100 cursor-pointer wborder rounded ${selectedUser ? 'bg-yayaBrand-500 hover:bg-yayaBrand-500 rounded text-white' : ''}`}
               onClick={() => {
                 onSelecteUser(user.account);
                 setSelectedUser(user.account);

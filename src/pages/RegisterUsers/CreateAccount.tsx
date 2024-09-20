@@ -308,7 +308,7 @@ const CreateAccount = () => {
         <div className="flex flex-wrap justify-center items-center gap-8 mb-6">
           <div className="flex flex-col items-center">
             <img src={userPhoto} className="h-28 w-28 object-cover rounded-full" alt="" />
-            <span className="bg-violet-500 text-white px-2 pb-0.5 text-sm rounded">
+            <span className="bg-yayaBrand-500 text-white px-2 pb-0.5 text-sm rounded">
               {registeredAccountName}
             </span>
           </div>
@@ -319,7 +319,7 @@ const CreateAccount = () => {
         <Link to="/register-user">
           <button
             type="button"
-            className={`text-white mr-28 bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            className={`text-white mr-28 bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
             Register another user
@@ -350,7 +350,7 @@ const CreateAccount = () => {
 
         <div className="md:grid" style={{ gridTemplateColumns: `repeat(${totalSteps}, 1fr)` }}>
           <h2
-            className={`mb-10 text-center col-start-${currentStep} md:font-semibold px-3 pt-0.5 pb-1 bg-violet-500 rounded-lg text-white`}
+            className={`mb-10 text-center col-start-${currentStep} md:font-semibold px-3 pt-0.5 pb-1 bg-yayaBrand-500 rounded-lg text-white`}
             style={{ gridColumn: `${currentStep} / ${currentStep + 1}` }}
           >
             {stepTitle}
@@ -851,7 +851,7 @@ const CreateAccount = () => {
           <button
             type="button"
             disabled={isLoading}
-            className={`text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            className={`text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
             BACK
@@ -860,7 +860,7 @@ const CreateAccount = () => {
           <button
             type="button"
             disabled={isLoading}
-            className="text-white bg-violet-700 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 rounded-lg px-8 py-2.5 text-center"
+            className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-8 py-2.5 text-center"
             onClick={handleClickNext}
           >
             {currentStep === totalSteps ? (isLoading ? 'SUBMITTING...' : 'SUBMIT') : 'NEXT'}

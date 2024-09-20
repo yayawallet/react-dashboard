@@ -80,14 +80,14 @@ const RejectionModal = ({ header, openModal, onConfirm }: Props) => {
             <button
               data-modal-hide="popup-modal"
               type="button"
-              className="mt-6 text-white bg-violet-600 hover:bg-violet-800 focus:ring-4 focus:outline-none focus:ring-violet-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
-              onClick={() => onConfirm(rejectionReason)}
+              className="mt-6 text-white bg-yayaBrand-600 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center"
+              onClick={() => onConfirm(rejectionReason || true)}
             >
               Reject Payment
             </button>
             <button
               type="button"
-              className="py-2.5 px-5 ms-3 text-sm font-medium text-violet-900 focus:outline-none bg-white rounded-lg border border-violet-200 hover:bg-gray-100 hover:text-violet-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+              className="py-2.5 px-5 ms-3 text-sm font-medium text-yayaBrand-900 focus:outline-none bg-white rounded-lg border border-yayaBrand-200 hover:bg-gray-100 hover:text-yayaBrand-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
               onClick={() => onConfirm(false)}
             >
               No, cancel

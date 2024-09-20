@@ -12,7 +12,6 @@ const Header = () => {
   const { user_role } = user || {};
 
   const { data: userInfo } = useGetData('user/me/');
-  const [profileImgSrc, setProfileImgSrc] = useState(avater);
 
   return (
     <div className="h-header shadow-sm">
@@ -28,11 +27,11 @@ const Header = () => {
           <div className="h-full flex items-center" onClick={() => setOpen(!open)}>
             <span className="text-gray-600 font-semibold mr-2">{capitalize(user_role)}</span>
             <img
-              src={profileImgSrc}
-              onLoad={() =>
-                setProfileImgSrc(import.meta.env.VITE_BASE_URL + userInfo?.profile_image)
+              src={
+                userInfo?.profile_image
+                  ? import.meta.env.VITE_BASE_URL + userInfo?.profile_image
+                  : avater
               }
-              onError={() => setProfileImgSrc(avater)}
               alt=""
               className="h-8 w-8 object-cover cursor-pointer rounded-full"
             />
