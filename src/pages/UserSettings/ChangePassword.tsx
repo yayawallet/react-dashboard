@@ -2,9 +2,8 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
-import { Link } from 'react-router-dom';
 import InlineNotification from '../../components/InlineNotification';
-import { SlArrowLeft } from 'react-icons/sl';
+import BackButton from '../../components/ui/BackButton';
 
 const ChangePassword = () => {
   const [isLoading, setLoading] = useState(false);
@@ -37,7 +36,7 @@ const ChangePassword = () => {
       setSuccessMessage('');
 
       authAxios
-        .post('/user/change-password', {
+        .post('/user/change-password/', {
           old_password: values.current_password,
           new_password: values.new_password,
         })
@@ -64,22 +63,7 @@ const ChangePassword = () => {
 
       <div className="flex justify-center lg:mr-32 mt-20">
         <div className={`${successMessage ? '' : 'hidden'}`}>
-          <Link to="/account">
-            <button
-              type="button"
-              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg w-full sm:w-[120px] px-5 py-2.5 text-center"
-            >
-              <div
-                className="flex items-center justify-center pr-2 gap-x-1"
-                style={{ letterSpacing: '0.3px' }}
-              >
-                <span className="pt-0.5">
-                  <SlArrowLeft />
-                </span>
-                <span className="">BACK</span>
-              </div>
-            </button>
-          </Link>
+          <BackButton gotoPath="/account" />
         </div>
 
         <form
