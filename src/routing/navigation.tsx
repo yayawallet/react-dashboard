@@ -75,6 +75,7 @@ import { HiOutlineSupport } from 'react-icons/hi';
 import { MdOutlineContactSupport } from 'react-icons/md';
 import { FaMoneyBillTrendUp } from 'react-icons/fa6';
 import { FaUserPlus } from 'react-icons/fa6';
+import ScheduledBulkDisplay from '../components/ScheduledBulkDisplay';
 
 export const sidebarNavs = [
   {
@@ -106,46 +107,6 @@ export const sidebarNavs = [
         title: 'Approval Requests',
         path: 'approval-requests',
         element: <TransactionApprovalList />,
-        accessRoles: ['accountant', 'agent', 'approver'],
-      },
-    ],
-  },
-
-  {
-    title: 'Scheduled Payment',
-    path: 'scheduled-payment',
-    icon: <RiCalendarScheduleLine />,
-    element: <ScheduledPayment />,
-    accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-    children: [
-      {
-        title: 'Create Schedule',
-        path: 'create',
-        element: <CreateScheduled />,
-        accessRoles: ['accountant', 'agent'],
-      },
-      {
-        title: 'Scheduled List',
-        path: 'list',
-        element: <ScheduledList />,
-        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-      },
-      {
-        title: 'Bulk Report',
-        path: 'bulk-report',
-        element: <ScheduledReport />,
-        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-      },
-      {
-        title: 'Approval Requests',
-        path: 'approval-requests',
-        element: <ScheduledApprovalList />,
-        accessRoles: ['accountant', 'agent', 'approver'],
-      },
-      {
-        title: 'Bulk Approval Requests',
-        path: 'bulk-approval-requests',
-        element: <ScheduledBulkApprovalList />,
         accessRoles: ['accountant', 'agent', 'approver'],
       },
     ],
@@ -192,6 +153,46 @@ export const sidebarNavs = [
   },
 
   {
+    title: 'Scheduled Payment',
+    path: 'scheduled-payment',
+    icon: <RiCalendarScheduleLine />,
+    element: <ScheduledPayment />,
+    accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+    children: [
+      {
+        title: 'Create Schedule',
+        path: 'create',
+        element: <CreateScheduled />,
+        accessRoles: ['accountant', 'agent'],
+      },
+      {
+        title: 'Scheduled List',
+        path: 'list',
+        element: <ScheduledList />,
+        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+      },
+      {
+        title: 'Bulk Report',
+        path: 'bulk-report',
+        element: <ScheduledReport />,
+        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+      },
+      {
+        title: 'Approval Requests',
+        path: 'approval-requests',
+        element: <ScheduledApprovalList />,
+        accessRoles: ['accountant', 'agent', 'approver'],
+      },
+      {
+        title: 'Bulk Approval Requests',
+        path: 'bulk-approval-requests',
+        element: <ScheduledBulkApprovalList />,
+        accessRoles: ['accountant', 'agent', 'approver'],
+      },
+    ],
+  },
+
+  {
     title: 'Bill Payment',
     path: 'bill',
     icon: <FaMoneyBillTrendUp />,
@@ -232,46 +233,6 @@ export const sidebarNavs = [
         title: 'List Payout Methods',
         path: 'payout-methods-list',
         element: <ListPayoutMethods />,
-        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-      },
-    ],
-  },
-
-  {
-    title: 'Recurring Contract',
-    path: 'recurring-contract',
-    icon: <MdOutlinePayments />,
-    element: <RecurringContract />,
-    accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-    children: [
-      {
-        title: 'Create Contract',
-        path: 'create',
-        element: <CreateContract />,
-        accessRoles: ['accountant', 'agent'],
-      },
-      {
-        title: 'Contract List',
-        path: 'list',
-        element: <ContractList />,
-        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-      },
-      {
-        title: 'Contract Report',
-        path: 'report',
-        element: <ContractReport />,
-        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
-      },
-      {
-        title: 'Request Payment',
-        path: 'request-payment',
-        element: <RequestPayment />,
-        accessRoles: ['accountant', 'agent'],
-      },
-      {
-        title: 'Request Payments Report',
-        path: 'request-payment-report',
-        element: <RequestPaymentReport />,
         accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
       },
     ],
@@ -350,6 +311,46 @@ export const sidebarNavs = [
   },
 
   {
+    title: 'Recurring Contract',
+    path: 'recurring-contract',
+    icon: <MdOutlinePayments />,
+    element: <RecurringContract />,
+    accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+    children: [
+      {
+        title: 'Create Contract',
+        path: 'create',
+        element: <CreateContract />,
+        accessRoles: ['accountant', 'agent'],
+      },
+      {
+        title: 'Contract List',
+        path: 'list',
+        element: <ContractList />,
+        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+      },
+      {
+        title: 'Contract Report',
+        path: 'report',
+        element: <ContractReport />,
+        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+      },
+      {
+        title: 'Request Payment',
+        path: 'request-payment',
+        element: <RequestPayment />,
+        accessRoles: ['accountant', 'agent'],
+      },
+      {
+        title: 'Request Payments Report',
+        path: 'request-payment-report',
+        element: <RequestPaymentReport />,
+        accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+      },
+    ],
+  },
+
+  {
     title: 'Generate QR Code',
     path: 'qr-code',
     icon: <IoQrCode />,
@@ -394,6 +395,10 @@ export const privateNavs = [
       { path: 'account', element: <UserAccount /> },
       { path: 'account/change-password', element: <ChangePassword /> },
     ],
+  },
+  {
+    path: '/scheduled-payment/bulk-approval-requests/json-display',
+    element: <ScheduledBulkDisplay />,
   },
 ];
 
