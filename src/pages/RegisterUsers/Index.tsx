@@ -10,7 +10,7 @@ const Index = () => {
   const [store, setStore] = useState({});
   const { data: profile } = useGetData('user/profile');
 
-  if (profile?.is_agent)
+  if (!profile?.is_agent)
     return (
       <div className="text-center">
         <h1 className="text-2xl lg:text-4xl pt-[10vh] pb-4">
