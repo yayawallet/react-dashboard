@@ -387,6 +387,10 @@ export const privateNavs = [
         path: 'recurring-contract/request-payment/report/:id',
         element: <BulkImportReportDetails />,
       },
+      {
+        path: '/scheduled-payment/bulk-approval-requests/json-display',
+        element: <ScheduledBulkDisplay />,
+      },
       { path: 'bill/update/:bill_id', element: <UpdateBill /> },
       { path: '', element: <Home /> },
       { path: 'profile', element: <Profile /> },
@@ -395,10 +399,6 @@ export const privateNavs = [
       { path: 'account', element: <UserAccount /> },
       { path: 'account/change-password', element: <ChangePassword /> },
     ],
-  },
-  {
-    path: '/scheduled-payment/bulk-approval-requests/json-display',
-    element: <ScheduledBulkDisplay />,
   },
 ];
 
