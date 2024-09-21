@@ -440,7 +440,7 @@ const ApprovalRequestsList = ({
                                   state={{ data: t.file, remark: t.remark }}
                                 >
                                   <span className="text-blue-800 hover:text-blue-900 hover:underline">
-                                    View Details
+                                    View Detail
                                   </span>
                                 </Link>
                               </td>

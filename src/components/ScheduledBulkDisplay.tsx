@@ -1,5 +1,4 @@
 import { useLocation } from 'react-router-dom';
-import Error from './ui/Error';
 import EmptyList from './ui/EmptyList';
 import { formatDate } from '../utils/table_utils';
 import BackButton from './ui/BackButton';
@@ -17,13 +16,11 @@ const ScheduledBulkDisplay = () => {
   const location = useLocation();
   const { data: jsonData, remark } = location.state || {};
 
-  console.log(jsonData);
-
   return (
     <>
-      <div className="table-container px-6">
-        {!jsonData.length ? (
-          <Error />
+      <div className="table-container">
+        {!jsonData?.length ? (
+          <EmptyList />
         ) : (
           <div className="border border-slate-200 rounded-xl">
             <div className="flex flex-wrap justify-between items-center m-3">
