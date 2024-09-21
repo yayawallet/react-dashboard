@@ -3,6 +3,8 @@ export const capitalize = (name: string) => {
 };
 
 export const formatDate = (timestamp: Date) => {
+  if (!timestamp) return;
+
   const stringTime = timestamp.toString();
 
   //stringTime.length === 10 -> Unix timestamp
