@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
@@ -14,6 +14,10 @@ const NationalID = () => {
   const [OTPSent, setOTPSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setStore({});
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -86,7 +90,7 @@ const NationalID = () => {
               onChange={formik.handleChange}
               value={formik.values.fin}
             />
-            <span className="pl-2 text-sm text-red-600">
+            <span className="pl-2 text-sm font-medium text-red-600">
               {formik.touched.fin && formik.errors.fin}
             </span>
           </div>

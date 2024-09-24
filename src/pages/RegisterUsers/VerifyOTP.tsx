@@ -15,9 +15,7 @@ const VerifyOTP = () => {
   const navigate = useNavigate();
 
   const [isOTPVerified, setOTPVerified] = useState(false);
-  const [otpExpiresIn, setOTPExpiresIn] = useState(
-    store?.registrationMethod == 'invitation' ? 120 : 300
-  );
+  const [otpExpiresIn, setOTPExpiresIn] = useState(300);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
@@ -49,18 +47,7 @@ const VerifyOTP = () => {
       setErrorMessage('');
       setLoading(true);
 
-      if (store.registrationMethod === 'invitation') {
-        setTimeout(() => {
-          if (store.otp?.toString() === values.otp?.toString()) {
-            setOTPVerified(true);
-            setOTPExpiresIn(-1);
-          } else {
-            setErrorMessage('Invalid OTP');
-          }
-
-          setLoading(false);
-        }, 1000);
-      } else if (store.registrationMethod === 'national-id') {
+      if (store.registrationMethod === 'national-id') {
         authAxios
           .get(`/kyc/fayda/get-kyc-details/${store.fin}/${store.transaction_id}/${values.otp}`)
           .then((res) => {
@@ -128,8 +115,10 @@ const VerifyOTP = () => {
               Enter 6 digit OTP
             </label>
             <input
-              type="string"
+              type="text"
               maxLength={6}
+              pattern="[0-9]"
+              title="Enter only digits (0-9)"
               autoFocus
               id="otp"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"

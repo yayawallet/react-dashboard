@@ -17,7 +17,7 @@ import { GoDotFill } from 'react-icons/go';
 import { useAuth } from '../auth/AuthProvider';
 import React from 'react';
 // import { BsDownload } from 'react-icons/bs';
-import { SmallLoading } from './ui/DotLoader';
+import { DotLoaderSmall } from './ui/DotLoader';
 import InlineNotification from './InlineNotification';
 import { Link } from 'react-router-dom';
 
@@ -374,7 +374,7 @@ const ApprovalRequestsList = ({
 
                               <td className="border-b border-slate-200 p-3 text-wrap">
                                 {t.request_json?.institution_code && isInstitutionListLoading ? (
-                                  <SmallLoading />
+                                  <DotLoaderSmall />
                                 ) : null}
                                 {t.request_json?.institution_code
                                   ? institutionList?.find(
@@ -398,7 +398,7 @@ const ApprovalRequestsList = ({
 
                               <td className="border-b border-slate-200 p-3 text-wrap">
                                 {t.request_json?.package && isPackagesLoading ? (
-                                  <SmallLoading />
+                                  <DotLoaderSmall />
                                 ) : null}
                                 {t.request_json?.package
                                   ? packages?.find(

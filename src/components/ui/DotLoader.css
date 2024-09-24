@@ -6,6 +6,10 @@
   --uib-size: 36px;
 }
 
+.large {
+  --uib-size: 54px;
+}
+
 .container {
   --uib-color: #323663;
   --uib-speed: 1.5s;
