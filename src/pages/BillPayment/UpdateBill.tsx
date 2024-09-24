@@ -224,6 +224,9 @@ const UpdateBill = () => {
             <div>
               <input
                 type="text"
+                maxLength={13}
+                pattern="[0-9]"
+                title="Enter only digits (0-9)"
                 id="bill_id"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="bill_id"
@@ -472,6 +475,9 @@ const UpdateBill = () => {
             </label>
             <input
               type="text"
+              maxLength={13}
+              pattern="[0-9]{0,13}"
+              title="Enter only digits (0-9)"
               id="phone"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="phone"
