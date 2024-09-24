@@ -212,7 +212,7 @@ const CreateAccount = () => {
           `${store.accountType === 'business' ? '/user/register-business' : '/user/register'}`,
           {
             ...values,
-            date_of_birth: new Date(values.date_of_birth),
+            date_of_birth: new Date(values.date_of_birth).getTime(),
           }
         )
         .then((res) => {
