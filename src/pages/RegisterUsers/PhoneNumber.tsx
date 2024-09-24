@@ -1,22 +1,21 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
-import InlineNotification from '../../components/InlineNotification';
-import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
-import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 import AccountType from './AccountType';
 
-const Invitation = () => {
+const PhoneNumber = () => {
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
-  const [OTPSent, setOTPSent] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isLoading, setLoading] = useState(false);
+  const [goNextStep, setGoNextStep] = useState(false);
   const [isCheckingPhone, setIsCheckingPhone] = useState(false);
   const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setStore({});
+  }, []);
 
   const handlePhoneNumberLookup = (number: string) => {
     setIsNewUser(null);
@@ -25,8 +24,6 @@ const Invitation = () => {
 
     if (number.startsWith('0') && number.length < 10) return;
     if ((number.startsWith('7') || number.startsWith('9')) && number.length < 9) return;
-    if (number.startsWith('+2510') && number.length < 14) return;
-    if (number.startsWith('+251') && number.length < 13) return;
 
     setIsCheckingPhone(true);
 
@@ -42,7 +39,7 @@ const Invitation = () => {
   const formik = useFormik({
     initialValues: {
       phone: '',
-      amount: 0,
+      fin: 'AGENT',
       country: 'Ethiopia',
     },
 
@@ -50,67 +47,33 @@ const Invitation = () => {
       phone: Yup.string()
         .matches(
           /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
-          'phone number is not valid'
+          'Invalid phone number'
         )
         .required('phone number is required'),
-      amount: Yup.number().min(0, 'cannot be less than 0'),
+      fin: Yup.string().required('fin is required'),
+      country: Yup.string().required('country is required'),
     }),
 
     onSubmit: (values) => {
       if (!isNewUser) return;
 
-      setLoading(true);
+      setStore({
+        phone: values.phone,
+        country: values.country,
+        fin: values.fin,
+        registrationMethod: 'phoneNumber',
+      });
 
-      // Clear existing values
-      setOTPSent(false);
-      setErrorMessage('');
-      setStore({});
-
-      authAxios
-        .post('/invitation/create', values)
-        .then((res) => {
-          authAxios
-            .post('/invitation/otp', {
-              phone: values.phone,
-              country: values.country,
-              invite_hash: res.data.invite_hash,
-            })
-            .then(() => {
-              setOTPSent(true);
-              setStore({
-                phone: values.phone,
-                country: values.country,
-                invite_hash: res.data.invite_hash,
-                otp: res.data.otp,
-                registrationMethod: 'invitation',
-              });
-
-              console.log(res.data.otp);
-            })
-            .catch((error) =>
-              setErrorMessage(
-                error.response?.data?.error || error.response?.data?.message || error.message
-              )
-            )
-            .finally(() => setLoading(false));
-        })
-        .catch((error) => {
-          setErrorMessage(
-            error.response?.data?.error || error.response?.data?.message || error.message
-          );
-          setLoading(false);
-        });
+      setGoNextStep(true);
     },
   });
 
-  if (OTPSent) return <VerifyOTP />;
+  if (goNextStep) return <AccountType />;
 
   return (
     <div>
-      {errorMessage && <InlineNotification type="error" info={errorMessage} />}
-
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
-        <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Invite a User</h3>
+        <h3 className="py-2 text-center text-gray-900 text-lg font-semibold">Phone Number</h3>
       </div>
 
       <form
@@ -124,21 +87,22 @@ const Invitation = () => {
               Phone
             </label>
             <input
-              type="number"
+              type="text"
               autoFocus
               id="phone"
-              maxLength={14}
+              maxLength={10}
+              pattern="[0-9]{0,10}"
+              title="Enter only digits (0-9)"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="phone number"
               autoComplete="off"
-              disabled={isLoading}
               onChange={(e) => {
                 formik.handleChange(e);
                 handlePhoneNumberLookup(e.target.value);
               }}
               value={formik.values.phone}
             />
-            <span className="pl-2 text-sm text-red-600">
+            <span className="pl-2 text-sm font-medium text-red-600">
               {formik.touched.phone && formik.errors.phone}
               {!formik.errors.phone && (isNewUser === false ? 'User already exists' : '')}
               {!formik.errors.phone && isCheckingPhone && (
@@ -155,11 +119,10 @@ const Invitation = () => {
 
           <button
             type="submit"
-            disabled={isLoading}
             className="text-white self-center bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm max-w-[180px] px-5 py-2.5 text-center"
           >
             <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
-              {isLoading ? <LoadingSpinnerButton /> : 'Invite User'}
+              NEXT
             </span>
           </button>
         </div>
@@ -168,4 +131,4 @@ const Invitation = () => {
   );
 };
 
-export default Invitation;
+export default PhoneNumber;

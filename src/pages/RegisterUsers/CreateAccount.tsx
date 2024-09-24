@@ -18,6 +18,7 @@ const CreateAccount = () => {
   const { store, setStore } = useContext(RegistrationContext);
 
   const [registeredAccountName, setRegisteredAccountName] = useState('');
+  const [registeredFullName, setRegisteredFullName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [accountnameLookup, setAccountnameLookup] = useState('');
@@ -117,7 +118,6 @@ const CreateAccount = () => {
 
   const formik = useFormik({
     initialValues: {
-      invitation_hash: store.invite_hash || '',
       fin: store.fin || '',
       name: store.name || '',
       gender: store.gender || '',
@@ -204,6 +204,7 @@ const CreateAccount = () => {
 
       // Clear existing values
       setRegisteredAccountName('');
+      setRegisteredFullName('');
       setErrorMessage('');
 
       authAxios
@@ -211,15 +212,15 @@ const CreateAccount = () => {
           `${store.accountType === 'business' ? '/user/register-business' : '/user/register'}`,
           {
             ...values,
-            date_of_birth: new Date(values.date_of_birth).getTime(),
+            date_of_birth: new Date(values.date_of_birth),
           }
         )
         .then((res) => {
           setRegisteredAccountName(res.data.account);
+          setRegisteredFullName(res.data.name);
           setUserPhoto(values.photo_base64);
 
           formik.resetForm(); // clear input fields
-          setStore({}); // clear store values
         })
         .catch((error) => {
           setErrorMessage(
@@ -308,9 +309,10 @@ const CreateAccount = () => {
         <div className="flex flex-wrap justify-center items-center gap-8 mb-6">
           <div className="flex flex-col items-center">
             <img src={userPhoto} className="h-28 w-28 object-cover rounded-full" alt="" />
-            <span className="bg-yayaBrand-500 text-white px-2 pb-0.5 text-sm rounded">
-              {registeredAccountName}
-            </span>
+            <div className="text-center text-gray-600 px-2 pb-0.5 text-sm rounded">
+              <span className="text-lg font-medium">{registeredFullName}</span>
+              <br /> @{registeredAccountName}
+            </div>
           </div>
 
           <img src={approvedIcon} className="h-24" alt="" />
@@ -403,7 +405,7 @@ const CreateAccount = () => {
                   onChange={formik.handleChange}
                   value={formik.values.date_of_birth}
                 />
-                <span className="block mb-5 pl-2 text-sm text-red-600">
+                <span className="block mb-5 pl-2 text-sm  text-red-600">
                   {formik.touched.date_of_birth && formik.errors.date_of_birth}
                 </span>
               </div>
@@ -484,7 +486,7 @@ const CreateAccount = () => {
                     Checking
                   </span>
                 )}
-                <span className="block mb-5 pl-2 text-sm text-red-600">
+                <span className="block mb-5 pl-2 text-sm font-medium text-red-600">
                   {formik.touched.email && formik.errors.email}
                   {!formik.errors.email && emailLookup}
                 </span>

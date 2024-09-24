@@ -16,9 +16,9 @@ const RegistrationMethod = () => {
 
           <div className="flex flex-col gap-y-10 justify-center gap-x-20 max-w-[var(--form-width)] border p-8 rounded-b-xl mx-auto mb-20">
             <div className="flex flex-col gap-y-4 items-center justify-center">
-              <Link to="invitation" className="w-full text-center">
-                <button className="h-12 text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-full w-full sm:w-[280px] px-5 py-2.5 text-centerm">
-                  Invitation
+              <Link to="phone-number" className="w-full text-center">
+                <button className="h-12 text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium text-[15px] rounded-full w-full sm:w-[280px] px-5 py-2.5 text-centerm">
+                  Phone Number
                 </button>
               </Link>
 

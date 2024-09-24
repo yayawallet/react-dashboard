@@ -22,7 +22,7 @@ import ListPayoutMethods from '../pages/BillPayment/ListPayoutMethods';
 import RegisterUsers from '../pages/RegisterUsers/Index';
 import CreateLevelTwoAccount from '../pages/RegisterUsers/CreateLevelTwoAccount';
 import CreateBussinessAccount from '../pages/RegisterUsers/CreateBusinessAccount';
-import Invitation from '../pages/RegisterUsers/Invitation';
+import PhoneNumber from '../pages/RegisterUsers/PhoneNumber';
 import NationalID from '../pages/RegisterUsers/NationalID';
 
 import ScheduledPayment from '../pages/ScheduledPayment/Index';
@@ -246,9 +246,9 @@ export const sidebarNavs = [
     accessRoles: ['agent'],
     children: [
       {
-        title: 'Invitation',
-        path: 'invitation',
-        element: <Invitation />,
+        title: 'Phone Number',
+        path: 'phone-number',
+        element: <PhoneNumber />,
         accessRoles: ['agent'],
         children: [
           {
