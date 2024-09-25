@@ -86,15 +86,23 @@ const PhoneNumber = () => {
             <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
               Phone
             </label>
+
+            <div className="relative">
+              <span className="absolute top-3 left-2 text-sm text-gray-500 pointer-events-none">
+                +251
+              </span>
+            </div>
+
             <input
-              type="text"
+              type="number"
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.value = target.value.slice(0, 10);
+              }}
               autoFocus
               id="phone"
-              maxLength={10}
-              pattern="[0-9]{0,10}"
-              title="Enter only digits (0-9)"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="phone number"
+              className="pl-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Phone number"
               autoComplete="off"
               onChange={(e) => {
                 formik.handleChange(e);

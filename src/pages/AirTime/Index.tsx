@@ -65,11 +65,16 @@ const AirTime = () => {
           </div>
 
           <div className="relative w-full mb-1">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-gray-600 pointer-events-none">
               <span>+251</span>
             </div>
             <input
               type="number"
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.value =
+                  target.value[0] === '0' ? target.value.slice(0, 10) : target.value.slice(0, 9);
+              }}
               id="phone-number"
               autoComplete="off"
               maxLength={10}

@@ -355,14 +355,15 @@ const UpdateModal = ({ bill, openUpdateModal, onCancelUpdate }: Props) => {
                   <span className="font-normal text-gray-400">&nbsp;(optional)</span>
                 </label>
                 <input
-                  type="text"
-                  maxLength={13}
-                  pattern="[0-9]{0,13}"
-                  title="Enter only digits (0-9)"
+                  type="number"
+                  onInput={(e) => {
+                    const target = e.target as HTMLInputElement;
+                    target.value = target.value.slice(0, 13);
+                  }}
                   id="phone"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                   placeholder="phone"
-                  autoComplete="tel"
+                  autoComplete="off"
                   onChange={formik.handleChange}
                   value={formik.values.phone}
                 />
