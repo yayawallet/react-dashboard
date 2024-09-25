@@ -41,7 +41,6 @@ const ApprovalRequestsList = ({
   const [showDetailID, setShowDetailID] = useState<string | null>(null);
   const [selectedActionUUID, setSelectedActionUUID] = useState('');
   const [approvalError, setApprovalError] = useState('');
-  const [filterPending, setFilterPending] = useState(false);
 
   const { user } = useAuth();
   const user_id = user?.user_id || null;
@@ -85,11 +84,6 @@ const ApprovalRequestsList = ({
     setIsRefreshing(true);
     await mutate();
     setIsRefreshing(false);
-  };
-
-  const handleFilterPending = () => {
-    setFilterPending((prev) => !prev);
-    mutate();
   };
 
   const handleOnApproveClick = (
