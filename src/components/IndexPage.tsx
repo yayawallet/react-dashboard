@@ -15,7 +15,7 @@ const IndexPage = ({ parentPath }: Props) => {
   return (
     <>
       {outlet || (
-        <div className="page-container">
+        <div className="page-container relative">
           <h3 className="text-2xl font-semibold p-2 mb-10">
             {parentPath.replace('-', ' ').replace(/\b\w{1}/g, (match) => match.toUpperCase())} Menus
           </h3>
@@ -38,7 +38,7 @@ const IndexPage = ({ parentPath }: Props) => {
             </ul>
           </div>
 
-          <div className="flex justify-center fixed bottom-2 left-0 right-0 lg:ml-[300px]">
+          <div className="flex justify-self-center absolute -bottom-40 left-0 right-0">
             <img src={yayaBrand} alt="YaYa Wallet" width={'120px'} />
           </div>
         </div>
