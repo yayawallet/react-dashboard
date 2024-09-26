@@ -44,7 +44,7 @@ const PhoneNumber = () => {
     validationSchema: Yup.object().shape({
       phone: Yup.string()
         .matches(
-          /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
+          /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^(9|7)\d{8}$)/, // Ethiopian phone number
           'Invalid phone number'
         )
         .required('phone number is required'),
@@ -99,7 +99,6 @@ const PhoneNumber = () => {
                 const target = e.target as HTMLInputElement;
                 target.value =
                   target.value[0] === '0' ? target.value.slice(0, 10) : target.value.slice(0, 9);
-                target.value.length > 8 && formik.setTouched({ phone: true });
               }}
               autoFocus
               id="phone"
