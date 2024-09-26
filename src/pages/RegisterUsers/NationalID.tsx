@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
@@ -6,18 +6,16 @@ import InlineNotification from '../../components/InlineNotification';
 import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
 import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
+import { useOutlet } from 'react-router-dom';
 
 const NationalID = () => {
+  const outlet = useOutlet();
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
   const [OTPSent, setOTPSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setStore({});
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -60,6 +58,7 @@ const NationalID = () => {
   });
 
   if (OTPSent) return <VerifyOTP />;
+  if (outlet) return outlet;
 
   return (
     <div>

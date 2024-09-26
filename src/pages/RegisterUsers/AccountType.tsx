@@ -2,10 +2,19 @@ import { Link, useOutlet } from 'react-router-dom';
 import { useContext } from 'react';
 import { RegistrationContext } from './Index';
 
-const AccountType = () => {
+interface Props {
+  onFinish?: () => void;
+}
+
+const AccountType = ({ onFinish }: Props) => {
   const outlet = useOutlet();
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
+
+  const handleNavigate = (path: string) => {
+    setStore({ ...store, accountType: path });
+    if (onFinish) onFinish();
+  };
 
   if (store?.accountType === 'level-two' || store?.accountType === 'business') return outlet;
 
@@ -18,7 +27,7 @@ const AccountType = () => {
             <Link
               to="level-two"
               className="inline-block py-2 px-6 w-full"
-              onClick={() => setStore({ ...store, accountType: 'level-two' })}
+              onClick={() => handleNavigate('level-two')}
             >
               Level-two Account
             </Link>
@@ -28,7 +37,7 @@ const AccountType = () => {
             <Link
               to="business"
               className="inline-block py-2 px-6 w-full"
-              onClick={() => setStore({ ...store, accountType: 'business' })}
+              onClick={() => handleNavigate('business')}
             >
               Business Account
             </Link>

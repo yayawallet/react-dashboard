@@ -294,10 +294,11 @@ const CreateAccount = () => {
   const handleClickBack = () => {
     if (currentStep === 1) return;
     setCurrentStep((prev) => prev - 1);
+    setErrorMessage('');
   };
 
   if (registeredAccountName) {
-    return (
+    registeredAccountName && (
       <div className="flex flex-col gap-6 justify-center items-center mb-20">
         <div className="mb-6 self-stretch">
           <InlineNotification
@@ -332,7 +333,7 @@ const CreateAccount = () => {
   }
 
   return (
-    <div className="page-containerr">
+    <div>
       {errorMessage && <InlineNotification type="error" info={errorMessage} />}
 
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
@@ -346,7 +347,7 @@ const CreateAccount = () => {
         onSubmit={formik.handleSubmit}
         autoComplete="off"
       >
-        <div className="relative mt-2 mb-2 max-w-[600px] mx-auto">
+        <div className="relative mt-2 mb-0.5 max-w-[600px] mx-auto">
           <Stepper totalSteps={totalSteps} currentStep={currentStep} />
         </div>
 
@@ -531,7 +532,7 @@ const CreateAccount = () => {
                 }
                 id="address"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="new-address"
+                placeholder="Address"
                 disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.address}

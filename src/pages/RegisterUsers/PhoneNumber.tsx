@@ -4,18 +4,16 @@ import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
+import { useOutlet } from 'react-router-dom';
 
 const PhoneNumber = () => {
+  const outlet = useOutlet();
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
   const [goNextStep, setGoNextStep] = useState(false);
   const [isCheckingPhone, setIsCheckingPhone] = useState(false);
   const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    setStore({});
-  }, []);
 
   const handlePhoneNumberLookup = (number: string) => {
     setIsNewUser(null);
@@ -64,11 +62,13 @@ const PhoneNumber = () => {
         registrationMethod: 'phoneNumber',
       });
 
+      formik.resetForm();
       setGoNextStep(true);
     },
   });
 
-  if (goNextStep) return <AccountType />;
+  if (goNextStep) return <AccountType onFinish={() => setGoNextStep(false)} />;
+  if (outlet) return outlet;
 
   return (
     <div>
@@ -97,7 +97,9 @@ const PhoneNumber = () => {
               type="number"
               onInput={(e) => {
                 const target = e.target as HTMLInputElement;
-                target.value = target.value.slice(0, 10);
+                target.value =
+                  target.value[0] === '0' ? target.value.slice(0, 10) : target.value.slice(0, 9);
+                target.value.length > 8 && formik.setTouched({ phone: true });
               }}
               autoFocus
               id="phone"
