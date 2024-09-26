@@ -12,6 +12,7 @@ import approvedIcon from '../../assets/approve-checked.gif';
 import { Link } from 'react-router-dom';
 import { suggestedUsername } from '../../utils/suggestedUsername';
 import { debounce } from 'lodash';
+import PageLoading from '../../components/ui/PageLoading';
 
 const CreateAccount = () => {
   // @ts-ignore
@@ -297,17 +298,25 @@ const CreateAccount = () => {
     setErrorMessage('');
   };
 
+  if (currentStep === totalSteps && isLoading)
+    return (
+      <div>
+        <PageLoading />
+        <p className="text-center p-2 text-yayaBrand-900">Account Creation in Progress...</p>
+      </div>
+    );
+
   if (registeredAccountName) {
-    registeredAccountName && (
+    return (
       <div className="flex flex-col gap-6 justify-center items-center mb-20">
-        <div className="mb-6 self-stretch">
+        <div className="self-stretch">
           <InlineNotification
             type="success"
             customType="Account created successfully"
             info={`account name: ${registeredAccountName}`}
           />
         </div>
-        <div className="flex flex-wrap justify-center items-center gap-8 mb-6">
+        <div className="flex flex-wrap justify-center items-center gap-8">
           <div className="flex flex-col items-center">
             <img src={userPhoto} className="h-28 w-28 object-cover rounded-full" alt="" />
             <div className="text-center text-gray-600 px-2 pb-0.5 text-sm rounded">
@@ -316,13 +325,13 @@ const CreateAccount = () => {
             </div>
           </div>
 
-          <img src={approvedIcon} className="h-24" alt="" />
+          <img src={approvedIcon} className="h-20" alt="" />
         </div>
 
         <Link to="/register-user">
           <button
             type="button"
-            className={`text-white mr-28 bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            className={`text-white mr-28 bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-5 py-2 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
             Register another user

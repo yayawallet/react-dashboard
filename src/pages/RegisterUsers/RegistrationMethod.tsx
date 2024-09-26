@@ -1,5 +1,6 @@
 import { useOutlet, Link } from 'react-router-dom';
 import faydaLogo from '../../assets/fayda-logo.png';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 const RegistrationMethod = () => {
   const outlet = useOutlet();
@@ -27,6 +28,8 @@ const RegistrationMethod = () => {
           </Link>
         </div>
       </div>
+
+      <YaYaLogoComponent />
     </div>
   );
 };

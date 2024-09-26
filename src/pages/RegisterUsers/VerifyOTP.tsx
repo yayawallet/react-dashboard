@@ -8,6 +8,7 @@ import { formatTime } from '../../utils/formatTime';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
 import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 const VerifyOTP = () => {
   // @ts-ignore
@@ -145,6 +146,8 @@ const VerifyOTP = () => {
           </button>
         </div>
       </form>
+
+      <YaYaLogoComponent />
     </div>
   );
 };

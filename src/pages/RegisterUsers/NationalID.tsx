@@ -7,6 +7,7 @@ import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
 import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
 import { useOutlet } from 'react-router-dom';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 const NationalID = () => {
   const outlet = useOutlet();
@@ -106,6 +107,8 @@ const NationalID = () => {
           </button>
         </div>
       </form>
+
+      <YaYaLogoComponent />
     </div>
   );
 };

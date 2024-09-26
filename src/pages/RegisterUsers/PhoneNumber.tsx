@@ -5,6 +5,7 @@ import { authAxios } from '../../api/axios';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
 import { useOutlet } from 'react-router-dom';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 const PhoneNumber = () => {
   const outlet = useOutlet();
@@ -136,6 +137,8 @@ const PhoneNumber = () => {
           </button>
         </div>
       </form>
+
+      <YaYaLogoComponent />
     </div>
   );
 };

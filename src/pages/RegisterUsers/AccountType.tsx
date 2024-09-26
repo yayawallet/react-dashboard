@@ -1,6 +1,7 @@
 import { Link, useOutlet } from 'react-router-dom';
 import { useContext } from 'react';
 import { RegistrationContext } from './Index';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 interface Props {
   onFinish?: () => void;
@@ -44,6 +45,8 @@ const AccountType = ({ onFinish }: Props) => {
           </li>
         </ul>
       </div>
+
+      <YaYaLogoComponent />
     </div>
   );
 };
