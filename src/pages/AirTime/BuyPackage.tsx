@@ -82,7 +82,7 @@ const BuyPackage = ({ phoneNumber, isInvalidNumber }: Props) => {
         <div className="flex self-start border border-yayaBrand-100 sm:flex-col flex-wrap gap-x-2 gap-y-5 rounded-lg p-3 bg-yayaBrand-50">
           {categories?.map((c) => (
             <div
-              className={`border-t border-yayaBrand-100 shadow-sm shadow-yayaBrand-200 text-sm rounded-lg text-yayaBrand-900 font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-yayaBrand-50 cursor-pointer ${selectedCategory == c ? 'bg-yayaBrand-600 text-white border-yayaBrand-600 hover:bg-yayaBrand-700' : 'bg-white'}`}
+              className={`border-t border-yayaBrand-100 shadow-sm shadow-yayaBrand-200 text-sm rounded-lg font-semibold md:w-40 p-2 flex justify-center text-center hover:bg-yayaBrand-50 cursor-pointer ${selectedCategory == c ? 'bg-yayaBrand-600 text-white border-yayaBrand-600 hover:bg-yayaBrand-700' : 'bg-white text-yayaBrand-900'}`}
               key={c}
               onClick={() => setSelectedCategory(c)}
             >
