@@ -98,8 +98,15 @@ const PhoneNumber = () => {
               type="number"
               onInput={(e) => {
                 const target = e.target as HTMLInputElement;
+                const phoneNumber = target.value;
                 target.value =
-                  target.value[0] === '0' ? target.value.slice(0, 10) : target.value.slice(0, 9);
+                  phoneNumber[0] === '0' ? phoneNumber.slice(0, 10) : phoneNumber.slice(0, 9);
+
+                if (phoneNumber[0] !== '0' && phoneNumber[0] !== '7' && phoneNumber[0] !== '9')
+                  formik.setTouched({ phone: true });
+                else if (phoneNumber[0] === '0' && phoneNumber.length === 10)
+                  formik.setTouched({ phone: true });
+                else if (phoneNumber.length === 9) formik.setTouched({ phone: true });
               }}
               autoFocus
               id="phone"
