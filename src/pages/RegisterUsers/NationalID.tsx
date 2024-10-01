@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
@@ -6,18 +6,17 @@ import InlineNotification from '../../components/InlineNotification';
 import VerifyOTP from './VerifyOTP';
 import { RegistrationContext } from './Index';
 import LoadingSpinnerButton from '../../components/ui/LoadingSpinnerButton';
+import { useOutlet } from 'react-router-dom';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 const NationalID = () => {
+  const outlet = useOutlet();
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
   const [OTPSent, setOTPSent] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setStore({});
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -60,6 +59,7 @@ const NationalID = () => {
   });
 
   if (OTPSent) return <VerifyOTP />;
+  if (outlet) return outlet;
 
   return (
     <div>
@@ -80,9 +80,10 @@ const NationalID = () => {
               FIN/FCN
             </label>
             <input
-              type="number"
+              type="text"
               autoFocus
               id="fin"
+              maxLength={16}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Fayda Indentification Number"
               autoComplete="off"
@@ -106,6 +107,8 @@ const NationalID = () => {
           </button>
         </div>
       </form>
+
+      <YaYaLogoComponent />
     </div>
   );
 };

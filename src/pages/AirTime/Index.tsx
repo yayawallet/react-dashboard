@@ -7,20 +7,47 @@ const AirTime = () => {
   const [topupFor, setTopupFor] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('airtime');
-  const [errorMessage, setErrorMessage] = useState<string | boolean>(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const { data: ownProfile } = useGetData('/user/profile');
   const ownPhoneNumber = ownProfile ? ownProfile.phone : '';
 
+  const isValidPhoneNumber = (phoneNumber: string) => {
+    return /(^09\d{8}$|^9\d{8}$)/.test(phoneNumber);
+  };
+
   useEffect(() => {
+    setErrorMessage('');
+
     if (topupFor === 'self') {
-      setErrorMessage(false);
       setPhoneNumber(ownPhoneNumber);
-    } else if (topupFor === 'other') {
+    } else if (topupFor === 'other' && phoneNumber === ownPhoneNumber) {
       setPhoneNumber('');
-      setErrorMessage(true);
     }
   }, [topupFor]);
+
+  useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+    if (phoneNumber) {
+      setErrorMessage('');
+
+      timeoutId = setTimeout(() => {
+        const isValidPhone = isValidPhoneNumber(phoneNumber);
+
+        setErrorMessage(isValidPhone ? '' : 'Invalid phone number');
+      }, 1000);
+    } else {
+      // Reset state if input is empty
+      setErrorMessage('');
+    }
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [phoneNumber]);
 
   return (
     <div className="page-container">
@@ -65,27 +92,28 @@ const AirTime = () => {
           </div>
 
           <div className="relative w-full mb-1">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 text-gray-600 pointer-events-none">
               <span>+251</span>
             </div>
             <input
               type="number"
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                target.value =
+                  target.value[0] === '0' ? target.value.slice(0, 10) : target.value.slice(0, 9);
+
+                setPhoneNumber(target.value);
+                setTopupFor('other');
+              }}
               id="phone-number"
               autoComplete="off"
               maxLength={10}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-yayaBrand-500 focus:border-yayaBrand-500 block w-full ps-14 p-2.5 outline-none"
               placeholder="Phone number"
               value={topupFor === 'self' ? ownPhoneNumber : phoneNumber}
-              onChange={(e) => {
-                setPhoneNumber(e.currentTarget.value);
-                setTopupFor('other');
-                /(^09\d{8}$|^9\d{8}$)/.test(e.currentTarget.value)
-                  ? setErrorMessage('')
-                  : setErrorMessage('Invalid phone number');
-              }}
             />
           </div>
-          <span className="block text-red-600 text-sm pl-10">{errorMessage}</span>
+          <span className="block text-red-600 font-medium text-sm pl-10">{errorMessage}</span>
         </div>
 
         <div className="flex ms-5 gap-x-4 my-4 px-4a mb-10">
@@ -108,12 +136,12 @@ const AirTime = () => {
       {selectedCategory == 'airtime' ? (
         <BuyAirTime
           phoneNumber={phoneNumber.startsWith('0') ? phoneNumber.slice(1) : phoneNumber}
-          isInvalidNumber={errorMessage ? true : false}
+          isInvalidNumber={!isValidPhoneNumber(phoneNumber)}
         />
       ) : (
         <BuyPackage
           phoneNumber={phoneNumber.startsWith('0') ? phoneNumber.slice(1) : phoneNumber}
-          isInvalidNumber={errorMessage ? true : false}
+          isInvalidNumber={!isValidPhoneNumber(phoneNumber)}
         />
       )}
     </div>

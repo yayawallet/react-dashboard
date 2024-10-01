@@ -20,7 +20,7 @@ const BackButton = ({ gotoPath, displayText }: Props) => {
       onClick={handleClick}
     >
       <div
-        className="flex items-center justify-center pr-2 gap-x-1"
+        className="flex items-center justify-center pr-2 gap-x-1 text-sm sm:text-base"
         style={{ letterSpacing: '0.3px' }}
       >
         <span className="pt-0.5">

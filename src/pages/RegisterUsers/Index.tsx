@@ -4,14 +4,9 @@ import yayaBrand from '../../assets/yayawallet-brand.svg';
 import { useGetData } from '../../hooks/useSWR';
 import BackButton from '../../components/ui/BackButton';
 import PageLoading from '../../components/ui/PageLoading';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 export const RegistrationContext = createContext(null);
-
-const YayaLogoComponent = (
-  <div className="flex justify-center fixed z-10 bottom-2 left-0 right-0 lg:ml-[300px]">
-    <img src={yayaBrand} alt="YaYa Wallet" width={'120px'} />
-  </div>
-);
 
 const Index = () => {
   const [store, setStore] = useState({});
@@ -21,7 +16,7 @@ const Index = () => {
     return (
       <>
         <PageLoading />
-        {YayaLogoComponent}
+        <YaYaLogoComponent />
       </>
     );
 
@@ -39,7 +34,7 @@ const Index = () => {
 
         <BackButton gotoPath="/" displayText="Back to Home" />
 
-        {YayaLogoComponent}
+        <YaYaLogoComponent />
       </div>
     );
 
@@ -48,10 +43,6 @@ const Index = () => {
     <RegistrationContext.Provider value={{ store, setStore }}>
       <div className="page-container">
         <RegistrationMethod />
-
-        <div className="flex justify-center mt-20">
-          <img src={yayaBrand} alt="YaYa Wallet" width={'120px'} />
-        </div>
       </div>
     </RegistrationContext.Provider>
   );

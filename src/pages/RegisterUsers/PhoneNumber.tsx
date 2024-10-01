@@ -4,18 +4,17 @@ import * as Yup from 'yup';
 import { authAxios } from '../../api/axios';
 import { RegistrationContext } from './Index';
 import AccountType from './AccountType';
+import { useOutlet } from 'react-router-dom';
+import YaYaLogoComponent from './YaYaLogoComponent';
 
 const PhoneNumber = () => {
+  const outlet = useOutlet();
   // @ts-ignore
   const { store, setStore } = useContext(RegistrationContext);
 
   const [goNextStep, setGoNextStep] = useState(false);
   const [isCheckingPhone, setIsCheckingPhone] = useState(false);
   const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    setStore({});
-  }, []);
 
   const handlePhoneNumberLookup = (number: string) => {
     setIsNewUser(null);
@@ -46,7 +45,7 @@ const PhoneNumber = () => {
     validationSchema: Yup.object().shape({
       phone: Yup.string()
         .matches(
-          /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^9\d{8}$)/, // Ethiopian phone number
+          /(^\+?251\d{9}$)|(^0(9|7)\d{8}$|^(9|7)\d{8}$)/, // Ethiopian phone number
           'Invalid phone number'
         )
         .required('phone number is required'),
@@ -64,11 +63,13 @@ const PhoneNumber = () => {
         registrationMethod: 'phoneNumber',
       });
 
+      formik.resetForm();
       setGoNextStep(true);
     },
   });
 
-  if (goNextStep) return <AccountType />;
+  if (goNextStep) return <AccountType onFinish={() => setGoNextStep(false)} />;
+  if (outlet) return outlet;
 
   return (
     <div>
@@ -86,15 +87,31 @@ const PhoneNumber = () => {
             <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
               Phone
             </label>
+
+            <div className="relative">
+              <span className="absolute top-3 left-2 text-sm text-gray-500 pointer-events-none">
+                +251
+              </span>
+            </div>
+
             <input
-              type="text"
+              type="number"
+              onInput={(e) => {
+                const target = e.target as HTMLInputElement;
+                const phoneNumber = target.value;
+                target.value =
+                  phoneNumber[0] === '0' ? phoneNumber.slice(0, 10) : phoneNumber.slice(0, 9);
+
+                if (phoneNumber[0] !== '0' && phoneNumber[0] !== '7' && phoneNumber[0] !== '9')
+                  formik.setTouched({ phone: true });
+                else if (phoneNumber[0] === '0' && phoneNumber.length === 10)
+                  formik.setTouched({ phone: true });
+                else if (phoneNumber.length === 9) formik.setTouched({ phone: true });
+              }}
               autoFocus
               id="phone"
-              maxLength={10}
-              pattern="[0-9]{0,10}"
-              title="Enter only digits (0-9)"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="phone number"
+              className="pl-12 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              placeholder="Phone number"
               autoComplete="off"
               onChange={(e) => {
                 formik.handleChange(e);
@@ -127,6 +144,8 @@ const PhoneNumber = () => {
           </button>
         </div>
       </form>
+
+      <YaYaLogoComponent />
     </div>
   );
 };
