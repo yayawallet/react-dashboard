@@ -17,4 +17,4 @@ An example dashboard using React + TypeScrpipt and Tailwind CSS
 ## Usage
 
 1. Run the development server: `npm run dev`
-2. Open your browser and visit: `http://localhost:3030`
+2. Open your browser and visit: `http://localhost:3000`
