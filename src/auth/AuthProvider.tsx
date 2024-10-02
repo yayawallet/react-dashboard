@@ -39,7 +39,13 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const login = (accessToken: string, refreshToken: string, user: UserType) => {
     const { user_id, username, roles } = user;
-    const user_role = roles?.length ? roles[0].toLowerCase() : '';
+
+    const user_role =
+      roles?.length && roles[0]?.toLowerCase() !== 'admin'
+        ? roles[0].toLowerCase()
+        : roles?.length >= 2
+          ? roles[1].toLowerCase()
+          : '';
 
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
