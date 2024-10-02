@@ -27,16 +27,6 @@ const DefaultHeader = () => {
               Help Center
             </Link>
           </li>
-
-          <li className="hover:bg-slate-50 flex items-end">
-            <Link
-              to="/about-yaya"
-              aria-label="About YaYa"
-              className="font-semibold text-blue-900 px-4 py-3"
-            >
-              About YaYa
-            </Link>
-          </li>
         </ul>
       </header>
       <Outlet />
