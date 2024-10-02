@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Pagination from '../../components/Pagination';
 import SearchBar from '../../components/SearchBar';
-import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { TransactionType } from '../../models';
 import { useGetData, usePostData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
@@ -66,13 +65,97 @@ const TransactionList = () => {
         <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
-          <div className="flex flex-wrap justify-between items-center m-4">
-            <div className="w-64">
-              <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+          <div className="">
+            <div className="flex flex-wrap justify-between items-center m-4">
+              <div className="w-64">
+                <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+              </div>
+
+              <div onClick={handleRefresh}>
+                <RefreshButton />
+              </div>
             </div>
 
-            <div onClick={handleRefresh}>
-              <RefreshButton />
+            <div className="flex items-center justify-center p-4">
+              <button
+                id="dropdownDefault"
+                data-dropdown-toggle="dropdown"
+                className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-yayaBrand-600 dark:hover:bg-yayaBrand-700 dark:focus:ring-yayaBrand-800"
+                type="button"
+              >
+                Filter by date
+                <svg
+                  className="w-4 h-4 ml-2"
+                  aria-hidden="true"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+
+              <div
+                id="dropdown"
+                className="z-10 hiddenn w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
+              >
+                <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
+                <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
+                  <li className="flex items-center">
+                    <input
+                      id="canon"
+                      type="checkbox"
+                      value=""
+                      className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-yayaBrand-600 focus:ring-yayaBrand-500 dark:focus:ring-yayaBrand-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+
+                    <label
+                      htmlFor="canon"
+                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
+                    >
+                      Canon (49)
+                    </label>
+                  </li>
+
+                  <li className="flex items-center">
+                    <input
+                      id="microsoft"
+                      type="checkbox"
+                      value=""
+                      className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-yayaBrand-600 focus:ring-yayaBrand-500 dark:focus:ring-yayaBrand-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+
+                    <label
+                      htmlFor="microsoft"
+                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
+                    >
+                      Microsoft (45)
+                    </label>
+                  </li>
+
+                  <li className="flex items-center">
+                    <input
+                      id="razor"
+                      type="checkbox"
+                      value=""
+                      className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-yayaBrand-600 focus:ring-yayaBrand-500 dark:focus:ring-yayaBrand-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                    />
+
+                    <label
+                      htmlFor="razor"
+                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
+                    >
+                      Razor (49)
+                    </label>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
@@ -116,7 +199,10 @@ const TransactionList = () => {
                             type="button"
                             className="py-0.5 px-3 text text-yayaBrand-900 focus:outline-none bg-white rounded border border-yayaBrand-200 hover:bg-yayaBrand-100 hover:text-yayaBrand-700 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
                           >
-                            <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
+                            <a
+                              href={`${import.meta.env.VITE_TRANSACTION_INVOICE_URL}/${t.id}`}
+                              target="_blank"
+                            >
                               Print
                             </a>
                           </button>
