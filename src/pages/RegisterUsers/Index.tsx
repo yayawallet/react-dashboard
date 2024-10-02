@@ -1,6 +1,5 @@
 import { createContext, useState } from 'react';
 import RegistrationMethod from './RegistrationMethod';
-import yayaBrand from '../../assets/yayawallet-brand.svg';
 import { useGetData } from '../../hooks/useSWR';
 import BackButton from '../../components/ui/BackButton';
 import PageLoading from '../../components/ui/PageLoading';
