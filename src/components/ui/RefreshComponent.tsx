@@ -1,4 +1,4 @@
-import { DotLoaderLarge } from './DotLoader';
+import { DotLoaderMedium } from './DotLoader';
 
 interface Props {
   isRefreshing: boolean;
@@ -13,9 +13,9 @@ const RefreshComponent = ({ isRefreshing }: Props) => {
           transform: 'translate(-50%)',
         }}
       >
-        <div className="bg-white shadow rounded-full p-1">
-          <div className="translate-y-1">
-            <DotLoaderLarge />
+        <div className="bg-white shadow shadow-yayaBrand-400 rounded-full p-1">
+          <div className="translate-y-0.5">
+            <DotLoaderMedium />
           </div>
         </div>
         {/* <span

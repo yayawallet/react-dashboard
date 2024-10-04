@@ -113,7 +113,6 @@ const ListBill = () => {
                       <th className="text-left pl-3 py-3 font-medium">ID</th>
                       <th className="text-left pl-3 py-3 font-medium">Client</th>
                       <th className="text-left pl-3 py-3 font-medium">Cluster</th>
-                      <th className="text-left pl-3 py-3 font-medium">Customer Account</th>
                       <th className="text-left pl-3 py-3 font-medium">Bill ID</th>
                       <th className="text-left pl-3 py-3 font-medium">Amount</th>
                       <th className="text-left pl-3 py-3 font-medium">Status</th>
@@ -128,7 +127,7 @@ const ListBill = () => {
                         <tr
                           key={bill.id}
                           className={`text-nowrap ${bill.status === 'PENDING' && new Date(bill.due_at) < new Date() ? 'bg-red-100 hover:bg-red-100' : 'hover:bg-gray-100'}`}
-                          title={`${bill.client_yaya_account.name}\nClient yaya account: ${bill.client_yaya_account.account}\n${bill.bill_code && `Bill code: ${bill.bill_code} \n`}${bill.bill_season && `Bill season: ${bill.bill_season} \n`}${bill.description && `Description: ${bill.description}\n`}${bill.customer_id && `Customer Id: ${bill.customer_id}\n`}${bill.phone && `Phone: ${bill.phone}\n`}${bill.email && `Email: ${bill.email}`}`}
+                          title={`${bill.client_yaya_account.name}\nClient yaya account: ${bill.client_yaya_account.account}\n${bill.customer_yaya_account?.account ? `Customer Account: ${bill.customer_yaya_account?.account} \n` : ''}${bill.bill_code && `Bill code: ${bill.bill_code} \n`}${bill.bill_season && `Bill season: ${bill.bill_season} \n`}${bill.description && `Description: ${bill.description}\n`}${bill.customer_id && `Customer Id: ${bill.customer_id}\n`}${bill.phone && `Phone: ${bill.phone}\n`}${bill.email && `Email: ${bill.email}`}`}
                         >
                           <td
                             title={bill.id}
@@ -149,14 +148,6 @@ const ListBill = () => {
 
                           <td className="border-b border-gray-200 pl-3 py-3">
                             {bill.cluster ? capitalize(bill.cluster) : ''}
-                          </td>
-
-                          <td className="border-b border-gray-200 pl-3 py-3">
-                            {bill.customer_yaya_account ? (
-                              bill.customer_yaya_account?.account
-                            ) : (
-                              <span className="text-gray-500">unavailable</span>
-                            )}
                           </td>
 
                           <td className="border-b border-gray-200 pl-3 py-3">{bill.bill_id}</td>
