@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Pagination from '../../components/Pagination';
 import SearchBar from '../../components/SearchBar';
 import { TransactionType } from '../../models';
@@ -12,7 +12,8 @@ import { MdCallMissedOutgoing } from 'react-icons/md';
 import RefreshComponent from '../../components/ui/RefreshComponent';
 import { IoIosArrowUp } from 'react-icons/io';
 import { IoIosArrowForward } from 'react-icons/io';
-import { filter } from 'lodash';
+import { PieChart, Pie, Cell } from 'recharts';
+import { DotLoaderMedium } from '../../components/ui/DotLoader';
 
 const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -125,7 +126,7 @@ const TransactionList = () => {
       const currentTime = await getCurrentTime();
       const oneWeekAgo = new Date(currentTime / 1000 - 7 * 24 * 60 * 60);
 
-      setFilterEndTime(oneWeekAgo.getTime());
+      setFilterStartTime(oneWeekAgo.getTime());
       return;
     }
 
@@ -145,7 +146,7 @@ const TransactionList = () => {
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="">
-            <div className="flex flex-wrap justify-between items-center m-4">
+            <div className="flex flex-wrap gap-2 justify-between items-center m-4">
               <div className="w-64">
                 <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
               </div>
@@ -155,10 +156,10 @@ const TransactionList = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-end my-6 ml-4 gap-8">
+            <div className="flex flex-wrap items-end mt-6 mb-10 ml-4 gap-8">
               <div className="flex flex-col items-center gap-2">
                 <div className="text-gray-500 self-start">Filter by date</div>
-                <div className="inline-flex px-4 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
+                <div className="inline-flex flex-wrap px-4 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
                   <button
                     className={`${filterValue === '1D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
                     onClick={() => handleFilterByDate('1D')}
@@ -197,7 +198,7 @@ const TransactionList = () => {
                 </div>
               </div>
 
-              <div className="flex items-end gap-3">
+              <div className="flex flex-wrap items-end gap-3">
                 <button
                   className={`${filterValue === 'custom' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
                   onClick={() => {
@@ -212,7 +213,9 @@ const TransactionList = () => {
                   </span>
                 </button>
 
-                <div className={`${openCustomFilter ? '' : 'hidden'} flex items-center gap-4`}>
+                <div
+                  className={`${openCustomFilter ? '' : 'hidden'} flex flex-wrap items-center gap-4`}
+                >
                   <div className="">
                     <label htmlFor="start" className="block mb-1 ml-2 text-sm font-medium">
                       From
@@ -254,60 +257,116 @@ const TransactionList = () => {
               </div>
             </div>
 
-            <div className={`${filterValue ? '' : 'hidden'} border p-2.5 mb-8 rounded-lg mx-4`}>
-              <div className="text-gray-600 border-4 rounded-lg py-2 px-4 inline-block">
-                <h3 className="text-xl font-semibold mb-2">
-                  Transactions with in{' '}
-                  {filterValue === '1D'
-                    ? '1 Day'
-                    : filterValue === '3D'
-                      ? '3 Days'
-                      : filterValue === '1W'
-                        ? '1 Week'
-                        : filterValue === '1M'
-                          ? '1 Month'
-                          : filterValue === 'custom'
-                            ? `Custom Time`
-                            : 'All Time'}
-                </h3>
+            <div className={`${filterValue ? '' : 'hidden'}  px-2.5 mb-10 rounded-lg md:mx-4`}>
+              <h3 className="text-xl font-semibold mb-2">
+                Transactions with in{' '}
+                {filterValue === '1D' ? (
+                  '1 Day'
+                ) : filterValue === '3D' ? (
+                  '3 Days'
+                ) : filterValue === '1W' ? (
+                  '1 Week'
+                ) : filterValue === '1M' ? (
+                  '1 Month'
+                ) : filterValue === 'custom' ? (
+                  <span className="text-gray-600 font-normal text-lg">{`${customFilterStartTime ? formatDate(new Date(customFilterStartTime * 1000)) : 'custom time'} - ${customFilterEndTime ? formatDate(new Date(customFilterEndTime * 1000)) : 'custom time'}`}</span>
+                ) : (
+                  'All Time'
+                )}
+              </h3>
 
-                <div>
-                  Total Incoming:{' '}
-                  <span className="text-gray-800 text-xl">
-                    {isLoading ? (
-                      '...'
-                    ) : totalIncoming ? (
-                      <span>
-                        {totalIncoming} <span className="text-gray-500 text-base">ETB</span>
-                      </span>
-                    ) : (
-                      '...'
-                    )}
-                  </span>
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="text-gray-600 border-4 rounded-lg py-2 px-4 inline-block">
+                  <div>
+                    Total Incoming:{' '}
+                    <span className="text-gray-800 text-lg">
+                      {isLoading ? (
+                        '...'
+                      ) : totalIncoming ? (
+                        <span>
+                          {totalIncoming} <span className="text-gray-500 text-base">ETB</span>
+                        </span>
+                      ) : (
+                        '--'
+                      )}
+                    </span>
+                  </div>
+                  <div>
+                    Total Outgoing:{' '}
+                    <span className="text-gray-800 text-lg">
+                      {isLoading ? (
+                        '...'
+                      ) : totalOutgoing ? (
+                        <span>
+                          {totalOutgoing} <span className="text-gray-500 text-base">ETB</span>
+                        </span>
+                      ) : (
+                        '--'
+                      )}
+                    </span>
+                  </div>
+                  <div>
+                    Net:{' '}
+                    <span className="text-gray-800 text-lg">
+                      {isLoading ? (
+                        '...'
+                      ) : totalOutgoing - totalIncoming ? (
+                        <span>
+                          {totalOutgoing - totalIncoming}{' '}
+                          <span className="text-gray-500 text-base">ETB</span>
+                        </span>
+                      ) : (
+                        '--'
+                      )}
+                    </span>
+                  </div>
+                  <div>
+                    Total Number of Transactions:{' '}
+                    <span className="text-gray-800 text-xl">
+                      {isLoading ? '...' : totalTransactions}
+                    </span>{' '}
+                    transactions
+                  </div>
                 </div>
-                <div>
-                  Total Outgoing:{' '}
-                  <span className="text-gray-800 text-xl">
-                    {isLoading ? (
-                      '...'
-                    ) : totalOutgoing ? (
-                      <span>
-                        {totalOutgoing} <span className="text-gray-500 text-base">ETB</span>
-                      </span>
-                    ) : (
-                      '...'
-                    )}
-                  </span>
-                </div>
-                <div>
-                  Total Number of Transactions:{' '}
-                  <span className="text-gray-800 text-xl">
-                    {isLoading ? '...' : totalTransactions}
-                  </span>
+
+                <div
+                  className={`${totalIncoming && totalOutgoing ? '' : 'hidden'} overflow-x-auto`}
+                >
+                  {isLoading ? (
+                    <div className="w-[80vw] max-w-[460px] h-[160px] flex self-center justify-center items-center">
+                      <DotLoaderMedium />
+                    </div>
+                  ) : (
+                    <PieChart width={460} height={160}>
+                      <Pie
+                        data={[
+                          {
+                            name: 'Total Incoming',
+                            value: isLoading ? 0 : totalIncoming,
+                          },
+                          {
+                            name: 'Total Outgoing',
+                            value: isLoading ? 0 : totalOutgoing,
+                          },
+                        ]}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={70}
+                        label={({ name, value }) =>
+                          `${name} (${((value / (totalIncoming + totalOutgoing)) * 100).toFixed(0)}%)`
+                        }
+                        animationDuration={1000}
+                        fill="#8884d8"
+                      >
+                        <Cell fill={'#12abed'} />
+                        <Cell fill={'#ff6242'} />
+                      </Pie>
+                    </PieChart>
+                  )}
                 </div>
               </div>
-
-              <div className=""></div>
             </div>
           </div>
 
