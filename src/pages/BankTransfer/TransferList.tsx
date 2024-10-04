@@ -8,9 +8,8 @@ import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
 import Pagination from '../../components/Pagination';
 import RefreshComponent from '../../components/ui/RefreshComponent';
-import { IoIosArrowForward, IoIosArrowUp } from 'react-icons/io';
-import { PieChart, Pie, Cell } from 'recharts';
-import { DotLoaderMedium } from '../../components/ui/DotLoader';
+import FilterByDate from '../../components/FilterByDate';
+import FilterByDateResult from '../../components/FilterByDateResult';
 
 const TransferList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,6 +58,14 @@ const TransferList = () => {
     setIsRefreshing(false);
   };
 
+  const handleCustomStartTime = (time: number) => {
+    setCustomFilterStartTime(time);
+  };
+
+  const handleCustomEndTime = (time: number) => {
+    setCustomFilterEndTime(time);
+  };
+
   const getCurrentTime = async () => {
     // const { data: { time: currentTime } = {} } = await axios.get(
     //   `${import.meta.env.VITE_GET_TIME_URL}`
@@ -81,6 +88,7 @@ const TransferList = () => {
     if (!value) return; // If no filter is selected, clear filter
 
     if (value === 'custom') {
+      setOpenCustomFilter(!openCustomFilter);
       setFilterStartTime(customFilterStartTime);
       setFilterEndTime(customFilterEndTime);
 
@@ -135,218 +143,26 @@ const TransferList = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-end mt-6 mb-10 ml-4 gap-8">
-              <div className="flex flex-col items-center gap-2">
-                <div className="text-gray-500 self-start">Filter by date</div>
-                <div className="inline-flex flex-wrap px-4 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
-                  <button
-                    className={`${filterValue === '1D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-                    onClick={() => handleFilterByDate('1D')}
-                    disabled={!transferListAll}
-                  >
-                    1D
-                  </button>
-                  <button
-                    className={`${filterValue === '3D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-                    onClick={() => handleFilterByDate('3D')}
-                    disabled={!transferListAll}
-                  >
-                    3D
-                  </button>
-                  <button
-                    className={`${filterValue === '1W' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-                    onClick={() => handleFilterByDate('1W')}
-                    disabled={!transferListAll}
-                  >
-                    1W
-                  </button>
-                  <button
-                    className={`${filterValue === '1M' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-                    onClick={() => handleFilterByDate('1M')}
-                    disabled={!transferListAll}
-                  >
-                    1M
-                  </button>
-                  <button
-                    className={`${filterValue === '' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-                    onClick={() => handleFilterByDate('')}
-                    disabled={!transferListAll}
-                  >
-                    All
-                  </button>
-                </div>
-              </div>
+            <FilterByDate
+              filterValue={filterValue}
+              transactionListAll={transferListAll}
+              openCustomFilter={openCustomFilter}
+              customFilterStartTime={customFilterStartTime}
+              customFilterEndTime={customFilterEndTime}
+              onFilterByDate={handleFilterByDate}
+              onCustomStartTime={handleCustomStartTime}
+              onCustomEndTime={handleCustomEndTime}
+            />
 
-              <div className="flex flex-wrap items-end gap-3">
-                <button
-                  className={`${filterValue === 'custom' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
-                  onClick={() => {
-                    setOpenCustomFilter(!openCustomFilter);
-                    handleFilterByDate('custom');
-                  }}
-                  disabled={!transferListAll}
-                >
-                  <span>Custom</span>
-                  <span className="mt-1">
-                    {openCustomFilter ? <IoIosArrowUp /> : <IoIosArrowForward />}
-                  </span>
-                </button>
-
-                <div
-                  className={`${openCustomFilter ? '' : 'hidden'} flex flex-wrap items-center gap-4`}
-                >
-                  <div className="">
-                    <label htmlFor="start" className="block mb-1 ml-2 text-sm font-medium">
-                      From
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="start"
-                      max={new Date().toISOString().replace(/:\d{2}\.\d{3}Z$/, '')}
-                      className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full px-2.5 py-1.5"
-                      onChange={(e) =>
-                        setCustomFilterStartTime(new Date(e.target.value).getTime() / 1000)
-                      }
-                    />
-                  </div>
-
-                  <div className="">
-                    <label htmlFor="end" className="block mb-1 ml-2 text-sm font-medium">
-                      To
-                    </label>
-                    <input
-                      type="datetime-local"
-                      id="end"
-                      max={new Date().toISOString().replace(/:\d{2}\.\d{3}Z$/, '')}
-                      className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full px-2.5 py-1.5"
-                      onChange={(e) =>
-                        setCustomFilterEndTime(new Date(e.target.value).getTime() / 1000)
-                      }
-                    />
-                  </div>
-
-                  <button
-                    className="self-end mb-1 text-white bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-5 pt-1 pb-1.5 text-center"
-                    disabled={customFilterStartTime === 0 && customFilterEndTime === 0}
-                    onClick={() => handleFilterByDate('custom')}
-                  >
-                    Apply
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className={`${filterValue ? '' : 'hidden'}  px-2.5 mb-10 rounded-lg md:mx-4`}>
-              <h3 className="text-xl font-semibold mb-2">
-                Transactions with in{' '}
-                {filterValue === '1D' ? (
-                  '1 Day'
-                ) : filterValue === '3D' ? (
-                  '3 Days'
-                ) : filterValue === '1W' ? (
-                  '1 Week'
-                ) : filterValue === '1M' ? (
-                  '1 Month'
-                ) : filterValue === 'custom' ? (
-                  <span className="text-gray-600 font-normal text-lg">{`${customFilterStartTime ? formatDate(new Date(customFilterStartTime * 1000)) : 'custom time'} - ${customFilterEndTime ? formatDate(new Date(customFilterEndTime * 1000)) : 'custom time'}`}</span>
-                ) : (
-                  'All Time'
-                )}
-              </h3>
-
-              <div className="flex flex-wrap items-center gap-6">
-                <div className="text-gray-600 border-4 rounded-lg py-2 px-4 inline-block">
-                  <div>
-                    Total Incoming:{' '}
-                    <span className="text-gray-800 text-lg">
-                      {isLoading ? (
-                        '...'
-                      ) : totalIncoming ? (
-                        <span>
-                          {totalIncoming} <span className="text-gray-500 text-base">ETB</span>
-                        </span>
-                      ) : (
-                        '--'
-                      )}
-                    </span>
-                  </div>
-                  <div>
-                    Total Outgoing:{' '}
-                    <span className="text-gray-800 text-lg">
-                      {isLoading ? (
-                        '...'
-                      ) : totalOutgoing ? (
-                        <span>
-                          {totalOutgoing} <span className="text-gray-500 text-base">ETB</span>
-                        </span>
-                      ) : (
-                        '--'
-                      )}
-                    </span>
-                  </div>
-                  <div>
-                    Net:{' '}
-                    <span className="text-gray-800 text-lg">
-                      {isLoading ? (
-                        '...'
-                      ) : totalOutgoing - totalIncoming ? (
-                        <span>
-                          {totalOutgoing - totalIncoming}{' '}
-                          <span className="text-gray-500 text-base">ETB</span>
-                        </span>
-                      ) : (
-                        '--'
-                      )}
-                    </span>
-                  </div>
-                  <div>
-                    Total Number of Transactions:{' '}
-                    <span className="text-gray-800 text-xl">
-                      {isLoading ? '...' : totalTransfers}
-                    </span>{' '}
-                    transactions
-                  </div>
-                </div>
-
-                <div
-                  className={`${totalIncoming && totalOutgoing ? '' : 'hidden'} overflow-x-auto`}
-                >
-                  {isLoading ? (
-                    <div className="w-[80vw] max-w-[460px] h-[160px] flex self-center justify-center items-center">
-                      <DotLoaderMedium />
-                    </div>
-                  ) : (
-                    <PieChart width={460} height={160}>
-                      <Pie
-                        data={[
-                          {
-                            name: 'Total Incoming',
-                            value: isLoading ? 0 : totalIncoming,
-                          },
-                          {
-                            name: 'Total Outgoing',
-                            value: isLoading ? 0 : totalOutgoing,
-                          },
-                        ]}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={70}
-                        label={({ name, value }) =>
-                          `${name} (${((value / (totalIncoming + totalOutgoing)) * 100).toFixed(0)}%)`
-                        }
-                        animationDuration={1000}
-                        fill="#8884d8"
-                      >
-                        <Cell fill={'#12abed'} />
-                        <Cell fill={'#ff6242'} />
-                      </Pie>
-                    </PieChart>
-                  )}
-                </div>
-              </div>
-            </div>
+            <FilterByDateResult
+              filterValue={filterValue}
+              isLoading={isLoading}
+              totalIncoming={totalIncoming}
+              totalOutgoing={totalOutgoing}
+              totalTransactions={totalTransfers}
+              customFilterStartTime={customFilterStartTime}
+              customFilterEndTime={customFilterEndTime}
+            />
           </div>
 
           {isLoading && currentPage === 1 ? (
