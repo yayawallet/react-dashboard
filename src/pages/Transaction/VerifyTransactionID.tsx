@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useFormik } from 'formik';
 import { authAxios } from '../../api/axios';
 import * as Yup from 'yup';
-import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { TransactionType } from '../../models';
 import InlineNotification from '../../components/InlineNotification';
 import { PiPrinterFill } from 'react-icons/pi';
@@ -62,7 +61,7 @@ const GetTransactionByID = () => {
             className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-yayaBrand-700 rounded-lg border border-yayaBrand-700 hover:bg-yayaBrand-800 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
           >
             <a
-              href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`}
+              href={`${import.meta.env.VITE_TRANSACTION_INVOICE_URL}/${transaction.id}`}
               target="_blank"
               className="flex items-center gap-2"
             >

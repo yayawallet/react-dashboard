@@ -39,14 +39,13 @@ const LoginForm = () => {
           setSuccess(true);
           setIsLoading(false);
           login(res.data.access, res.data.refresh, res.data.user);
+          formik.resetForm();
         })
         .catch(() => {
           setSuccess(false);
           setIsLoading(false);
           setErrorMessage('Incorrect username or password');
-        })
-        .finally(() => {
-          formik.resetForm();
+          formik.setFieldValue('password', '');
         });
     },
   });

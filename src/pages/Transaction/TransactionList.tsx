@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Pagination from '../../components/Pagination';
 import SearchBar from '../../components/SearchBar';
-import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 import { TransactionType } from '../../models';
 import { useGetData, usePostData } from '../../hooks/useSWR';
 import Loading from '../../components/ui/Loading';
@@ -11,12 +10,20 @@ import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
 import { MdCallMissedOutgoing } from 'react-icons/md';
 import RefreshComponent from '../../components/ui/RefreshComponent';
+import FilterByDateResult from '../../components/FilterByDateResult';
+import FilterByDate from '../../components/FilterByDate';
 
 const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [openCustomFilter, setOpenCustomFilter] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
+  const [filterStartTime, setFilterStartTime] = useState(0);
+  const [filterEndTime, setFilterEndTime] = useState(0);
+  const [customFilterStartTime, setCustomFilterStartTime] = useState(0);
+  const [customFilterEndTime, setCustomFilterEndTime] = useState(0);
 
   const { data: ownProfile } = useGetData('/user/profile');
   const ownAccount = ownProfile?.account;
@@ -24,10 +31,21 @@ const TransactionList = () => {
   const {
     error,
     isLoading,
-    data: { data: transactionList, lastPage: pageCount, total: totalTransactions, perPage } = {},
+    data: {
+      data: transactionList,
+      lastPage: pageCount,
+      total: totalTransactions,
+      perPage,
+      totalIncoming,
+      totalOutgoing,
+    } = {},
     mutate,
     isValidating,
-  } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
+  } = useGetData(
+    `/transaction/find-by-user?p=${currentPage}${filterStartTime !== 0 ? `&start=${filterStartTime}` : ''}${filterEndTime !== 0 ? `&end=${filterEndTime}` : ''}`
+  );
+
+  const { data: { total: transactionListAll } = {} } = useGetData('transaction/find-by-user?p=1');
 
   const {
     error: searchError,
@@ -58,25 +76,118 @@ const TransactionList = () => {
     setIsRefreshing(false);
   };
 
+  const handleCustomStartTime = (time: number) => {
+    setCustomFilterStartTime(time);
+  };
+
+  const handleCustomEndTime = (time: number) => {
+    setCustomFilterEndTime(time);
+  };
+
+  const getCurrentTime = async () => {
+    // const { data: { time: currentTime } = {} } = await axios.get(
+    //   `${import.meta.env.VITE_GET_TIME_URL}`
+    // );
+
+    const currentTime = new Date().getTime();
+
+    return currentTime;
+  };
+
+  const handleFilterByDate = async (value: string) => {
+    setFilterValue(value);
+
+    // Reset custom filter values
+    setFilterStartTime(0);
+    setFilterEndTime(0);
+
+    if (value !== 'custom') setOpenCustomFilter(false);
+
+    if (!value) return; // If no filter is selected, clear filter
+
+    if (value === 'custom') {
+      setOpenCustomFilter(!openCustomFilter);
+      setFilterStartTime(customFilterStartTime);
+      setFilterEndTime(customFilterEndTime);
+
+      return;
+    }
+
+    if (value === '1D') {
+      const currentTime = await getCurrentTime();
+      const oneDayAgo = new Date(currentTime / 1000 - 24 * 60 * 60);
+
+      setFilterStartTime(oneDayAgo.getTime());
+      return;
+    }
+
+    if (value === '3D') {
+      const currentTime = await getCurrentTime();
+      const threeDaysAgo = new Date(currentTime / 1000 - 3 * 24 * 60 * 60);
+
+      setFilterStartTime(threeDaysAgo.getTime());
+      return;
+    }
+
+    if (value === '1W') {
+      const currentTime = await getCurrentTime();
+      const oneWeekAgo = new Date(currentTime / 1000 - 7 * 24 * 60 * 60);
+
+      setFilterStartTime(oneWeekAgo.getTime());
+      return;
+    }
+
+    if (value === '1M') {
+      const currentTime = await getCurrentTime();
+      const oneMonthAgo = new Date(currentTime / 1000 - 30 * 24 * 60 * 60);
+
+      setFilterStartTime(oneMonthAgo.getTime());
+      return;
+    }
+  };
+
   return (
     <div className="table-container">
       {error || searchError ? (
         <Error />
-      ) : isLoading && currentPage === 1 ? (
-        <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
-          <div className="flex flex-wrap justify-between items-center m-4">
-            <div className="w-64">
-              <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+          <div className="">
+            <div className="flex flex-wrap gap-2 justify-between items-center m-4">
+              <div className="w-64">
+                <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+              </div>
+
+              <div onClick={handleRefresh}>
+                <RefreshButton />
+              </div>
             </div>
 
-            <div onClick={handleRefresh}>
-              <RefreshButton />
-            </div>
+            <FilterByDate
+              filterValue={filterValue}
+              transactionListAll={transactionListAll}
+              openCustomFilter={openCustomFilter}
+              customFilterStartTime={customFilterStartTime}
+              customFilterEndTime={customFilterEndTime}
+              onFilterByDate={handleFilterByDate}
+              onCustomStartTime={handleCustomStartTime}
+              onCustomEndTime={handleCustomEndTime}
+            />
+
+            <FilterByDateResult
+              filterValue={filterValue}
+              isLoading={isLoading}
+              totalIncoming={totalIncoming}
+              totalOutgoing={totalOutgoing}
+              totalTransactions={totalTransactions}
+              customFilterStartTime={customFilterStartTime}
+              customFilterEndTime={customFilterEndTime}
+            />
           </div>
 
-          {(searchQuery && searchResult?.length === 0) || transactionList?.length === 0 ? (
+          {isLoading && currentPage === 1 ? (
+            <Loading />
+          ) : (searchQuery && searchResult?.length === 0) || transactionList?.length === 0 ? (
             <EmptyList />
           ) : (
             <div className="relative">
@@ -116,7 +227,10 @@ const TransactionList = () => {
                             type="button"
                             className="py-0.5 px-3 text text-yayaBrand-900 focus:outline-none bg-white rounded border border-yayaBrand-200 hover:bg-yayaBrand-100 hover:text-yayaBrand-700 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
                           >
-                            <a href={`${TRANSACTION_INVOICE_URL}/${t.id}`} target="_blank">
+                            <a
+                              href={`${import.meta.env.VITE_TRANSACTION_INVOICE_URL}/${t.id}`}
+                              target="_blank"
+                            >
                               Print
                             </a>
                           </button>

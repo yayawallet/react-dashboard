@@ -54,7 +54,8 @@ import ChangePassword from '../pages/UserSettings/ChangePassword';
 import Support from '../pages/Support';
 import Guide from '../pages/Guide';
 import HelpCenter from '../pages/HelpCenter';
-import AboutYaYa from '../pages/AboutYaYa';
+
+import NoRoleAssigned from '../pages/ErrorPage/NoRoleAssigned';
 
 // Non-menu navigations
 import DefaultHeader from '../components/layouts/DefaultHeader';
@@ -398,6 +399,7 @@ export const privateNavs = [
       { path: '*', element: <NotFound /> },
       { path: 'account', element: <UserAccount /> },
       { path: 'account/change-password', element: <ChangePassword /> },
+      { path: 'no-role-assigned', element: <NoRoleAssigned /> },
     ],
   },
 ];
@@ -410,7 +412,6 @@ export const publicNavs = [
       { path: '', element: <Navigate to="/login" replace={true} /> },
       { path: 'login', element: <Login /> },
       { path: 'help-center', element: <HelpCenter /> },
-      { path: 'about-yaya', element: <AboutYaYa /> },
       { path: '*', element: <Navigate to="/login" replace={true} /> },
     ],
   },

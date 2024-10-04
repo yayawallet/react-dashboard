@@ -1,4 +1,4 @@
-import { DotLoaderMedium } from './DotLoader';
+import { DotLoaderLarge } from './DotLoader';
 
 interface Props {
   isRefreshing: boolean;
@@ -8,14 +8,16 @@ const RefreshComponent = ({ isRefreshing }: Props) => {
   return (
     <div className={`${isRefreshing ? '' : 'hidden'}`}>
       <div
-        className="absolute z-10"
+        className="fixed z-10 top-[50%] left-[50%] lg:left-[55%]"
         style={{
-          top: '64px',
-          left: '50%',
           transform: 'translate(-50%)',
         }}
       >
-        <DotLoaderMedium />
+        <div className="bg-white shadow rounded-full p-1">
+          <div className="translate-y-1">
+            <DotLoaderLarge />
+          </div>
+        </div>
         {/* <span
           className="inline-block border-gray-400 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
           role="status"

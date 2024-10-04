@@ -127,7 +127,7 @@ const ListBill = () => {
                       (bill: BillListType) => (
                         <tr
                           key={bill.id}
-                          className={`text-nowrap ${new Date(bill.due_at) < new Date() ? 'bg-red-100 hover:bg-red-100' : 'hover:bg-gray-100'}`}
+                          className={`text-nowrap ${bill.status === 'PENDING' && new Date(bill.due_at) < new Date() ? 'bg-red-100 hover:bg-red-100' : 'hover:bg-gray-100'}`}
                           title={`${bill.client_yaya_account.name}\nClient yaya account: ${bill.client_yaya_account.account}\n${bill.bill_code && `Bill code: ${bill.bill_code} \n`}${bill.bill_season && `Bill season: ${bill.bill_season} \n`}${bill.description && `Description: ${bill.description}\n`}${bill.customer_id && `Customer Id: ${bill.customer_id}\n`}${bill.phone && `Phone: ${bill.phone}\n`}${bill.email && `Email: ${bill.email}`}`}
                         >
                           <td
@@ -168,7 +168,7 @@ const ListBill = () => {
 
                           <td className="border-b border-gray-200 pl-3 py-3">
                             <span
-                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] text-${bill.status == 'PAID' ? 'green' : 'orange'}-500`}
+                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] ${bill.status == 'PAID' ? 'text-green-500' : bill.status == 'FORWARDED' ? 'text-yayaBrand-500' : 'text-orange-500'}`}
                             >
                               <GoDotFill />
                             </span>
@@ -176,13 +176,13 @@ const ListBill = () => {
                           </td>
 
                           <td className="border-b border-gray-200 pl-3 py-3 text-gray-500 tracking-normal">
-                            {formatDate(bill.due_at).split('-')[0]}
+                            {formatDate(bill.due_at)?.split('-')[0]}
                           </td>
 
                           <td className="relative border-b border-gray-200 pl-3 py-3">
                             <button
                               type="button"
-                              disabled={bill.status === 'PAID'}
+                              disabled={bill.status !== 'PENDING'}
                               className="pt-0.5 pb-1 px-3 focus:outline-none text-black bg-yellow-400 rounded hover:bg-yellow-500 focus:z-10 focus:ring-4 focus:ring-yellow-300"
                               onClick={() => handleUpdateBill(bill)}
                             >
