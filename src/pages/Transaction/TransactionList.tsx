@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '../../components/Pagination';
 import SearchBar from '../../components/SearchBar';
 import { TransactionType } from '../../models';
@@ -10,12 +10,21 @@ import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
 import { MdCallMissedOutgoing } from 'react-icons/md';
 import RefreshComponent from '../../components/ui/RefreshComponent';
+import { IoIosArrowUp } from 'react-icons/io';
+import { IoIosArrowForward } from 'react-icons/io';
+import { filter } from 'lodash';
 
 const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [openCustomFilter, setOpenCustomFilter] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
+  const [filterStartTime, setFilterStartTime] = useState(0);
+  const [filterEndTime, setFilterEndTime] = useState(0);
+  const [customFilterStartTime, setCustomFilterStartTime] = useState(0);
+  const [customFilterEndTime, setCustomFilterEndTime] = useState(0);
 
   const { data: ownProfile } = useGetData('/user/profile');
   const ownAccount = ownProfile?.account;
@@ -23,10 +32,21 @@ const TransactionList = () => {
   const {
     error,
     isLoading,
-    data: { data: transactionList, lastPage: pageCount, total: totalTransactions, perPage } = {},
+    data: {
+      data: transactionList,
+      lastPage: pageCount,
+      total: totalTransactions,
+      perPage,
+      totalIncoming,
+      totalOutgoing,
+    } = {},
     mutate,
     isValidating,
-  } = useGetData(`/transaction/find-by-user?p=${currentPage}`);
+  } = useGetData(
+    `/transaction/find-by-user?p=${currentPage}${filterStartTime !== 0 ? `&start=${filterStartTime}` : ''}${filterEndTime !== 0 ? `&end=${filterEndTime}` : ''}`
+  );
+
+  const { data: { total: transactionListAll } = {} } = useGetData('transaction/find-by-user?p=1');
 
   const {
     error: searchError,
@@ -57,12 +77,71 @@ const TransactionList = () => {
     setIsRefreshing(false);
   };
 
+  const getCurrentTime = async () => {
+    // const { data: { time: currentTime } = {} } = await axios.get(
+    //   `${import.meta.env.VITE_GET_TIME_URL}`
+    // );
+
+    const currentTime = new Date().getTime();
+
+    return currentTime;
+  };
+
+  const handleFilterByDate = async (value: string) => {
+    setFilterValue(value);
+
+    // Reset custom filter values
+    setFilterStartTime(0);
+    setFilterEndTime(0);
+
+    if (value !== 'custom') setOpenCustomFilter(false);
+
+    if (!value) return; // If no filter is selected, clear filter
+
+    if (value === 'custom') {
+      setFilterStartTime(customFilterStartTime);
+      setFilterEndTime(customFilterEndTime);
+
+      return;
+    }
+
+    if (value === '1D') {
+      const currentTime = await getCurrentTime();
+      const oneDayAgo = new Date(currentTime / 1000 - 24 * 60 * 60);
+
+      setFilterStartTime(oneDayAgo.getTime());
+      return;
+    }
+
+    if (value === '3D') {
+      const currentTime = await getCurrentTime();
+      const threeDaysAgo = new Date(currentTime / 1000 - 3 * 24 * 60 * 60);
+
+      setFilterStartTime(threeDaysAgo.getTime());
+      return;
+    }
+
+    if (value === '1W') {
+      const currentTime = await getCurrentTime();
+      const oneWeekAgo = new Date(currentTime / 1000 - 7 * 24 * 60 * 60);
+
+      setFilterEndTime(oneWeekAgo.getTime());
+      return;
+    }
+
+    if (value === '1M') {
+      const currentTime = await getCurrentTime();
+      const oneMonthAgo = new Date(currentTime / 1000 - 30 * 24 * 60 * 60);
+
+      setFilterStartTime(oneMonthAgo.getTime());
+      return;
+    }
+  };
+
   return (
     <div className="table-container">
       {error || searchError ? (
         <Error />
-      ) : isLoading && currentPage === 1 ? (
-        <Loading />
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="">
@@ -76,90 +155,165 @@ const TransactionList = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-center p-4">
-              <button
-                id="dropdownDefault"
-                data-dropdown-toggle="dropdown"
-                className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-yayaBrand-600 dark:hover:bg-yayaBrand-700 dark:focus:ring-yayaBrand-800"
-                type="button"
-              >
-                Filter by date
-                <svg
-                  className="w-4 h-4 ml-2"
-                  aria-hidden="true"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  ></path>
-                </svg>
-              </button>
-
-              <div
-                id="dropdown"
-                className="z-10 hiddenn w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
-              >
-                <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
-                <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-                  <li className="flex items-center">
-                    <input
-                      id="canon"
-                      type="checkbox"
-                      value=""
-                      className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-yayaBrand-600 focus:ring-yayaBrand-500 dark:focus:ring-yayaBrand-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                    />
-
-                    <label
-                      htmlFor="canon"
-                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                    >
-                      Canon (49)
-                    </label>
-                  </li>
-
-                  <li className="flex items-center">
-                    <input
-                      id="microsoft"
-                      type="checkbox"
-                      value=""
-                      className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-yayaBrand-600 focus:ring-yayaBrand-500 dark:focus:ring-yayaBrand-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                    />
-
-                    <label
-                      htmlFor="microsoft"
-                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                    >
-                      Microsoft (45)
-                    </label>
-                  </li>
-
-                  <li className="flex items-center">
-                    <input
-                      id="razor"
-                      type="checkbox"
-                      value=""
-                      className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-yayaBrand-600 focus:ring-yayaBrand-500 dark:focus:ring-yayaBrand-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                    />
-
-                    <label
-                      htmlFor="razor"
-                      className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                    >
-                      Razor (49)
-                    </label>
-                  </li>
-                </ul>
+            <div className="flex flex-wrap items-end my-6 ml-4 gap-8">
+              <div className="flex flex-col items-center gap-2">
+                <div className="text-gray-500 self-start">Filter by date</div>
+                <div className="inline-flex px-4 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
+                  <button
+                    className={`${filterValue === '1D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+                    onClick={() => handleFilterByDate('1D')}
+                    disabled={!transactionListAll}
+                  >
+                    1D
+                  </button>
+                  <button
+                    className={`${filterValue === '3D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+                    onClick={() => handleFilterByDate('3D')}
+                    disabled={!transactionListAll}
+                  >
+                    3D
+                  </button>
+                  <button
+                    className={`${filterValue === '1W' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+                    onClick={() => handleFilterByDate('1W')}
+                    disabled={!transactionListAll}
+                  >
+                    1W
+                  </button>
+                  <button
+                    className={`${filterValue === '1M' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+                    onClick={() => handleFilterByDate('1M')}
+                    disabled={!transactionListAll}
+                  >
+                    1M
+                  </button>
+                  <button
+                    className={`${filterValue === '' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+                    onClick={() => handleFilterByDate('')}
+                    disabled={!transactionListAll}
+                  >
+                    All
+                  </button>
+                </div>
               </div>
+
+              <div className="flex items-end gap-3">
+                <button
+                  className={`${filterValue === 'custom' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
+                  onClick={() => {
+                    setOpenCustomFilter(!openCustomFilter);
+                    handleFilterByDate('custom');
+                  }}
+                  disabled={!transactionListAll}
+                >
+                  <span>Custom</span>
+                  <span className="mt-1">
+                    {openCustomFilter ? <IoIosArrowUp /> : <IoIosArrowForward />}
+                  </span>
+                </button>
+
+                <div className={`${openCustomFilter ? '' : 'hidden'} flex items-center gap-4`}>
+                  <div className="">
+                    <label htmlFor="start" className="block mb-1 ml-2 text-sm font-medium">
+                      From
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="start"
+                      max={new Date().toISOString().replace(/:\d{2}\.\d{3}Z$/, '')}
+                      className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full px-2.5 py-1.5"
+                      onChange={(e) =>
+                        setCustomFilterStartTime(new Date(e.target.value).getTime() / 1000)
+                      }
+                    />
+                  </div>
+
+                  <div className="">
+                    <label htmlFor="end" className="block mb-1 ml-2 text-sm font-medium">
+                      To
+                    </label>
+                    <input
+                      type="datetime-local"
+                      id="end"
+                      max={new Date().toISOString().replace(/:\d{2}\.\d{3}Z$/, '')}
+                      className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full px-2.5 py-1.5"
+                      onChange={(e) =>
+                        setCustomFilterEndTime(new Date(e.target.value).getTime() / 1000)
+                      }
+                    />
+                  </div>
+
+                  <button
+                    className="self-end mb-1 text-white bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-5 pt-1 pb-1.5 text-center"
+                    disabled={customFilterStartTime === 0 && customFilterEndTime === 0}
+                    onClick={() => handleFilterByDate('custom')}
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className={`${filterValue ? '' : 'hidden'} border p-2.5 mb-8 rounded-lg mx-4`}>
+              <div className="text-gray-600 border-4 rounded-lg py-2 px-4 inline-block">
+                <h3 className="text-xl font-semibold mb-2">
+                  Transactions with in{' '}
+                  {filterValue === '1D'
+                    ? '1 Day'
+                    : filterValue === '3D'
+                      ? '3 Days'
+                      : filterValue === '1W'
+                        ? '1 Week'
+                        : filterValue === '1M'
+                          ? '1 Month'
+                          : filterValue === 'custom'
+                            ? `Custom Time`
+                            : 'All Time'}
+                </h3>
+
+                <div>
+                  Total Incoming:{' '}
+                  <span className="text-gray-800 text-xl">
+                    {isLoading ? (
+                      '...'
+                    ) : totalIncoming ? (
+                      <span>
+                        {totalIncoming} <span className="text-gray-500 text-base">ETB</span>
+                      </span>
+                    ) : (
+                      '...'
+                    )}
+                  </span>
+                </div>
+                <div>
+                  Total Outgoing:{' '}
+                  <span className="text-gray-800 text-xl">
+                    {isLoading ? (
+                      '...'
+                    ) : totalOutgoing ? (
+                      <span>
+                        {totalOutgoing} <span className="text-gray-500 text-base">ETB</span>
+                      </span>
+                    ) : (
+                      '...'
+                    )}
+                  </span>
+                </div>
+                <div>
+                  Total Number of Transactions:{' '}
+                  <span className="text-gray-800 text-xl">
+                    {isLoading ? '...' : totalTransactions}
+                  </span>
+                </div>
+              </div>
+
+              <div className=""></div>
             </div>
           </div>
 
-          {(searchQuery && searchResult?.length === 0) || transactionList?.length === 0 ? (
+          {isLoading && currentPage === 1 ? (
+            <Loading />
+          ) : (searchQuery && searchResult?.length === 0) || transactionList?.length === 0 ? (
             <EmptyList />
           ) : (
             <div className="relative">
