@@ -8,14 +8,12 @@ const RefreshComponent = ({ isRefreshing }: Props) => {
   return (
     <div className={`${isRefreshing ? '' : 'hidden'}`}>
       <div
-        className="absolute z-10"
+        className="fixed z-10 top-[50%] left-[50%] lg:left-[55%]"
         style={{
-          top: '64px',
-          left: '50%',
           transform: 'translate(-50%)',
         }}
       >
-        <div className="bg-yayaBrand-50 rounded-full p-1.5">
+        <div className="bg-white shadow rounded-full p-1">
           <div className="translate-y-1">
             <DotLoaderLarge />
           </div>
