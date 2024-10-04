@@ -1,4 +1,4 @@
-import { DotLoaderMedium } from './DotLoader';
+import { DotLoaderLarge } from './DotLoader';
 
 interface Props {
   isRefreshing: boolean;
@@ -15,7 +15,11 @@ const RefreshComponent = ({ isRefreshing }: Props) => {
           transform: 'translate(-50%)',
         }}
       >
-        <DotLoaderMedium />
+        <div className="bg-yayaBrand-50 rounded-full p-1.5">
+          <div className="translate-y-1">
+            <DotLoaderLarge />
+          </div>
+        </div>
         {/* <span
           className="inline-block border-gray-400 h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
           role="status"
