@@ -17,7 +17,7 @@ export const DotLoaderSmall = () => {
 
 export const DotLoaderMedium = () => {
   return (
-    <div className="h-10 w-10">
+    <div className="h-12 w-12">
       <div className="container medium">
         <div className="dot"></div>
         <div className="dot"></div>
