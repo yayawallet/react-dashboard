@@ -55,7 +55,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
+    <div className="flex flex-wrap justify-center sm:justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
       <p className="text-[15px] text-slate-700 py-4">
         {
           <span>
