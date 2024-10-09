@@ -88,6 +88,7 @@ const CreateBill = () => {
           customer_yaya_account: selectedCustomer || values.customer_yaya_account,
           start_at: values.start_at ? new Date(values.start_at).getTime() / 1000 : '',
           due_at: values.due_at ? new Date(values.due_at).getTime() / 1000 : '',
+          phone: values.phone?.toString(),
         })
         .then((res) => {
           setBillPaymentID(res.data.id);
@@ -458,7 +459,7 @@ const CreateBill = () => {
                 id="email"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 placeholder="email"
-                autoComplete="off"
+                autoComplete="new-email"
                 disabled={isLoading}
                 onChange={formik.handleChange}
                 value={formik.values.email}
