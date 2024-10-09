@@ -64,6 +64,7 @@ export interface Transfer {
     name: string;
     account: string;
   };
+  incoming: boolean;
   created_at_time: Date;
 }
 

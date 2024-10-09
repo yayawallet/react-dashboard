@@ -217,7 +217,7 @@ const TransferList = () => {
                           </span>
                         </td>
                         <td className="border-b border-slate-200 p-3">
-                          {t?.user.account === t?.payment_method.account_number ? (
+                          {t?.incoming === true ? (
                             <span className="inline-block font-semibold text-green-600">
                               &#43;&nbsp;
                             </span>
