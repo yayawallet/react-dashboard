@@ -23,8 +23,8 @@ const FilterByDateResult = ({
   customFilterEndTime,
 }: Props) => {
   return (
-    <div className={`${showFilterResult ? '' : 'hidden'}  px-2.5 mb-10 rounded-lg md:mx-4`}>
-      <h3 className="text-xl font-semibold mb-2">
+    <div className={`${showFilterResult ? '' : 'hidden'} px-2.5 mb-10 rounded-lg md:mx-4`}>
+      <h3 className="text-xl font-semibold mb-4 text-center sm:text-start">
         Transactions with in{' '}
         {filterValue === '1D' ? (
           '1 Day'
@@ -41,7 +41,7 @@ const FilterByDateResult = ({
         )}
       </h3>
 
-      <div className="flex flex-wrap items-center gap-6">
+      <div className="flex flex-wrap items-center justify-center sm:justify-start gap-6">
         <div className="text-gray-700 border-t rounded-lg p-5 inline-block bg-slate-50 shadow-md shadow-gray-400">
           <div className="text-[#008fd6]">
             Total Incoming:{' '}
@@ -50,7 +50,8 @@ const FilterByDateResult = ({
                 '...'
               ) : typeof incomingSum === 'number' ? (
                 <span>
-                  {incomingSum.toFixed(2)} <span className="text-base">ETB</span>
+                  {incomingSum.toLocaleString('en-US', { maximumFractionDigits: 2 })}{' '}
+                  <span className="text-base">ETB</span>
                 </span>
               ) : (
                 '--'
@@ -64,21 +65,25 @@ const FilterByDateResult = ({
                 '...'
               ) : typeof outgoingSum === 'number' ? (
                 <span>
-                  {outgoingSum.toFixed(2)} <span className="text-base">ETB</span>
+                  {outgoingSum.toLocaleString('en-US', { maximumFractionDigits: 2 })}{' '}
+                  <span className="text-base">ETB</span>
                 </span>
               ) : (
                 '--'
               )}
             </span>
           </div>
-          <div className="text-gray-800">
+          <div className="text-gray-800 pt-5">
             Net:{' '}
             <span className="text-lg">
               {isLoading ? (
                 '...'
               ) : typeof incomingSum === 'number' && typeof outgoingSum === 'number' ? (
                 <span>
-                  {(incomingSum - outgoingSum).toFixed(2)} <span className="text-base">ETB</span>
+                  {(incomingSum - outgoingSum).toLocaleString('en-US', {
+                    maximumFractionDigits: 2,
+                  })}{' '}
+                  <span className="text-base">ETB</span>
                 </span>
               ) : (
                 '--'
@@ -93,9 +98,9 @@ const FilterByDateResult = ({
         </div>
 
         <div
-          className={`py-4 ${typeof incomingSum === 'number' && typeof outgoingSum === 'number' ? '' : 'hidden'} overflow-x-auto`}
+          className={`${typeof incomingSum === 'number' && typeof outgoingSum === 'number' ? '' : 'hidden'} overflow-x-auto`}
         >
-          <PieChart width={500} height={200}>
+          <PieChart width={540} height={220}>
             <Pie
               data={[
                 {
@@ -114,7 +119,7 @@ const FilterByDateResult = ({
               innerRadius={30}
               outerRadius={70}
               label={({ name, value }) =>
-                `${name} (${((value / (incomingSum + outgoingSum)) * 100).toFixed(0)}%)`
+                `${name} (${((value / (incomingSum + outgoingSum)) * 100).toFixed(1)}%)`
               }
               animationDuration={1000}
               fill="#8884d8"
