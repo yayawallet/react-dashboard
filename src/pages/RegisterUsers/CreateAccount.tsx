@@ -302,7 +302,9 @@ const CreateAccount = () => {
     return (
       <div>
         <PageLoading />
-        <p className="text-center p-2 text-yayaBrand-900">Account Creation in Progress...</p>
+        <p className="text-center p-2 text-yayaBrand-800 font-semibold text-lg">
+          Account Creation in Progress...
+        </p>
       </div>
     );
 
@@ -355,6 +357,8 @@ const CreateAccount = () => {
         className="max-w-[var(--form-width)] border p-8 pt-6 rounded-b-xl mx-auto mb-20"
         onSubmit={formik.handleSubmit}
         autoComplete="off"
+        autoSave="off"
+        autoCorrect="off"
       >
         <div className="relative mt-2 mb-0.5 max-w-[600px] mx-auto">
           <Stepper totalSteps={totalSteps} currentStep={currentStep} />

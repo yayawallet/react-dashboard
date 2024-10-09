@@ -9,6 +9,7 @@ import EmptyList from '../../components/ui/EmptyList';
 import { capitalize, formatDate } from '../../utils/table_utils';
 import RefreshButton from '../../components/ui/RefreshButton';
 import { MdCallMissedOutgoing } from 'react-icons/md';
+import { RxExternalLink } from 'react-icons/rx';
 import RefreshComponent from '../../components/ui/RefreshComponent';
 import FilterByDateResult from '../../components/FilterByDateResult';
 import FilterByDate from '../../components/FilterByDate';
@@ -18,8 +19,8 @@ const TransactionList = () => {
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [openCustomFilter, setOpenCustomFilter] = useState(false);
-  const [filterValue, setFilterValue] = useState('');
+
+  const [filterValue, setFilterValue] = useState('all');
   const [filterStartTime, setFilterStartTime] = useState(0);
   const [filterEndTime, setFilterEndTime] = useState(0);
   const [customFilterStartTime, setCustomFilterStartTime] = useState(0);
@@ -36,8 +37,8 @@ const TransactionList = () => {
       lastPage: pageCount,
       total: totalTransactions,
       perPage,
-      totalIncoming,
-      totalOutgoing,
+      incomingSum,
+      outgoingSum,
     } = {},
     mutate,
     isValidating,
@@ -101,17 +102,18 @@ const TransactionList = () => {
     setFilterStartTime(0);
     setFilterEndTime(0);
 
-    if (value !== 'custom') setOpenCustomFilter(false);
-
-    if (!value) return; // If no filter is selected, clear filter
+    if (value !== 'custom') {
+      setCustomFilterEndTime(0);
+      setCustomFilterStartTime(0);
+    }
 
     if (value === 'custom') {
-      setOpenCustomFilter(!openCustomFilter);
       setFilterStartTime(customFilterStartTime);
       setFilterEndTime(customFilterEndTime);
-
       return;
     }
+
+    if (value === 'all') return; // If no filter is selected, clear filter
 
     if (value === '1D') {
       const currentTime = await getCurrentTime();
@@ -166,7 +168,6 @@ const TransactionList = () => {
             <FilterByDate
               filterValue={filterValue}
               transactionListAll={transactionListAll}
-              openCustomFilter={openCustomFilter}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
               onFilterByDate={handleFilterByDate}
@@ -176,9 +177,10 @@ const TransactionList = () => {
 
             <FilterByDateResult
               filterValue={filterValue}
+              showFilterResult={!!(filterStartTime || filterEndTime)}
               isLoading={isLoading}
-              totalIncoming={totalIncoming}
-              totalOutgoing={totalOutgoing}
+              incomingSum={incomingSum}
+              outgoingSum={outgoingSum}
               totalTransactions={totalTransactions}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
@@ -225,13 +227,17 @@ const TransactionList = () => {
                         <td className="relative border-b border-slate-200 p-3">
                           <button
                             type="button"
-                            className="py-0.5 px-3 text text-yayaBrand-900 focus:outline-none bg-white rounded border border-yayaBrand-200 hover:bg-yayaBrand-100 hover:text-yayaBrand-700 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
+                            className="py-0.5 px-3 text text-yayaBrand-800 focus:outline-none bg-white rounded border border-yayaBrand-200 hover:bg-yayaBrand-50 hover:text-yayaBrand-700 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
                           >
                             <a
                               href={`${import.meta.env.VITE_TRANSACTION_INVOICE_URL}/${t.id}`}
                               target="_blank"
+                              className="flex items-center hover:underline hover:text-yayaBrand-900"
                             >
-                              Print
+                              Print{' '}
+                              <span className="text- text-sm ml-1 mt-0.5">
+                                <RxExternalLink />
+                              </span>
                             </a>
                           </button>
                         </td>

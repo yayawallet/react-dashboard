@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { IoIosArrowForward, IoIosArrowUp } from 'react-icons/io';
 
 interface Props {
   filterValue: string;
   transactionListAll: number;
-  openCustomFilter: boolean;
   customFilterStartTime: number;
   customFilterEndTime: number;
   onFilterByDate: (value: string) => void;
@@ -14,49 +14,57 @@ interface Props {
 const FilterByDate = ({
   filterValue,
   transactionListAll,
-  openCustomFilter,
   customFilterStartTime,
   customFilterEndTime,
   onFilterByDate,
   onCustomStartTime,
   onCustomEndTime,
 }: Props) => {
+  const [openCustomFilter, setOpenCustomFilter] = useState(false);
+
+  const handleOnClickFilter = (value: string) => {
+    onFilterByDate(value);
+
+    if (value !== 'custom') setOpenCustomFilter(false);
+    else if (value === 'custom') setOpenCustomFilter(!openCustomFilter);
+  };
+
   return (
     <div className="flex flex-wrap items-end mt-6 mb-10 ml-4 gap-8">
       <div className="flex flex-col items-center gap-2">
         <div className="text-gray-500 self-start">Filter by date</div>
-        <div className="inline-flex flex-wrap px-4 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
+        <div className="inline-flex flex-wrap px-3 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
           <button
             className={`${filterValue === '1D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-            onClick={() => onFilterByDate('1D')}
+            onClick={() => handleOnClickFilter('1D')}
             disabled={!transactionListAll}
           >
             1D
           </button>
           <button
             className={`${filterValue === '3D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-            onClick={() => onFilterByDate('3D')}
+            onClick={() => handleOnClickFilter('3D')}
             disabled={!transactionListAll}
           >
             3D
           </button>
           <button
             className={`${filterValue === '1W' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-            onClick={() => onFilterByDate('1W')}
+            onClick={() => handleOnClickFilter('1W')}
             disabled={!transactionListAll}
           >
             1W
           </button>
           <button
             className={`${filterValue === '1M' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-            onClick={() => onFilterByDate('1M')}
+            onClick={() => handleOnClickFilter('1M')}
             disabled={!transactionListAll}
           >
             1M
           </button>
           <button
-            className={`${filterValue === '' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
-            onClick={() => onFilterByDate('')}
+            className={`${filterValue === 'all' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+            onClick={() => handleOnClickFilter('all')}
             disabled={!transactionListAll}
           >
             All
@@ -67,7 +75,7 @@ const FilterByDate = ({
       <div className="flex flex-wrap items-end gap-3">
         <button
           className={`${filterValue === 'custom' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
-          onClick={() => onFilterByDate('custom')}
+          onClick={() => handleOnClickFilter('custom')}
           disabled={!transactionListAll}
         >
           <span>Custom</span>
@@ -84,6 +92,13 @@ const FilterByDate = ({
             <input
               type="datetime-local"
               id="start"
+              value={
+                customFilterStartTime
+                  ? new Date(customFilterStartTime * 1000)
+                      .toISOString()
+                      .replace(/:\d{2}\.\d{3}Z$/, '')
+                  : ''
+              }
               max={new Date().toISOString().replace(/:\d{2}\.\d{3}Z$/, '')}
               className="bg-gray-50 border border-gray-300 text-sm rounded-lg block w-full px-2.5 py-1.5"
               onChange={(e) => onCustomStartTime(new Date(e.target.value).getTime() / 1000)}
@@ -97,6 +112,13 @@ const FilterByDate = ({
             <input
               type="datetime-local"
               id="end"
+              value={
+                customFilterEndTime
+                  ? new Date(customFilterEndTime * 1000)
+                      .toISOString()
+                      .replace(/:\d{2}\.\d{3}Z$/, '')
+                  : ''
+              }
               min={
                 customFilterStartTime
                   ? new Date(customFilterStartTime * 1000 + 1000)

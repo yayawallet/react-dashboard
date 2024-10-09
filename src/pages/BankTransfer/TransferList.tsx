@@ -15,7 +15,6 @@ const TransferList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [openCustomFilter, setOpenCustomFilter] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const [filterStartTime, setFilterStartTime] = useState(0);
   const [filterEndTime, setFilterEndTime] = useState(0);
@@ -39,8 +38,8 @@ const TransferList = () => {
       lastPage: pageCount,
       total: totalTransfers,
       perPage,
-      totalIncoming,
-      totalOutgoing,
+      incomingSum,
+      outgoingSum,
     } = {},
   } = useGetData(
     `/transfer/list?p=${currentPage}${filterStartTime !== 0 ? `&start=${filterStartTime}` : ''}${filterEndTime !== 0 ? `&end=${filterEndTime}` : ''}`
@@ -83,17 +82,18 @@ const TransferList = () => {
     setFilterStartTime(0);
     setFilterEndTime(0);
 
-    if (value !== 'custom') setOpenCustomFilter(false);
-
-    if (!value) return; // If no filter is selected, clear filter
+    if (value !== 'custom') {
+      setCustomFilterEndTime(0);
+      setCustomFilterStartTime(0);
+    }
 
     if (value === 'custom') {
-      setOpenCustomFilter(!openCustomFilter);
       setFilterStartTime(customFilterStartTime);
       setFilterEndTime(customFilterEndTime);
-
       return;
     }
+
+    if (value === 'all') return; // If no filter is selected, clear filter
 
     if (value === '1D') {
       const currentTime = await getCurrentTime();
@@ -146,7 +146,6 @@ const TransferList = () => {
             <FilterByDate
               filterValue={filterValue}
               transactionListAll={transferListAll}
-              openCustomFilter={openCustomFilter}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
               onFilterByDate={handleFilterByDate}
@@ -156,9 +155,10 @@ const TransferList = () => {
 
             <FilterByDateResult
               filterValue={filterValue}
+              showFilterResult={!!(filterStartTime || filterEndTime)}
               isLoading={isLoading}
-              totalIncoming={totalIncoming}
-              totalOutgoing={totalOutgoing}
+              incomingSum={incomingSum}
+              outgoingSum={outgoingSum}
               totalTransactions={totalTransfers}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
@@ -217,7 +217,7 @@ const TransferList = () => {
                           </span>
                         </td>
                         <td className="border-b border-slate-200 p-3">
-                          {t?.user.account === t?.payment_method.account_number ? (
+                          {t?.incoming === true ? (
                             <span className="inline-block font-semibold text-green-600">
                               &#43;&nbsp;
                             </span>
