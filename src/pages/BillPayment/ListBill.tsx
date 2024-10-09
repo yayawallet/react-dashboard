@@ -167,7 +167,7 @@ const ListBill = () => {
                           </td>
 
                           <td className="border-b border-gray-200 pl-3 py-3 text-gray-500 tracking-normal">
-                            {formatDate(bill.due_at)?.split('-')[0]}
+                            {formatDate(bill.due_at)}
                           </td>
 
                           <td className="relative border-b border-gray-200 pl-3 py-3">

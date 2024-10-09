@@ -65,8 +65,8 @@ const Profile = () => {
 
               <div className="py-2 sm:py-4 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6">
                 <dt className="font-medium text-gray-500">Guardians</dt>
-                <dd className="mt-1 text-gray-900 sm:mt-0 sm:col-span-3">
-                  {profile?.guardians.join(', ')}
+                <dd className="mt-1 text-gray-700 sm:mt-0 sm:col-span-3">
+                  {profile?.guardians.map((g: string) => `@${g}`).join(', ')}
                 </dd>
               </div>
 
