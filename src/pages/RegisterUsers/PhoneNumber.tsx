@@ -104,9 +104,9 @@ const PhoneNumber = () => {
 
                 if (phoneNumber[0] !== '0' && phoneNumber[0] !== '7' && phoneNumber[0] !== '9')
                   formik.setTouched({ phone: true });
-                else if (phoneNumber[0] === '0' && phoneNumber.length === 10)
+                else if (phoneNumber[0] !== '0' && phoneNumber.length === 9)
                   formik.setTouched({ phone: true });
-                else if (phoneNumber.length === 9) formik.setTouched({ phone: true });
+                else if (phoneNumber.length >= 10) formik.setTouched({ phone: true });
               }}
               autoFocus
               id="phone"
