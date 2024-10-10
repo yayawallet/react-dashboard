@@ -3,7 +3,6 @@ import { formatDate } from '../utils/table_utils';
 
 interface Props {
   filterValue: string;
-  showFilterResult: boolean;
   isLoading: boolean;
   incomingSum: number;
   outgoingSum: number;
@@ -14,7 +13,6 @@ interface Props {
 
 const FilterByDateResult = ({
   filterValue,
-  showFilterResult,
   isLoading,
   incomingSum,
   outgoingSum,
@@ -23,8 +21,8 @@ const FilterByDateResult = ({
   customFilterEndTime,
 }: Props) => {
   return (
-    <div className={`${showFilterResult ? '' : 'hidden'} px-2.5 mb-10 rounded-lg md:mx-4`}>
-      <h3 className="text-xl font-semibold mb-4 text-center sm:text-start">
+    <div className={`px-2.5 mb-10 rounded-lg md:mx-4`}>
+      <h3 className="text-xl font-semibold mb-2 text-center sm:text-start">
         Transactions with in{' '}
         {filterValue === '1D' ? (
           '1 Day'
@@ -80,6 +78,7 @@ const FilterByDateResult = ({
                 '...'
               ) : typeof incomingSum === 'number' && typeof outgoingSum === 'number' ? (
                 <span>
+                  {incomingSum - outgoingSum > 0 && <span>+</span>}
                   {(incomingSum - outgoingSum).toLocaleString('en-US', {
                     maximumFractionDigits: 2,
                   })}{' '}

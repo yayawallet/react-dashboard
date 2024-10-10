@@ -13,13 +13,13 @@ import { RxExternalLink } from 'react-icons/rx';
 import RefreshComponent from '../../components/ui/RefreshComponent';
 import FilterByDateResult from '../../components/FilterByDateResult';
 import FilterByDate from '../../components/FilterByDate';
+import PageLoading from '../../components/ui/PageLoading';
 
 const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-
   const [filterValue, setFilterValue] = useState('all');
   const [filterStartTime, setFilterStartTime] = useState(0);
   const [filterEndTime, setFilterEndTime] = useState(0);
@@ -46,7 +46,7 @@ const TransactionList = () => {
     `/transaction/find-by-user?p=${currentPage}${filterStartTime !== 0 ? `&start=${filterStartTime}` : ''}${filterEndTime !== 0 ? `&end=${filterEndTime}` : ''}`
   );
 
-  const { data: { total: transactionListAll } = {} } = useGetData('transaction/find-by-user?p=1');
+  const { data: { total: transactionListTotal } = {} } = useGetData('transaction/find-by-user?p=1');
 
   const {
     error: searchError,
@@ -148,6 +148,8 @@ const TransactionList = () => {
     }
   };
 
+  if (transactionListTotal === undefined) return <PageLoading />; // Page is loading
+
   return (
     <div className="table-container">
       {error || searchError ? (
@@ -167,7 +169,7 @@ const TransactionList = () => {
 
             <FilterByDate
               filterValue={filterValue}
-              transactionListAll={transactionListAll}
+              transactionListTotal={transactionListTotal}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
               onFilterByDate={handleFilterByDate}
@@ -177,7 +179,6 @@ const TransactionList = () => {
 
             <FilterByDateResult
               filterValue={filterValue}
-              showFilterResult={!!(filterStartTime || filterEndTime)}
               isLoading={isLoading}
               incomingSum={incomingSum}
               outgoingSum={outgoingSum}

@@ -3,7 +3,7 @@ import { IoIosArrowForward, IoIosArrowUp } from 'react-icons/io';
 
 interface Props {
   filterValue: string;
-  transactionListAll: number;
+  transactionListTotal: number;
   customFilterStartTime: number;
   customFilterEndTime: number;
   onFilterByDate: (value: string) => void;
@@ -13,7 +13,7 @@ interface Props {
 
 const FilterByDate = ({
   filterValue,
-  transactionListAll,
+  transactionListTotal,
   customFilterStartTime,
   customFilterEndTime,
   onFilterByDate,
@@ -37,35 +37,35 @@ const FilterByDate = ({
           <button
             className={`${filterValue === '1D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('1D')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             1D
           </button>
           <button
             className={`${filterValue === '3D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('3D')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             3D
           </button>
           <button
             className={`${filterValue === '1W' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('1W')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             1W
           </button>
           <button
             className={`${filterValue === '1M' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('1M')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             1M
           </button>
           <button
             className={`${filterValue === 'all' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('all')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             All
           </button>
@@ -76,7 +76,7 @@ const FilterByDate = ({
         <button
           className={`${filterValue === 'custom' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
           onClick={() => handleOnClickFilter('custom')}
-          disabled={!transactionListAll}
+          disabled={!transactionListTotal}
         >
           <span>Custom</span>
           <span className="mt-1">
