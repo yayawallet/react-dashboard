@@ -11,13 +11,7 @@ const Index = () => {
   const [store, setStore] = useState({});
   const { data: profile, isLoading: isProfileLoading } = useGetData('user/profile');
 
-  if (isProfileLoading)
-    return (
-      <>
-        <PageLoading />
-        <YaYaLogoComponent />
-      </>
-    );
+  if (isProfileLoading) return <PageLoading />;
 
   if (!profile?.is_agent)
     return (
