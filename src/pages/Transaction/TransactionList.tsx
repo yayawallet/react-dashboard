@@ -229,12 +229,12 @@ const TransactionList = () => {
                         <td className="relative border-b border-slate-200 p-3">
                           <button
                             type="button"
-                            className="py-0.5 px-3 text text-yayaBrand-800 focus:outline-none bg-white rounded border border-yayaBrand-200 hover:bg-yayaBrand-50 hover:text-yayaBrand-700 focus:z-10 focus:ring-4 focus:ring-yayaBrand-100"
+                            className="py-0.5 px-3 text text-yaya-800 focus:outline-none bg-white rounded border border-yaya-200 hover:bg-yaya-50 hover:text-yaya-700 focus:z-10 focus:ring-4 focus:ring-yaya-100"
                           >
                             <a
                               href={`${import.meta.env.VITE_TRANSACTION_INVOICE_URL}/${t.id}`}
                               target="_blank"
-                              className="flex items-center hover:underline hover:text-yayaBrand-900"
+                              className="flex items-center hover:underline hover:text-yaya-900"
                             >
                               Print{' '}
                               <span className="text- text-sm ml-1 mt-0.5">

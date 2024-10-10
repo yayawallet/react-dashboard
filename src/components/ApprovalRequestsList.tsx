@@ -195,7 +195,7 @@ const ApprovalRequestsList = ({
             {/* <div className="flex items-center gap-4">
               <span className="font-semibold pb-1">Filter by</span>
               <span
-                className={`inline-flex items-center text-[15px] px-3 pb-1 pt-0.5 border bg-gray-100 text-gray-500 rounded cursor-pointer ${filterPending ? 'bg-yayaBrand-600 text-white' : ''}`}
+                className={`inline-flex items-center text-[15px] px-3 pb-1 pt-0.5 border bg-gray-100 text-gray-500 rounded cursor-pointer ${filterPending ? 'bg-yaya-600 text-white' : ''}`}
                 onClick={handleFilterPending}
               >
                 Pending

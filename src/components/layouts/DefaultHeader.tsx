@@ -1,5 +1,5 @@
 import { Link, Outlet } from 'react-router-dom';
-import yayaBrand from '../../assets/yayawallet-brand.svg';
+import yaya from '../../assets/yayawallet-brand.svg';
 
 const DefaultHeader = () => {
   return (
@@ -7,7 +7,7 @@ const DefaultHeader = () => {
       <header className="h-full flex justify-between px-8">
         <div className="">
           <Link to="/" aria-label="yaya wallet logo">
-            <img src={yayaBrand} alt="" className="h-full p-1.5" />
+            <img src={yaya} alt="" className="h-full p-1.5" />
           </Link>
         </div>
 

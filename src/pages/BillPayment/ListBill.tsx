@@ -159,7 +159,7 @@ const ListBill = () => {
 
                           <td className="border-b border-gray-200 pl-3 py-3">
                             <span
-                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] ${bill.status == 'PAID' ? 'text-green-500' : bill.status == 'FORWARDED' ? 'text-yayaBrand-500' : 'text-orange-500'}`}
+                              className={`inline-block align-middle pb-0.5 pr-1 text-[16px] ${bill.status == 'PAID' ? 'text-green-500' : bill.status == 'FORWARDED' ? 'text-yaya-500' : 'text-orange-500'}`}
                             >
                               <GoDotFill />
                             </span>

@@ -1,4 +1,4 @@
-import yayaBrand from '../../assets/yayawallet-brand.svg';
+import yaya from '../../assets/yayawallet-brand.svg';
 import { useAuth } from '../../auth/AuthProvider';
 import { useGetData } from '../../hooks/useSWR';
 import { LuLogOut } from 'react-icons/lu';
@@ -21,7 +21,7 @@ const NoRoleAssigned = () => {
 
       <button
         type="button"
-        className="text-white bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg min-w-[120px] px-5 py-2.5 text-center"
+        className="text-white bg-yaya-600 hover:bg-yaya-700 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg min-w-[120px] px-5 py-2.5 text-center"
         onClick={() => logout()}
       >
         <div
@@ -36,7 +36,7 @@ const NoRoleAssigned = () => {
       </button>
 
       <div className="flex justify-self-center fixed bottom-2 left-0 right-0 md:ml-[300px]">
-        <img src={yayaBrand} alt="YaYa Wallet" width={'120px'} />
+        <img src={yaya} alt="YaYa Wallet" width={'120px'} />
       </div>
     </div>
   );

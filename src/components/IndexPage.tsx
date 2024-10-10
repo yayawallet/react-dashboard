@@ -1,6 +1,6 @@
 import { Link, useOutlet } from 'react-router-dom';
 import { sidebarNavs } from '../routing/navigation';
-import yayaBrand from '../assets/yayawallet-brand.svg';
+import yaya from '../assets/yayawallet-brand.svg';
 import { IoChevronForward } from 'react-icons/io5';
 
 interface Props {
@@ -39,7 +39,7 @@ const IndexPage = ({ parentPath }: Props) => {
           </div>
 
           <div className="flex justify-self-center absolute -bottom-40 left-0 right-0">
-            <img src={yayaBrand} alt="YaYa Wallet" width={'120px'} />
+            <img src={yaya} alt="YaYa Wallet" width={'120px'} />
           </div>
         </div>
       )}
