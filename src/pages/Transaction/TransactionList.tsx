@@ -183,6 +183,7 @@ const TransactionList = () => {
               incomingSum={incomingSum}
               outgoingSum={outgoingSum}
               totalTransactions={totalTransactions}
+              transactionLIstTotal={transactionListTotal}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
             />

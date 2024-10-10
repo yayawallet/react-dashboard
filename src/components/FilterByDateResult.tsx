@@ -7,6 +7,7 @@ interface Props {
   incomingSum: number;
   outgoingSum: number;
   totalTransactions: number;
+  transactionLIstTotal: number;
   customFilterStartTime: number;
   customFilterEndTime: number;
 }
@@ -17,6 +18,7 @@ const FilterByDateResult = ({
   incomingSum,
   outgoingSum,
   totalTransactions,
+  transactionLIstTotal,
   customFilterStartTime,
   customFilterEndTime,
 }: Props) => {
@@ -71,7 +73,7 @@ const FilterByDateResult = ({
               )}
             </span>
           </div>
-          <div className="text-gray-800 pt-5">
+          <div className="text-gray-800 pt-2">
             Net:{' '}
             <span className="text-lg">
               {isLoading ? (
@@ -91,8 +93,12 @@ const FilterByDateResult = ({
           </div>
           <div className="text-gray-800">
             Total Number of Transactions:{' '}
-            <span className="text-lg">{isLoading ? '...' : totalTransactions}</span>{' '}
-            {totalTransactions > 1 ? 'transactions' : 'transaction'}
+            <span className="text-lg">{isLoading ? '...' : totalTransactions}</span>
+            <span className="text-gray-600 ml-1">
+              {filterValue === 'all'
+                ? 'transactions'
+                : `(${isLoading ? '...' : ((totalTransactions / transactionLIstTotal) * 100).toFixed(1)}% of the total)`}
+            </span>
           </div>
         </div>
 

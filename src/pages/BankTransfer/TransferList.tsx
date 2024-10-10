@@ -162,6 +162,7 @@ const TransferList = () => {
               incomingSum={incomingSum}
               outgoingSum={outgoingSum}
               totalTransactions={totalTransfers}
+              transactionLIstTotal={transferListTotal}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
             />
