@@ -10,12 +10,13 @@ import Pagination from '../../components/Pagination';
 import RefreshComponent from '../../components/ui/RefreshComponent';
 import FilterByDate from '../../components/FilterByDate';
 import FilterByDateResult from '../../components/FilterByDateResult';
+import PageLoading from '../../components/ui/PageLoading';
 
 const TransferList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [copiedID, setCopiedID] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [filterValue, setFilterValue] = useState('');
+  const [filterValue, setFilterValue] = useState('all');
   const [filterStartTime, setFilterStartTime] = useState(0);
   const [filterEndTime, setFilterEndTime] = useState(0);
   const [customFilterStartTime, setCustomFilterStartTime] = useState(0);
@@ -45,7 +46,7 @@ const TransferList = () => {
     `/transfer/list?p=${currentPage}${filterStartTime !== 0 ? `&start=${filterStartTime}` : ''}${filterEndTime !== 0 ? `&end=${filterEndTime}` : ''}`
   );
 
-  const { data: { total: transferListAll } = {} } = useGetData('transfer/list?p=1');
+  const { data: { total: transferListTotal } = {} } = useGetData('transfer/list?p=1');
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -128,6 +129,8 @@ const TransferList = () => {
     }
   };
 
+  if (transferListTotal === undefined) return <PageLoading />; // Page is loading
+
   return (
     <div className="table-container">
       {error ? (
@@ -145,7 +148,7 @@ const TransferList = () => {
 
             <FilterByDate
               filterValue={filterValue}
-              transactionListAll={transferListAll}
+              transactionListTotal={transferListTotal}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
               onFilterByDate={handleFilterByDate}
@@ -155,11 +158,11 @@ const TransferList = () => {
 
             <FilterByDateResult
               filterValue={filterValue}
-              showFilterResult={!!(filterStartTime || filterEndTime)}
               isLoading={isLoading}
               incomingSum={incomingSum}
               outgoingSum={outgoingSum}
               totalTransactions={totalTransfers}
+              transactionLIstTotal={transferListTotal}
               customFilterStartTime={customFilterStartTime}
               customFilterEndTime={customFilterEndTime}
             />

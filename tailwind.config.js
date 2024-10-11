@@ -7,7 +7,7 @@ export default {
         header: 'var(--header-height)',
       },
       colors: {
-        yayaBrand: {
+        yaya: {
           50: '#eef0fa',
           100: '#d3d4f2',
           200: '#b5b8e9',

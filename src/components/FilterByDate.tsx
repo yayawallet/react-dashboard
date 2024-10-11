@@ -3,7 +3,7 @@ import { IoIosArrowForward, IoIosArrowUp } from 'react-icons/io';
 
 interface Props {
   filterValue: string;
-  transactionListAll: number;
+  transactionListTotal: number;
   customFilterStartTime: number;
   customFilterEndTime: number;
   onFilterByDate: (value: string) => void;
@@ -13,7 +13,7 @@ interface Props {
 
 const FilterByDate = ({
   filterValue,
-  transactionListAll,
+  transactionListTotal,
   customFilterStartTime,
   customFilterEndTime,
   onFilterByDate,
@@ -35,37 +35,37 @@ const FilterByDate = ({
         <div className="text-gray-500 self-start">Filter by date</div>
         <div className="inline-flex flex-wrap px-3 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
           <button
-            className={`${filterValue === '1D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+            className={`${filterValue === '1D' ? 'bg-yaya-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('1D')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             1D
           </button>
           <button
-            className={`${filterValue === '3D' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+            className={`${filterValue === '3D' ? 'bg-yaya-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('3D')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             3D
           </button>
           <button
-            className={`${filterValue === '1W' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+            className={`${filterValue === '1W' ? 'bg-yaya-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('1W')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             1W
           </button>
           <button
-            className={`${filterValue === '1M' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+            className={`${filterValue === '1M' ? 'bg-yaya-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('1M')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             1M
           </button>
           <button
-            className={`${filterValue === 'all' ? 'bg-yayaBrand-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
+            className={`${filterValue === 'all' ? 'bg-yaya-600 text-white' : ''} px-2 py-1 rounded cursor-pointer`}
             onClick={() => handleOnClickFilter('all')}
-            disabled={!transactionListAll}
+            disabled={!transactionListTotal}
           >
             All
           </button>
@@ -74,9 +74,9 @@ const FilterByDate = ({
 
       <div className="flex flex-wrap items-end gap-3">
         <button
-          className={`${filterValue === 'custom' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
+          className={`${filterValue === 'custom' ? 'bg-yaya-600 hover:bg-yaya-700 text-white' : 'text-gray-800 bg-gray-100'} flex items-center gap-1 cursor-pointer px-2.5 pt-1.5 pb-2 mb-0.5 rounded`}
           onClick={() => handleOnClickFilter('custom')}
-          disabled={!transactionListAll}
+          disabled={!transactionListTotal}
         >
           <span>Custom</span>
           <span className="mt-1">
@@ -133,7 +133,7 @@ const FilterByDate = ({
           </div>
 
           <button
-            className="self-end mb-1 text-white bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-5 pt-1 pb-1.5 text-center"
+            className="self-end mb-1 text-white bg-yaya-600 hover:bg-yaya-700 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg text-sm px-5 pt-1 pb-1.5 text-center"
             disabled={customFilterStartTime === 0 && customFilterEndTime === 0}
             onClick={() => onFilterByDate('custom')}
           >

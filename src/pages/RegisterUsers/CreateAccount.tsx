@@ -302,7 +302,7 @@ const CreateAccount = () => {
     return (
       <div>
         <PageLoading />
-        <p className="text-center p-2 text-yayaBrand-800 font-semibold text-lg">
+        <p className="text-center p-2 text-yaya-800 font-semibold text-lg">
           Account Creation in Progress...
         </p>
       </div>
@@ -333,7 +333,7 @@ const CreateAccount = () => {
         <Link to="/register-user">
           <button
             type="button"
-            className={`text-white mr-28 bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-5 py-2 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            className={`text-white mr-28 bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 rounded-lg px-5 py-2 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
             Register another user
@@ -366,7 +366,7 @@ const CreateAccount = () => {
 
         <div className="md:grid" style={{ gridTemplateColumns: `repeat(${totalSteps}, 1fr)` }}>
           <h2
-            className={`mb-10 text-center col-start-${currentStep} md:font-semibold px-3 pt-0.5 pb-1 bg-yayaBrand-500 rounded-lg text-white`}
+            className={`mb-10 text-center col-start-${currentStep} md:font-semibold px-3 pt-0.5 pb-1 bg-yaya-500 rounded-lg text-white`}
             style={{ gridColumn: `${currentStep} / ${currentStep + 1}` }}
           >
             {stepTitle}
@@ -867,7 +867,7 @@ const CreateAccount = () => {
           <button
             type="button"
             disabled={isLoading}
-            className={`text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
+            className={`text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 rounded-lg px-8 py-2.5 text-center ${currentStep === 1 ? 'hidden' : ''}`}
             onClick={handleClickBack}
           >
             BACK
@@ -876,7 +876,7 @@ const CreateAccount = () => {
           <button
             type="button"
             disabled={isLoading}
-            className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg px-8 py-2.5 text-center"
+            className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 rounded-lg px-8 py-2.5 text-center"
             onClick={handleClickNext}
           >
             {currentStep === totalSteps ? (isLoading ? 'SUBMITTING...' : 'SUBMIT') : 'NEXT'}

@@ -4,7 +4,7 @@ const RefreshButton = () => {
   return (
     <button
       type="button"
-      className="btn bg-yayaBrand-600 text-white flex gap-x-1 items-center  px-2.5 py-1.5 rounded-md hover:bg-yayaBrand-700 focus:ring-4 focus:ring-yayaBrand-100"
+      className="btn bg-yaya-600 text-white flex gap-x-1 items-center  px-2.5 py-1.5 rounded-md hover:bg-yaya-700 focus:ring-4 focus:ring-yaya-100"
     >
       <HiOutlineRefresh />
       <span>Refresh</span>

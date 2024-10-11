@@ -3,7 +3,7 @@ const LoadingSpinner = () => {
     <div>
       <button
         type="button"
-        className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 inline-flex items-center"
+        className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:ring-yaya-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 inline-flex items-center"
       >
         <svg
           aria-hidden="true"

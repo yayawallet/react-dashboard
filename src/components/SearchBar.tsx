@@ -30,7 +30,7 @@ const SearchBar = ({ onSearch, onSubmit, placeholder }: Props) => {
           <button
             type="submit"
             aria-label="search"
-            className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-yayaBrand-500 rounded-e border border-yayaBrand-500 hover:bg-yayaBrand-600 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300"
+            className="absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-yaya-500 rounded-e border border-yaya-500 hover:bg-yaya-600 focus:ring-4 focus:outline-none focus:ring-yaya-300"
           >
             <svg
               className="w-4 h-4"

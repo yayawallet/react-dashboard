@@ -3,7 +3,7 @@ import { useAuth } from '../auth/AuthProvider';
 
 export const useInactivityTimeout = (timeout = 300000) => {
   const { logout: logoutCallback } = useAuth();
-  const timeoutId = useRef<number | null>(null);
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const resetTimeout = () => {
     if (timeoutId.current) {

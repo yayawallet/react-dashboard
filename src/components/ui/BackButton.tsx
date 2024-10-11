@@ -16,7 +16,7 @@ const BackButton = ({ gotoPath, displayText }: Props) => {
   return (
     <button
       type="button"
-      className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg min-w-[120px] px-5 py-2.5 text-center"
+      className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg min-w-[120px] px-5 py-2.5 text-center"
       onClick={handleClick}
     >
       <div

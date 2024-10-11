@@ -17,7 +17,10 @@ const Profile = () => {
             <p className="mt-1 max-w-2xl text-sm text-gray-500">{'@' + profile?.account}</p>
 
             <h4 className="mt-8 text-lg">
-              Balance: {balance && !isValidating ? Number(balance)?.toFixed(2) : ' ... '}
+              Balance:{' '}
+              {balance && !isValidating
+                ? Number(balance)?.toLocaleString('en-US', { maximumFractionDigits: 2 })
+                : ' ... '}
               &nbsp;
               <span className="text-gray-500">ETB</span>
             </h4>

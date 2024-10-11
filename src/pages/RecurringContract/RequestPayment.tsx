@@ -84,7 +84,7 @@ const RequestPayment = () => {
       <div className="border border-b-0 rounded-t-xl p-2 px-5 max-w-[var(--form-width)] mx-auto bg-gray-50 mt-6">
         <div className="flex gap-x-4 my-2 justify-end">
           <button
-            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'single' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-yayaBrand-900 border-2 border-yayaBrand-600 hover:bg-yayaBrand-100'}`}
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'single' ? 'bg-yaya-600 hover:bg-yaya-700 text-white' : 'text-yaya-900 border-2 border-yaya-600 hover:bg-yaya-100'}`}
             onClick={() => setInputFormType('single')}
           >
             <input
@@ -101,7 +101,7 @@ const RequestPayment = () => {
           </button>
 
           <button
-            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'multiple' ? 'bg-yayaBrand-600 hover:bg-yayaBrand-700 text-white' : 'text-yayaBrand-900 border-2 border-yayaBrand-600 hover:bg-yayaBrand-100'}`}
+            className={`flex flex-wrap items-center gap-x-2 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-1.5 text-center ${inputFormType === 'multiple' ? 'bg-yaya-600 hover:bg-yaya-700 text-white' : 'text-yaya-900 border-2 border-yaya-600 hover:bg-yaya-100'}`}
             onClick={() => setInputFormType('multiple')}
           >
             <input
@@ -211,7 +211,7 @@ const RequestPayment = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
+              className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg text-sm w-full sm:w-[200px] px-5 py-2.5 text-center"
             >
               <span className="text-[15px]" style={{ letterSpacing: '0.3px' }}>
                 {isLoading ? 'Please wait...' : 'Request Payment'}

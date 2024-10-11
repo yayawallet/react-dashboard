@@ -56,7 +56,7 @@ const BulkImportReportDetails = () => {
             <div className="overflow-auto">
               <table className="w-full">
                 <thead className="">
-                  <tr className="bg-yayaBrand-500 text-gray-50">
+                  <tr className="bg-yaya-500 text-gray-50">
                     <th className="text-left px-4 py-2 font-medium">ID</th>
                     <th className="text-left px-4 py-2 font-medium">Row&nbsp;#</th>
                     <th className="text-left px-4 py-2 font-medium">Error Message</th>

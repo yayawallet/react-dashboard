@@ -25,7 +25,7 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
       <NavLink
         to={menu.path}
         className={({ isActive }) =>
-          `flex items-center p-2 text-gray-800 hover:bg-yayaBrand-50 ${isActive ? 'bg-yayaBrand-600 text-white hover:bg-yayaBrand-700' : ''} ${isActive && isOpen && menu.children?.length ? 'rounded-t-lg shadow shadow-yayaBrand-200' : 'rounded-lg'}`
+          `flex items-center p-2 text-gray-800 hover:bg-yaya-50 ${isActive ? 'bg-yaya-600 text-white hover:bg-yaya-700' : ''} ${isActive && isOpen && menu.children?.length ? 'rounded-t-lg shadow shadow-yaya-200' : 'rounded-lg'}`
         }
         onClick={() => {
           pathName.startsWith('/' + menu.path) ? setIsOpen(!isOpen) : setIsOpen(true);
@@ -45,14 +45,14 @@ const SidebarItem = ({ menu, onCloseSidebar }: Props) => {
 
       {menu.children && (
         <ul
-          className={`px-4 pt-2 pb-3 rounded-b-xl ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-white shadow shadow-yayaBrand-200' : 'hidden'}`}
+          className={`px-4 pt-2 pb-3 rounded-b-xl ${pathName.startsWith('/' + menu.path) && isOpen ? 'bg-white shadow shadow-yaya-200' : 'hidden'}`}
         >
           {menu.children.map((item, index) => (
             <li key={index}>
               <NavLink
                 to={`${menu.path}/${item.path}`}
                 className={({ isActive }) =>
-                  `flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-50 ${isActive ? 'text-gray-900 shadow bg-yayaBrand-50 hover:bg-yayaBrand-50 activeSubmenuItem' : ''}`
+                  `flex items-center p-2 text-gray-600 rounded-lg hover:bg-gray-50 ${isActive ? 'text-gray-900 shadow bg-yaya-50 hover:bg-yaya-50 activeSubmenuItem' : ''}`
                 }
                 onClick={onCloseSidebar}
               >

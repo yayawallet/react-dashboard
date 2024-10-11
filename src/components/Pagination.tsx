@@ -55,7 +55,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
   };
 
   return (
-    <div className="flex flex-wrap justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
+    <div className="flex flex-wrap justify-center sm:justify-between items-center px-5 bg-gray-100 rounded-t rounded-xl">
       <p className="text-[15px] text-slate-700 py-4">
         {
           <span>
@@ -97,7 +97,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 1 ? 'hidden' : ''}
-            ${currentPage === 1 ? 'bg-yayaBrand-600 text-white' : ''}
+            ${currentPage === 1 ? 'bg-yaya-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(1)}
@@ -110,7 +110,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 2 ? 'hidden' : ''}
-            ${currentPage === left ? 'bg-yayaBrand-600 text-white' : ''}
+            ${currentPage === left ? 'bg-yaya-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(left)}
@@ -123,7 +123,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 3 ? 'hidden' : ''}
-            ${currentPage === middle ? 'bg-yayaBrand-600 text-white' : ''}
+            ${currentPage === middle ? 'bg-yaya-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(middle)}
@@ -136,7 +136,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 4 ? 'hidden' : ''}
-            ${currentPage === right ? 'bg-yayaBrand-600 text-white' : ''}
+            ${currentPage === right ? 'bg-yaya-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(right)}
@@ -149,7 +149,7 @@ const Pagination = ({ currentPage, pageCount, total, perPage, isLoading, onPageC
             <button
               className={`
             ${pageCount < 5 ? 'hidden' : ''}
-            ${currentPage === pageCount ? 'bg-yayaBrand-600 text-white' : ''}
+            ${currentPage === pageCount ? 'bg-yaya-600 text-white' : ''}
             flex justify-center items-center h-[28px] min-w-[26px] px-1 rounded cursor-pointer
           `}
               onClick={() => handlePageClick(pageCount)}

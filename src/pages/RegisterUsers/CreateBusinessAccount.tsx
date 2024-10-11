@@ -168,7 +168,7 @@ const CreateBusinessAccount = () => {
             <button
               type="button"
               disabled={isLoading}
-              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 rounded-lg max-w-[180px] px-8 py-2.5 text-center"
+              className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 rounded-lg max-w-[180px] px-8 py-2.5 text-center"
               onClick={handleGetLicenseNumber}
             >
               {isLoading ? <LoadingSpinnerButton /> : 'NEXT'}
@@ -219,7 +219,7 @@ const CreateBusinessAccount = () => {
             <button
               type="submit"
               disabled={isLoading || !isTINValid}
-              className="text-white bg-yayaBrand-700 hover:bg-yayaBrand-800 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 w-[130px] rounded-lg px-8 py-2.5 text-center"
+              className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 w-[130px] rounded-lg px-8 py-2.5 text-center"
             >
               {isLoading ? <LoadingSpinnerButton /> : 'NEXT'}
             </button>

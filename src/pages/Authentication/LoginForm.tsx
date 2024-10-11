@@ -71,7 +71,7 @@ const LoginForm = () => {
             type="username"
             name="username"
             id="username"
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yayaBrand-600 focus:border-yayaBrand-600 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yaya-600 focus:border-yaya-600 block w-full p-2.5"
             placeholder="username"
             autoComplete="username"
             disabled={isLoading}
@@ -96,7 +96,7 @@ const LoginForm = () => {
             name="password"
             id="password"
             placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yayaBrand-600 focus:border-yayaBrand-600 block w-full p-2.5"
+            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-yaya-600 focus:border-yaya-600 block w-full p-2.5"
             disabled={isLoading}
             onChange={(e) => {
               formik.handleChange(e);
@@ -117,7 +117,7 @@ const LoginForm = () => {
                 id="remember"
                 aria-describedby="remember"
                 type="checkbox"
-                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-yayaBrand-300"
+                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-yaya-300"
               />
             </div>
             <div className="ml-3 text-sm">
@@ -127,7 +127,7 @@ const LoginForm = () => {
             </div>
           </div>
           <span
-            className="text-sm font-medium text-yayaBrand-600 hover:underline cursor-pointer"
+            className="text-sm font-medium text-yaya-600 hover:underline cursor-pointer"
             onClick={() => alert("If you lost your password, please contact the company's Admin.")}
           >
             Forgot password?
@@ -135,7 +135,7 @@ const LoginForm = () => {
         </div>
         <button
           type="submit"
-          className="w-full text-white bg-yayaBrand-600 hover:bg-yayaBrand-700 focus:ring-4 focus:outline-none focus:ring-yayaBrand-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="w-full text-white bg-yaya-600 hover:bg-yaya-700 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
           disabled={isLoading}
         >
           {isLoading ? 'Please wait...' : 'Sign in'}
