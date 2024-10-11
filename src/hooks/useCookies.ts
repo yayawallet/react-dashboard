@@ -16,7 +16,7 @@ export const useCookies = (keyName: string): [string | undefined, SetCookieFunct
   const setValue: SetCookieFunction = (newValue: string) => {
     try {
       Cookies.set(keyName, newValue, {
-        secure: true,
+        // secure: true,
         sameSite: 'strict',
       });
       setStoredValue(newValue);
