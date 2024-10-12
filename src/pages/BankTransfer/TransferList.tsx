@@ -146,26 +146,30 @@ const TransferList = () => {
               </div>
             </div>
 
-            <FilterByDate
-              filterValue={filterValue}
-              transactionListTotal={transferListTotal}
-              customFilterStartTime={customFilterStartTime}
-              customFilterEndTime={customFilterEndTime}
-              onFilterByDate={handleFilterByDate}
-              onCustomStartTime={handleCustomStartTime}
-              onCustomEndTime={handleCustomEndTime}
-            />
+            <div className="mb-10">
+              <FilterByDate
+                filterValue={filterValue}
+                transactionListTotal={transferListTotal}
+                customFilterStartTime={customFilterStartTime}
+                customFilterEndTime={customFilterEndTime}
+                onFilterByDate={handleFilterByDate}
+                onCustomStartTime={handleCustomStartTime}
+                onCustomEndTime={handleCustomEndTime}
+              />
+            </div>
 
-            <FilterByDateResult
-              filterValue={filterValue}
-              isLoading={isLoading}
-              incomingSum={incomingSum}
-              outgoingSum={outgoingSum}
-              totalTransactions={totalTransfers}
-              transactionLIstTotal={transferListTotal}
-              customFilterStartTime={customFilterStartTime}
-              customFilterEndTime={customFilterEndTime}
-            />
+            <div className="mb-10">
+              <FilterByDateResult
+                filterValue={filterValue}
+                isLoading={isLoading}
+                incomingSum={incomingSum}
+                outgoingSum={outgoingSum}
+                totalTransactions={totalTransfers}
+                transactionLIstTotal={transferListTotal}
+                customFilterStartTime={customFilterStartTime}
+                customFilterEndTime={customFilterEndTime}
+              />
+            </div>
           </div>
 
           {isLoading && currentPage === 1 ? (

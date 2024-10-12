@@ -23,7 +23,7 @@ const FilterByDateResult = ({
   customFilterEndTime,
 }: Props) => {
   return (
-    <div className={`px-2.5 mb-10 rounded-lg md:mx-4`}>
+    <div className={`px-2.5 rounded-lg md:mx-3`}>
       <h3 className="text-xl font-semibold mb-2 text-center sm:text-start">
         Transactions with in{' '}
         {filterValue === '1D' ? (

@@ -30,7 +30,7 @@ const FilterByDate = ({
   };
 
   return (
-    <div className="flex flex-wrap items-end mt-6 mb-10 ml-4 gap-8">
+    <div className="flex flex-wrap items-end mt-6 ml-3 gap-8">
       <div className="flex flex-col items-center gap-2">
         <div className="text-gray-500 self-start">Filter by date</div>
         <div className="inline-flex flex-wrap px-3 py-1 gap-1 bg-gray-100 text-gray-800 text-[15px] rounded">
