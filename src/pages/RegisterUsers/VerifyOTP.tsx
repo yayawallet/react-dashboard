@@ -58,8 +58,7 @@ const VerifyOTP = () => {
             authAxios
               .post('/user/search', { query: phone })
               .then((res) => {
-                // if (res.data?.length === 0) {
-                if (false) {
+                if (res.data?.length > 0) {
                   setErrorMessage(`User with this number 0${phone} already exists`);
                   setOTPExpiresIn(30);
                   setStore({});
