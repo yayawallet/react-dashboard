@@ -469,7 +469,7 @@ const CreateAccount = () => {
 
                 <span className="block mb-5 pl-2 text-sm text-red-600">
                   {formik.touched.gender &&
-                    typeof typeof formik.errors.gender === 'string' &&
+                    typeof formik.errors.gender === 'string' &&
                     formik.errors.gender}
                 </span>
               </div>
