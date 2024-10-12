@@ -5,7 +5,7 @@ interface Props {
   onHide: () => void;
 }
 
-const BulkBillDetailModal = ({ failed, onHide }: Props) => {
+const BulkBillDetailModal = ({ failed }: Props) => {
   return (
     <div className="table-container">
       <div className="border border-slate-200 rounded-xl">

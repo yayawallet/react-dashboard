@@ -26,7 +26,7 @@ const CreateAccount = () => {
   const [emailLookup, setEmailLookup] = useState('');
   const [isAccountNameAvailable, setIsAccountNameAvailable] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [totalSteps, setTotalSteps] = useState(store.accountType === 'business' ? 5 : 4);
+  const [totalSteps] = useState(store.accountType === 'business' ? 5 : 4);
   const [stepTitle, setStepTitle] = useState('');
   const [isChecking, setChecking] = useState(false);
   const [userPhoto, setUserPhoto] = useState('');
@@ -395,7 +395,9 @@ const CreateAccount = () => {
                 onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
               />
               <span className="block mb-5 pl-2 text-sm text-red-600">
-                {formik.touched.name && formik.errors.name}
+                {formik.touched.name &&
+                  typeof formik.errors.name === 'string' &&
+                  formik.errors.name}
               </span>
             </div>
 
@@ -466,7 +468,9 @@ const CreateAccount = () => {
                 </div>
 
                 <span className="block mb-5 pl-2 text-sm text-red-600">
-                  {formik.touched.gender && formik.errors.gender}
+                  {formik.touched.gender &&
+                    typeof formik.errors.gender === 'string' &&
+                    formik.errors.gender}
                 </span>
               </div>
 
@@ -501,7 +505,9 @@ const CreateAccount = () => {
                   </span>
                 )}
                 <span className="block mb-5 pl-2 text-sm font-medium text-red-600">
-                  {formik.touched.email && formik.errors.email}
+                  {formik.touched.email &&
+                    typeof formik.errors.email === 'string' &&
+                    formik.errors.email}
                   {!formik.errors.email && emailLookup}
                 </span>
               </div>
@@ -553,7 +559,9 @@ const CreateAccount = () => {
                 onKeyDown={(e) => (e.key === 'Enter' ? handleClickNext() : undefined)}
               />
               <span className="block mb-5 pl-2 text-sm text-red-600">
-                {formik.touched.address && formik.errors.address}
+                {formik.touched.address &&
+                  typeof formik.errors.address === 'string' &&
+                  formik.errors.address}
               </span>
             </div>
 
@@ -586,7 +594,9 @@ const CreateAccount = () => {
                   disabled={isLoading}
                 />
                 <span className="block mb-5 pl-2 text-sm text-red-600">
-                  {formik.touched.region && formik.errors.region}
+                  {formik.touched.region &&
+                    typeof formik.errors.region === 'string' &&
+                    formik.errors.region}
                 </span>
               </div>
             </div>
@@ -707,7 +717,9 @@ const CreateAccount = () => {
               />
 
               <span className="block mb-2 pl-2 text-sm text-red-600">
-                {formik.touched.photo_base64 && formik.errors.photo_base64}
+                {formik.touched.photo_base64 &&
+                  typeof formik.errors.photo_base64 === 'string' &&
+                  formik.errors.photo_base64}
               </span>
             </div>
 

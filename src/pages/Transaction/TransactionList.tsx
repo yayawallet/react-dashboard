@@ -157,36 +157,41 @@ const TransactionList = () => {
       ) : (
         <div className="border border-slate-200 rounded-xl">
           <div className="">
-            <div className="flex flex-wrap gap-2 justify-between items-center m-4">
-              <div className="w-64">
-                <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
-              </div>
-
+            <div className="flex flex-wrap gap-2 justify-between items-center m-3 mb-0">
+              <h3 className="py-2 text-lg font-medium">Transaction List</h3>
               <div onClick={handleRefresh}>
                 <RefreshButton />
               </div>
             </div>
 
-            <FilterByDate
-              filterValue={filterValue}
-              transactionListTotal={transactionListTotal}
-              customFilterStartTime={customFilterStartTime}
-              customFilterEndTime={customFilterEndTime}
-              onFilterByDate={handleFilterByDate}
-              onCustomStartTime={handleCustomStartTime}
-              onCustomEndTime={handleCustomEndTime}
-            />
+            <div className="flex items-center justify-between gap-5 flex-wrap mb-10">
+              <FilterByDate
+                filterValue={filterValue}
+                transactionListTotal={transactionListTotal}
+                customFilterStartTime={customFilterStartTime}
+                customFilterEndTime={customFilterEndTime}
+                onFilterByDate={handleFilterByDate}
+                onCustomStartTime={handleCustomStartTime}
+                onCustomEndTime={handleCustomEndTime}
+              />
 
-            <FilterByDateResult
-              filterValue={filterValue}
-              isLoading={isLoading}
-              incomingSum={incomingSum}
-              outgoingSum={outgoingSum}
-              totalTransactions={totalTransactions}
-              transactionLIstTotal={transactionListTotal}
-              customFilterStartTime={customFilterStartTime}
-              customFilterEndTime={customFilterEndTime}
-            />
+              <div className="w-64 mx-3 self-end">
+                <SearchBar onSearch={(query) => handleSearchTransaction(query)} />
+              </div>
+            </div>
+
+            <div className="mb-10">
+              <FilterByDateResult
+                filterValue={filterValue}
+                isLoading={isLoading}
+                incomingSum={incomingSum}
+                outgoingSum={outgoingSum}
+                totalTransactions={totalTransactions}
+                transactionLIstTotal={transactionListTotal}
+                customFilterStartTime={customFilterStartTime}
+                customFilterEndTime={customFilterEndTime}
+              />
+            </div>
           </div>
 
           {isLoading && currentPage === 1 ? (

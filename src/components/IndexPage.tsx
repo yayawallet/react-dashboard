@@ -38,7 +38,7 @@ const IndexPage = ({ parentPath }: Props) => {
             </ul>
           </div>
 
-          <div className="flex justify-self-center absolute -bottom-40 left-0 right-0">
+          <div className="flex justify-center absolute -bottom-40 left-0 right-0">
             <img src={yaya} alt="YaYa Wallet" width={'120px'} />
           </div>
         </div>
