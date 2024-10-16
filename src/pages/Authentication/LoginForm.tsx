@@ -4,11 +4,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthProvider';
+import { BiSolidShow } from 'react-icons/bi';
+import { BiSolidHide } from 'react-icons/bi';
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const { login } = useAuth();
 
@@ -20,7 +23,7 @@ const LoginForm = () => {
 
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(4, 'Invalid username')
+        .min(4, 'must be at least 4 characters')
         .max(64, 'Must be 64 characters or less')
         .required('username is required'),
       password: Yup.string()
@@ -41,11 +44,17 @@ const LoginForm = () => {
           login(res.data.access, res.data.refresh, res.data.user);
           formik.resetForm();
         })
-        .catch(() => {
+        .catch((error) => {
           setSuccess(false);
           setIsLoading(false);
-          setErrorMessage('Incorrect username or password');
-          formik.setFieldValue('password', '');
+
+          if (error.response?.status === 401) {
+            setErrorMessage('Incorrect username or password');
+          } else if (error.response) {
+            setErrorMessage("Can't Login, Something went wrong!");
+          } else {
+            setErrorMessage('Network Failed');
+          }
         });
     },
   });
@@ -57,7 +66,7 @@ const LoginForm = () => {
   return (
     <div>
       {errorMessage && (
-        <p className="my-2 px-4 py-1 bg-red-50 text-center text-red-600 border-2 border-red-100 rounded">
+        <p className="px-4 py-1 pb-1.5 bg-red-50 border border-red-100 rounded text-center text-red-600">
           {errorMessage}
         </p>
       )}
@@ -87,12 +96,12 @@ const LoginForm = () => {
           </span>
         </div>
 
-        <div>
+        <div className="relative">
           <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
             Password
           </label>
           <input
-            type="password"
+            type={isPasswordVisible ? 'text' : 'password'}
             name="password"
             id="password"
             placeholder="••••••••"
@@ -104,6 +113,13 @@ const LoginForm = () => {
             }}
             value={formik.values.password}
           />
+
+          <span
+            className="absolute top-9 right-2 text-lg text-gray-700 cursor-pointer p-1.5"
+            onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            {isPasswordVisible ? <BiSolidHide /> : <BiSolidShow />}
+          </span>
 
           <span className="text-sm text-red-600">
             {formik.touched.password && formik.errors.password}
