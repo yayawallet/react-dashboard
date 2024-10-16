@@ -7,11 +7,14 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+
+# Build command using dotenv to load environment variables
+CMD ["sh", "-c", "dotenv -e .env npm run build"]
 
 FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
+
 
 # Set appropriate file permissions
 RUN chown -R nginx:nginx /usr/share/nginx/html
@@ -21,3 +24,5 @@ EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+# $185
