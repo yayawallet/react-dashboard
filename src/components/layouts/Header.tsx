@@ -17,7 +17,7 @@ const Header = () => {
 
   useEffect(() => {
     if (userInfo?.profile_image) {
-      setImgSrc(import.meta.env.VITE_BASE_URL + userInfo?.profile_image);
+      setImgSrc(process.env.VITE_BASE_URL + userInfo?.profile_image);
     }
   }, [userInfo]);
 

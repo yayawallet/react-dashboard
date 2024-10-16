@@ -16,14 +16,14 @@ const BackButton = ({ gotoPath, displayText }: Props) => {
   return (
     <button
       type="button"
-      className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 font-medium rounded-lg min-w-[120px] px-5 py-2.5 text-center"
+      className="text-white bg-yaya-700 hover:bg-yaya-800 focus:ring-4 focus:outline-none focus:ring-yaya-300 rounded-lg min-w-[100px] px-3 py-1.5 text-center"
       onClick={handleClick}
     >
       <div
-        className="flex items-center justify-center pr-2 gap-x-1 text-sm sm:text-base"
+        className="flex items-center justify-center pr-2 gap-x-1 text-sm lg:text-base"
         style={{ letterSpacing: '0.3px' }}
       >
-        <span className="pt-0.5">
+        <span className="pt-0.5 text-sm">
           <SlArrowLeft />
         </span>
         <span>{displayText || 'BACK'}</span>

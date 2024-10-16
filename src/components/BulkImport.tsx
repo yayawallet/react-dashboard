@@ -55,10 +55,9 @@ const BulkImport = ({
               : 'Your file is being processed.'
           );
         })
-        .catch((err) => {
+        .catch(() => {
           onSuccess('');
           onError('Failed to upload your file.');
-          console.log(err);
         })
         .finally(() => {
           onLoading(false);

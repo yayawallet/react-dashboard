@@ -68,7 +68,7 @@ const TransferList = () => {
 
   const getCurrentTime = async () => {
     // const { data: { time: currentTime } = {} } = await axios.get(
-    //   `${import.meta.env.VITE_GET_TIME_URL}`
+    //   `${process.env.VITE_GET_TIME_URL}`
     // );
 
     const currentTime = new Date().getTime();

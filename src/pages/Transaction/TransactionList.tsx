@@ -87,7 +87,7 @@ const TransactionList = () => {
 
   const getCurrentTime = async () => {
     // const { data: { time: currentTime } = {} } = await axios.get(
-    //   `${import.meta.env.VITE_GET_TIME_URL}`
+    //   `${process.env.VITE_GET_TIME_URL}`
     // );
 
     const currentTime = new Date().getTime();
@@ -237,7 +237,7 @@ const TransactionList = () => {
                             className="py-0.5 px-3 text text-yaya-800 focus:outline-none bg-white rounded border border-yaya-200 hover:bg-yaya-50 hover:text-yaya-700 focus:z-10 focus:ring-4 focus:ring-yaya-100"
                           >
                             <a
-                              href={`${import.meta.env.VITE_TRANSACTION_INVOICE_URL}/${t.id}`}
+                              href={`${process.env.VITE_TRANSACTION_INVOICE_URL}/${t.id}`}
                               target="_blank"
                               className="flex items-center hover:underline hover:text-yaya-900"
                             >
