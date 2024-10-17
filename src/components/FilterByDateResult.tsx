@@ -1,5 +1,6 @@
 import { Cell, Pie, PieChart } from 'recharts';
 import { formatDate } from '../utils/table_utils';
+import '../components/ui/BlinkDotLoader.css';
 
 interface Props {
   filterValue: string;
@@ -92,12 +93,12 @@ const FilterByDateResult = ({
             </span>
           </div>
           <div className="text-gray-800">
-            Total Number of Transactions:{' '}
+            Number of Transactions:{' '}
             <span className="text-lg">{isLoading ? '...' : totalTransactions}</span>
             <span className="text-gray-600 ml-1">
               {filterValue === 'all'
                 ? 'transactions'
-                : `(${isLoading ? '...' : ((totalTransactions / transactionLIstTotal) * 100).toFixed(1)}% of the total)`}
+                : `~ ${isLoading ? '...' : ((totalTransactions / transactionLIstTotal) * 100).toFixed(1)}% of the total`}
             </span>
           </div>
         </div>
@@ -105,34 +106,40 @@ const FilterByDateResult = ({
         <div
           className={`${typeof incomingSum === 'number' && typeof outgoingSum === 'number' ? '' : 'hidden'} overflow-x-auto`}
         >
-          <PieChart width={540} height={220}>
-            <Pie
-              data={[
-                {
-                  name: 'Total Incoming',
-                  value: isLoading ? 0 : incomingSum,
-                },
-                {
-                  name: 'Total Outgoing',
-                  value: isLoading ? 0 : outgoingSum,
-                },
-              ]}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              innerRadius={30}
-              outerRadius={70}
-              label={({ name, value }) =>
-                `${name} (${((value / (incomingSum + outgoingSum)) * 100).toFixed(1)}%)`
-              }
-              animationDuration={1000}
-              fill="#8884d8"
-            >
-              <Cell fill={'#008fd6'} />
-              <Cell fill={'#ff6242'} />
-            </Pie>
-          </PieChart>
+          {isLoading ? (
+            <div className="w-[540px] p-10 flex justify-center ">
+              <div className="loader"></div>
+            </div>
+          ) : (
+            <PieChart width={540} height={220}>
+              <Pie
+                data={[
+                  {
+                    name: 'Total Incoming',
+                    value: isLoading ? 0 : incomingSum,
+                  },
+                  {
+                    name: 'Total Outgoing',
+                    value: isLoading ? 0 : outgoingSum,
+                  },
+                ]}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                innerRadius={30}
+                outerRadius={70}
+                label={({ name, value }) =>
+                  `${name} (${((value / (incomingSum + outgoingSum)) * 100).toFixed(1)}%)`
+                }
+                animationDuration={1000}
+                fill="#8884d8"
+              >
+                <Cell fill={'#008fd6'} />
+                <Cell fill={'#ff6242'} />
+              </Pie>
+            </PieChart>
+          )}
         </div>
       </div>
     </div>
