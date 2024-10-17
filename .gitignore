@@ -1,5 +1,4 @@
 *.env*
-runtime-env.*
 
 # Logs
 logs
