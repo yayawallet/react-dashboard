@@ -22,7 +22,7 @@ const UserSettings = ({ onCloseUserSettings }: Props) => {
 
   useEffect(() => {
     if (userInfo?.profile_image) {
-      setImgSrc(process.env.VITE_BASE_URL + userInfo?.profile_image);
+      setImgSrc(window.env.BASE_URL + userInfo?.profile_image);
     }
   }, [userInfo]);
 
