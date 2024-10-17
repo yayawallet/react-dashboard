@@ -53,7 +53,7 @@ const LoginForm = () => {
           } else if (error.response) {
             setErrorMessage('Something went wrong!');
           } else {
-            setErrorMessage('Network Failed');
+            setErrorMessage('Network Error');
           }
         });
     },
