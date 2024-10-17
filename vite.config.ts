@@ -10,4 +10,7 @@ export default defineConfig({
     port: 3000,
   },
   assetsInclude: ['**/*.xlsx'],
+  define: {
+    'process.env': process.env,
+  },
 });

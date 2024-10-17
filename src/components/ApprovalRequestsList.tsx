@@ -412,7 +412,7 @@ const ApprovalRequestsList = ({
                               >
                                 {t.file ? (
                                   <a
-                                    href={import.meta.env.VITE_BASE_URL + t.file}
+                                    href={window.env.BASE_URL + t.file}
                                     download={`YaYa_Scheduled_Bulk_Request_${t.file}`}
                                     className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
                                   >

@@ -51,9 +51,9 @@ const LoginForm = () => {
           if (error.response?.status === 401) {
             setErrorMessage('Incorrect username or password');
           } else if (error.response) {
-            setErrorMessage("Can't Login, Something went wrong!");
+            setErrorMessage('Something went wrong!');
           } else {
-            setErrorMessage('Network Failed');
+            setErrorMessage('Network Error');
           }
         });
     },
@@ -118,7 +118,7 @@ const LoginForm = () => {
             className="absolute top-9 right-2 text-lg text-gray-700 cursor-pointer p-1.5"
             onClick={() => setIsPasswordVisible(!isPasswordVisible)}
           >
-            {isPasswordVisible ? <BiSolidHide /> : <BiSolidShow />}
+            {isPasswordVisible ? <BiSolidShow /> : <BiSolidHide />}
           </span>
 
           <span className="text-sm text-red-600">

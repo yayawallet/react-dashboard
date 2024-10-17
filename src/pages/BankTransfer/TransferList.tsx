@@ -11,6 +11,7 @@ import RefreshComponent from '../../components/ui/RefreshComponent';
 import FilterByDate from '../../components/FilterByDate';
 import FilterByDateResult from '../../components/FilterByDateResult';
 import PageLoading from '../../components/ui/PageLoading';
+import axios from 'axios';
 
 const TransferList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +22,7 @@ const TransferList = () => {
   const [filterEndTime, setFilterEndTime] = useState(0);
   const [customFilterStartTime, setCustomFilterStartTime] = useState(0);
   const [customFilterEndTime, setCustomFilterEndTime] = useState(0);
+  const [isFetchingCurrentTime, setIsFetchingCurrentTime] = useState(false);
 
   const copyTransferID = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -67,11 +69,11 @@ const TransferList = () => {
   };
 
   const getCurrentTime = async () => {
-    // const { data: { time: currentTime } = {} } = await axios.get(
-    //   `${import.meta.env.VITE_GET_TIME_URL}`
-    // );
+    setIsFetchingCurrentTime(true);
 
-    const currentTime = new Date().getTime();
+    const { data: { time: currentTime } = {} } = await axios.get(`${window.env.GET_TIME_URL}`);
+
+    setIsFetchingCurrentTime(false);
 
     return currentTime;
   };
@@ -96,33 +98,31 @@ const TransferList = () => {
 
     if (value === 'all') return; // If no filter is selected, clear filter
 
+    const currentTime = (await getCurrentTime()) / 1000; // convert miliseconds to seconds
+
     if (value === '1D') {
-      const currentTime = await getCurrentTime();
-      const oneDayAgo = new Date(currentTime / 1000 - 24 * 60 * 60);
+      const oneDayAgo = new Date(currentTime - 24 * 60 * 60);
 
       setFilterStartTime(oneDayAgo.getTime());
       return;
     }
 
     if (value === '3D') {
-      const currentTime = await getCurrentTime();
-      const threeDaysAgo = new Date(currentTime / 1000 - 3 * 24 * 60 * 60);
+      const threeDaysAgo = new Date(currentTime - 3 * 24 * 60 * 60);
 
       setFilterStartTime(threeDaysAgo.getTime());
       return;
     }
 
     if (value === '1W') {
-      const currentTime = await getCurrentTime();
-      const oneWeekAgo = new Date(currentTime / 1000 - 7 * 24 * 60 * 60);
+      const oneWeekAgo = new Date(currentTime - 7 * 24 * 60 * 60);
 
       setFilterStartTime(oneWeekAgo.getTime());
       return;
     }
 
     if (value === '1M') {
-      const currentTime = await getCurrentTime();
-      const oneMonthAgo = new Date(currentTime / 1000 - 30 * 24 * 60 * 60);
+      const oneMonthAgo = new Date(currentTime - 30 * 24 * 60 * 60);
 
       setFilterStartTime(oneMonthAgo.getTime());
       return;
@@ -161,7 +161,7 @@ const TransferList = () => {
             <div className="mb-10">
               <FilterByDateResult
                 filterValue={filterValue}
-                isLoading={isLoading}
+                isLoading={isLoading || isFetchingCurrentTime}
                 incomingSum={incomingSum}
                 outgoingSum={outgoingSum}
                 totalTransactions={totalTransfers}
@@ -172,7 +172,7 @@ const TransferList = () => {
             </div>
           </div>
 
-          {isLoading && currentPage === 1 ? (
+          {(isLoading && currentPage === 1) || isFetchingCurrentTime ? (
             <Loading />
           ) : transferList.length === 0 ? (
             <EmptyList />

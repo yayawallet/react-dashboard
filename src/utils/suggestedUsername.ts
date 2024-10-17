@@ -40,8 +40,6 @@ export const suggestedUsername = async (fullname: string) => {
   let digit = 2;
   const prevGeneratedNums: number[] = [];
 
-  console.log(isAvailable);
-
   while (!isAvailable) {
     if (digit > 12) break;
 

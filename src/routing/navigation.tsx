@@ -356,7 +356,7 @@ export const sidebarNavs = [
     path: 'qr-code',
     icon: <IoQrCode />,
     element: <GenerateQRCode />,
-    accessRoles: ['accountant', 'agent', 'approver', 'clerk'],
+    accessRoles: ['accountant', 'agent'],
   },
 
   {
