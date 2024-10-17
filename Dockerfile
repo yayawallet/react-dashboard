@@ -1,3 +1,4 @@
+# Build stage
 FROM node:21-alpine AS builder
 
 WORKDIR /app
@@ -7,22 +8,22 @@ RUN npm install
 
 COPY . .
 
+RUN npm run build
 
-# Build command using dotenv to load environment variables
-CMD ["sh", "-c", "dotenv -e .env npm run build"]
 
+# Server with Nginx
 FROM nginx:alpine
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Copy the runtime-env.js template
+COPY public/runtime-env.js /usr/share/nginx/html/runtime-env.js
 
-# Set appropriate file permissions
-RUN chown -R nginx:nginx /usr/share/nginx/html
+# Copy the Nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for Nginx
 EXPOSE 80
 
-# Start Nginx
-CMD ["nginx", "-g", "daemon off;"]
-
-# $185
+# Replace placeholders with actual environment variables at runtime
+CMD ["/bin/sh", "-c", "envsubst < /usr/share/nginx/html/runtime-env.js > /usr/share/nginx/html/runtime-env.js && nginx -g 'daemon off;'"]
