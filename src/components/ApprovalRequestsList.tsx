@@ -406,26 +406,6 @@ const ApprovalRequestsList = ({
 
                           {requestType === 'bulk' && (
                             <>
-                              {/* <td
-                                className="border-b border-slate-200 p-3"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                {t.file ? (
-                                  <a
-                                    href={window.env.BASE_URL + t.file}
-                                    download={`YaYa_Scheduled_Bulk_Request_${t.file}`}
-                                    className="inline-flex gap-x-2 items-center text-blue-600 hover:text-blue-700 hover:underline"
-                                  >
-                                    Download
-                                    <span className="text-sm">
-                                      <BsDownload />
-                                    </span>{' '}
-                                  </a>
-                                ) : (
-                                  '~'
-                                )}
-                              </td> */}
-
                               <td className="border-b border-slate-200 p-3">
                                 <Link
                                   to="json-display"

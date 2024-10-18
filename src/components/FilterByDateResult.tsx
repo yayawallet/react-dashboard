@@ -107,7 +107,7 @@ const FilterByDateResult = ({
           className={`${typeof incomingSum === 'number' && typeof outgoingSum === 'number' ? '' : 'hidden'} overflow-x-auto`}
         >
           {isLoading ? (
-            <div className="w-[540px] p-10 flex justify-center ">
+            <div className="w-[540px] flex justify-center ">
               <div className="loader"></div>
             </div>
           ) : (

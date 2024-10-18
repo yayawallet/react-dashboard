@@ -5,6 +5,7 @@ import avater from '../../assets/avater.svg';
 import { useAuth } from '../../auth/AuthProvider';
 import { capitalize } from 'lodash';
 import { useGetData } from '../../hooks/useSWR';
+import { BASE_URL } from '../../CONSTANTS';
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -17,7 +18,7 @@ const Header = () => {
 
   useEffect(() => {
     if (userInfo?.profile_image) {
-      setImgSrc(window.env.BASE_URL + userInfo?.profile_image);
+      setImgSrc(BASE_URL + userInfo?.profile_image);
     }
   }, [userInfo]);
 

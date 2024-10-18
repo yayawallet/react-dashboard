@@ -15,6 +15,7 @@ import FilterByDateResult from '../../components/FilterByDateResult';
 import FilterByDate from '../../components/FilterByDate';
 import PageLoading from '../../components/ui/PageLoading';
 import axios from 'axios';
+import { TRANSACTION_INVOICE_URL, GET_TIME_URL } from '../../CONSTANTS';
 
 const TransactionList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -90,7 +91,7 @@ const TransactionList = () => {
   const getCurrentTime = async () => {
     setIsFetchingCurrentTime(true);
 
-    const { data: { time: currentTime } = {} } = await axios.get(`${window.env.GET_TIME_URL}`);
+    const { data: { time: currentTime } = {} } = await axios.get(`${GET_TIME_URL}`);
 
     setIsFetchingCurrentTime(false);
 
@@ -237,7 +238,7 @@ const TransactionList = () => {
                             className="py-0.5 px-3 text text-yaya-800 focus:outline-none bg-white rounded border border-yaya-200 hover:bg-yaya-50 hover:text-yaya-700 focus:z-10 focus:ring-4 focus:ring-yaya-100"
                           >
                             <a
-                              href={`${window.env.TRANSACTION_INVOICE_URL}/${t.id}`}
+                              href={`${TRANSACTION_INVOICE_URL}/${t.id}`}
                               target="_blank"
                               className="flex items-center hover:underline hover:text-yaya-900"
                             >
