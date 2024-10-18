@@ -5,6 +5,7 @@ import { capitalize } from '../../utils/table_utils';
 import { useAuth } from '../../auth/AuthProvider';
 import avater from '../../assets/avater.svg';
 import { useEffect, useState } from 'react';
+import { BASE_URL } from '../../CONSTANTS';
 
 const UserAccount = () => {
   const [imgSrc, setImgSrc] = useState(avater);
@@ -17,7 +18,7 @@ const UserAccount = () => {
 
   useEffect(() => {
     if (userInfo?.profile_image) {
-      setImgSrc(window.env.BASE_URL + userInfo?.profile_image);
+      setImgSrc(BASE_URL + userInfo?.profile_image);
     }
   }, [userInfo]);
 

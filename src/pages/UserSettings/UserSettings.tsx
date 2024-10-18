@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { capitalize } from '../../utils/table_utils';
 import { useGetData } from '../../hooks/useSWR';
 import { useEffect, useState } from 'react';
+import { BASE_URL } from '../../CONSTANTS';
 
 interface Props {
   onCloseUserSettings: () => void;
@@ -22,7 +23,7 @@ const UserSettings = ({ onCloseUserSettings }: Props) => {
 
   useEffect(() => {
     if (userInfo?.profile_image) {
-      setImgSrc(window.env.BASE_URL + userInfo?.profile_image);
+      setImgSrc(BASE_URL + userInfo?.profile_image);
     }
   }, [userInfo]);
 

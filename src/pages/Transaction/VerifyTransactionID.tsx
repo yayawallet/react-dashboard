@@ -7,6 +7,7 @@ import InlineNotification from '../../components/InlineNotification';
 import { PiPrinterFill } from 'react-icons/pi';
 import { formatDate } from '../../utils/table_utils';
 import { useGetData } from '../../hooks/useSWR';
+import { TRANSACTION_INVOICE_URL } from '../../CONSTANTS';
 
 const GetTransactionByID = () => {
   const [transaction, setTransaction] = useState<TransactionType>();
@@ -61,7 +62,7 @@ const GetTransactionByID = () => {
             className="block ml-auto mb-2 py-2 px-6 font-medium text-white focus:outline-none bg-yaya-700 rounded-lg border border-yaya-700 hover:bg-yaya-800 focus:z-10 focus:ring-4 focus:ring-yaya-100"
           >
             <a
-              href={`${window.env.TRANSACTION_INVOICE_URL}/${transaction.id}`}
+              href={`${TRANSACTION_INVOICE_URL}/${transaction.id}`}
               target="_blank"
               className="flex items-center gap-2"
             >

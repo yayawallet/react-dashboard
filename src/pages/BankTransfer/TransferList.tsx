@@ -12,6 +12,7 @@ import FilterByDate from '../../components/FilterByDate';
 import FilterByDateResult from '../../components/FilterByDateResult';
 import PageLoading from '../../components/ui/PageLoading';
 import axios from 'axios';
+import { GET_TIME_URL } from '../../CONSTANTS';
 
 const TransferList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +72,7 @@ const TransferList = () => {
   const getCurrentTime = async () => {
     setIsFetchingCurrentTime(true);
 
-    const { data: { time: currentTime } = {} } = await axios.get(`${window.env.GET_TIME_URL}`);
+    const { data: { time: currentTime } = {} } = await axios.get(`${GET_TIME_URL}`);
 
     setIsFetchingCurrentTime(false);
 

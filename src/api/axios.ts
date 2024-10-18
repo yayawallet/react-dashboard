@@ -1,14 +1,13 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-
-const baseURL = window.env.BASE_URL;
+import { BASE_URL } from '../CONSTANTS.ts';
 
 export default axios.create({
-  baseURL,
+  baseURL: BASE_URL,
 });
 
 export const authAxios = axios.create({
-  baseURL,
+  baseURL: BASE_URL,
 });
 
 authAxios.interceptors.request.use(
