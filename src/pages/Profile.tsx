@@ -8,7 +8,7 @@ const Profile = () => {
   return (
     <div className="page-container">
       <div className="bg-white overflow-hidden shadow rounded-lg border">
-        <div className="flex flex-wrap justify-between p-4 sm:px-6 border-b">
+        <div className="flex flex-wrap justify-between gap-4 p-4 sm:px-6 border-b">
           <div className="">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
               {profile?.name}
@@ -26,21 +26,8 @@ const Profile = () => {
             </h4>
           </div>
 
-          <div className="flex flex-col justify-between items-center">
-            <dl>
-              <dt className="text-sm font-medium text-gray-500 px-3 pb-0.5">Status</dt>
-              <dd
-                className={`flex self-center items-center justify-center mt-1 text-sm px-3 pb-0.5 text-gray-800 sm:mt-0 sm:col-span-3 font-medium rounded ${profile?.status === 'ACTIVE' ? 'bg-green-600 text-white' : 'bg-gray-100'}`}
-              >
-                {profile
-                  ? `${profile?.status?.charAt(0)}${profile?.status?.slice(1).toLowerCase()}`
-                  : '- - -'}
-              </dd>
-            </dl>
-
-            <span onClick={() => mutateBalance()}>
-              <RefreshButton />
-            </span>
+          <div onClick={() => mutateBalance()}>
+            <RefreshButton />
           </div>
         </div>
 
